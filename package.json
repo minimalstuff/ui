@@ -1,6 +1,6 @@
 {
   "name": "@minimalstuff/ui",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "Minimal UI lib for React built on top of Emotion",
   "type": "module",
   "main": "./dist/index.umd.js",
