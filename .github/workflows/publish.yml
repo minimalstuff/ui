@@ -43,6 +43,6 @@ jobs:
         run: |
           VERSION=$(node -p "require('./package.json').version")
           TAG=$([[ "$VERSION" == *-* ]] && echo "next" || echo "latest")
-          pnpm publish --no-git-checks --tag "$TAG"
+          npm publish --tag "$TAG"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

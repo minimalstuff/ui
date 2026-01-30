@@ -30,6 +30,7 @@ export default defineConfig({
 			: []),
 	],
 	build: {
+		copyPublicDir: isLibBuild ? false : true,
 		lib: {
 			entry: path.resolve(dirname, 'src/index.ts'),
 			name: 'MinimalstuffUi',
