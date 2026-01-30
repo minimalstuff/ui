@@ -12,6 +12,9 @@
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build"
 	},
+	"imports": {
+		"#components/*": "./src/components/*.js"
+	},
 	"dependencies": {
 		"clsx": "^2.1.1",
 		"react": "^19.2.0",
