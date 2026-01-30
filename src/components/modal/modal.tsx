@@ -1,5 +1,5 @@
 import { IconButton } from '#components/icon_button/icon_button';
-import { useRunAfterAnimation } from '#hooks/use_run_after_animation';
+import { useRunAfterAnimation } from '#hooks/use_run_after_animation/use_run_after_animation';
 import clsx from 'clsx';
 import { type ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
