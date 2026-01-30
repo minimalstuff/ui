@@ -27,11 +27,6 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Set version from release tag
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          pnpm version $VERSION --no-git-tag-version
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
