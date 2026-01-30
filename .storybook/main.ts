@@ -8,6 +8,7 @@ const config: StorybookConfig = {
 		'@storybook/addon-a11y',
 		'@storybook/addon-docs',
 		'@storybook/addon-onboarding',
+		'./addons/theme/register.ts',
 	],
 	framework: '@storybook/react-vite',
 	core: {
