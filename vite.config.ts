@@ -49,10 +49,19 @@ export default defineConfig({
 				],
 				test: {
 					name: 'storybook',
+					retry: 2,
 					browser: {
 						enabled: true,
 						headless: true,
-						provider: playwright({}),
+						provider: playwright({
+							launchOptions: {
+								args: [
+									'--no-sandbox',
+									'--disable-setuid-sandbox',
+									'--disable-dev-shm-usage',
+								],
+							},
+						}),
 						instances: [
 							{
 								browser: 'chromium',
