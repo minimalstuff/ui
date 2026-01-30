@@ -14,7 +14,9 @@
 	},
 	"imports": {
 		"#components/*": "./src/components/*.js",
-		"#hooks/*": "./src/hooks/*.js"
+		"#hooks/*": "./src/hooks/*.js",
+		"#types/*": "./src/types/*.js",
+		"#utils/*": "./src/utils/*.js"
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
