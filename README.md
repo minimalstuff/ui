@@ -21,6 +21,8 @@ export function App() {
 }
 ```
 
+The `@minimalstuff/ui/style.css` import is required for styles and icons to render.
+
 ## Development
 
 ```bash
