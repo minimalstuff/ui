@@ -4,7 +4,7 @@ import {
 	THEME_STORAGE_KEY,
 	getThemePreference,
 	type ThemePreference,
-} from '../../theme/index';
+} from '../../theme/index.ts';
 
 const OPTIONS: { value: ThemePreference; label: string }[] = [
 	{ value: 'light', label: 'Light' },
