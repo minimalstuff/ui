@@ -6,3 +6,6 @@ storybook:
 
 format:
 	@pnpm run format
+
+release:
+	@pnpm run release
