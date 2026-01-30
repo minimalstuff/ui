@@ -1,6 +1,6 @@
 {
 	"name": "@minimalstuff/ui",
-	"version": "0.0.0",
+	"version": "1.0.0-0",
 	"type": "module",
 	"main": "./dist/minimalstuff-ui.js",
 	"module": "./dist/minimalstuff-ui.js",
