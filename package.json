@@ -18,7 +18,7 @@
 	],
 	"scripts": {
 		"dev": "storybook dev -p 6006 --ci",
-		"build": "tsc -b && vite build",
+		"build": "tsc -b && VITE_BUILD_LIB=1 vite build",
 		"lint": "eslint .",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",

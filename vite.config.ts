@@ -13,15 +13,21 @@ const dirname =
 		? __dirname
 		: path.dirname(fileURLToPath(import.meta.url));
 
+const isLibBuild = process.env.VITE_BUILD_LIB === '1';
+
 export default defineConfig({
 	plugins: [
 		UnoCSS(),
 		react(),
-		dts({
-			tsconfigPath: './tsconfig.app.json',
-			rollupTypes: true,
-			exclude: ['**/*.stories.tsx'],
-		}),
+		...(isLibBuild
+			? [
+					dts({
+						tsconfigPath: './tsconfig.app.json',
+						rollupTypes: true,
+						exclude: ['**/*.stories.tsx'],
+					}),
+				]
+			: []),
 	],
 	build: {
 		lib: {
