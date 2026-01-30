@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# @minimalstuff/ui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React UI component library.
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm add @minimalstuff/ui react react-dom
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Peer dependencies: React 18 or 19.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Usage
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```tsx
+import { Button } from '@minimalstuff/ui';
+import '@minimalstuff/ui/style.css';
+
+export function App() {
+	return <Button variant="primary">Click me</Button>;
+}
 ```
+
+## Development
+
+```bash
+pnpm install
+pnpm run dev        # Storybook on :6006
+pnpm run lint
+pnpm run test
+pnpm run build      # Library build → dist/
+```
+
+## Releasing
+
+CI (lint, test, build) and npm publish run together when a GitHub Release is published.
+
+### Prerequisites
+
+1. **NPM token**
+   Create an automation token at [npmjs.com/access-tokens](https://www.npmjs.com/access-tokens) (scope: package publish for `@minimalstuff/ui`).
+
+2. **Repository secret**
+   In the repo: **Settings → Secrets and variables → Actions**. Add a secret named `NPM_TOKEN` with the token value.
+
+### Procedure
+
+1. **Bump version** (optional if using tag-based versioning):
+
+   ```bash
+   pnpm version 1.2.0   # or 1.2.0-alpha.0 for prerelease
+   git push && git push --tags
+   ```
+
+2. **Create a GitHub Release**
+   **Releases → Draft a new release**:
+   - Choose or create a tag (e.g. `v1.2.0`). Use the same version as in `package.json` if you bumped it; otherwise the workflow sets the package version from the tag (e.g. `v1.2.0` → `1.2.0`).
+   - Add release notes and publish.
+
+3. **Workflow**
+   The **CI & Publish** workflow runs on **release published**. It sets the package version from the tag, runs lint, test, build, then `pnpm publish --no-git-checks`. The package is published under the tag `latest` (or the tag you set for prereleases).
+
+### Prereleases
+
+Semver prereleases (e.g. `1.0.0-0`, `1.0.0-alpha.1`) are supported. To avoid making them the default install:
+
+- Publish with a dist-tag, e.g. `pnpm publish --tag next`, or
+- Rely on consumers installing an explicit version: `pnpm add @minimalstuff/ui@1.0.0-alpha.1`.
+
+If you want CI to publish prereleases automatically (e.g. on tag `v1.0.0-alpha.1`), add a separate workflow or extend the existing one to run on prerelease tags and use `--tag next`.

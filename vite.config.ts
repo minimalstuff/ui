@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 const dirname =
 	typeof __dirname !== 'undefined'
@@ -13,7 +14,30 @@ const dirname =
 		: path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-	plugins: [UnoCSS(), react()],
+	plugins: [
+		UnoCSS(),
+		react(),
+		dts({
+			tsconfigPath: './tsconfig.app.json',
+			rollupTypes: true,
+			exclude: ['**/*.stories.tsx'],
+		}),
+	],
+	build: {
+		lib: {
+			entry: path.resolve(dirname, 'src/index.ts'),
+			name: 'MinimalstuffUi',
+			formats: ['es'],
+			fileName: 'minimalstuff-ui',
+		},
+		rollupOptions: {
+			external: ['react', 'react-dom', 'react/jsx-runtime'],
+			output: {
+				globals: {},
+			},
+		},
+		cssCodeSplit: false,
+	},
 	test: {
 		projects: [
 			{

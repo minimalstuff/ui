@@ -1,16 +1,33 @@
 {
-	"name": "minimalstuff-ui",
-	"private": true,
+	"name": "@minimalstuff/ui",
 	"version": "0.0.0",
 	"type": "module",
+	"main": "./dist/minimalstuff-ui.js",
+	"module": "./dist/minimalstuff-ui.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/minimalstuff-ui.js",
+			"default": "./dist/minimalstuff-ui.js"
+		},
+		"./style.css": "./dist/minimalstuff-ui.css"
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"dev": "storybook dev -p 6006 --ci",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
+		"test": "vitest run",
 		"preview": "vite preview",
 		"format": "prettier --write --parser typescript '**/*.{ts,tsx}'",
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"imports": {
 		"#components/*": "./src/components/*.js",
@@ -18,12 +35,16 @@
 		"#types/*": "./src/types/*.js",
 		"#utils/*": "./src/utils/*.js"
 	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0"
+	},
 	"dependencies": {
-		"clsx": "^2.1.1",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0"
+		"clsx": "^2.1.1"
 	},
 	"devDependencies": {
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
 		"@chromatic-com/storybook": "^5.0.0",
 		"@eslint/js": "^9.39.1",
 		"@storybook/addon-a11y": "^10.2.3",
@@ -51,6 +72,7 @@
 		"typescript-eslint": "^8.46.4",
 		"unocss": "^66.6.0",
 		"vite": "npm:rolldown-vite@7.2.5",
+		"vite-plugin-dts": "^4.5.4",
 		"vitest": "^4.0.18"
 	},
 	"pnpm": {
