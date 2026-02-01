@@ -90,7 +90,8 @@
 			"vite": "npm:rolldown-vite@7.2.5"
 		},
 		"onlyBuiltDependencies": [
-			"@swc/core"
+			"@swc/core",
+			"esbuild"
 		]
 	},
 	"prettier": {

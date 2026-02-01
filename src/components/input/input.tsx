@@ -58,6 +58,9 @@ export function Input({
 					htmlFor={inputId}
 				>
 					{label}
+					{props.required && (
+						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+					)}
 				</label>
 			)}
 			<input

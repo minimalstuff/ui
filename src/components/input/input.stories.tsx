@@ -112,3 +112,20 @@ export const WithErrorAndCharCount: Story = {
 		defaultValue: 'ab',
 	},
 };
+
+export const Required: Story = {
+	args: {
+		label: 'Email',
+		placeholder: 'you@example.com',
+		required: true,
+	},
+};
+
+export const RequiredWithError: Story = {
+	args: {
+		label: 'Email',
+		placeholder: 'you@example.com',
+		required: true,
+		error: 'This field is required',
+	},
+};
