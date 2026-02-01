@@ -19,7 +19,7 @@ const meta = {
 		},
 		variant: {
 			control: 'select',
-			options: ['default', 'ghost', 'danger', 'outline'],
+			options: ['default', 'ghost', 'danger', 'outline', 'subtle'],
 			description: 'Visual style',
 		},
 		size: {
@@ -67,6 +67,14 @@ export const Outline: Story = {
 	},
 };
 
+export const Subtle: Story = {
+	args: {
+		variant: 'subtle',
+		'aria-label': 'More options',
+		icon: 'i-mdi-dots-vertical',
+	},
+};
+
 export const SizeSM: Story = {
 	args: {
 		size: 'sm',
@@ -106,7 +114,7 @@ export const WithChildren: Story = {
 export const AllVariants: Story = {
 	render: (args) => (
 		<div className="flex flex-wrap items-center gap-3">
-			{(['default', 'ghost', 'danger', 'outline'] as const).map((variant) => (
+			{(['default', 'ghost', 'danger', 'outline', 'subtle'] as const).map((variant) => (
 				<IconButton
 					key={variant}
 					{...args}

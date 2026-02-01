@@ -4,7 +4,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	icon: string;
 	'aria-label': string;
-	variant?: 'default' | 'ghost' | 'danger' | 'outline';
+	variant?: 'default' | 'ghost' | 'danger' | 'outline' | 'subtle';
 	size?: 'sm' | 'md' | 'lg';
 	children?: ReactNode;
 	ref?: React.Ref<HTMLButtonElement>;
@@ -19,6 +19,8 @@ const VARIANT_CLASSES = {
 		'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20',
 	outline:
 		'text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 hover:bg-white/50 dark:hover:bg-gray-800/50',
+	subtle:
+		'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50/50 dark:hover:bg-gray-800/30',
 };
 
 const SIZE_CLASSES = {
