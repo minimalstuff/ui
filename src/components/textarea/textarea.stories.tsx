@@ -101,3 +101,20 @@ export const WithErrorAndCharCount: Story = {
 		defaultValue: 'Too short',
 	},
 };
+
+export const Required: Story = {
+	args: {
+		label: 'Message',
+		placeholder: 'Enter your message...',
+		required: true,
+	},
+};
+
+export const RequiredWithError: Story = {
+	args: {
+		label: 'Message',
+		placeholder: 'Enter your message...',
+		required: true,
+		error: 'This field is required',
+	},
+};
