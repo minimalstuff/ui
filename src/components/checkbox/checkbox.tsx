@@ -50,7 +50,7 @@ export function Checkbox({
 			>
 				<span
 					className={clsx(
-						'relative mt-0.5 shrink-0 rounded',
+						'relative shrink-0 rounded',
 						'focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900',
 						error ? 'focus-within:ring-red-500' : 'focus-within:ring-blue-500'
 					)}
