@@ -1,5 +1,6 @@
 import { Button } from '#components/button/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useEffect, useState } from 'react';
 
 const meta = {
 	title: 'Example/Button',
@@ -26,6 +27,10 @@ const meta = {
 		fullWidth: {
 			control: 'boolean',
 			description: 'Stretch button to full container width',
+		},
+		loading: {
+			control: 'boolean',
+			description: 'Show spinner and disable the button',
 		},
 		disabled: {
 			control: 'boolean',
@@ -111,6 +116,26 @@ export const SizeLG: Story = {
 	args: {
 		size: 'lg',
 		children: 'Large',
+	},
+};
+
+export const Loading: Story = {
+	args: {
+		loading: true,
+		children: 'Submit',
+	},
+	render: (args) => {
+		const [loading, setLoading] = useState(false);
+		useEffect(() => {
+			if (loading) {
+				setTimeout(() => setLoading(false), 2000);
+			}
+		}, [loading]);
+		return (
+			<Button {...args} loading={loading} onClick={() => setLoading(true)}>
+				{loading ? 'Submitting…' : args.children}
+			</Button>
+		);
 	},
 };
 

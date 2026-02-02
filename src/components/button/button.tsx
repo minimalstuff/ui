@@ -38,6 +38,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	children: ReactNode;
 	className?: string;
 	fullWidth?: boolean;
+	loading?: boolean;
 }
 
 export const Button = ({
@@ -46,6 +47,7 @@ export const Button = ({
 	children,
 	className,
 	fullWidth = false,
+	loading = false,
 	disabled,
 	...props
 }: ButtonProps) => (
@@ -58,9 +60,12 @@ export const Button = ({
 			fullWidth && 'w-full',
 			className
 		)}
-		disabled={disabled}
+		disabled={disabled ?? loading}
 		{...props}
 	>
+		{loading && (
+			<span className="i-svg-spinners-3-dots-fade w-4 h-4" aria-hidden="true" />
+		)}
 		{children}
 	</button>
 );
