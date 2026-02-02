@@ -7,7 +7,10 @@ export interface SelectOption {
 	label: string;
 }
 
-interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'> {
+interface SelectProps extends Omit<
+	SelectHTMLAttributes<HTMLSelectElement>,
+	'children'
+> {
 	options: SelectOption[];
 	label?: string;
 	error?: string;
@@ -61,9 +64,7 @@ export function Select({
 				aria-describedby={error ? `${selectId}-error` : undefined}
 				{...props}
 			>
-				{placeholder !== undefined && (
-					<option value="">{placeholder}</option>
-				)}
+				{placeholder !== undefined && <option value="">{placeholder}</option>}
 				{options.map((opt) => (
 					<option key={opt.value} value={opt.value}>
 						{opt.label}

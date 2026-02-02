@@ -114,15 +114,17 @@ export const WithChildren: Story = {
 export const AllVariants: Story = {
 	render: (args) => (
 		<div className="flex flex-wrap items-center gap-3">
-			{(['default', 'ghost', 'danger', 'outline', 'subtle'] as const).map((variant) => (
-				<IconButton
-					key={variant}
-					{...args}
-					variant={variant}
-					aria-label={variant}
-					icon={variant === 'danger' ? 'i-mdi-delete' : 'i-mdi-close'}
-				/>
-			))}
+			{(['default', 'ghost', 'danger', 'outline', 'subtle'] as const).map(
+				(variant) => (
+					<IconButton
+						key={variant}
+						{...args}
+						variant={variant}
+						aria-label={variant}
+						icon={variant === 'danger' ? 'i-mdi-delete' : 'i-mdi-close'}
+					/>
+				)
+			)}
 		</div>
 	),
 };
