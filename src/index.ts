@@ -1,5 +1,3 @@
-import 'virtual:uno.css';
-
 export { Button } from './components/button/button';
 export { CharacterCount } from './components/char_count/char_count';
 export { Checkbox } from './components/checkbox/checkbox';
