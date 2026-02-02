@@ -6,6 +6,8 @@ export { ClientOnly } from './components/client_only/client_only';
 export { IconButton } from './components/icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './components/input/input';
 export { Modal } from './components/modal/modal';
+export { Select } from './components/select/select';
+export type { SelectOption } from './components/select/select';
 export { Tabs } from './components/tabs/tabs';
 export type { TabItem } from './components/tabs/tabs';
 export { Textarea } from './components/textarea/textarea';
