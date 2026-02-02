@@ -13,6 +13,10 @@ const meta = {
 			control: 'text',
 			description: 'Label next to the checkbox',
 		},
+		description: {
+			control: 'text',
+			description: 'Helper text below the label',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the checkbox',
@@ -41,6 +45,13 @@ export const Default: Story = {
 export const WithLabel: Story = {
 	args: {
 		label: 'Accept terms and conditions',
+	},
+};
+
+export const WithDescription: Story = {
+	args: {
+		label: 'Subscribe to newsletter',
+		description: 'We will send you updates about new features and tips.',
 	},
 };
 

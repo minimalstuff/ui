@@ -6,6 +6,7 @@ interface CheckboxProps extends Omit<
 	'type' | 'className'
 > {
 	label?: string;
+	description?: string;
 	error?: string;
 	className?: string;
 	wrapperClassName?: string;
@@ -13,6 +14,7 @@ interface CheckboxProps extends Omit<
 
 export function Checkbox({
 	label,
+	description,
 	error,
 	className,
 	wrapperClassName,
@@ -27,6 +29,10 @@ export function Checkbox({
 	const [internalChecked, setInternalChecked] = useState(defaultChecked);
 	const isControlled = checked !== undefined;
 	const isChecked = isControlled ? checked : internalChecked;
+	const describedBy =
+		[description && `${checkboxId}-description`, error && `${checkboxId}-error`]
+			.filter(Boolean)
+			.join(' ') || undefined;
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!isControlled) setInternalChecked(e.target.checked);
@@ -57,7 +63,7 @@ export function Checkbox({
 						defaultChecked={defaultChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
-						aria-describedby={error ? `${checkboxId}-error` : undefined}
+						aria-describedby={describedBy}
 						{...props}
 					/>
 					<span
@@ -95,6 +101,14 @@ export function Checkbox({
 					</span>
 				)}
 			</label>
+			{description && (
+				<p
+					id={`${checkboxId}-description`}
+					className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-8"
+				>
+					{description}
+				</p>
+			)}
 			{error && (
 				<p
 					id={`${checkboxId}-error`}
