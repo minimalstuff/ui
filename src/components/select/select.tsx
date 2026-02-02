@@ -1,6 +1,6 @@
-import { BASE_INPUT_STYLES } from '../input/input';
 import clsx from 'clsx';
-import { type SelectHTMLAttributes, useId } from 'react';
+import { type ReactNode, type SelectHTMLAttributes, useId } from 'react';
+import { BASE_INPUT_STYLES } from '../input/input';
 
 export interface SelectOption {
 	value: string;
@@ -12,7 +12,7 @@ interface SelectProps extends Omit<
 	'children'
 > {
 	options: SelectOption[];
-	label?: string;
+	label?: string | ReactNode;
 	error?: string;
 	placeholder?: string;
 	className?: string;
@@ -37,7 +37,7 @@ export function Select({
 
 	return (
 		<div className={clsx('w-full', wrapperClassName)}>
-			{label && (
+			{typeof label === 'string' ? (
 				<label
 					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
 					htmlFor={selectId}
@@ -47,6 +47,8 @@ export function Select({
 						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
 					)}
 				</label>
+			) : (
+				label
 			)}
 			<select
 				id={selectId}

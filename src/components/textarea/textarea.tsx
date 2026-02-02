@@ -1,10 +1,15 @@
 import { CharacterCount } from '#components/char_count/char_count';
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import clsx from 'clsx';
-import { type TextareaHTMLAttributes, useId, useState } from 'react';
+import {
+	type ReactNode,
+	type TextareaHTMLAttributes,
+	useId,
+	useState,
+} from 'react';
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-	label?: string;
+	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;
 	minLength?: number;
@@ -50,7 +55,7 @@ export function Textarea({
 
 	return (
 		<div className={clsx('w-full', wrapperClassName)}>
-			{label && (
+			{typeof label === 'string' ? (
 				<label
 					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
 					htmlFor={textareaId}
@@ -60,6 +65,8 @@ export function Textarea({
 						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
 					)}
 				</label>
+			) : (
+				label
 			)}
 			<textarea
 				id={textareaId}

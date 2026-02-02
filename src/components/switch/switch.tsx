@@ -1,11 +1,16 @@
 import clsx from 'clsx';
-import { type InputHTMLAttributes, useId, useState } from 'react';
+import {
+	type InputHTMLAttributes,
+	type ReactNode,
+	useId,
+	useState,
+} from 'react';
 
 interface SwitchProps extends Omit<
 	InputHTMLAttributes<HTMLInputElement>,
 	'type' | 'className'
 > {
-	label?: string;
+	label?: string | ReactNode;
 	error?: string;
 	className?: string;
 	wrapperClassName?: string;
@@ -77,12 +82,23 @@ export function Switch({
 					/>
 				</span>
 				{label && (
-					<span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
-						{label}
-						{props.required && (
-							<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+					<>
+						{typeof label === 'string' ? (
+							<span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
+								{label}
+								{props.required && (
+									<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+								)}
+							</span>
+						) : (
+							<>
+								{label}
+								{props.required && (
+									<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+								)}
+							</>
 						)}
-					</span>
+					</>
 				)}
 			</label>
 			{error && (

@@ -5,8 +5,8 @@ interface CheckboxProps extends Omit<
 	InputHTMLAttributes<HTMLInputElement>,
 	'type' | 'className'
 > {
-	label?: string;
-	description?: string;
+	label?: string | React.ReactNode;
+	description?: string | React.ReactNode;
 	error?: string;
 	className?: string;
 	wrapperClassName?: string;
@@ -92,23 +92,33 @@ export function Checkbox({
 						)}
 					</span>
 				</span>
-				{label && (
+				{typeof label === 'string' ? (
 					<span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
 						{label}
 						{props.required && (
 							<span className="text-red-500 dark:text-red-400 ml-1">*</span>
 						)}
 					</span>
+				) : (
+					label
 				)}
 			</label>
-			{description && (
-				<p
-					id={`${checkboxId}-description`}
-					className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-8"
-				>
-					{description}
-				</p>
-			)}
+			{description &&
+				(typeof description === 'string' ? (
+					<p
+						id={`${checkboxId}-description`}
+						className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-8"
+					>
+						{description}
+					</p>
+				) : (
+					<span
+						id={`${checkboxId}-description`}
+						className="block text-xs text-gray-500 dark:text-gray-400 mt-1 ml-8"
+					>
+						{description}
+					</span>
+				))}
 			{error && (
 				<p
 					id={`${checkboxId}-error`}

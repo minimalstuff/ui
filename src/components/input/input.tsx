@@ -1,12 +1,17 @@
 import clsx from 'clsx';
-import { type InputHTMLAttributes, useId, useState } from 'react';
+import {
+	type InputHTMLAttributes,
+	type ReactNode,
+	useId,
+	useState,
+} from 'react';
 import { CharacterCount } from '../char_count/char_count';
 
 export const BASE_INPUT_STYLES =
 	'w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-	label?: string;
+	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;
 	minLength?: number;
@@ -52,7 +57,7 @@ export function Input({
 
 	return (
 		<div className={clsx('w-full', wrapperClassName)}>
-			{label && (
+			{typeof label === 'string' ? (
 				<label
 					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
 					htmlFor={inputId}
@@ -62,6 +67,8 @@ export function Input({
 						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
 					)}
 				</label>
+			) : (
+				label
 			)}
 			<input
 				id={inputId}
