@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-02-02
+
+### Reverted
+
+- **UnoCSS on demand** (from 1.1.0): the library again ships the full prebuilt UnoCSS CSS. Import `@minimalstuff/ui/style.css` for component styles and icons (required).
+- **Removed** `@minimalstuff/ui/uno-config` export.
+- **Removed** `unocss` peer dependency.
+
+---
+
 ## [1.1.0] - 2026-02-02
 
 ### Added
