@@ -5,65 +5,23 @@ React UI component library.
 ## Installation
 
 ```bash
-pnpm add @minimalstuff/ui react react-dom unocss
+pnpm add @minimalstuff/ui react react-dom
 ```
 
-Peer dependencies: React 18 or 19, UnoCSS (same major as the lib, e.g. ^66.0.0).
+Peer dependencies: React 18 or 19.
 
 ## Usage
 
-Styles are generated on demand by your app's UnoCSS build (no heavy prebuilt CSS in the lib). In both cases you must **include the lib in UnoCSS content** so its classes are scanned and generated.
-
-**Option A — Base your config on the lib's** (recommended): use `@minimalstuff/ui/uno-config` so presets (Wind, icons, web fonts, `dark: 'class'`) match the lib exactly.
-
-```ts
-// uno.config.ts
-import libUno from '@minimalstuff/ui/uno-config';
-import { defineConfig } from 'unocss';
-
-export default defineConfig({
-	...libUno,
-	content: {
-		pipeline: {
-			include: [
-				/\.(vue|svelte|[jt]sx|mdx?|html)($|\?)/,
-				'node_modules/@minimalstuff/ui/dist/**/*.js',
-			],
-		},
-	},
-});
-```
-
-**Option B — Keep your own config**: do not use the lib's config; only add the lib's dist to `content` so UnoCSS scans it. Your presets must be compatible (e.g. same Wind / icons / `dark: 'class'`), or some lib classes may not be generated.
-
-```ts
-content: {
-	pipeline: {
-		include: [
-			// your existing patterns
-			'node_modules/@minimalstuff/ui/dist/**/*.js',
-		],
-	},
-},
-```
-
-**3. Optional: Tabs animation**
-
-If you use the `Tabs` component and want its panel animation, import the small CSS once:
-
-```tsx
-import '@minimalstuff/ui/style.css';
-```
-
-**Example**
-
 ```tsx
 import { Button } from '@minimalstuff/ui';
+import '@minimalstuff/ui/style.css';
 
 export function App() {
 	return <Button variant="primary">Click me</Button>;
 }
 ```
+
+The `@minimalstuff/ui/style.css` import is required for styles and icons to render.
 
 ## Development
 

@@ -31,38 +31,17 @@ export default defineConfig({
 	],
 	build: {
 		copyPublicDir: isLibBuild ? false : true,
-		lib: isLibBuild
-			? {
-					entry: {
-						'minimalstuff-ui': path.resolve(dirname, 'src/index.ts'),
-						'uno-config': path.resolve(dirname, 'src/uno-config.ts'),
-					},
-					name: 'MinimalstuffUi',
-					formats: ['es'],
-				}
-			: undefined,
+		lib: {
+			entry: path.resolve(dirname, 'src/index.ts'),
+			name: 'MinimalstuffUi',
+			formats: ['es'],
+			fileName: 'minimalstuff-ui',
+		},
 		rollupOptions: {
-			external: [
-				'react',
-				'react-dom',
-				'react/jsx-runtime',
-				...(isLibBuild
-					? [
-							'unocss',
-							'@unocss/preset-icons',
-							'@unocss/preset-web-fonts',
-						]
-					: []),
-			],
-			output: isLibBuild
-				? {
-						entryFileNames: '[name].js',
-						assetFileNames: (assetInfo) =>
-							/\.css$/i.test(String(assetInfo.name ?? ''))
-								? 'minimalstuff-ui.css'
-								: '[name][extname]',
-					}
-				: { globals: {} },
+			external: ['react', 'react-dom', 'react/jsx-runtime'],
+			output: {
+				globals: {},
+			},
 		},
 		cssCodeSplit: false,
 	},

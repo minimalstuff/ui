@@ -4,17 +4,12 @@
 	"type": "module",
 	"main": "./dist/minimalstuff-ui.js",
 	"module": "./dist/minimalstuff-ui.js",
-	"types": "./dist/minimalstuff-ui.d.ts",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/minimalstuff-ui.d.ts",
+			"types": "./dist/index.d.ts",
 			"import": "./dist/minimalstuff-ui.js",
 			"default": "./dist/minimalstuff-ui.js"
-		},
-		"./uno-config": {
-			"types": "./dist/uno-config.d.ts",
-			"import": "./dist/uno-config.js",
-			"default": "./dist/uno-config.js"
 		},
 		"./style.css": "./dist/minimalstuff-ui.css"
 	},
@@ -49,8 +44,7 @@
 	},
 	"peerDependencies": {
 		"react": "^18.0.0 || ^19.0.0",
-		"react-dom": "^18.0.0 || ^19.0.0",
-		"unocss": "^66.0.0"
+		"react-dom": "^18.0.0 || ^19.0.0"
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
