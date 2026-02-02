@@ -2,6 +2,7 @@ import 'virtual:uno.css';
 
 export { Button } from './components/button/button';
 export { CharacterCount } from './components/char_count/char_count';
+export { Checkbox } from './components/checkbox/checkbox';
 export { ClientOnly } from './components/client_only/client_only';
 export { IconButton } from './components/icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './components/input/input';
