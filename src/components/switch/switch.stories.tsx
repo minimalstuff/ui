@@ -13,6 +13,10 @@ const meta = {
 			control: 'text',
 			description: 'Label next to the switch',
 		},
+		description: {
+			control: 'text',
+			description: 'Helper text below the label',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the switch',
@@ -41,6 +45,13 @@ export const Default: Story = {
 export const WithLabel: Story = {
 	args: {
 		label: 'Enable notifications',
+	},
+};
+
+export const WithDescription: Story = {
+	args: {
+		label: 'Enable dark mode',
+		description: 'Use system preference or toggle manually.',
 	},
 };
 

@@ -11,6 +11,7 @@ interface SwitchProps extends Omit<
 	'type' | 'className'
 > {
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	error?: string;
 	className?: string;
 	wrapperClassName?: string;
@@ -18,6 +19,7 @@ interface SwitchProps extends Omit<
 
 export function Switch({
 	label,
+	description,
 	error,
 	className,
 	wrapperClassName,
@@ -32,6 +34,10 @@ export function Switch({
 	const [internalChecked, setInternalChecked] = useState(defaultChecked);
 	const isControlled = checked !== undefined;
 	const isChecked = isControlled ? checked : internalChecked;
+	const describedBy =
+		[description && `${switchId}-description`, error && `${switchId}-error`]
+			.filter(Boolean)
+			.join(' ') || undefined;
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!isControlled) setInternalChecked(e.target.checked);
@@ -69,7 +75,7 @@ export function Switch({
 						defaultChecked={defaultChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
-						aria-describedby={error ? `${switchId}-error` : undefined}
+						aria-describedby={describedBy}
 						{...props}
 					/>
 					<span
@@ -101,6 +107,22 @@ export function Switch({
 					</>
 				)}
 			</label>
+			{description &&
+				(typeof description === 'string' ? (
+					<p
+						id={`${switchId}-description`}
+						className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-14"
+					>
+						{description}
+					</p>
+				) : (
+					<span
+						id={`${switchId}-description`}
+						className="block text-xs text-gray-500 dark:text-gray-400 mt-1 ml-14"
+					>
+						{description}
+					</span>
+				))}
 			{error && (
 				<p
 					id={`${switchId}-error`}
