@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.5](https://github.com/minimalstuff/ui/compare/1.1.4...1.1.5) (2026-02-08)
+
+### Bug Fixes
+
+* **modal:** adjust padding and height for improved responsiveness ([274af77](https://github.com/minimalstuff/ui/commit/274af77d98b4ea55fcea09086de0ec617e76083d))
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
