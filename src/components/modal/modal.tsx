@@ -9,6 +9,7 @@ interface ModalProps {
 	onClose?: () => void;
 	title?: ReactNode;
 	children: ReactNode;
+	footer?: ReactNode;
 	size?: 'sm' | 'md' | 'lg' | 'xl';
 	className?: string;
 }
@@ -26,6 +27,7 @@ export function Modal({
 	onClose,
 	title,
 	children,
+	footer,
 	size = 'md',
 	className,
 }: ModalProps) {
@@ -94,7 +96,8 @@ export function Modal({
 	return createPortal(
 		<div
 			className={clsx(
-				'fixed inset-0 z-50 h-fit flex justify-center p-4 mt-32',
+				'fixed inset-0 z-50 flex items-start justify-center',
+				'pt-0 pb-0 sm:pt-[5rem] sm:pb-[5rem]',
 				'transition-opacity duration-200',
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
@@ -112,8 +115,8 @@ export function Modal({
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
-					'bg-white dark:bg-gray-800 rounded-lg shadow-xl',
-					'max-h-[90vh] overflow-hidden flex flex-col',
+					'bg-white dark:bg-gray-800 sm:rounded-lg sm:shadow-xl',
+					'max-h-[100vh] h-full sm:max-h-[calc(100vh-10rem)] sm:h-auto overflow-hidden flex flex-col',
 					'transition-all duration-200',
 					isVisible
 						? 'opacity-100 scale-100 translate-y-0'
@@ -122,7 +125,7 @@ export function Modal({
 				onClick={(e) => e.stopPropagation()}
 			>
 				{title && (
-					<div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+					<div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
 						<h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
 							{title}
 						</h2>
@@ -137,12 +140,17 @@ export function Modal({
 				)}
 				<div
 					className={clsx(
-						'flex-1 overflow-y-auto px-6 py-4 text-gray-600 dark:text-gray-400',
+						'flex-1 overflow-y-auto px-6 py-4 text-gray-600 dark:text-gray-400 min-h-0',
 						className
 					)}
 				>
 					{children}
 				</div>
+				{footer && (
+					<div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+						{footer}
+					</div>
+				)}
 			</div>
 		</div>,
 		document.body

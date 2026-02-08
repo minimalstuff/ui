@@ -42,14 +42,13 @@ export function ConfirmModal({
 	const cancelLabel = propCancelLabel ?? 'Cancel';
 	const confirmColor = propConfirmColor ?? 'blue';
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-			<div className="space-y-4">
-				{children && (
-					<div className="text-sm text-gray-600 dark:text-gray-300">
-						{children}
-					</div>
-				)}
-				<div className="flex justify-end gap-3">
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			title={title}
+			size="sm"
+			footer={
+				<>
 					<Button
 						variant="secondary"
 						onClick={onClose}
@@ -67,8 +66,14 @@ export function ConfirmModal({
 					>
 						{confirmLabel}
 					</Button>
+				</>
+			}
+		>
+			{children && (
+				<div className="text-sm text-gray-600 dark:text-gray-300">
+					{children}
 				</div>
-			</div>
+			)}
 		</Modal>
 	);
 }
