@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 import { themes } from 'storybook/theming';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import 'virtual:uno.css';
 import { getResolvedTheme, getThemePreference } from './theme';
 import {
@@ -26,6 +27,9 @@ const preview: Preview = {
 		},
 		docs: {
 			theme: themes[getResolvedTheme()],
+		},
+		viewport: {
+			options: MINIMAL_VIEWPORTS,
 		},
 	},
 };

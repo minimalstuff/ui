@@ -17,7 +17,7 @@
 		"dist"
 	],
 	"scripts": {
-		"dev": "storybook dev -p 6006 --ci",
+		"dev": "storybook dev -p 6006",
 		"build": "tsc -b && VITE_BUILD_LIB=1 vite build",
 		"lint": "eslint .",
 		"test": "vitest run --config vitest.ci.config.ts",
@@ -26,7 +26,8 @@
 		"format": "prettier --write --parser typescript '**/*.{ts,tsx}'",
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build",
-		"release": "release-it"
+		"release": "release-it",
+		"ci": "storybook dev -p 6006 --ci"
 	},
 	"repository": {
 		"type": "git",

@@ -1,6 +1,9 @@
 dev:
 	@pnpm run dev
 
+ci:
+	@pnpm run ci
+
 storybook:
 	@pnpm run storybook
 
