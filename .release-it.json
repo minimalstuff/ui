@@ -10,9 +10,18 @@
 		"push": true
 	},
 	"github": {
-		"release": true
+		"release": true,
+		"web": true
 	},
 	"npm": {
 		"publish": false
+	},
+	"plugins": {
+		"@release-it/conventional-changelog": {
+			"infile": "CHANGELOG.md",
+			"preset": {
+				"name": "conventionalcommits"
+			}
+		}
 	}
 }
