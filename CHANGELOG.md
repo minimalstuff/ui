@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.1.6](https://github.com/minimalstuff/ui/compare/1.1.5...1.1.6) (2026-02-08)
+
 ## [1.1.5](https://github.com/minimalstuff/ui/compare/1.1.4...1.1.5) (2026-02-08)
 
 ### Bug Fixes
