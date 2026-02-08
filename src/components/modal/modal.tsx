@@ -97,8 +97,8 @@ export function Modal({
 		<div
 			className={clsx(
 				'fixed inset-0 z-50 flex items-start justify-center',
-				'pt-0 pb-0 sm:pt-[5rem] sm:pb-[5rem]',
-				'transition-opacity duration-200',
+				'p-2 sm:py-[3rem] lg:py-[5rem]',
+				'transition-all duration-200',
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
 			onClick={handleBackdropClick}
@@ -115,8 +115,8 @@ export function Modal({
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
-					'bg-white dark:bg-gray-800 sm:rounded-lg sm:shadow-xl',
-					'max-h-[100vh] h-full sm:max-h-[calc(100vh-10rem)] sm:h-auto overflow-hidden flex flex-col',
+					'bg-white dark:bg-gray-800 rounded-lg shadow-xl',
+					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',
 					'transition-all duration-200',
 					isVisible
 						? 'opacity-100 scale-100 translate-y-0'
