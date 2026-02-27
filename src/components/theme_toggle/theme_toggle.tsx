@@ -2,7 +2,9 @@ import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import { type Theme } from '#types/theme';
 import { applyTheme } from '#utils/theme';
 import clsx from 'clsx';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getNextTheme, switchTheme } from '../../lib/theme_transition';
+import './theme_toggle.css';
 
 function getIcon(theme: Theme): React.ReactNode {
 	const iconClasses = {
@@ -19,25 +21,29 @@ function getIcon(theme: Theme): React.ReactNode {
 	);
 }
 
-export function ThemeToggle() {
-	const [theme, setTheme] = useState<Theme>('system');
-	const isClient = useIsClient();
+interface ThemeToggleProps {
+	isTransitionEnabled?: boolean;
+	transitionDuration?: number;
+	transitionEasing?: string;
+}
 
-	useEffect(() => {
+export function ThemeToggle({
+	isTransitionEnabled = true,
+	transitionDuration,
+	transitionEasing,
+}: Readonly<ThemeToggleProps>) {
+	const [theme, setTheme] = useState<Theme>(() => {
 		const savedTheme = localStorage.getItem('theme') as Theme;
-		requestAnimationFrame(() => {
-			if (savedTheme) {
-				setTheme(savedTheme);
-				applyTheme(savedTheme);
-			} else {
-				setTheme('system');
-				applyTheme('system');
-			}
-		});
-	}, []);
+		if (savedTheme) {
+			return savedTheme;
+		}
+		return 'system';
+	});
+	const isClient = useIsClient();
+	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
-		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
 
 		const handleSystemThemeChange = () => {
 			if (theme === 'system') {
@@ -52,26 +58,29 @@ export function ThemeToggle() {
 		};
 	}, [theme]);
 
-	const toggleTheme = useCallback(() => {
-		setTheme((prevTheme) => {
-			let newTheme: Theme;
+	const toggleTheme = useCallback(async () => {
+		const newTheme = getNextTheme(theme);
+		const element = buttonRef.current;
 
-			if (prevTheme === 'light') {
-				newTheme = 'dark';
-			} else if (prevTheme === 'dark') {
-				newTheme = 'system';
-			} else {
-				newTheme = 'light';
-			}
-
+		if (element && isTransitionEnabled) {
+			await switchTheme({
+				theme: newTheme,
+				element,
+				transitionDuration,
+				transitionEasing,
+				applyThemeCallback: applyTheme,
+			});
+		} else {
 			applyTheme(newTheme);
-			localStorage.setItem('theme', newTheme);
-			return newTheme;
-		});
-	}, []);
+		}
+
+		setTheme(newTheme);
+		localStorage.setItem('theme', newTheme);
+	}, [theme, isTransitionEnabled, transitionDuration, transitionEasing]);
 
 	return (
 		<button
+			ref={buttonRef}
 			onClick={toggleTheme}
 			className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer"
 			aria-label={`Thème actuel: ${theme}`}
