@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.1](https://github.com/minimalstuff/ui/compare/1.2.0...1.2.1) (2026-02-28)
+
+### Bug Fixes
+
+* **theme_toggle:** move theme initialization to useEffect for fixing "localStorage is not defined" ([a01017b](https://github.com/minimalstuff/ui/commit/a01017b07c1c66be810a48ce8066e9fb96fbf8a0))
+
 ## [1.2.0](https://github.com/minimalstuff/ui/compare/1.1.6...1.2.0) (2026-02-27)
 
 ### Features
