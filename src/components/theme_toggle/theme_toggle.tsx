@@ -32,15 +32,22 @@ export function ThemeToggle({
 	transitionDuration,
 	transitionEasing,
 }: Readonly<ThemeToggleProps>) {
-	const [theme, setTheme] = useState<Theme>(() => {
-		const savedTheme = localStorage.getItem('theme') as Theme;
-		if (savedTheme) {
-			return savedTheme;
-		}
-		return 'system';
-	});
+	const [theme, setTheme] = useState<Theme>('system');
 	const isClient = useIsClient();
 	const buttonRef = useRef<HTMLButtonElement>(null);
+
+	useEffect(() => {
+		const savedTheme = localStorage.getItem('theme') as Theme;
+		requestAnimationFrame(() => {
+			if (savedTheme) {
+				setTheme(savedTheme);
+				applyTheme(savedTheme);
+			} else {
+				setTheme('system');
+				applyTheme('system');
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
