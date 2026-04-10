@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import {
-	type InputHTMLAttributes,
+	type ComponentPropsWithRef,
 	type ReactNode,
 	useId,
 	useState,
@@ -10,7 +10,7 @@ import { CharacterCount } from '../char_count/char_count';
 export const BASE_INPUT_STYLES =
 	'w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;

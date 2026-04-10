@@ -2,13 +2,13 @@ import { CharacterCount } from '#components/char_count/char_count';
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import clsx from 'clsx';
 import {
+	type ComponentPropsWithRef,
 	type ReactNode,
-	type TextareaHTMLAttributes,
 	useId,
 	useState,
 } from 'react';
 
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;

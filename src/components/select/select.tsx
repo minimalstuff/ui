@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type ReactNode, type SelectHTMLAttributes, useId } from 'react';
+import { type ComponentPropsWithRef, type ReactNode, useId } from 'react';
 import { BASE_INPUT_STYLES } from '../input/input';
 
 export interface SelectOption {
@@ -8,7 +8,7 @@ export interface SelectOption {
 }
 
 interface SelectProps extends Omit<
-	SelectHTMLAttributes<HTMLSelectElement>,
+	ComponentPropsWithRef<'select'>,
 	'children'
 > {
 	options: SelectOption[];

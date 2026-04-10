@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { type InputHTMLAttributes, useId, useState } from 'react';
+import { type ComponentPropsWithRef, useId, useState } from 'react';
 
 interface CheckboxProps extends Omit<
-	InputHTMLAttributes<HTMLInputElement>,
+	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
 > {
 	label?: string | React.ReactNode;

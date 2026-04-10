@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import {
-	type InputHTMLAttributes,
+	type ComponentPropsWithRef,
 	type ReactNode,
 	useId,
 	useState,
 } from 'react';
 
 interface SwitchProps extends Omit<
-	InputHTMLAttributes<HTMLInputElement>,
+	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
 > {
 	label?: string | ReactNode;

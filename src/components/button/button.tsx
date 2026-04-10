@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 type ButtonVariant =
 	| 'primary'
@@ -32,7 +32,10 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 	lg: 'px-4 py-3 text-base',
 };
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<
+	ComponentPropsWithRef<'button'>,
+	'children'
+> {
 	variant?: ButtonVariant;
 	size?: ButtonSize;
 	children: ReactNode;

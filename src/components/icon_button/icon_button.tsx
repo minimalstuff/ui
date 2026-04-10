@@ -1,13 +1,12 @@
 import clsx from 'clsx';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IconButtonProps extends ComponentPropsWithRef<'button'> {
 	icon: string;
 	'aria-label': string;
 	variant?: 'default' | 'ghost' | 'danger' | 'outline' | 'subtle';
 	size?: 'sm' | 'md' | 'lg';
 	children?: ReactNode;
-	ref?: React.Ref<HTMLButtonElement>;
 }
 
 const VARIANT_CLASSES = {
