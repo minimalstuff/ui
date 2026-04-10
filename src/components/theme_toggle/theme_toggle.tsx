@@ -88,7 +88,9 @@ export function ThemeToggle({
 	return (
 		<button
 			ref={buttonRef}
-			onClick={toggleTheme}
+			onClick={() => {
+				void toggleTheme();
+			}}
 			className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 cursor-pointer"
 			aria-label={`Thème actuel: ${theme}`}
 		>

@@ -59,7 +59,9 @@ export function ConfirmModal({
 					</Button>
 					<Button
 						variant={confirmColor === 'red' ? 'danger' : 'primary'}
-						onClick={handleConfirm}
+						onClick={() => {
+							void handleConfirm();
+						}}
 						loading={isDisabled}
 						disabled={isDisabled}
 						size="sm"

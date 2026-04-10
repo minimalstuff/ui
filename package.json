@@ -37,7 +37,7 @@
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
 		"preview": "vite preview",
-		"format": "oxfmt --write .",
+		"format": "oxfmt --write . && oxlint --type-aware --fix",
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build",
 		"release": "release-it",

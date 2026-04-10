@@ -22,10 +22,7 @@ export function getResolvedThemeFromPreference(
 ): 'light' | 'dark' {
 	if (preference === 'light') return 'light';
 	if (preference === 'dark') return 'dark';
-	if (typeof window !== 'undefined' && window.matchMedia) {
-		return window.matchMedia('(prefers-color-scheme: dark)').matches
-			? 'dark'
-			: 'light';
-	}
-	return 'light';
+	const prefersDark =
+		globalThis.matchMedia?.('(prefers-color-scheme: dark)')?.matches;
+	return prefersDark ? 'dark' : 'light';
 }
