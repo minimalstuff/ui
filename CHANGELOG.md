@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.3](https://github.com/minimalstuff/ui/compare/1.2.2...1.2.3) (2026-04-10)
+
+### Bug Fixes
+
+* pnpm missing packages field ([e8bd7e6](https://github.com/minimalstuff/ui/commit/e8bd7e64f3ec0f92936932c251ea548f3955b40c))
+
 ## [1.2.2](https://github.com/minimalstuff/ui/compare/1.2.1...1.2.2) (2026-04-10)
 
 ## [1.2.1](https://github.com/minimalstuff/ui/compare/1.2.0...1.2.1) (2026-02-28)
