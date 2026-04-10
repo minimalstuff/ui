@@ -4,13 +4,13 @@
 
 ### Bug Fixes
 
-* **theme_toggle:** move theme initialization to useEffect for fixing "localStorage is not defined" ([a01017b](https://github.com/minimalstuff/ui/commit/a01017b07c1c66be810a48ce8066e9fb96fbf8a0))
+- **theme_toggle:** move theme initialization to useEffect for fixing "localStorage is not defined" ([a01017b](https://github.com/minimalstuff/ui/commit/a01017b07c1c66be810a48ce8066e9fb96fbf8a0))
 
 ## [1.2.0](https://github.com/minimalstuff/ui/compare/1.1.6...1.2.0) (2026-02-27)
 
 ### Features
 
-* **theme_toggle:** add optional fullscreen transition ([a870309](https://github.com/minimalstuff/ui/commit/a870309660caaa26b4a33baa2a4e4f1609013c6c))
+- **theme_toggle:** add optional fullscreen transition ([a870309](https://github.com/minimalstuff/ui/commit/a870309660caaa26b4a33baa2a4e4f1609013c6c))
 
 ## [1.1.6](https://github.com/minimalstuff/ui/compare/1.1.5...1.1.6) (2026-02-08)
 
@@ -18,7 +18,7 @@
 
 ### Bug Fixes
 
-* **modal:** adjust padding and height for improved responsiveness ([274af77](https://github.com/minimalstuff/ui/commit/274af77d98b4ea55fcea09086de0ec617e76083d))
+- **modal:** adjust padding and height for improved responsiveness ([274af77](https://github.com/minimalstuff/ui/commit/274af77d98b4ea55fcea09086de0ec617e76083d))
 
 All notable changes to this project will be documented in this file.
 
