@@ -1,6 +1,6 @@
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import { type Theme } from '#types/theme';
-import { applyTheme } from '#utils/theme';
+import { followThemeState, getCurrentTheme, setCurrentTheme } from '#utils/theme';
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getNextTheme, switchTheme } from '../../lib/theme_transition';
@@ -37,33 +37,16 @@ export function ThemeToggle({
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
-		const savedTheme = localStorage.getItem('theme') as Theme;
+		const currentTheme = getCurrentTheme();
 		requestAnimationFrame(() => {
-			if (savedTheme) {
-				setTheme(savedTheme);
-				applyTheme(savedTheme);
-			} else {
-				setTheme('system');
-				applyTheme('system');
-			}
+			setTheme(currentTheme);
+			setCurrentTheme(currentTheme);
+		});
+
+		return followThemeState((nextTheme) => {
+			setTheme(nextTheme);
 		});
 	}, []);
-
-	useEffect(() => {
-		const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
-
-		const handleSystemThemeChange = () => {
-			if (theme === 'system') {
-				applyTheme('system');
-			}
-		};
-
-		mediaQuery.addEventListener('change', handleSystemThemeChange);
-
-		return () => {
-			mediaQuery.removeEventListener('change', handleSystemThemeChange);
-		};
-	}, [theme]);
 
 	const toggleTheme = useCallback(async () => {
 		const newTheme = getNextTheme(theme);
@@ -75,14 +58,11 @@ export function ThemeToggle({
 				element,
 				transitionDuration,
 				transitionEasing,
-				applyThemeCallback: applyTheme,
+				applyThemeCallback: setCurrentTheme,
 			});
 		} else {
-			applyTheme(newTheme);
+			setCurrentTheme(newTheme);
 		}
-
-		setTheme(newTheme);
-		localStorage.setItem('theme', newTheme);
 	}, [theme, isTransitionEnabled, transitionDuration, transitionEasing]);
 
 	return (
