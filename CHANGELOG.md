@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0](https://github.com/minimalstuff/ui/compare/1.2.3...1.3.0) (2026-04-20)
+
+### Features
+
+* **theme:** enhance theme management and state handling ([78ea30f](https://github.com/minimalstuff/ui/commit/78ea30f1d21bd9d1fd2b084b9202b6e58ec4d11e))
+
 ## [1.2.3](https://github.com/minimalstuff/ui/compare/1.2.2...1.2.3) (2026-04-10)
 
 ### Bug Fixes
