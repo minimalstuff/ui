@@ -7,6 +7,8 @@ export { BASE_INPUT_STYLES, Input } from './input/input';
 export { ConfirmModal } from './modal/confirm_modal';
 export { Modal } from './modal/modal';
 export { ModalProvider } from './modal_provider/modal_provider';
+export { RadioOptions } from './radio_options/radio_options';
+export type { RadioOption } from './radio_options/radio_options';
 export { Select } from './select/select';
 export type { SelectOption } from './select/select';
 export { Switch } from './switch/switch';
