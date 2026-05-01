@@ -1,6 +1,7 @@
+import './tabs.css';
+
 import clsx from 'clsx';
 import { type ReactNode, useState } from 'react';
-import './tabs.css';
 
 export interface TabItem {
 	title: string;

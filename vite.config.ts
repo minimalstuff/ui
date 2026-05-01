@@ -1,12 +1,12 @@
+import path from 'node:path';
+import UnoCSS from 'unocss/vite';
+import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
+import { playwright } from '@vitest/browser-playwright';
 /// <reference types="vitest/config" />
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import react from '@vitejs/plugin-react';
-import { playwright } from '@vitest/browser-playwright';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import UnoCSS from 'unocss/vite';
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 
 const dirname =
 	typeof __dirname !== 'undefined'

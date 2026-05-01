@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef, type ReactNode, useId } from 'react';
+
 import { BASE_INPUT_STYLES } from '../input/input';
 
 export interface SelectOption {

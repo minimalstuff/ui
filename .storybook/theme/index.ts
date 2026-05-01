@@ -22,7 +22,8 @@ export function getResolvedThemeFromPreference(
 ): 'light' | 'dark' {
 	if (preference === 'light') return 'light';
 	if (preference === 'dark') return 'dark';
-	const prefersDark =
-		globalThis.matchMedia?.('(prefers-color-scheme: dark)')?.matches;
+	const prefersDark = globalThis.matchMedia?.(
+		'(prefers-color-scheme: dark)'
+	)?.matches;
 	return prefersDark ? 'dark' : 'light';
 }

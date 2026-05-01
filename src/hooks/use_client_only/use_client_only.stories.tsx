@@ -1,8 +1,9 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import {
 	useClientOnly,
 	withClientOnly,
 } from '#hooks/use_client_only/use_client_only';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * This is not the best story because storybook will only render the story after the client has mounted.

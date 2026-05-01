@@ -1,5 +1,6 @@
-import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
+import { renderHook, waitFor } from '@testing-library/react';
+
 import { useIsClient } from './use_is_client';
 
 describe('useIsClient', () => {

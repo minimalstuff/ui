@@ -1,5 +1,6 @@
-import { useClientOnly } from '#hooks/use_client_only/use_client_only';
 import { createElement, Fragment } from 'react';
+
+import { useClientOnly } from '#hooks/use_client_only/use_client_only';
 
 interface ClientOnlyProps extends React.PropsWithChildren {
 	fallback?: React.ReactNode;

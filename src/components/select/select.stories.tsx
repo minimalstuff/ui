@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Select, type SelectOption } from './select';
 
 const defaultOptions: SelectOption[] = [

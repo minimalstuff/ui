@@ -1,5 +1,6 @@
-import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { useIsClient } from '#hooks/use_is_client/use_is_client';
 
 function DemoHook() {
 	const isClient = useIsClient();

@@ -13,7 +13,10 @@ function isTheme(value: string | null): value is Theme {
 }
 
 function isBrowserEnvironment() {
-	return typeof globalThis.window !== 'undefined' && typeof globalThis.document !== 'undefined';
+	return (
+		typeof globalThis.window !== 'undefined' &&
+		typeof globalThis.document !== 'undefined'
+	);
 }
 
 function notifyThemeListeners(theme: Theme) {

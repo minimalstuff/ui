@@ -1,7 +1,8 @@
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Button } from '#components/button/button';
 import { ConfirmModal } from '#components/modal/confirm_modal';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
 
 type ConfirmModalWrapperProps = Omit<
 	React.ComponentProps<typeof ConfirmModal>,

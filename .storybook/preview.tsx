@@ -1,7 +1,9 @@
-import type { Preview } from '@storybook/react-vite';
-import { themes } from 'storybook/theming';
-import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import 'virtual:uno.css';
+
+import { themes } from 'storybook/theming';
+import type { Preview } from '@storybook/react-vite';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
+
 import { getResolvedTheme, getThemePreference } from './theme';
 import {
 	themeClassDecorator,

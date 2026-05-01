@@ -1,5 +1,6 @@
-import { IconButton } from '#components/icon_button/icon_button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { IconButton } from '#components/icon_button/icon_button';
 
 const meta = {
 	title: 'Example/IconButton',

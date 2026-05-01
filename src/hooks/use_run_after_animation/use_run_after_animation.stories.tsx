@@ -1,7 +1,8 @@
-import { useRunAfterAnimation } from '#hooks/use_run_after_animation/use_run_after_animation';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { useRunAfterAnimation } from '#hooks/use_run_after_animation/use_run_after_animation';
 
 const DURATION_MS = 400;
 

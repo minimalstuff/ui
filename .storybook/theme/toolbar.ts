@@ -1,4 +1,5 @@
 import type React from 'react';
+
 import {
 	THEME_STORAGE_KEY,
 	getResolvedThemeFromPreference,

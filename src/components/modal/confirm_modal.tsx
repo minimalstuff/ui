@@ -1,6 +1,7 @@
-import { Button } from '#components/button/button';
-import { Modal } from '#components/modal/modal';
 import { type ReactNode, useState } from 'react';
+
+import { Modal } from '#components/modal/modal';
+import { Button } from '#components/button/button';
 
 interface ConfirmModalProps {
 	isOpen: boolean;

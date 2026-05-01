@@ -5,6 +5,7 @@ import {
 	useId,
 	useState,
 } from 'react';
+
 import { CharacterCount } from '../char_count/char_count';
 
 export const BASE_INPUT_STYLES =

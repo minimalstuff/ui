@@ -1,5 +1,3 @@
-import { CharacterCount } from '#components/char_count/char_count';
-import { BASE_INPUT_STYLES } from '#components/input/input';
 import clsx from 'clsx';
 import {
 	type ComponentPropsWithRef,
@@ -7,6 +5,9 @@ import {
 	useId,
 	useState,
 } from 'react';
+
+import { BASE_INPUT_STYLES } from '#components/input/input';
+import { CharacterCount } from '#components/char_count/char_count';
 
 interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;

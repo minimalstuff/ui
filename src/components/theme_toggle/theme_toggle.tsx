@@ -1,14 +1,16 @@
+import './theme_toggle.css';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { type Theme } from '#types/theme';
 import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
-import { type Theme } from '#types/theme';
+import { getNextTheme, switchTheme } from '../../lib/theme_transition';
 import {
 	followThemeState,
 	getCurrentTheme,
 	setCurrentTheme,
 } from '#utils/theme';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getNextTheme, switchTheme } from '../../lib/theme_transition';
-import './theme_toggle.css';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
 	light: 'i-tabler-sun text-yellow-500',

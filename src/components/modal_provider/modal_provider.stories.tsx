@@ -1,7 +1,8 @@
-import { Button } from '#components/button/button';
-import { ModalProvider } from '#components/modal_provider/modal_provider';
-import { useModalStore } from '#stores/modal_store/modal_store';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Button } from '#components/button/button';
+import { useModalStore } from '#stores/modal_store/modal_store';
+import { ModalProvider } from '#components/modal_provider/modal_provider';
 
 function ModalProviderDemo() {
 	const open = useModalStore((s) => s.open);

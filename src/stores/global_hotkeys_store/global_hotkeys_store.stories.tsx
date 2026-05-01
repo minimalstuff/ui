@@ -1,5 +1,6 @@
-import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
 
 function GlobalHotkeysStoreDemo() {
 	const globalHotkeysEnabled = useGlobalHotkeysStore(

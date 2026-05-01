@@ -1,5 +1,5 @@
-import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal } from '#components/modal/modal';
+import { ConfirmModal } from '#components/modal/confirm_modal';
 import { useModalStore } from '#stores/modal_store/modal_store';
 
 export function ModalProvider() {

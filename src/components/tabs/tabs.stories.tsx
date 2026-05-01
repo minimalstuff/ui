@@ -1,5 +1,6 @@
-import { Tabs } from '#components/tabs/tabs';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Tabs } from '#components/tabs/tabs';
 
 const meta = {
 	title: 'Example/Tabs',

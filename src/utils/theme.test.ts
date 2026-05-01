@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import { applyTheme, followThemeState, getCurrentTheme, setCurrentTheme } from './theme';
+
+import {
+	applyTheme,
+	followThemeState,
+	getCurrentTheme,
+	setCurrentTheme,
+} from './theme';
 
 describe('applyTheme', () => {
 	beforeEach(() => {
@@ -71,7 +77,8 @@ describe('applyTheme', () => {
 		const listener = vi.fn();
 		const unsubscribe = followThemeState(listener);
 
-		const mediaQueryHandler = mediaQuery.addEventListener.mock.calls[0][1] as () => void;
+		const mediaQueryHandler = mediaQuery.addEventListener.mock
+			.calls[0][1] as () => void;
 		mediaQuery.matches = true;
 		mediaQueryHandler();
 

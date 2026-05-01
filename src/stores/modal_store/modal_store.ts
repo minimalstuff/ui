@@ -1,6 +1,7 @@
-import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
-import { type ReactNode } from 'react';
 import { create } from 'zustand';
+import { type ReactNode } from 'react';
+
+import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 export type ConfirmModalColor = 'red' | 'blue' | 'green';
