@@ -33,16 +33,19 @@
 	"scripts": {
 		"dev": "storybook dev -p 6006",
 		"build": "tsc -b && VITE_BUILD_LIB=1 vite build",
-		"lint": "oxlint --type-aware",
+		"lint": "oxlint .",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
 		"preview": "vite preview",
-		"format": "oxfmt --write . && oxlint --type-aware --fix",
+		"format": "pnpm lint:fix; oxfmt .",
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build",
 		"release": "release-it",
 		"ci": "storybook dev -p 6006 --ci",
-		"lint:fix": "oxlint --type-aware --fix"
+		"lint:fix": "oxlint . --fix --fix-suggestions --fix-dangerously",
+		"format:check": "oxfmt . --check",
+		"typecheck": "tsc --noEmit",
+		"check": "pnpm run lint && pnpm run format:check && pnpm run typecheck"
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
@@ -50,7 +53,7 @@
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^5.1.1",
-		"@minimalstuff/tooling": "^0.3.0",
+		"@minimalstuff/tooling": "^0.5.0",
 		"@release-it/conventional-changelog": "^10.0.6",
 		"@storybook/addon-a11y": "^10.3.5",
 		"@storybook/addon-docs": "^10.3.5",
