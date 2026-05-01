@@ -7,6 +7,12 @@ const meta = {
 	parameters: {
 		layout: 'centered',
 	},
+	argTypes: {
+		size: {
+			control: 'select',
+			options: ['xs', 'sm', 'md', 'lg'],
+		},
+	},
 	tags: ['autodocs'],
 } satisfies Meta<typeof ThemeToggle>;
 
@@ -15,6 +21,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const ChangeSize: Story = {
+	args: {
+		size: 'lg',
+	},
+};
 
 export const FullPage: Story = {
 	render: () => (
