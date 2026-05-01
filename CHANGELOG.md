@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/minimalstuff/ui/compare/1.3.0...1.4.0) (2026-05-01)
+
+### Features
+
+* **radio_options:** add RadioOptions component ([4e8338e](https://github.com/minimalstuff/ui/commit/4e8338ee29231317e359b555355618ab171dd677))
+* **theme_toggle:** add size prop and update icon button implementation ([84025c5](https://github.com/minimalstuff/ui/commit/84025c5942dfd55f45a967e35b3149b4c7f1a32a))
+
 ## [1.3.0](https://github.com/minimalstuff/ui/compare/1.2.3...1.3.0) (2026-04-20)
 
 ### Features
