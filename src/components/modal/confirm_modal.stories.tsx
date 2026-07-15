@@ -1,48 +1,22 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from '#components/button/button';
-import { ConfirmModal } from '#components/modal/confirm_modal';
+import {
+	ConfirmModal,
+	type ConfirmModalProps,
+} from '#components/modal/confirm_modal';
 
-type ConfirmModalWrapperProps = Omit<
-	React.ComponentProps<typeof ConfirmModal>,
-	'isOpen' | 'onClose' | 'onConfirm'
-> & { defaultOpen?: boolean };
+function ConfirmModalTrigger(props: ConfirmModalProps) {
+	const handleOpen = () => {
+		void ConfirmModal.call(props);
+	};
 
-function ConfirmModalWrapper({
-	defaultOpen = false,
-	title,
-	children,
-	confirmLabel,
-	cancelLabel,
-	confirmColor,
-	loading,
-}: ConfirmModalWrapperProps) {
-	const [isOpen, setIsOpen] = useState(defaultOpen);
-	return (
-		<>
-			<Button onClick={() => setIsOpen(true)}>Open confirm</Button>
-			<ConfirmModal
-				isOpen={isOpen}
-				onClose={() => setIsOpen(false)}
-				onConfirm={async () => {
-					await new Promise((r) => setTimeout(r, 800));
-				}}
-				title={title}
-				confirmLabel={confirmLabel}
-				cancelLabel={cancelLabel}
-				confirmColor={confirmColor}
-				loading={loading}
-			>
-				{children}
-			</ConfirmModal>
-		</>
-	);
+	return <Button onClick={handleOpen}>Open confirm</Button>;
 }
 
 const meta = {
 	title: 'Example/ConfirmModal',
-	component: ConfirmModalWrapper,
+	component: ConfirmModalTrigger,
 	parameters: {
 		layout: 'centered',
 	},
@@ -65,24 +39,17 @@ const meta = {
 			options: ['red', 'blue', 'green'],
 			description: 'Confirm button color',
 		},
-		loading: {
-			control: 'boolean',
-			description: 'External loading state',
-		},
-		defaultOpen: {
-			control: 'boolean',
-			description: 'Open by default',
-		},
 	},
 	args: {
 		title: 'Confirm action',
 		confirmLabel: 'Confirm',
 		cancelLabel: 'Cancel',
 		confirmColor: 'blue',
-		defaultOpen: false,
+		onConfirm: async () => {
+			await new Promise((r) => setTimeout(r, 800));
+		},
 	},
-	render: (args) => <ConfirmModalWrapper {...args} />,
-} satisfies Meta<typeof ConfirmModalWrapper>;
+} satisfies Meta<typeof ConfirmModalTrigger>;
 
 export default meta;
 
@@ -120,14 +87,5 @@ export const CustomLabels: Story = {
 		children: 'You have unsaved changes. Do you want to save before leaving?',
 		confirmLabel: 'Save',
 		cancelLabel: 'Discard',
-	},
-};
-
-export const Loading: Story = {
-	args: {
-		title: 'Processing…',
-		children: 'Please wait while we complete the action.',
-		loading: true,
-		defaultOpen: false,
 	},
 };

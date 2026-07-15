@@ -11,6 +11,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      react-call:
+        specifier: ^2.0.2
+        version: 2.0.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vite@8.1.4(@types/node@24.10.13)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
       zustand:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.17)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
@@ -3439,6 +3442,18 @@ packages:
 
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
+
+  react-call@2.0.2:
+    resolution: {integrity: sha512-egXLdccpWeRq+6XmR+jm/4Lg0w5zLAe/2jMzYdWtQkfe5qgfUJReZWdLWyPIfzZt215FBF6wFOZPaqne6MhNNw==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+      vite: '>=8'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      vite:
+        optional: true
 
   react-docgen-typescript@2.4.0:
     resolution: {integrity: sha512-ZtAp5XTO5HRzQctjPU0ybY0RRCQO19X/8fxn3w7y2VVTUbGHDKULPTL4ky3vB05euSgG5NpALhEhDPvQ56wvXg==}
@@ -7223,6 +7238,13 @@ snapshots:
     dependencies:
       defu: 6.1.7
       destr: 2.0.5
+
+  react-call@2.0.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vite@8.1.4(@types/node@24.10.13)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)):
+    dependencies:
+      react: 19.2.7
+    optionalDependencies:
+      react-dom: 19.2.7(react@19.2.7)
+      vite: 8.1.4(@types/node@24.10.13)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)
 
   react-docgen-typescript@2.4.0(typescript@6.0.3):
     dependencies:

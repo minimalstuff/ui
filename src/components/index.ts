@@ -4,8 +4,13 @@ export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';
 export { IconButton } from './icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './input/input';
-export { ConfirmModal } from './modal/confirm_modal';
-export { Modal } from './modal/modal';
+export {
+	ConfirmModal,
+	type ConfirmModalColor,
+	type ConfirmModalProps,
+	type ConfirmModalResponse,
+} from './modal/confirm_modal';
+export { Modal, type ModalProps, type ModalSize } from './modal/modal';
 export { ModalProvider } from './modal_provider/modal_provider';
 export { RadioOptions } from './radio_options/radio_options';
 export type { RadioOption } from './radio_options/radio_options';

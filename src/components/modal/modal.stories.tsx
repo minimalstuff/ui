@@ -1,46 +1,22 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Input } from '#components/input/input';
-import { Modal } from '#components/modal/modal';
 import { Button } from '#components/button/button';
 import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
+import { Modal, type ModalProps } from '#components/modal/modal';
 
-type ModalWrapperProps = Omit<
-	React.ComponentProps<typeof Modal>,
-	'isOpen' | 'onClose'
-> & { defaultOpen?: boolean };
+function ModalTrigger(props: ModalProps) {
+	const handleOpen = () => {
+		void Modal.call(props);
+	};
 
-function ModalWrapper({
-	defaultOpen = false,
-	title,
-	children,
-	footer,
-	size,
-	className,
-}: ModalWrapperProps) {
-	const [isOpen, setIsOpen] = useState(defaultOpen);
-	return (
-		<>
-			<Button onClick={() => setIsOpen(true)}>Open modal</Button>
-			<Modal
-				isOpen={isOpen}
-				onClose={() => setIsOpen(false)}
-				title={title}
-				footer={footer}
-				size={size}
-				className={className}
-			>
-				{children}
-			</Modal>
-		</>
-	);
+	return <Button onClick={handleOpen}>Open modal</Button>;
 }
 
 const meta = {
 	title: 'Example/Modal',
-	component: Modal,
+	component: ModalTrigger,
 	parameters: {
 		layout: 'centered',
 	},
@@ -59,19 +35,13 @@ const meta = {
 			control: 'text',
 			description: 'Body content',
 		},
-		defaultOpen: {
-			control: 'boolean',
-			description: 'Open by default in story',
-		},
 	},
 	args: {
 		title: 'Modal title',
 		children: 'Modal content goes here.',
 		size: 'md',
-		defaultOpen: false,
 	},
-	render: (args) => <ModalWrapper {...args} />,
-} satisfies Meta<typeof ModalWrapper>;
+} satisfies Meta<typeof ModalTrigger>;
 
 export default meta;
 

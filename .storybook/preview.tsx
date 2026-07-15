@@ -4,6 +4,7 @@ import { themes } from 'storybook/theming';
 import type { Preview } from '@storybook/react-vite';
 import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 
+import { modalRootDecorator } from './modal_root_decorator';
 import { getResolvedTheme, getThemePreference } from './theme';
 import {
 	themeClassDecorator,
@@ -16,7 +17,7 @@ const preview: Preview = {
 	initialGlobals: {
 		theme: getThemePreference(),
 	},
-	decorators: [themeClassDecorator, themeSyncDecorator],
+	decorators: [themeClassDecorator, themeSyncDecorator, modalRootDecorator],
 	parameters: {
 		controls: {
 			matchers: {

@@ -50,6 +50,7 @@
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
+		"react-call": "^2.0.2",
 		"zustand": "^5.0.14"
 	},
 	"devDependencies": {
