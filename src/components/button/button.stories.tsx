@@ -42,6 +42,15 @@ const meta = {
 			control: 'boolean',
 			description: 'Disable the button',
 		},
+		startIcon: {
+			control: 'text',
+			description: 'Icon class rendered before the label (e.g. i-mdi-plus)',
+		},
+		endIcon: {
+			control: 'text',
+			description:
+				'Icon class rendered after the label (e.g. i-mdi-arrow-right)',
+		},
 	},
 	args: {
 		children: 'Button',
@@ -79,6 +88,26 @@ export const States: Story = {
 			</div>
 		);
 	},
+	args: {
+		children: '',
+	},
+};
+
+export const WithIcons: Story = {
+	render: () => (
+		<div className="flex flex-wrap items-center gap-3">
+			<Button startIcon="i-mdi-plus">New item</Button>
+			<Button endIcon="i-mdi-arrow-right" variant="outline" color="neutral">
+				Continue
+			</Button>
+			<Button startIcon="i-mdi-trash-can" color="danger">
+				Delete
+			</Button>
+			<Button startIcon="i-mdi-plus" loading>
+				New item
+			</Button>
+		</div>
+	),
 	args: {
 		children: '',
 	},
