@@ -7,12 +7,11 @@ import {
 	type ThemePreference,
 } from './index';
 
-export const THEME_TOOLBAR_ITEMS: { value: ThemePreference; title: string }[] =
-	[
-		{ value: 'light', title: 'Light' },
-		{ value: 'dark', title: 'Dark' },
-		{ value: 'system', title: 'System' },
-	];
+const THEME_TOOLBAR_ITEMS: { value: ThemePreference; title: string }[] = [
+	{ value: 'light', title: 'Light' },
+	{ value: 'dark', title: 'Dark' },
+	{ value: 'system', title: 'System' },
+];
 
 export const themeGlobalTypes = {
 	theme: {
