@@ -1,3 +1,5 @@
 import { minimalstuffPreset } from '@minimalstuff/tooling/oxc/fmt';
 
-export default minimalstuffPreset();
+export default minimalstuffPreset({
+	ignorePatterns: ['**/*.md'],
+});

@@ -12,7 +12,7 @@ import {
 } from './theme/toolbar';
 
 const preview: Preview = {
-	globalTypes: themeGlobalTypes as Preview['globalTypes'],
+	globalTypes: themeGlobalTypes,
 	initialGlobals: {
 		theme: getThemePreference(),
 	},
