@@ -32,6 +32,15 @@ const meta = {
 			control: 'boolean',
 			description: 'Mark group as required',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius of the option cards',
+		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in border/background styling from option cards',
+		},
 	},
 } satisfies Meta<typeof RadioOptions>;
 

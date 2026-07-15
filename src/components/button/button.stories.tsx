@@ -13,8 +13,9 @@ const meta = {
 	argTypes: {
 		variant: {
 			control: 'select',
-			options: ['solid', 'outline', 'ghost', 'subtle'],
-			description: 'Visual shape of the button',
+			options: ['solid', 'outline', 'ghost', 'subtle', 'unstyled'],
+			description:
+				'Visual shape of the button. "unstyled" strips all built-in styling.',
 		},
 		color: {
 			control: 'select',
@@ -25,6 +26,11 @@ const meta = {
 			control: 'select',
 			options: ['xs', 'sm', 'md', 'lg'],
 			description: 'Button size',
+		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius',
 		},
 		children: {
 			control: 'text',
@@ -143,6 +149,35 @@ export const AllSizes: Story = {
 				</Button>
 			))}
 		</div>
+	),
+	args: {
+		children: '',
+	},
+};
+
+export const RadiusMatrix: Story = {
+	render: () => (
+		<div className="flex flex-wrap items-center gap-3">
+			{(['none', 'sm', 'md', 'lg', 'xl', 'full'] as const).map((radius) => (
+				<Button key={radius} radius={radius}>
+					{radius}
+				</Button>
+			))}
+		</div>
+	),
+	args: {
+		children: '',
+	},
+};
+
+export const Unstyled: Story = {
+	render: () => (
+		<Button
+			variant="unstyled"
+			className="bg-fuchsia-600 text-white px-4 py-2 rounded-full hover:bg-fuchsia-700"
+		>
+			Bring your own styles
+		</Button>
 	),
 	args: {
 		children: '',

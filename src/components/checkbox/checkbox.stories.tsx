@@ -26,6 +26,15 @@ const meta = {
 			control: 'boolean',
 			description: 'Disable the checkbox',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius of the box',
+		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in border/background styling from the box',
+		},
 	},
 	decorators: [
 		(Story) => (

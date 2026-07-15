@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef, useId, useState } from 'react';
 
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
 export interface RadioOption {
 	value: string;
 	label: string;
@@ -22,6 +24,8 @@ interface RadioOptionsProps extends Omit<
 	label?: string | React.ReactNode;
 	error?: string;
 	required?: boolean;
+	radius?: Radius;
+	unstyled?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 	id?: string;
@@ -38,6 +42,8 @@ export function RadioOptions({
 	error,
 	required,
 	disabled,
+	radius = 'lg',
+	unstyled = false,
 	className,
 	wrapperClassName,
 	id = 'radio',
@@ -102,20 +108,24 @@ export function RadioOptions({
 							key={option.value}
 							htmlFor={optionId}
 							className={clsx(
-								'flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-2.5 transition-colors duration-150',
+								'flex cursor-pointer items-start gap-3 transition-colors duration-150',
 								orientation === 'horizontal' && 'flex-1',
 								'focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2',
 								'focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900',
 								error
 									? 'focus-within:ring-red-500'
 									: 'focus-within:ring-blue-500',
-								isSelected
-									? error
-										? 'border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950/20'
-										: 'border-blue-500 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/25'
-									: error
-										? 'border-red-300 bg-white dark:border-red-800/50 dark:bg-gray-800/50'
-										: 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-white dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800',
+								!unstyled && [
+									RADIUS_CLASSES[radius],
+									'border px-3 py-2.5',
+									isSelected
+										? error
+											? 'border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950/20'
+											: 'border-blue-500 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/25'
+										: error
+											? 'border-red-300 bg-white dark:border-red-800/50 dark:bg-gray-800/50'
+											: 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-white dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800',
+								],
 								isDisabled && 'cursor-not-allowed opacity-50'
 							)}
 						>

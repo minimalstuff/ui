@@ -20,13 +20,18 @@ const meta = {
 		},
 		variant: {
 			control: 'select',
-			options: ['default', 'ghost', 'danger', 'outline', 'subtle'],
-			description: 'Visual style',
+			options: ['default', 'ghost', 'danger', 'outline', 'subtle', 'unstyled'],
+			description: 'Visual style. "unstyled" strips all built-in styling.',
 		},
 		size: {
 			control: 'select',
 			options: ['sm', 'md', 'lg'],
 			description: 'Button size',
+		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius',
 		},
 		disabled: {
 			control: 'boolean',
@@ -138,4 +143,29 @@ export const AllSizes: Story = {
 			))}
 		</div>
 	),
+};
+
+export const RadiusMatrix: Story = {
+	render: () => (
+		<div className="flex flex-wrap items-center gap-3">
+			{(['none', 'sm', 'md', 'lg', 'xl', 'full'] as const).map((radius) => (
+				<IconButton
+					key={radius}
+					icon="i-mdi-cog"
+					radius={radius}
+					aria-label={radius}
+					variant="outline"
+				/>
+			))}
+		</div>
+	),
+};
+
+export const Unstyled: Story = {
+	args: {
+		variant: 'unstyled',
+		icon: 'i-mdi-heart',
+		'aria-label': 'Unstyled',
+		className: 'text-fuchsia-600 hover:text-fuchsia-700 p-2',
+	},
 };

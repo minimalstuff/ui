@@ -3,6 +3,7 @@ import './theme_toggle.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { type Theme } from '#types/theme';
+import { type Radius } from '#components/shared/radius';
 import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import { getNextTheme, switchTheme } from '../../lib/theme_transition';
@@ -25,6 +26,7 @@ interface ThemeToggleProps {
 	transitionDuration?: number;
 	transitionEasing?: string;
 	size?: 'sm' | 'md' | 'lg';
+	radius?: Radius;
 }
 
 export function ThemeToggle({
@@ -32,6 +34,7 @@ export function ThemeToggle({
 	transitionDuration,
 	transitionEasing,
 	size = 'md',
+	radius,
 }: Readonly<ThemeToggleProps>) {
 	const [theme, setTheme] = useState<Theme>('system');
 	const isClient = useIsClient();
@@ -74,6 +77,7 @@ export function ThemeToggle({
 			icon={iconClass}
 			aria-label={`Thème actuel: ${theme}`}
 			size={size}
+			radius={radius}
 			onClick={() => {
 				void toggleTheme();
 			}}

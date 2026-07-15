@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { type ReactNode, useEffect, useState } from 'react';
 
 import { IconButton } from '#components/icon_button/icon_button';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -13,6 +14,7 @@ interface ModalShellProps {
 	children: ReactNode;
 	footer?: ReactNode;
 	size?: ModalSize;
+	radius?: Radius;
 	className?: string;
 }
 
@@ -30,6 +32,7 @@ export function ModalShell({
 	children,
 	footer,
 	size = 'md',
+	radius = 'xl',
 	className,
 }: ModalShellProps) {
 	const [isOpening, setIsOpening] = useState(false);
@@ -85,7 +88,8 @@ export function ModalShell({
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
-					'bg-white dark:bg-gray-900 rounded-xl shadow-2xl',
+					'bg-white dark:bg-gray-900 shadow-2xl',
+					RADIUS_CLASSES[radius],
 					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',
 					'transition-all duration-200 ease-out',
 					isVisible
@@ -105,7 +109,8 @@ export function ModalShell({
 							aria-label="Close"
 							variant="subtle"
 							size="sm"
-							className="rounded-full -mr-1"
+							radius="full"
+							className="-mr-1"
 						/>
 					</div>
 				)}

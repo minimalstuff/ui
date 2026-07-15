@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef, useId, useState } from 'react';
 
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
 interface CheckboxProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
@@ -8,6 +10,8 @@ interface CheckboxProps extends Omit<
 	label?: string | React.ReactNode;
 	description?: string | React.ReactNode;
 	error?: string;
+	radius?: Radius;
+	unstyled?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -16,6 +20,8 @@ export function Checkbox({
 	label,
 	description,
 	error,
+	radius = 'sm',
+	unstyled = false,
 	className,
 	wrapperClassName,
 	checked,
@@ -68,11 +74,15 @@ export function Checkbox({
 					/>
 					<span
 						className={clsx(
-							'flex h-5 w-5 items-center justify-center rounded border-2 transition-all duration-200',
-							isChecked
-								? 'border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500'
-								: 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800',
-							error && 'border-red-500 dark:border-red-400',
+							'flex h-5 w-5 items-center justify-center transition-all duration-200',
+							!unstyled && [
+								RADIUS_CLASSES[radius],
+								'border-2',
+								isChecked
+									? 'border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500'
+									: 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800',
+								error && 'border-red-500 dark:border-red-400',
+							],
 							className
 						)}
 						aria-hidden

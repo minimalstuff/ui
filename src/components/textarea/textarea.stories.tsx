@@ -38,6 +38,15 @@ const meta = {
 			control: 'boolean',
 			description: 'Disable the textarea',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius',
+		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip all built-in styling',
+		},
 	},
 	args: {
 		placeholder: 'Enter your message...',

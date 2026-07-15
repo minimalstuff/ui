@@ -1,7 +1,14 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
-export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'subtle';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
+export type ButtonVariant =
+	| 'solid'
+	| 'outline'
+	| 'ghost'
+	| 'subtle'
+	| 'unstyled';
 export type ButtonColor = 'primary' | 'neutral' | 'danger' | 'success';
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -81,6 +88,7 @@ interface ButtonProps extends Omit<
 	variant?: ButtonVariant;
 	color?: ButtonColor;
 	size?: ButtonSize;
+	radius?: Radius;
 	children: ReactNode;
 	className?: string;
 	fullWidth?: boolean;
@@ -93,6 +101,7 @@ export const Button = ({
 	variant = 'solid',
 	color = 'primary',
 	size = 'md',
+	radius = 'md',
 	children,
 	className,
 	fullWidth = false,
@@ -109,11 +118,15 @@ export const Button = ({
 		<button
 			type="button"
 			className={clsx(
-				'cursor-pointer inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 enabled:active:duration-75 border enabled:active:scale-[0.95]',
+				'cursor-pointer inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 enabled:active:duration-75 enabled:active:scale-[0.95]',
 				'outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2',
 				'disabled:opacity-50 disabled:cursor-not-allowed',
-				tokens[variant],
-				tokens.focusOutline,
+				variant !== 'unstyled' && [
+					'border',
+					RADIUS_CLASSES[radius],
+					tokens[variant],
+					tokens.focusOutline,
+				],
 				SIZE_CLASSES[size],
 				fullWidth && 'w-full',
 				className

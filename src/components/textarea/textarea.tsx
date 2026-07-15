@@ -8,6 +8,7 @@ import {
 
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import { CharacterCount } from '#components/char_count/char_count';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;
@@ -15,6 +16,8 @@ interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	showCharCount?: boolean;
 	minLength?: number;
 	maxLength?: number;
+	radius?: Radius;
+	unstyled?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -25,6 +28,8 @@ export function Textarea({
 	showCharCount = false,
 	minLength,
 	maxLength,
+	radius = 'md',
+	unstyled = false,
 	className,
 	wrapperClassName,
 	value,
@@ -72,9 +77,15 @@ export function Textarea({
 			<textarea
 				id={textareaId}
 				className={clsx(
-					BASE_INPUT_STYLES,
-					'px-3 py-2 text-sm min-h-[80px] resize-y',
-					error && 'border-red-500 dark:border-red-400 focus:ring-red-500',
+					'w-full min-h-[80px] resize-y disabled:opacity-50 disabled:cursor-not-allowed',
+					!unstyled && [
+						BASE_INPUT_STYLES,
+						RADIUS_CLASSES[radius],
+						'px-3 py-2 text-sm',
+					],
+					!unstyled &&
+						error &&
+						'border-red-500 dark:border-red-400 focus:ring-red-500',
 					className
 				)}
 				value={value}

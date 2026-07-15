@@ -27,6 +27,11 @@ const meta = {
 			control: 'text',
 			description: 'Class name for the tab panel',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius applied to the tab list, tabs, and panel',
+		},
 	},
 	args: {
 		items: [

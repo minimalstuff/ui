@@ -27,6 +27,11 @@ const meta = {
 			options: ['sm', 'md', 'lg', 'xl'],
 			description: 'Modal width',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius',
+		},
 		title: {
 			control: 'text',
 			description: 'Header title',
@@ -71,6 +76,14 @@ export const Large: Story = {
 		title: 'Large modal',
 		size: 'lg',
 		children: 'Wide modal for more content.',
+	},
+};
+
+export const SquareRadius: Story = {
+	args: {
+		title: 'Square corners',
+		radius: 'none',
+		children: 'Border radius is fully customizable via the radius prop.',
 	},
 };
 

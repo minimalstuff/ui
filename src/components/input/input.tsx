@@ -7,9 +7,10 @@ import {
 } from 'react';
 
 import { CharacterCount } from '../char_count/char_count';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 export const BASE_INPUT_STYLES =
-	'w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+	'w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;
@@ -17,6 +18,8 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
 	showCharCount?: boolean;
 	minLength?: number;
 	maxLength?: number;
+	radius?: Radius;
+	unstyled?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -27,6 +30,8 @@ export function Input({
 	showCharCount = false,
 	minLength,
 	maxLength,
+	radius = 'md',
+	unstyled = false,
 	className,
 	wrapperClassName,
 	value,
@@ -74,9 +79,15 @@ export function Input({
 			<input
 				id={inputId}
 				className={clsx(
-					BASE_INPUT_STYLES,
-					'px-3 py-2 text-sm',
-					error && 'border-red-500 dark:border-red-400 focus:ring-red-500',
+					'w-full disabled:opacity-50 disabled:cursor-not-allowed',
+					!unstyled && [
+						BASE_INPUT_STYLES,
+						RADIUS_CLASSES[radius],
+						'px-3 py-2 text-sm',
+					],
+					!unstyled &&
+						error &&
+						'border-red-500 dark:border-red-400 focus:ring-red-500',
 					className
 				)}
 				value={value}

@@ -39,6 +39,11 @@ const meta = {
 			options: ['red', 'blue', 'green'],
 			description: 'Confirm button color',
 		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+			description: 'Border radius',
+		},
 	},
 	args: {
 		title: 'Confirm action',

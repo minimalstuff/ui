@@ -3,6 +3,8 @@ import './tabs.css';
 import clsx from 'clsx';
 import { type ReactNode, useState } from 'react';
 
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
 export interface TabItem {
 	title: string;
 	content: ReactNode;
@@ -13,6 +15,7 @@ export interface TabItem {
 interface TabsProps {
 	items: TabItem[];
 	defaultIndex?: number;
+	radius?: Radius;
 	className?: string;
 	tabListClassName?: string;
 	panelClassName?: string;
@@ -22,6 +25,7 @@ interface TabsProps {
 export function Tabs({
 	items,
 	defaultIndex = 0,
+	radius = 'md',
 	className,
 	tabListClassName,
 	panelClassName,
@@ -42,7 +46,8 @@ export function Tabs({
 			<div
 				role="tablist"
 				className={clsx(
-					'flex gap-1 p-1 rounded-md bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700',
+					'flex gap-1 p-1 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700',
+					RADIUS_CLASSES[radius],
 					tabListClassName
 				)}
 			>
@@ -56,7 +61,8 @@ export function Tabs({
 						disabled={item.disabled}
 						onClick={() => handleTabClick(index)}
 						className={clsx(
-							'flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium',
+							'flex items-center gap-2 px-4 py-2.5 text-sm font-medium',
+							RADIUS_CLASSES[radius],
 							activeIndex === index
 								? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm border border-gray-200 dark:border-gray-600'
 								: clsx(
@@ -85,7 +91,8 @@ export function Tabs({
 			<div
 				role="tabpanel"
 				className={clsx(
-					'mt-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-4 overflow-hidden',
+					'mt-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-4 overflow-hidden',
+					RADIUS_CLASSES[radius],
 					panelClassName
 				)}
 			>

@@ -1,11 +1,14 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
 interface IconButtonProps extends ComponentPropsWithRef<'button'> {
 	icon: string;
 	'aria-label': string;
-	variant?: 'default' | 'ghost' | 'danger' | 'outline' | 'subtle';
+	variant?: 'default' | 'ghost' | 'danger' | 'outline' | 'subtle' | 'unstyled';
 	size?: 'sm' | 'md' | 'lg';
+	radius?: Radius;
 	children?: ReactNode;
 }
 
@@ -20,6 +23,7 @@ const VARIANT_CLASSES = {
 		'text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 hover:bg-white/50 dark:hover:bg-gray-800/50',
 	subtle:
 		'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50/50 dark:hover:bg-gray-800/30',
+	unstyled: '',
 };
 
 const SIZE_CLASSES = {
@@ -39,6 +43,7 @@ export const IconButton = ({
 	'aria-label': ariaLabel,
 	variant = 'default',
 	size = 'md',
+	radius = 'sm',
 	className,
 	children,
 	ref,
@@ -49,8 +54,9 @@ export const IconButton = ({
 		type="button"
 		aria-label={ariaLabel}
 		className={clsx(
-			'cursor-pointer inline-flex items-center justify-center rounded transition-colors',
+			'cursor-pointer inline-flex items-center justify-center transition-colors',
 			'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+			RADIUS_CLASSES[radius],
 			VARIANT_CLASSES[variant],
 			SIZE_CLASSES[size],
 			className

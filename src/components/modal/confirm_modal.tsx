@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { createCallable } from 'react-call';
 import { type ReactNode, useState } from 'react';
 
+import { type Radius } from '#components/shared/radius';
 import { ModalShell } from '#components/modal/modal_shell';
 import { Button, type ButtonColor } from '#components/button/button';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
@@ -55,6 +56,7 @@ export interface ConfirmModalProps {
 	confirmLabel?: ReactNode;
 	cancelLabel?: ReactNode;
 	confirmColor?: ConfirmModalColor;
+	radius?: Radius;
 	onConfirm?: () => void | Promise<void>;
 }
 
@@ -73,6 +75,7 @@ export const ConfirmModal = createCallable<
 		confirmLabel,
 		cancelLabel,
 		confirmColor,
+		radius,
 		onConfirm,
 	}) => {
 		useDisableHotkeysWhileMounted();
@@ -106,6 +109,7 @@ export const ConfirmModal = createCallable<
 				onDismiss={handleCancel}
 				title={<ConfirmModalTitle title={title} color={resolvedConfirmColor} />}
 				size="sm"
+				radius={radius}
 				footer={
 					<>
 						<Button
