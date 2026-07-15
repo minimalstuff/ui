@@ -1,4 +1,4 @@
-export { Button } from './button/button';
+export { Button, type ButtonColor, type ButtonVariant } from './button/button';
 export { CharacterCount } from './char_count/char_count';
 export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';

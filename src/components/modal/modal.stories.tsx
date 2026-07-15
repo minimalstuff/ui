@@ -115,12 +115,10 @@ export const WithFooter: Story = {
 		children: 'This modal has a footer with action buttons.',
 		footer: (
 			<>
-				<Button variant="secondary" size="sm">
+				<Button variant="outline" color="neutral" size="sm">
 					Cancel
 				</Button>
-				<Button variant="primary" size="sm">
-					Save
-				</Button>
+				<Button size="sm">Save</Button>
 			</>
 		),
 	},
@@ -147,12 +145,10 @@ export const LongContentWithFooter: Story = {
 		),
 		footer: (
 			<>
-				<Button variant="secondary" size="sm">
+				<Button variant="outline" color="neutral" size="sm">
 					Cancel
 				</Button>
-				<Button variant="primary" size="sm">
-					Confirm
-				</Button>
+				<Button size="sm">Confirm</Button>
 			</>
 		),
 	},
@@ -185,12 +181,10 @@ export const SmallForm: Story = {
 		),
 		footer: (
 			<>
-				<Button variant="secondary" size="sm">
+				<Button variant="outline" color="neutral" size="sm">
 					Cancel
 				</Button>
-				<Button variant="primary" size="sm">
-					Create
-				</Button>
+				<Button size="sm">Create</Button>
 			</>
 		),
 	},
@@ -258,12 +252,10 @@ export const LongForm: Story = {
 		),
 		footer: (
 			<>
-				<Button variant="secondary" size="sm">
+				<Button variant="outline" color="neutral" size="sm">
 					Cancel
 				</Button>
-				<Button variant="primary" size="sm">
-					Save profile
-				</Button>
+				<Button size="sm">Save profile</Button>
 			</>
 		),
 	},

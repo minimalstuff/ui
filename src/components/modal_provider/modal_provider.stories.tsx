@@ -42,10 +42,10 @@ function ModalProviderDemo() {
 	return (
 		<div className="flex flex-wrap gap-3">
 			<Button onClick={handleOpenStandard}>Open standard modal</Button>
-			<Button variant="secondary" onClick={handleOpenConfirm}>
+			<Button color="neutral" onClick={handleOpenConfirm}>
 				Open confirm modal
 			</Button>
-			<Button variant="danger" onClick={handleOpenDangerConfirm}>
+			<Button color="danger" onClick={handleOpenDangerConfirm}>
 				Open danger confirm
 			</Button>
 		</div>

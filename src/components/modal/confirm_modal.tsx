@@ -2,11 +2,17 @@ import clsx from 'clsx';
 import { createCallable } from 'react-call';
 import { type ReactNode, useState } from 'react';
 
-import { Button } from '#components/button/button';
 import { ModalShell } from '#components/modal/modal_shell';
+import { Button, type ButtonColor } from '#components/button/button';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
 export type ConfirmModalColor = 'red' | 'blue' | 'green';
+
+const CONFIRM_BUTTON_COLOR: Record<ConfirmModalColor, ButtonColor> = {
+	red: 'danger',
+	blue: 'primary',
+	green: 'success',
+};
 
 const BADGE_ICON: Record<ConfirmModalColor, string> = {
 	red: 'i-mdi-alert-circle',
@@ -103,7 +109,8 @@ export const ConfirmModal = createCallable<
 				footer={
 					<>
 						<Button
-							variant="secondary"
+							variant="outline"
+							color="neutral"
 							onClick={handleCancel}
 							disabled={isDisabled}
 							size="sm"
@@ -111,7 +118,7 @@ export const ConfirmModal = createCallable<
 							{resolvedCancelLabel}
 						</Button>
 						<Button
-							variant={resolvedConfirmColor === 'red' ? 'danger' : 'primary'}
+							color={CONFIRM_BUTTON_COLOR[resolvedConfirmColor]}
 							onClick={() => {
 								void handleConfirm();
 							}}

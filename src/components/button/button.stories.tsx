@@ -13,8 +13,13 @@ const meta = {
 	argTypes: {
 		variant: {
 			control: 'select',
-			options: ['primary', 'secondary', 'ghost', 'outline', 'subtle', 'danger'],
-			description: 'Visual style of the button',
+			options: ['solid', 'outline', 'ghost', 'subtle'],
+			description: 'Visual shape of the button',
+		},
+		color: {
+			control: 'select',
+			options: ['primary', 'neutral', 'danger', 'success'],
+			description: 'Color intent of the button',
 		},
 		size: {
 			control: 'select',
@@ -50,136 +55,48 @@ export const Default: Story = {
 	args: {},
 };
 
-export const Primary: Story = {
-	args: {
-		variant: 'primary',
-		children: 'Primary',
-	},
-};
-
-export const Secondary: Story = {
-	args: {
-		variant: 'secondary',
-		children: 'Secondary',
-	},
-};
-
-export const Ghost: Story = {
-	args: {
-		variant: 'ghost',
-		children: 'Ghost',
-	},
-};
-
-export const Outline: Story = {
-	args: {
-		variant: 'outline',
-		children: 'Outline',
-	},
-};
-
-export const Subtle: Story = {
-	args: {
-		variant: 'subtle',
-		children: 'Subtle',
-	},
-};
-
-export const Danger: Story = {
-	args: {
-		variant: 'danger',
-		children: 'Danger',
-	},
-};
-
-export const SizeXS: Story = {
-	args: {
-		size: 'xs',
-		children: 'Extra small',
-	},
-};
-
-export const SizeSM: Story = {
-	args: {
-		size: 'sm',
-		children: 'Small',
-	},
-};
-
-export const SizeMD: Story = {
-	args: {
-		size: 'md',
-		children: 'Medium',
-	},
-};
-
-export const SizeLG: Story = {
-	args: {
-		size: 'lg',
-		children: 'Large',
-	},
-};
-
-export const Loading: Story = {
-	args: {
-		loading: true,
-		children: 'Submit',
-	},
-	render: (args) => {
+export const States: Story = {
+	render: () => {
 		const [loading, setLoading] = useState(false);
 		useEffect(() => {
-			if (loading) {
-				setTimeout(() => setLoading(false), 2000);
-			}
+			if (!loading) return;
+			const id = setTimeout(() => setLoading(false), 2000);
+			return () => clearTimeout(id);
 		}, [loading]);
+
 		return (
-			<Button {...args} loading={loading} onClick={() => setLoading(true)}>
-				{loading ? 'Submitting…' : args.children}
-			</Button>
+			<div className="flex flex-col gap-4">
+				<div className="flex flex-wrap items-center gap-3">
+					<Button>Default</Button>
+					<Button loading={loading} onClick={() => setLoading(true)}>
+						{loading ? 'Submitting…' : 'Loading'}
+					</Button>
+					<Button disabled>Disabled</Button>
+				</div>
+				<div style={{ width: 320 }}>
+					<Button fullWidth>Full width</Button>
+				</div>
+			</div>
 		);
 	},
-};
-
-export const Disabled: Story = {
 	args: {
-		disabled: true,
-		children: 'Disabled',
+		children: '',
 	},
 };
 
-export const FullWidth: Story = {
-	args: {
-		fullWidth: true,
-		children: 'Full width',
-	},
-	parameters: {
-		layout: 'padded',
-	},
-	decorators: [
-		(Story) => (
-			<div style={{ width: 320 }}>
-				<Story />
-			</div>
-		),
-	],
-};
-
-export const AllVariants: Story = {
-	render: (args) => (
-		<div className="flex flex-wrap gap-3">
-			{(
-				[
-					'primary',
-					'secondary',
-					'ghost',
-					'outline',
-					'subtle',
-					'danger',
-				] as const
-			).map((variant) => (
-				<Button key={variant} {...args} variant={variant}>
-					{variant}
-				</Button>
+export const VariantColorMatrix: Story = {
+	render: () => (
+		<div className="flex flex-col gap-3">
+			{(['solid', 'outline', 'ghost', 'subtle'] as const).map((variant) => (
+				<div key={variant} className="flex flex-wrap items-center gap-3">
+					{(['primary', 'neutral', 'danger', 'success'] as const).map(
+						(color) => (
+							<Button key={color} variant={variant} color={color} size="sm">
+								{variant} / {color}
+							</Button>
+						)
+					)}
+				</div>
 			))}
 		</div>
 	),

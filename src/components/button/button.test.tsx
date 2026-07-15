@@ -20,9 +20,18 @@ describe('Button', () => {
 		expect(btn).toHaveClass('px-4', 'py-2');
 	});
 
-	test('applies variant class', () => {
-		render(<Button variant="danger">Delete</Button>);
+	test('applies color class', () => {
+		render(<Button color="danger">Delete</Button>);
 		expect(screen.getByRole('button')).toHaveClass('bg-red-600');
+	});
+
+	test('applies variant class', () => {
+		render(
+			<Button variant="outline" color="neutral">
+				Cancel
+			</Button>
+		);
+		expect(screen.getByRole('button')).toHaveClass('border-gray-300');
 	});
 
 	test('forwards disabled', () => {
