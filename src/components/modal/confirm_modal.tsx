@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { createCallable } from 'react-call';
 import { type ReactNode, useState } from 'react';
 
@@ -6,6 +7,41 @@ import { ModalShell } from '#components/modal/modal_shell';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
 export type ConfirmModalColor = 'red' | 'blue' | 'green';
+
+const BADGE_ICON: Record<ConfirmModalColor, string> = {
+	red: 'i-mdi-alert-circle',
+	blue: 'i-mdi-help-circle',
+	green: 'i-mdi-check-circle',
+};
+
+const BADGE_COLOR_CLASSES: Record<ConfirmModalColor, string> = {
+	red: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
+	blue: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+	green: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
+};
+
+function ConfirmModalTitle({
+	title,
+	color,
+}: {
+	title: ReactNode;
+	color: ConfirmModalColor;
+}) {
+	return (
+		<div className="flex items-center gap-3">
+			<span
+				className={clsx(
+					'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+					BADGE_COLOR_CLASSES[color]
+				)}
+				aria-hidden="true"
+			>
+				<span className={clsx(BADGE_ICON[color], 'h-5 w-5')} />
+			</span>
+			{title}
+		</div>
+	);
+}
 
 export interface ConfirmModalProps {
 	title: ReactNode;
@@ -62,7 +98,7 @@ export const ConfirmModal = createCallable<
 			<ModalShell
 				isEnded={call.ended}
 				onDismiss={handleCancel}
-				title={title}
+				title={<ConfirmModalTitle title={title} color={resolvedConfirmColor} />}
 				size="sm"
 				footer={
 					<>
@@ -88,11 +124,7 @@ export const ConfirmModal = createCallable<
 					</>
 				}
 			>
-				{children && (
-					<div className="text-sm text-gray-600 dark:text-gray-300">
-						{children}
-					</div>
-				)}
+				{children}
 			</ModalShell>
 		);
 	},
