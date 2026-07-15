@@ -3,6 +3,11 @@ import { type ComponentPropsWithRef, type ReactNode, useId } from 'react';
 
 import { BASE_INPUT_STYLES } from '../input/input';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	FIELD_ERROR_TEXT,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
 
 export interface SelectOption {
 	value: string;
@@ -45,13 +50,11 @@ export function Select({
 		<div className={clsx('w-full', wrapperClassName)}>
 			{typeof label === 'string' ? (
 				<label
-					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
 					htmlFor={selectId}
 				>
 					{label}
-					{props.required && (
-						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
-					)}
+					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
 				label
@@ -88,7 +91,7 @@ export function Select({
 			{error && (
 				<p
 					id={`${selectId}-error`}
-					className="text-xs text-red-600 dark:text-red-400 mt-1"
+					className={clsx(FIELD_ERROR_TEXT, 'mt-1')}
 					role="alert"
 				>
 					{error}

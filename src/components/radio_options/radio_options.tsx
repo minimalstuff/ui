@@ -2,6 +2,12 @@ import clsx from 'clsx';
 import { type ComponentPropsWithRef, useId, useState } from 'react';
 
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	FIELD_DESCRIPTION_TEXT,
+	FIELD_ERROR_TEXT,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
 
 export interface RadioOption {
 	value: string;
@@ -77,16 +83,9 @@ export function RadioOptions({
 			{...props}
 		>
 			{label && (
-				<legend
-					className={clsx(
-						'mb-2 text-sm font-medium text-gray-700 dark:text-gray-300',
-						className
-					)}
-				>
+				<legend className={clsx(FIELD_LABEL_TEXT, 'mb-2', className)}>
 					{label}
-					{required && (
-						<span className="ml-1 text-red-500 dark:text-red-400">*</span>
-					)}
+					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</legend>
 			)}
 
@@ -202,7 +201,7 @@ export function RadioOptions({
 								{option.description && (
 									<span
 										id={descriptionId}
-										className="mt-0.5 text-xs text-gray-500 dark:text-gray-400"
+										className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-0.5')}
 									>
 										{option.description}
 									</span>
@@ -214,11 +213,7 @@ export function RadioOptions({
 			</div>
 
 			{error && (
-				<p
-					id={errorId}
-					className="mt-2 text-xs text-red-600 dark:text-red-400"
-					role="alert"
-				>
+				<p id={errorId} className={clsx(FIELD_ERROR_TEXT, 'mt-2')} role="alert">
 					{error}
 				</p>
 			)}

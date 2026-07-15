@@ -8,6 +8,11 @@ import {
 
 import { CharacterCount } from '../char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	FIELD_ERROR_TEXT,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
 
 export const BASE_INPUT_STYLES =
 	'w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
@@ -65,13 +70,11 @@ export function Input({
 		<div className={clsx('w-full', wrapperClassName)}>
 			{typeof label === 'string' ? (
 				<label
-					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
 					htmlFor={inputId}
 				>
 					{label}
-					{props.required && (
-						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
-					)}
+					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
 				label
@@ -106,9 +109,7 @@ export function Input({
 					showMax={maxLength !== undefined}
 				/>
 			)}
-			{error && (
-				<p className="text-xs text-red-600 dark:text-red-400 mt-1">{error}</p>
-			)}
+			{error && <p className={clsx(FIELD_ERROR_TEXT, 'mt-1')}>{error}</p>}
 		</div>
 	);
 }

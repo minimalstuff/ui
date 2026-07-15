@@ -9,6 +9,11 @@ import {
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	FIELD_ERROR_TEXT,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
 
 interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;
@@ -63,13 +68,11 @@ export function Textarea({
 		<div className={clsx('w-full', wrapperClassName)}>
 			{typeof label === 'string' ? (
 				<label
-					className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
 					htmlFor={textareaId}
 				>
 					{label}
-					{props.required && (
-						<span className="text-red-500 dark:text-red-400 ml-1">*</span>
-					)}
+					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
 				label
@@ -104,9 +107,7 @@ export function Textarea({
 					showMax={maxLength !== undefined}
 				/>
 			)}
-			{error && (
-				<p className="text-xs text-red-600 dark:text-red-400 mt-1">{error}</p>
-			)}
+			{error && <p className={clsx(FIELD_ERROR_TEXT, 'mt-1')}>{error}</p>}
 		</div>
 	);
 }

@@ -6,6 +6,13 @@ import {
 	useState,
 } from 'react';
 
+import {
+	FIELD_DESCRIPTION_TEXT,
+	FIELD_ERROR_TEXT,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
+
 interface SwitchProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
@@ -90,17 +97,17 @@ export function Switch({
 				{label && (
 					<>
 						{typeof label === 'string' ? (
-							<span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
+							<span className={clsx(FIELD_LABEL_TEXT, 'select-none')}>
 								{label}
 								{props.required && (
-									<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+									<span className={FIELD_REQUIRED_MARK}>*</span>
 								)}
 							</span>
 						) : (
 							<>
 								{label}
 								{props.required && (
-									<span className="text-red-500 dark:text-red-400 ml-1">*</span>
+									<span className={FIELD_REQUIRED_MARK}>*</span>
 								)}
 							</>
 						)}
@@ -111,14 +118,14 @@ export function Switch({
 				(typeof description === 'string' ? (
 					<p
 						id={`${switchId}-description`}
-						className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-14"
+						className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-1 ml-14')}
 					>
 						{description}
 					</p>
 				) : (
 					<span
 						id={`${switchId}-description`}
-						className="block text-xs text-gray-500 dark:text-gray-400 mt-1 ml-14"
+						className={clsx(FIELD_DESCRIPTION_TEXT, 'block mt-1 ml-14')}
 					>
 						{description}
 					</span>
@@ -126,7 +133,7 @@ export function Switch({
 			{error && (
 				<p
 					id={`${switchId}-error`}
-					className="text-xs text-red-600 dark:text-red-400 mt-1 ml-14"
+					className={clsx(FIELD_ERROR_TEXT, 'mt-1 ml-14')}
 					role="alert"
 				>
 					{error}
