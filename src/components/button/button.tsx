@@ -118,7 +118,7 @@ export const Button = ({
 		<button
 			type="button"
 			className={clsx(
-				'cursor-pointer inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 enabled:active:duration-75 enabled:active:scale-[0.95]',
+				'cursor-pointer inline-flex items-center justify-center gap-2 font-medium transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95]',
 				'outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2',
 				'disabled:opacity-50 disabled:cursor-not-allowed',
 				variant !== 'unstyled' && [

@@ -20,8 +20,14 @@ const meta = {
 		},
 		variant: {
 			control: 'select',
-			options: ['default', 'ghost', 'danger', 'outline', 'subtle', 'unstyled'],
-			description: 'Visual style. "unstyled" strips all built-in styling.',
+			options: ['solid', 'outline', 'ghost', 'subtle', 'unstyled'],
+			description:
+				'Visual shape of the button. "unstyled" strips all built-in styling.',
+		},
+		color: {
+			control: 'select',
+			options: ['primary', 'neutral', 'danger', 'success'],
+			description: 'Color intent of the button',
 		},
 		size: {
 			control: 'select',
@@ -49,37 +55,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Ghost: Story = {
-	args: {
-		variant: 'ghost',
-		'aria-label': 'Close',
-	},
-};
-
-export const Danger: Story = {
-	args: {
-		variant: 'danger',
-		icon: 'i-mdi-delete',
-		'aria-label': 'Delete',
-	},
-};
-
-export const Outline: Story = {
-	args: {
-		variant: 'outline',
-		'aria-label': 'Settings',
-		icon: 'i-mdi-cog',
-	},
-};
-
-export const Subtle: Story = {
-	args: {
-		variant: 'subtle',
-		'aria-label': 'More options',
-		icon: 'i-mdi-dots-vertical',
-	},
-};
 
 export const SizeSM: Story = {
 	args: {
@@ -117,20 +92,24 @@ export const WithChildren: Story = {
 	},
 };
 
-export const AllVariants: Story = {
-	render: (args) => (
-		<div className="flex flex-wrap items-center gap-3">
-			{(['default', 'ghost', 'danger', 'outline', 'subtle'] as const).map(
-				(variant) => (
-					<IconButton
-						key={variant}
-						{...args}
-						variant={variant}
-						aria-label={variant}
-						icon={variant === 'danger' ? 'i-mdi-delete' : 'i-mdi-close'}
-					/>
-				)
-			)}
+export const VariantColorMatrix: Story = {
+	render: () => (
+		<div className="flex flex-col gap-3">
+			{(['solid', 'outline', 'ghost', 'subtle'] as const).map((variant) => (
+				<div key={variant} className="flex flex-wrap items-center gap-3">
+					{(['primary', 'neutral', 'danger', 'success'] as const).map(
+						(color) => (
+							<IconButton
+								key={color}
+								variant={variant}
+								color={color}
+								icon={color === 'danger' ? 'i-mdi-delete' : 'i-mdi-cog'}
+								aria-label={`${variant} / ${color}`}
+							/>
+						)
+					)}
+				</div>
+			))}
 		</div>
 	),
 };
