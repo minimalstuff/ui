@@ -8,7 +8,7 @@ React UI component library.
 pnpm add @minimalstuff/ui react react-dom
 ```
 
-Peer dependencies: React 18 or 19.
+Peer dependencies: React 19.
 
 ## Usage
 
