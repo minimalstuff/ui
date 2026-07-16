@@ -1,12 +1,15 @@
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 import { IconButton } from '#components/icon_button/icon_button';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
+
+const FOCUSABLE_SELECTOR =
+	'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 interface ModalShellProps {
 	isEnded: boolean;
@@ -37,9 +40,15 @@ export function ModalShell({
 	className,
 }: ModalShellProps) {
 	const [isOpening, setIsOpening] = useState(false);
+	const dialogRef = useRef<HTMLDivElement>(null);
+	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+	const titleId = useId();
 
 	useEffect(() => {
 		document.body.style.overflow = 'hidden';
+		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+		dialogRef.current?.focus();
+
 		const frameId = requestAnimationFrame(() => {
 			requestAnimationFrame(() => setIsOpening(true));
 		});
@@ -51,14 +60,41 @@ export function ModalShell({
 	}, []);
 
 	useEffect(() => {
+		if (isEnded) previouslyFocusedRef.current?.focus();
+	}, [isEnded]);
+
+	useEffect(() => {
 		if (isEnded) return;
 
-		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') onDismiss();
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				onDismiss();
+				return;
+			}
+			if (e.key !== 'Tab') return;
+
+			const dialog = dialogRef.current;
+			if (!dialog) return;
+
+			const focusable = Array.from(
+				dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+			);
+			if (focusable.length === 0) return;
+
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+
+			if (e.shiftKey && document.activeElement === first) {
+				e.preventDefault();
+				last.focus();
+			} else if (!e.shiftKey && document.activeElement === last) {
+				e.preventDefault();
+				first.focus();
+			}
 		};
 
-		document.addEventListener('keydown', handleEscape);
-		return () => document.removeEventListener('keydown', handleEscape);
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [isEnded, onDismiss]);
 
 	const handleBackdropClick = () => {
@@ -86,6 +122,11 @@ export function ModalShell({
 				aria-hidden="true"
 			/>
 			<div
+				ref={dialogRef}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={title ? titleId : undefined}
+				tabIndex={-1}
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
@@ -94,6 +135,7 @@ export function ModalShell({
 					RADIUS_CLASSES[radius],
 					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',
 					'transition-all duration-200 ease-out',
+					'focus:outline-none',
 					isVisible
 						? 'opacity-100 scale-100 translate-y-0'
 						: 'opacity-0 scale-95 translate-y-1'
@@ -102,7 +144,10 @@ export function ModalShell({
 			>
 				{title && (
 					<div className="flex items-center justify-between gap-4 px-6 pt-5 pb-4 flex-shrink-0">
-						<h2 className="text-base font-medium tracking-tight text-gray-900 dark:text-gray-100">
+						<h2
+							id={titleId}
+							className="text-base font-medium tracking-tight text-gray-900 dark:text-gray-100"
+						>
 							{title}
 						</h2>
 						<IconButton

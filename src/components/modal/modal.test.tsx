@@ -49,4 +49,53 @@ describe('Modal', () => {
 
 		await expect(result).resolves.toBeUndefined();
 	});
+
+	test('exposes dialog semantics wired to the title', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({ title: 'Hello', children: 'Body' });
+		});
+		await screen.findByText('Hello');
+
+		const dialog = screen.getByRole('dialog');
+		expect(dialog).toHaveAttribute('aria-modal', 'true');
+		expect(dialog).toHaveAttribute(
+			'aria-labelledby',
+			screen.getByText('Hello').id
+		);
+	});
+
+	test('moves focus into the dialog when opened', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({ title: 'Hello', children: 'Body' });
+		});
+		await screen.findByText('Hello');
+
+		expect(screen.getByRole('dialog')).toHaveFocus();
+	});
+
+	test('restores focus to the previously focused element on close', async () => {
+		render(
+			<>
+				<button type="button">Open</button>
+				<Modal />
+			</>
+		);
+		const trigger = screen.getByRole('button', { name: 'Open' });
+		trigger.focus();
+
+		let result: Promise<void> = Promise.resolve();
+		act(() => {
+			result = Modal.call({ title: 'Hello', children: 'Body' });
+		});
+		await screen.findByText('Hello');
+
+		fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+		await result;
+
+		expect(trigger).toHaveFocus();
+	});
 });
