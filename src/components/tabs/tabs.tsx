@@ -1,7 +1,13 @@
 import './tabs.css';
 
 import clsx from 'clsx';
-import { type ReactNode, useState } from 'react';
+import {
+	type KeyboardEvent,
+	type ReactNode,
+	useId,
+	useRef,
+	useState,
+} from 'react';
 
 import { SURFACE_BORDER } from '#components/shared/surface_tokens';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
@@ -33,11 +39,45 @@ export function Tabs({
 	onChange,
 }: TabsProps) {
 	const [activeIndex, setActiveIndex] = useState(defaultIndex);
+	const id = useId();
+	const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-	const handleTabClick = (index: number) => {
+	const activateTab = (index: number) => {
 		if (items[index]?.disabled) return;
 		setActiveIndex(index);
 		onChange?.(index);
+	};
+
+	const focusTab = (index: number) => {
+		tabRefs.current[index]?.focus();
+		activateTab(index);
+	};
+
+	const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+		const enabledIndexes = items
+			.map((_, index) => index)
+			.filter((index) => !items[index]?.disabled);
+		if (enabledIndexes.length === 0) return;
+
+		const currentPosition = enabledIndexes.indexOf(activeIndex);
+
+		if (e.key === 'ArrowRight') {
+			e.preventDefault();
+			focusTab(enabledIndexes[(currentPosition + 1) % enabledIndexes.length]);
+		} else if (e.key === 'ArrowLeft') {
+			e.preventDefault();
+			focusTab(
+				enabledIndexes[
+					(currentPosition - 1 + enabledIndexes.length) % enabledIndexes.length
+				]
+			);
+		} else if (e.key === 'Home') {
+			e.preventDefault();
+			focusTab(enabledIndexes[0]);
+		} else if (e.key === 'End') {
+			e.preventDefault();
+			focusTab(enabledIndexes[enabledIndexes.length - 1]);
+		}
 	};
 
 	const activeItem = items[activeIndex];
@@ -56,12 +96,19 @@ export function Tabs({
 				{items.map((item, index) => (
 					<button
 						key={index}
+						ref={(el) => {
+							tabRefs.current[index] = el;
+						}}
+						id={`${id}-tab-${index}`}
 						role="tab"
 						type="button"
 						aria-selected={activeIndex === index}
 						aria-disabled={item.disabled}
+						aria-controls={`${id}-panel-${index}`}
+						tabIndex={activeIndex === index ? 0 : -1}
 						disabled={item.disabled}
-						onClick={() => handleTabClick(index)}
+						onClick={() => activateTab(index)}
+						onKeyDown={handleKeyDown}
 						className={clsx(
 							'flex items-center gap-2 px-4 py-2.5 text-sm font-medium',
 							RADIUS_CLASSES[radius],
@@ -95,8 +142,11 @@ export function Tabs({
 			</div>
 			<div
 				role="tabpanel"
+				id={`${id}-panel-${activeIndex}`}
+				aria-labelledby={`${id}-tab-${activeIndex}`}
+				tabIndex={0}
 				className={clsx(
-					'mt-3 border bg-white dark:bg-gray-800/50 p-4 overflow-hidden',
+					'mt-3 border bg-white dark:bg-gray-800/50 p-4 overflow-hidden focus:outline-none',
 					SURFACE_BORDER,
 					RADIUS_CLASSES[radius],
 					panelClassName

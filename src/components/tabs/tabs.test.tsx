@@ -75,4 +75,64 @@ describe('Tabs', () => {
 		render(<Tabs items={ITEMS} />);
 		expect(screen.getByRole('tab', { name: 'Third' })).toBeDisabled();
 	});
+
+	test('active tabpanel is labelled by and controlled by the active tab', () => {
+		render(<Tabs items={ITEMS} />);
+		const tab = screen.getByRole('tab', { name: 'First' });
+		const panel = screen.getByRole('tabpanel');
+
+		expect(tab).toHaveAttribute('aria-controls', panel.id);
+		expect(panel).toHaveAttribute('aria-labelledby', tab.id);
+	});
+
+	test('only the active tab is in the roving tab order', () => {
+		render(<Tabs items={ITEMS} />);
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
+			'tabindex',
+			'0'
+		);
+		expect(screen.getByRole('tab', { name: 'Second' })).toHaveAttribute(
+			'tabindex',
+			'-1'
+		);
+	});
+
+	test('ArrowRight moves focus and activation to the next enabled tab', () => {
+		render(<Tabs items={ITEMS} />);
+		screen.getByRole('tab', { name: 'First' }).focus();
+
+		fireEvent.keyDown(screen.getByRole('tab', { name: 'First' }), {
+			key: 'ArrowRight',
+		});
+
+		const second = screen.getByRole('tab', { name: 'Second' });
+		expect(second).toHaveAttribute('aria-selected', 'true');
+		expect(second).toHaveFocus();
+	});
+
+	test('ArrowRight skips the disabled tab and wraps around', () => {
+		render(<Tabs items={ITEMS} defaultIndex={1} />);
+		screen.getByRole('tab', { name: 'Second' }).focus();
+
+		fireEvent.keyDown(screen.getByRole('tab', { name: 'Second' }), {
+			key: 'ArrowRight',
+		});
+
+		const first = screen.getByRole('tab', { name: 'First' });
+		expect(first).toHaveAttribute('aria-selected', 'true');
+		expect(first).toHaveFocus();
+	});
+
+	test('End moves focus and activation to the last enabled tab', () => {
+		render(<Tabs items={ITEMS} />);
+		screen.getByRole('tab', { name: 'First' }).focus();
+
+		fireEvent.keyDown(screen.getByRole('tab', { name: 'First' }), {
+			key: 'End',
+		});
+
+		const second = screen.getByRole('tab', { name: 'Second' });
+		expect(second).toHaveAttribute('aria-selected', 'true');
+		expect(second).toHaveFocus();
+	});
 });
