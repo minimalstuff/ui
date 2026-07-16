@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.0.0](https://github.com/minimalstuff/ui/compare/1.4.0...2.0.0) (2026-07-16)
+
+### ⚠ BREAKING CHANGES
+
+* **icon-button:** IconButton no longer accepts variant="default"/"danger"
+(danger was a shape+color pair). Use variant="ghost" (default) with
+color="danger" etc. instead.
+* **button:** Button no longer accepts variant="primary"/"secondary"/
+"danger". Use variant="solid" (default) with color="primary"/"neutral"/
+"danger" instead.
+* **modal:** useModalStore, ModalConfig and related exports from
+
+### Features
+
+* add configurable border-radius and unstyled variants across components ([1e93b51](https://github.com/minimalstuff/ui/commit/1e93b51f9a848fed43862f649e15911e6bb451df))
+* **button:** split variant (shape) from color (intent) ([be3998f](https://github.com/minimalstuff/ui/commit/be3998fe91b4166de2c7755e6d3278b5a828ccfa))
+* **icon-button:** split variant (shape) from color (intent), match Button ([24e11a7](https://github.com/minimalstuff/ui/commit/24e11a7f624fc87dd11233e957a9d2b9ced878d5))
+* **modal:** switch Modal/ConfirmModal to react-call ([bbdb892](https://github.com/minimalstuff/ui/commit/bbdb892ecd98d1dec416a2840c93e514e3fad629)), closes [#stores](https://github.com/minimalstuff/ui/issues/stores)
+
+### Bug Fixes
+
+* **button:** announce loading state via aria-busy ([629298b](https://github.com/minimalstuff/ui/commit/629298b8acfca763bc474a9a7e3ee53dec17ec98))
+* **button:** keep hover/active styles and press feedback out of disabled state ([46c06b6](https://github.com/minimalstuff/ui/commit/46c06b6d6264dcc90175b282bf8568faa5347390))
+* **client-only:** use JSX fragment instead of createElement ([a9f257b](https://github.com/minimalstuff/ui/commit/a9f257b1391914f9b1a9841e5e34550415e47d74))
+* **input,textarea:** wire error state to aria-invalid/aria-describedby ([19a5d54](https://github.com/minimalstuff/ui/commit/19a5d5442ee0096a16278bf6ee906c0e3e35fa7c))
+* **modal:** add dialog semantics and focus management ([326001a](https://github.com/minimalstuff/ui/commit/326001a53626192eefb894886048cca0d01b4bd1))
+* **preview:** serve built storybook static output on correct port ([554d286](https://github.com/minimalstuff/ui/commit/554d2866285c1a6f8dcd81b20289ba6f174db950))
+* **tabs:** implement WAI-ARIA tabs keyboard pattern and id linkage ([ef94311](https://github.com/minimalstuff/ui/commit/ef9431148c84bc45de5345ffd28808d58f08bfa0))
+* **uno:** scan plain .ts files so Button color-variant classes aren't dropped ([fd0bb82](https://github.com/minimalstuff/ui/commit/fd0bb8246e2833e6bbe7ffad46012db48debc34d))
+
 ## [1.4.0](https://github.com/minimalstuff/ui/compare/1.3.0...1.4.0) (2026-05-01)
 
 ### Features
