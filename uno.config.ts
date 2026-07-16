@@ -14,4 +14,12 @@ export default defineConfig({
 			provider: 'bunny',
 		}),
 	],
+	content: {
+		pipeline: {
+			include: [
+				/\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|marko|html)($|\?)/,
+				'src/**/*.{ts,tsx}',
+			],
+		},
+	},
 });
