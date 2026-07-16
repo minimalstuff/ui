@@ -80,6 +80,7 @@ export const Button = ({
 				className
 			)}
 			disabled={disabled ?? loading}
+			aria-busy={loading || undefined}
 			{...props}
 		>
 			{loading && (

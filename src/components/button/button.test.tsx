@@ -38,4 +38,14 @@ describe('Button', () => {
 		render(<Button disabled>Disabled</Button>);
 		expect(screen.getByRole('button')).toBeDisabled();
 	});
+
+	test('marks the button busy while loading', () => {
+		render(<Button loading>Submit</Button>);
+		expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
+	});
+
+	test('is not marked busy when not loading', () => {
+		render(<Button>Submit</Button>);
+		expect(screen.getByRole('button')).not.toHaveAttribute('aria-busy');
+	});
 });
