@@ -16,7 +16,6 @@
 		"#components/*": "./src/components/*.js",
 		"#hooks/*": "./src/hooks/*.js",
 		"#types/*": "./src/types/*.js",
-		"#utils/*": "./src/utils/*.js",
 		"#stores/*": "./src/stores/*.js"
 	},
 	"exports": {

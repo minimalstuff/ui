@@ -1,17 +1,13 @@
 import './theme_toggle.css';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { type Theme } from '#types/theme';
 import { type Radius } from '#components/shared/radius';
+import { useThemeStore } from '#stores/theme_store/theme_store';
 import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import { getNextTheme, switchTheme } from '../../lib/theme_transition';
-import {
-	followThemeState,
-	getCurrentTheme,
-	setCurrentTheme,
-} from '#utils/theme';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
 	light: 'i-tabler-sun text-yellow-500',
@@ -36,21 +32,14 @@ export function ThemeToggle({
 	size = 'md',
 	radius,
 }: Readonly<ThemeToggleProps>) {
-	const [theme, setTheme] = useState<Theme>('system');
+	const theme = useThemeStore((state) => state.theme);
+	const setTheme = useThemeStore((state) => state.setTheme);
 	const isClient = useIsClient();
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
-		const currentTheme = getCurrentTheme();
-		requestAnimationFrame(() => {
-			setTheme(currentTheme);
-			setCurrentTheme(currentTheme);
-		});
-
-		return followThemeState((nextTheme) => {
-			setTheme(nextTheme);
-		});
-	}, []);
+		setTheme(useThemeStore.getState().theme);
+	}, [setTheme]);
 
 	const toggleTheme = useCallback(async () => {
 		const newTheme = getNextTheme(theme);
@@ -62,12 +51,18 @@ export function ThemeToggle({
 				element,
 				transitionDuration,
 				transitionEasing,
-				applyThemeCallback: setCurrentTheme,
+				applyThemeCallback: setTheme,
 			});
 		} else {
-			setCurrentTheme(newTheme);
+			setTheme(newTheme);
 		}
-	}, [theme, isTransitionEnabled, transitionDuration, transitionEasing]);
+	}, [
+		theme,
+		isTransitionEnabled,
+		transitionDuration,
+		transitionEasing,
+		setTheme,
+	]);
 
 	const iconClass = isClient ? THEME_ICON_CLASSES[theme] : FALLBACK_ICON_CLASS;
 
