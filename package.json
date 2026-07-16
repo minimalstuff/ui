@@ -35,7 +35,7 @@
 		"lint": "oxlint .",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
-		"preview": "vite preview",
+		"preview": "vite preview --outDir storybook-static --port 6006 --host 0.0.0.0",
 		"format": "pnpm lint:fix; oxfmt .",
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build",
