@@ -36,9 +36,14 @@ describe('Input', () => {
 		expect(input).toHaveValue('fixed');
 	});
 
-	test('shows an error message', () => {
+	test('shows an error message wired to aria-describedby', () => {
 		render(<Input label="Email" error="Invalid email" />);
-		expect(screen.getByText('Invalid email')).toBeInTheDocument();
+		const input = screen.getByLabelText('Email');
+		const errorMessage = screen.getByRole('alert');
+
+		expect(errorMessage).toHaveTextContent('Invalid email');
+		expect(input).toHaveAttribute('aria-invalid', 'true');
+		expect(input).toHaveAttribute('aria-describedby', errorMessage.id);
 	});
 
 	test('shows character count when showCharCount and maxLength are set', () => {

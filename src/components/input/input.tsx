@@ -96,6 +96,8 @@ export function Input({
 				minLength={minLength}
 				maxLength={maxLength}
 				onChange={handleChange}
+				aria-invalid={!!error}
+				aria-describedby={error ? `${inputId}-error` : undefined}
 				{...props}
 			/>
 			{hasCharCount && (
@@ -107,7 +109,15 @@ export function Input({
 					showMax={maxLength !== undefined}
 				/>
 			)}
-			{error && <p className={clsx(FIELD_ERROR_TEXT, 'mt-1')}>{error}</p>}
+			{error && (
+				<p
+					id={`${inputId}-error`}
+					className={clsx(FIELD_ERROR_TEXT, 'mt-1')}
+					role="alert"
+				>
+					{error}
+				</p>
+			)}
 		</div>
 	);
 }

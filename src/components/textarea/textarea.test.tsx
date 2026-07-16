@@ -36,9 +36,14 @@ describe('Textarea', () => {
 		expect(textarea).toHaveValue('fixed');
 	});
 
-	test('shows an error message', () => {
+	test('shows an error message wired to aria-describedby', () => {
 		render(<Textarea label="Bio" error="Too long" />);
-		expect(screen.getByText('Too long')).toBeInTheDocument();
+		const textarea = screen.getByLabelText('Bio');
+		const errorMessage = screen.getByRole('alert');
+
+		expect(errorMessage).toHaveTextContent('Too long');
+		expect(textarea).toHaveAttribute('aria-invalid', 'true');
+		expect(textarea).toHaveAttribute('aria-describedby', errorMessage.id);
 	});
 
 	test('shows character count when showCharCount and maxLength are set', () => {

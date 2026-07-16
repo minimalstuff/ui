@@ -94,6 +94,8 @@ export function Textarea({
 				minLength={minLength}
 				maxLength={maxLength}
 				onChange={handleChange}
+				aria-invalid={!!error}
+				aria-describedby={error ? `${textareaId}-error` : undefined}
 				{...props}
 			/>
 			{hasCharCount && (
@@ -105,7 +107,15 @@ export function Textarea({
 					showMax={maxLength !== undefined}
 				/>
 			)}
-			{error && <p className={clsx(FIELD_ERROR_TEXT, 'mt-1')}>{error}</p>}
+			{error && (
+				<p
+					id={`${textareaId}-error`}
+					className={clsx(FIELD_ERROR_TEXT, 'mt-1')}
+					role="alert"
+				>
+					{error}
+				</p>
+			)}
 		</div>
 	);
 }
