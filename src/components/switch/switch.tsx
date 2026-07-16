@@ -77,8 +77,7 @@ export function Switch({
 						role="switch"
 						id={switchId}
 						className="sr-only"
-						checked={checked}
-						defaultChecked={defaultChecked}
+						checked={isChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
 						aria-describedby={describedBy}

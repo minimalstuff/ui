@@ -73,8 +73,7 @@ export function Select({
 					!unstyled && error && clsx(FIELD_ERROR_BORDER, 'focus:ring-red-500'),
 					className
 				)}
-				value={value}
-				defaultValue={defaultValue}
+				{...(value === undefined ? { defaultValue } : { value })}
 				onChange={onChange}
 				aria-invalid={!!error}
 				aria-describedby={error ? `${selectId}-error` : undefined}

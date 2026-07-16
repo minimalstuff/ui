@@ -77,8 +77,7 @@ export function Checkbox({
 						type="checkbox"
 						id={checkboxId}
 						className="sr-only"
-						checked={checked}
-						defaultChecked={defaultChecked}
+						checked={isChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
 						aria-describedby={describedBy}
