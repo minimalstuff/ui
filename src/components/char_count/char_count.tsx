@@ -1,6 +1,14 @@
 const CHARACTER_COUNT_STYLES =
 	'text-xs text-gray-500 dark:text-gray-400 mt-1 text-right';
 
+type BoundStatus = 'ok' | 'atLimit' | 'overLimit';
+
+function getBoundStatusClass(status: BoundStatus): string {
+	if (status === 'overLimit') return 'text-red-600 dark:text-red-400';
+	if (status === 'atLimit') return 'text-amber-600 dark:text-amber-400';
+	return '';
+}
+
 interface CharacterCountProps {
 	current: number;
 	min?: number;
@@ -16,48 +24,36 @@ export function CharacterCount({
 	showMin,
 	showMax,
 }: CharacterCountProps) {
-	const atMin = min !== undefined && current <= min;
-	const atMax = max !== undefined && current >= max;
-	const overMax = max !== undefined && current > max;
+	const showLabels = showMin === true || showMax === true;
+
+	const minStatus: BoundStatus =
+		min !== undefined && current <= min ? 'atLimit' : 'ok';
+	const maxStatus: BoundStatus =
+		max !== undefined && current > max
+			? 'overLimit'
+			: max !== undefined && current >= max
+				? 'atLimit'
+				: 'ok';
+
+	const minText = showLabels
+		? `${current}/${min} min`
+		: `${current} (min ${min})`;
+	const maxText = showLabels ? `${current}/${max} max` : `${current}/${max}`;
 
 	return (
 		<div className={CHARACTER_COUNT_STYLES}>
 			{showMin && min !== undefined && (
-				<span className={atMin ? 'text-amber-600 dark:text-amber-400' : ''}>
-					{current}/{min} min
-				</span>
+				<span className={getBoundStatusClass(minStatus)}>{minText}</span>
 			)}
 			{showMin && showMax && ' · '}
 			{showMax && max !== undefined && (
-				<span
-					className={
-						overMax
-							? 'text-red-600 dark:text-red-400'
-							: atMax
-								? 'text-amber-600 dark:text-amber-400'
-								: ''
-					}
-				>
-					{current}/{max} max
-				</span>
+				<span className={getBoundStatusClass(maxStatus)}>{maxText}</span>
 			)}
 			{!showMin && !showMax && max !== undefined && (
-				<span
-					className={
-						overMax
-							? 'text-red-600 dark:text-red-400'
-							: atMax
-								? 'text-amber-600 dark:text-amber-400'
-								: ''
-					}
-				>
-					{current}/{max}
-				</span>
+				<span className={getBoundStatusClass(maxStatus)}>{maxText}</span>
 			)}
 			{!showMin && !showMax && min !== undefined && max === undefined && (
-				<span className={atMin ? 'text-amber-600 dark:text-amber-400' : ''}>
-					{current} (min {min})
-				</span>
+				<span className={getBoundStatusClass(minStatus)}>{minText}</span>
 			)}
 		</div>
 	);
