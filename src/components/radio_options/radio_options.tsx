@@ -3,7 +3,13 @@ import { type ComponentPropsWithRef, useId, useState } from 'react';
 
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
+	CONTROL_BORDER,
+	SELECTED_FILL,
+	SURFACE_BORDER,
+} from '#components/shared/surface_tokens';
+import {
 	FIELD_DESCRIPTION_TEXT,
+	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
@@ -119,11 +125,14 @@ export function RadioOptions({
 									'border px-3 py-2.5',
 									isSelected
 										? error
-											? 'border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950/20'
+											? clsx(FIELD_ERROR_BORDER, 'bg-red-50 dark:bg-red-950/20')
 											: 'border-blue-500 bg-blue-50 dark:border-blue-500 dark:bg-blue-950/25'
 										: error
 											? 'border-red-300 bg-white dark:border-red-800/50 dark:bg-gray-800/50'
-											: 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-white dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800',
+											: clsx(
+													SURFACE_BORDER,
+													'bg-gray-50 hover:border-gray-300 hover:bg-white dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800'
+												),
 								],
 								isDisabled && 'cursor-not-allowed opacity-50'
 							)}
@@ -149,11 +158,11 @@ export function RadioOptions({
 									'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-150',
 									isSelected
 										? error
-											? 'border-red-500 dark:border-red-400'
+											? FIELD_ERROR_BORDER
 											: 'border-blue-600 dark:border-blue-500'
 										: error
 											? 'border-red-400 dark:border-red-600'
-											: 'border-gray-300 dark:border-gray-600'
+											: CONTROL_BORDER
 								)}
 								aria-hidden
 							>
@@ -161,9 +170,7 @@ export function RadioOptions({
 									<span
 										className={clsx(
 											'h-2 w-2 rounded-full',
-											error
-												? 'bg-red-500 dark:bg-red-400'
-												: 'bg-blue-600 dark:bg-blue-500'
+											error ? 'bg-red-500 dark:bg-red-400' : SELECTED_FILL
 										)}
 									/>
 								)}

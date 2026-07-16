@@ -3,6 +3,7 @@ import './tabs.css';
 import clsx from 'clsx';
 import { type ReactNode, useState } from 'react';
 
+import { SURFACE_BORDER } from '#components/shared/surface_tokens';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 export interface TabItem {
@@ -46,7 +47,8 @@ export function Tabs({
 			<div
 				role="tablist"
 				className={clsx(
-					'flex gap-1 p-1 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700',
+					'flex gap-1 p-1 bg-gray-100 dark:bg-gray-800/50 border',
+					SURFACE_BORDER,
 					RADIUS_CLASSES[radius],
 					tabListClassName
 				)}
@@ -64,7 +66,10 @@ export function Tabs({
 							'flex items-center gap-2 px-4 py-2.5 text-sm font-medium',
 							RADIUS_CLASSES[radius],
 							activeIndex === index
-								? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm border border-gray-200 dark:border-gray-600'
+								? clsx(
+										'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm border',
+										SURFACE_BORDER
+									)
 								: clsx(
 										'text-gray-600 dark:text-gray-400 border border-transparent',
 										item.disabled
@@ -91,7 +96,8 @@ export function Tabs({
 			<div
 				role="tabpanel"
 				className={clsx(
-					'mt-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-4 overflow-hidden',
+					'mt-3 border bg-white dark:bg-gray-800/50 p-4 overflow-hidden',
+					SURFACE_BORDER,
 					RADIUS_CLASSES[radius],
 					panelClassName
 				)}

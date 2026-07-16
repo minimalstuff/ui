@@ -8,14 +8,15 @@ import {
 
 import { CharacterCount } from '../char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { CONTROL_BG, CONTROL_BORDER } from '#components/shared/surface_tokens';
 import {
+	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
 
-export const BASE_INPUT_STYLES =
-	'w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+export const BASE_INPUT_STYLES = `w-full border ${CONTROL_BORDER} ${CONTROL_BG} text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`;
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;
@@ -88,9 +89,7 @@ export function Input({
 						RADIUS_CLASSES[radius],
 						'px-3 py-2 text-sm',
 					],
-					!unstyled &&
-						error &&
-						'border-red-500 dark:border-red-400 focus:ring-red-500',
+					!unstyled && error && clsx(FIELD_ERROR_BORDER, 'focus:ring-red-500'),
 					className
 				)}
 				value={value}

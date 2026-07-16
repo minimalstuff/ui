@@ -4,6 +4,7 @@ import { type ReactNode, useEffect, useState } from 'react';
 
 import { IconButton } from '#components/icon_button/icon_button';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -88,7 +89,8 @@ export function ModalShell({
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
-					'bg-white dark:bg-gray-900 shadow-2xl',
+					OVERLAY_BG,
+					'shadow-2xl',
 					RADIUS_CLASSES[radius],
 					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',
 					'transition-all duration-200 ease-out',
@@ -124,7 +126,12 @@ export function ModalShell({
 					{children}
 				</div>
 				{footer && (
-					<div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex-shrink-0">
+					<div
+						className={clsx(
+							'flex items-center justify-end gap-3 px-6 py-4 border-t flex-shrink-0',
+							OVERLAY_BORDER
+						)}
+					>
 						{footer}
 					</div>
 				)}

@@ -6,6 +6,7 @@ import {
 	useState,
 } from 'react';
 
+import { SELECTED_FILL } from '#components/shared/surface_tokens';
 import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_TEXT,
@@ -66,9 +67,7 @@ export function Switch({
 						'transition-colors duration-200 ease-in-out',
 						'focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2',
 						'disabled:opacity-50',
-						isChecked
-							? 'bg-blue-600 dark:bg-blue-500'
-							: 'bg-gray-200 dark:bg-gray-600',
+						isChecked ? SELECTED_FILL : 'bg-gray-200 dark:bg-gray-600',
 						error && 'ring-2 ring-red-500 dark:ring-red-400',
 						className
 					)}

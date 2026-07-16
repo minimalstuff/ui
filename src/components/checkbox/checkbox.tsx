@@ -3,7 +3,13 @@ import { type ComponentPropsWithRef, useId, useState } from 'react';
 
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
+	CONTROL_BG,
+	CONTROL_BORDER,
+	SELECTED_FILL,
+} from '#components/shared/surface_tokens';
+import {
 	FIELD_DESCRIPTION_TEXT,
+	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
@@ -85,9 +91,9 @@ export function Checkbox({
 								RADIUS_CLASSES[radius],
 								'border-2',
 								isChecked
-									? 'border-blue-600 bg-blue-600 dark:border-blue-500 dark:bg-blue-500'
-									: 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800',
-								error && 'border-red-500 dark:border-red-400',
+									? clsx('border-blue-600 dark:border-blue-500', SELECTED_FILL)
+									: clsx(CONTROL_BORDER, CONTROL_BG),
+								error && FIELD_ERROR_BORDER,
 							],
 							className
 						)}

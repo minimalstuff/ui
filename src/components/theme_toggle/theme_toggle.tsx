@@ -81,7 +81,6 @@ export function ThemeToggle({
 			onClick={() => {
 				void toggleTheme();
 			}}
-			className="!bg-gray-100 dark:!bg-gray-700/50 border border-gray-200 dark:border-gray-600 !hover:bg-gray-200 dark:!hover:bg-gray-600 transition-all duration-200"
 		/>
 	);
 }
