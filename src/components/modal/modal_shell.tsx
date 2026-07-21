@@ -20,6 +20,7 @@ interface ModalShellProps {
 	size?: ModalSize;
 	radius?: Radius;
 	className?: string;
+	dismissible?: boolean;
 }
 
 const SIZE_CLASSES = {
@@ -38,6 +39,7 @@ export function ModalShell({
 	size = 'md',
 	radius = 'xl',
 	className,
+	dismissible = true,
 }: ModalShellProps) {
 	const [isOpening, setIsOpening] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
@@ -68,7 +70,7 @@ export function ModalShell({
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
-				onDismiss();
+				if (dismissible) onDismiss();
 				return;
 			}
 			if (e.key !== 'Tab') return;
@@ -95,10 +97,10 @@ export function ModalShell({
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isEnded, onDismiss]);
+	}, [isEnded, onDismiss, dismissible]);
 
 	const handleBackdropClick = () => {
-		if (!isEnded) onDismiss();
+		if (!isEnded && dismissible) onDismiss();
 	};
 
 	const isVisible = isOpening && !isEnded;
@@ -150,15 +152,17 @@ export function ModalShell({
 						>
 							{title}
 						</h2>
-						<IconButton
-							icon="i-mdi-close"
-							onClick={onDismiss}
-							aria-label="Close"
-							variant="subtle"
-							size="sm"
-							radius="full"
-							className="-mr-1"
-						/>
+						{dismissible && (
+							<IconButton
+								icon="i-mdi-close"
+								onClick={onDismiss}
+								aria-label="Close"
+								variant="subtle"
+								size="sm"
+								radius="full"
+								className="-mr-1"
+							/>
+						)}
 					</div>
 				)}
 				<div

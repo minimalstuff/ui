@@ -122,6 +122,20 @@ export const LongContent: Story = {
 	},
 };
 
+export const NonDismissible: Story = {
+	args: {
+		title: 'Complete your setup',
+		children:
+			'This modal cannot be closed via Escape, backdrop click, or the close button. Finish the action below to continue.',
+		dismissible: false,
+		footer: (close) => (
+			<Button size="sm" onClick={close}>
+				Finish setup
+			</Button>
+		),
+	},
+};
+
 export const WithFooter: Story = {
 	args: {
 		title: 'Modal with footer',

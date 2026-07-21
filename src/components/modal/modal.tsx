@@ -7,19 +7,29 @@ import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_
 
 export type { ModalSize } from '#components/modal/modal_shell';
 
+type ModalRenderProp = ReactNode | ((close: () => void) => ReactNode);
+
 export interface ModalProps {
 	title?: ReactNode;
-	children: ReactNode;
-	footer?: ReactNode;
+	children: ModalRenderProp;
+	footer?: ModalRenderProp;
 	size?: ModalSize;
 	radius?: Radius;
 	className?: string;
+	dismissible?: boolean;
 }
 
 const EXIT_ANIMATION_DURATION_MS = 200;
 
+function resolveRenderProp(
+	prop: ModalRenderProp,
+	close: () => void
+): ReactNode {
+	return typeof prop === 'function' ? prop(close) : prop;
+}
+
 export const Modal = createCallable<ModalProps, void>(
-	({ call, title, children, footer, size, radius, className }) => {
+	({ call, title, children, footer, size, radius, className, dismissible }) => {
 		useDisableHotkeysWhileMounted();
 
 		const handleDismiss = () => call.end();
@@ -29,12 +39,13 @@ export const Modal = createCallable<ModalProps, void>(
 				isEnded={call.ended}
 				onDismiss={handleDismiss}
 				title={title}
-				footer={footer}
+				footer={resolveRenderProp(footer, handleDismiss)}
 				size={size}
 				radius={radius}
 				className={className}
+				dismissible={dismissible}
 			>
-				{children}
+				{resolveRenderProp(children, handleDismiss)}
 			</ModalShell>
 		);
 	},

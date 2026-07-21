@@ -50,6 +50,61 @@ describe('Modal', () => {
 		await expect(result).resolves.toBeUndefined();
 	});
 
+	test('hides the close button when dismissible is false', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({ title: 'Hello', children: 'Body', dismissible: false });
+		});
+		await screen.findByText('Hello');
+
+		expect(
+			screen.queryByRole('button', { name: 'Close' })
+		).not.toBeInTheDocument();
+	});
+
+	test('ignores Escape when dismissible is false', async () => {
+		render(<Modal />);
+
+		let ended = false;
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body',
+				dismissible: false,
+			}).then(() => {
+				ended = true;
+			});
+		});
+		await screen.findByText('Hello');
+
+		fireEvent.keyDown(document, { key: 'Escape' });
+
+		expect(ended).toBe(false);
+		expect(screen.getByText('Hello')).toBeInTheDocument();
+	});
+
+	test('ignores backdrop click when dismissible is false', async () => {
+		render(<Modal />);
+
+		let ended = false;
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body',
+				dismissible: false,
+			}).then(() => {
+				ended = true;
+			});
+		});
+		await screen.findByText('Hello');
+
+		fireEvent.click(screen.getByRole('dialog').parentElement as HTMLElement);
+
+		expect(ended).toBe(false);
+		expect(screen.getByText('Hello')).toBeInTheDocument();
+	});
+
 	test('exposes dialog semantics wired to the title', async () => {
 		render(<Modal />);
 
