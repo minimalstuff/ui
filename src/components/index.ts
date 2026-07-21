@@ -2,6 +2,8 @@ export { Button, type ButtonColor, type ButtonVariant } from './button/button';
 export { CharacterCount } from './char_count/char_count';
 export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';
+export { Combobox } from './combobox/combobox';
+export type { ComboboxOption } from './combobox/combobox';
 export { IconButton } from './icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './input/input';
 export {
