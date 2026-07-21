@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/minimalstuff/ui/compare/2.0.0...2.1.0) (2026-07-21)
+
+### Features
+
+* **combobox:** add searchable select with filtering ([29a3301](https://github.com/minimalstuff/ui/commit/29a3301799e879c8eb2d639dec09901e514416b6))
+* **modal:** add dismissible prop to block Escape/backdrop/close-button ([435c6eb](https://github.com/minimalstuff/ui/commit/435c6eb63d2cc90ae8e3ae3c05e232b0c95630e6))
+
 ## [2.0.0](https://github.com/minimalstuff/ui/compare/1.4.0...2.0.0) (2026-07-16)
 
 ### ⚠ BREAKING CHANGES
