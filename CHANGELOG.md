@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/minimalstuff/ui/compare/2.1.0...2.1.1) (2026-08-01)
+
+### Bug Fixes
+
+* **modal:** focus first focusable field on open instead of dialog ([ed1a2ca](https://github.com/minimalstuff/ui/commit/ed1a2ca2088fa6b70fb1c2cf7f18941004e6d0a2))
+* **storybook:** unmount global modal root on story opt-out ([a03ed6a](https://github.com/minimalstuff/ui/commit/a03ed6a2f225fa9a4fd5a8606c981827639dd8ce))
+
 ## [2.1.0](https://github.com/minimalstuff/ui/compare/2.0.0...2.1.0) (2026-07-21)
 
 ### Features
