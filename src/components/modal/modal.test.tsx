@@ -121,15 +121,47 @@ describe('Modal', () => {
 		);
 	});
 
-	test('moves focus into the dialog when opened', async () => {
+	test('moves focus into the dialog when there is nothing focusable inside', async () => {
 		render(<Modal />);
 
 		act(() => {
-			void Modal.call({ title: 'Hello', children: 'Body' });
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body',
+				dismissible: false,
+			});
 		});
 		await screen.findByText('Hello');
 
 		expect(screen.getByRole('dialog')).toHaveFocus();
+	});
+
+	test('focuses the first focusable field in the content instead of the close button', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: <input type="text" aria-label="Name" />,
+			});
+		});
+		await screen.findByText('Hello');
+
+		expect(screen.getByRole('textbox', { name: 'Name' })).toHaveFocus();
+	});
+
+	test('does not steal focus back from a field with autoFocus', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: <input type="text" aria-label="Name" autoFocus />,
+			});
+		});
+		await screen.findByText('Hello');
+
+		expect(screen.getByRole('textbox', { name: 'Name' })).toHaveFocus();
 	});
 
 	test('restores focus to the previously focused element on close', async () => {

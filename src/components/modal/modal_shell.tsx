@@ -43,13 +43,19 @@ export function ModalShell({
 }: ModalShellProps) {
 	const [isOpening, setIsOpening] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 	const titleId = useId();
 
 	useEffect(() => {
 		document.body.style.overflow = 'hidden';
 		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
-		dialogRef.current?.focus();
+
+		const dialog = dialogRef.current;
+		const firstFocusable =
+			contentRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ??
+			dialog?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+		(firstFocusable ?? dialog)?.focus();
 
 		const frameId = requestAnimationFrame(() => {
 			requestAnimationFrame(() => setIsOpening(true));
@@ -166,6 +172,7 @@ export function ModalShell({
 					</div>
 				)}
 				<div
+					ref={contentRef}
 					className={clsx(
 						'flex-1 overflow-y-auto px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
 						!title && 'pt-6',
