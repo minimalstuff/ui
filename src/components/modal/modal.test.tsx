@@ -185,4 +185,23 @@ describe('Modal', () => {
 
 		expect(trigger).toHaveFocus();
 	});
+
+	test('throws when calling without a mounted Modal root', () => {
+		expect(() => {
+			void Modal.call({ title: 'Hello', children: 'Body' });
+		}).toThrow('No <Root> found!');
+	});
+
+	test('throws when more than one Modal root is mounted', () => {
+		render(
+			<>
+				<Modal />
+				<Modal />
+			</>
+		);
+
+		expect(() => {
+			void Modal.call({ title: 'Hello', children: 'Body' });
+		}).toThrow('Multiple instances of <Root> found!');
+	});
 });

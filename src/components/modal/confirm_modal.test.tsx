@@ -91,4 +91,23 @@ describe('ConfirmModal', () => {
 
 		await expect(result).resolves.toBe(true);
 	});
+
+	test('throws when calling without a mounted ConfirmModal root', () => {
+		expect(() => {
+			void ConfirmModal.call({ title: 'Delete item?' });
+		}).toThrow('No <Root> found!');
+	});
+
+	test('throws when more than one ConfirmModal root is mounted', () => {
+		render(
+			<>
+				<ConfirmModal />
+				<ConfirmModal />
+			</>
+		);
+
+		expect(() => {
+			void ConfirmModal.call({ title: 'Delete item?' });
+		}).toThrow('Multiple instances of <Root> found!');
+	});
 });
