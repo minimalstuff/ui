@@ -18,6 +18,7 @@ export {
 } from './highlight/highlight';
 export { IconButton } from './icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './input/input';
+export { Kbd, type KbdSize } from './kbd/kbd';
 export {
 	ConfirmModal,
 	type ConfirmModalColor,
