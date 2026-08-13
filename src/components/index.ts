@@ -13,6 +13,8 @@ export {
 	type ConfirmModalResponse,
 } from './modal/confirm_modal';
 export { Modal, type ModalProps, type ModalSize } from './modal/modal';
+export { ModalBody } from './modal/modal_body';
+export { ModalFooter } from './modal/modal_footer';
 export { ModalProvider } from './modal_provider/modal_provider';
 export { RadioOptions } from './radio_options/radio_options';
 export type { RadioOption } from './radio_options/radio_options';

@@ -4,6 +4,8 @@ import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { Modal } from './modal';
+import { ModalBody } from './modal_body';
+import { ModalFooter } from './modal_footer';
 
 describe('Modal', () => {
 	test('renders nothing when no call is active', () => {
@@ -184,6 +186,27 @@ describe('Modal', () => {
 		await result;
 
 		expect(trigger).toHaveFocus();
+	});
+
+	test('renders a ModalBody/ModalFooter pair as a pinned footer, ignoring the footer prop', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: (
+					<>
+						<ModalBody>Body text</ModalBody>
+						<ModalFooter>Footer text</ModalFooter>
+					</>
+				),
+				footer: 'Ignored footer',
+			});
+		});
+
+		expect(await screen.findByText('Body text')).toBeInTheDocument();
+		expect(screen.getByText('Footer text')).toBeInTheDocument();
+		expect(screen.queryByText('Ignored footer')).not.toBeInTheDocument();
 	});
 
 	test('throws when calling without a mounted Modal root', () => {

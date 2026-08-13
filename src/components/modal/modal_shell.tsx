@@ -1,10 +1,20 @@
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import {
+	Children,
+	Fragment,
+	isValidElement,
+	type ReactNode,
+	useEffect,
+	useId,
+	useRef,
+	useState,
+} from 'react';
 
+import { ModalFooter } from '#components/modal/modal_footer';
+import { OVERLAY_BG } from '#components/shared/surface_tokens';
 import { IconButton } from '#components/icon_button/icon_button';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -21,6 +31,18 @@ interface ModalShellProps {
 	radius?: Radius;
 	className?: string;
 	dismissible?: boolean;
+}
+
+// `Children.toArray` treats a `<>...</>` as one opaque element rather than
+// spreading its contents, so a top-level Fragment (the common shape for
+// `<><ModalBody/><ModalFooter/></>`) needs unwrapping before we can look for
+// a `ModalFooter` among the actual top-level children.
+function flattenFragments(children: ReactNode): ReactNode[] {
+	return Children.toArray(children).flatMap((child) =>
+		isValidElement(child) && child.type === Fragment
+			? flattenFragments((child.props as { children?: ReactNode }).children)
+			: [child]
+	);
 }
 
 const SIZE_CLASSES = {
@@ -40,7 +62,7 @@ export function ModalShell({
 	radius = 'xl',
 	className,
 	dismissible = true,
-}: ModalShellProps) {
+}: Readonly<ModalShellProps>) {
 	const [isOpening, setIsOpening] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -111,6 +133,14 @@ export function ModalShell({
 
 	const isVisible = isOpening && !isEnded;
 
+	// A `ModalFooter` among `children` means the content owns its own
+	// scroll/footer layout (see `ModalBody`/`ModalFooter`) — skip the default
+	// padded/scrolling wrapper and the separate `footer` prop slot so the two
+	// don't fight over the same space.
+	const hasCompoundFooter = flattenFragments(children).some(
+		(child) => isValidElement(child) && child.type === ModalFooter
+	);
+
 	return createPortal(
 		<div
 			className={clsx(
@@ -174,23 +204,19 @@ export function ModalShell({
 				<div
 					ref={contentRef}
 					className={clsx(
-						'flex-1 overflow-y-auto px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
-						!title && 'pt-6',
+						'min-h-0',
+						hasCompoundFooter
+							? 'flex-1 flex flex-col overflow-hidden'
+							: [
+									'flex-1 overflow-y-auto px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
+									!title && 'pt-6',
+								],
 						className
 					)}
 				>
 					{children}
 				</div>
-				{footer && (
-					<div
-						className={clsx(
-							'flex items-center justify-end gap-3 px-6 py-4 border-t flex-shrink-0',
-							OVERLAY_BORDER
-						)}
-					>
-						{footer}
-					</div>
-				)}
+				{!hasCompoundFooter && footer && <ModalFooter>{footer}</ModalFooter>}
 			</div>
 		</div>,
 		document.body
