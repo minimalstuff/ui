@@ -10,12 +10,14 @@ import {
 } from '#components/shared/button_styles';
 
 const SIZE_CLASSES = {
-	sm: 'p-1',
+	xs: 'p-1',
+	sm: 'p-2',
 	md: 'p-2',
 	lg: 'p-3',
 };
 
 const ICON_SIZE_CLASSES = {
+	xs: 'w-4 h-4',
 	sm: 'w-4 h-4',
 	md: 'w-5 h-5',
 	lg: 'w-6 h-6',
@@ -26,7 +28,7 @@ interface IconButtonProps extends ComponentPropsWithRef<'button'> {
 	'aria-label': string;
 	variant?: ButtonVariant;
 	color?: ButtonColor;
-	size?: 'sm' | 'md' | 'lg';
+	size?: 'xs' | 'sm' | 'md' | 'lg';
 	radius?: Radius;
 	children?: ReactNode;
 }

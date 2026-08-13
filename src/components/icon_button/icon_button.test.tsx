@@ -28,6 +28,16 @@ describe('IconButton', () => {
 		expect(screen.getByRole('button')).toHaveClass('p-3');
 	});
 
+	test('applies the xs size class', () => {
+		render(<IconButton icon="i-mdi-cog" aria-label="Settings" size="xs" />);
+		expect(screen.getByRole('button')).toHaveClass('p-1');
+	});
+
+	test('applies the sm size class', () => {
+		render(<IconButton icon="i-mdi-cog" aria-label="Settings" size="sm" />);
+		expect(screen.getByRole('button')).toHaveClass('p-2');
+	});
+
 	test('renders children next to the icon', () => {
 		render(
 			<IconButton icon="i-mdi-heart" aria-label="Like">

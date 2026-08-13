@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Button } from '#components/button/button';
 import { IconButton } from '#components/icon_button/icon_button';
 
 const meta = {
@@ -26,12 +27,12 @@ const meta = {
 		},
 		color: {
 			control: 'select',
-			options: ['primary', 'neutral', 'danger', 'success'],
+			options: ['primary', 'neutral', 'danger', 'success', 'warning'],
 			description: 'Color intent of the button',
 		},
 		size: {
 			control: 'select',
-			options: ['sm', 'md', 'lg'],
+			options: ['xs', 'sm', 'md', 'lg'],
 			description: 'Button size',
 		},
 		radius: {
@@ -55,6 +56,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const SizeXS: Story = {
+	args: {
+		size: 'xs',
+		'aria-label': 'Extra small',
+	},
+};
 
 export const SizeSM: Story = {
 	args: {
@@ -97,17 +105,17 @@ export const VariantColorMatrix: Story = {
 		<div className="flex flex-col gap-3">
 			{(['solid', 'outline', 'ghost', 'subtle'] as const).map((variant) => (
 				<div key={variant} className="flex flex-wrap items-center gap-3">
-					{(['primary', 'neutral', 'danger', 'success'] as const).map(
-						(color) => (
-							<IconButton
-								key={color}
-								variant={variant}
-								color={color}
-								icon={color === 'danger' ? 'i-mdi-delete' : 'i-mdi-cog'}
-								aria-label={`${variant} / ${color}`}
-							/>
-						)
-					)}
+					{(
+						['primary', 'neutral', 'danger', 'success', 'warning'] as const
+					).map((color) => (
+						<IconButton
+							key={color}
+							variant={variant}
+							color={color}
+							icon={color === 'danger' ? 'i-mdi-delete' : 'i-mdi-cog'}
+							aria-label={`${variant} / ${color}`}
+						/>
+					))}
 				</div>
 			))}
 		</div>
@@ -117,7 +125,7 @@ export const VariantColorMatrix: Story = {
 export const AllSizes: Story = {
 	render: (args) => (
 		<div className="flex flex-wrap items-center gap-3">
-			{(['sm', 'md', 'lg'] as const).map((size) => (
+			{(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
 				<IconButton key={size} {...args} size={size} aria-label={size} />
 			))}
 		</div>
@@ -147,4 +155,19 @@ export const Unstyled: Story = {
 		'aria-label': 'Unstyled',
 		className: 'text-fuchsia-600 hover:text-fuchsia-700 p-2',
 	},
+};
+
+export const SameHeightAsButton: Story = {
+	render: () => (
+		<div className="flex flex-col gap-3">
+			{(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+				<div key={size} className="flex items-center gap-3">
+					<Button size={size} variant="outline" color="neutral">
+						{size}
+					</Button>
+					<IconButton icon="i-mdi-cog" size={size} aria-label={size} />
+				</div>
+			))}
+		</div>
+	),
 };
