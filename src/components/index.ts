@@ -38,3 +38,4 @@ export { Tabs } from './tabs/tabs';
 export type { TabItem } from './tabs/tabs';
 export { Textarea } from './textarea/textarea';
 export { ThemeToggle } from './theme_toggle/theme_toggle';
+export { Tooltip, type TooltipPosition } from './tooltip/tooltip';
