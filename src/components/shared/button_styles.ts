@@ -4,7 +4,12 @@ export type ButtonVariant =
 	| 'ghost'
 	| 'subtle'
 	| 'unstyled';
-export type ButtonColor = 'primary' | 'neutral' | 'danger' | 'success';
+export type ButtonColor =
+	| 'primary'
+	| 'neutral'
+	| 'danger'
+	| 'success'
+	| 'warning';
 
 interface ButtonColorTokens {
 	solid: string;
@@ -58,6 +63,17 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 		subtle:
 			'border-transparent bg-green-50 text-green-700 enabled:hover:bg-green-100 enabled:active:bg-green-200 dark:bg-green-500/10 dark:text-green-400 dark:enabled:hover:bg-green-500/20 dark:enabled:active:bg-green-500/30',
 		focusOutline: 'focus-visible:outline-green-500',
+	},
+	warning: {
+		solid:
+			'border-transparent bg-yellow-600 text-white enabled:hover:bg-yellow-700 enabled:active:bg-yellow-800 dark:bg-yellow-500 dark:enabled:hover:bg-yellow-600 dark:enabled:active:bg-yellow-700',
+		outline:
+			'border-yellow-300 bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:border-yellow-800 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
+		ghost:
+			'border-transparent bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
+		subtle:
+			'border-transparent bg-yellow-50 text-yellow-700 enabled:hover:bg-yellow-100 enabled:active:bg-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:enabled:hover:bg-yellow-500/20 dark:enabled:active:bg-yellow-500/30',
+		focusOutline: 'focus-visible:outline-yellow-500',
 	},
 };
 

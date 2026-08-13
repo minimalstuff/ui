@@ -1,3 +1,9 @@
+export {
+	Badge,
+	type BadgeColor,
+	type BadgeSize,
+	type BadgeVariant,
+} from './badge/badge';
 export { Button, type ButtonColor, type ButtonVariant } from './button/button';
 export { CharacterCount } from './char_count/char_count';
 export { Checkbox } from './checkbox/checkbox';
