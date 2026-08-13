@@ -13,6 +13,9 @@ function ConfirmModalTrigger(props: ConfirmModalProps) {
 
 	return <Button onClick={handleOpen}>Open confirm</Button>;
 }
+// Pins the name the "Show code" panel reconstructs from `component.name` —
+// without it, production minification mangles `ConfirmModalTrigger`.
+ConfirmModalTrigger.displayName = 'ConfirmModal';
 
 const meta = {
 	title: 'Example/ConfirmModal',

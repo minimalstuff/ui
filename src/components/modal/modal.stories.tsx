@@ -13,6 +13,9 @@ function ModalTrigger(props: ModalProps) {
 
 	return <Button onClick={handleOpen}>Open modal</Button>;
 }
+// Pins the name the "Show code" panel reconstructs from `component.name` —
+// without it, production minification mangles `ModalTrigger` (e.g. to `f`).
+ModalTrigger.displayName = 'Modal';
 
 const meta = {
 	title: 'Example/Modal',
