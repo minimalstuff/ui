@@ -4,6 +4,11 @@ export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';
 export { Combobox } from './combobox/combobox';
 export type { ComboboxOption } from './combobox/combobox';
+export {
+	Highlight,
+	type HighlightSegment,
+	splitIntoHighlightSegments,
+} from './highlight/highlight';
 export { IconButton } from './icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './input/input';
 export {
