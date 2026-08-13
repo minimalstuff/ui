@@ -135,4 +135,21 @@ describe('Tabs', () => {
 		expect(second).toHaveAttribute('aria-selected', 'true');
 		expect(second).toHaveFocus();
 	});
+
+	test('unstyled drops the default tablist and panel styling', () => {
+		render(<Tabs items={ITEMS} unstyled />);
+		expect(screen.getByRole('tablist')).not.toHaveClass('bg-gray-100');
+		expect(screen.getByRole('tabpanel')).not.toHaveClass('bg-white');
+		expect(screen.getByRole('tab', { name: 'First' })).not.toHaveClass(
+			'bg-white'
+		);
+	});
+
+	test('disabled tabs stay visually flagged even when unstyled', () => {
+		render(<Tabs items={ITEMS} unstyled />);
+		expect(screen.getByRole('tab', { name: 'Third' })).toHaveClass(
+			'opacity-50',
+			'cursor-not-allowed'
+		);
+	});
 });

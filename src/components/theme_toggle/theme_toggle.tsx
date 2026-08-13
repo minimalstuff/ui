@@ -7,6 +7,7 @@ import { type Radius } from '#components/shared/radius';
 import { useThemeStore } from '#stores/theme_store/theme_store';
 import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
+import { type ButtonVariant } from '#components/shared/button_styles';
 import { getNextTheme, switchTheme } from '../../lib/theme_transition';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
@@ -23,6 +24,7 @@ interface ThemeToggleProps {
 	transitionEasing?: string;
 	size?: 'sm' | 'md' | 'lg';
 	radius?: Radius;
+	variant?: ButtonVariant;
 }
 
 export function ThemeToggle({
@@ -31,6 +33,7 @@ export function ThemeToggle({
 	transitionEasing,
 	size = 'md',
 	radius,
+	variant,
 }: Readonly<ThemeToggleProps>) {
 	const theme = useThemeStore((state) => state.theme);
 	const setTheme = useThemeStore((state) => state.setTheme);
@@ -73,6 +76,7 @@ export function ThemeToggle({
 			aria-label={`Thème actuel: ${theme}`}
 			size={size}
 			radius={radius}
+			variant={variant}
 			onClick={() => {
 				void toggleTheme();
 			}}

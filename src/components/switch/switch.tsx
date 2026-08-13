@@ -21,6 +21,7 @@ interface SwitchProps extends Omit<
 	label?: string | ReactNode;
 	description?: string | ReactNode;
 	error?: string;
+	unstyled?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -29,6 +30,7 @@ export function Switch({
 	label,
 	description,
 	error,
+	unstyled = false,
 	className,
 	wrapperClassName,
 	checked,
@@ -63,12 +65,15 @@ export function Switch({
 			>
 				<span
 					className={clsx(
-						'relative inline-flex w-11 shrink-0 rounded-full border-2 border-transparent',
+						'relative inline-flex w-11 shrink-0',
 						'transition-colors duration-200 ease-in-out',
 						'focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2',
 						'disabled:opacity-50',
-						isChecked ? SELECTED_FILL : 'bg-gray-200 dark:bg-gray-600',
-						error && 'ring-2 ring-red-500 dark:ring-red-400',
+						!unstyled && [
+							'rounded-full border-2 border-transparent',
+							isChecked ? SELECTED_FILL : 'bg-gray-200 dark:bg-gray-600',
+							error && 'ring-2 ring-red-500 dark:ring-red-400',
+						],
 						className
 					)}
 				>

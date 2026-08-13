@@ -26,6 +26,10 @@ const meta = {
 			control: 'boolean',
 			description: 'Disable the switch',
 		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in track/thumb styling from the switch',
+		},
 	},
 	decorators: [
 		(Story) => (
@@ -104,5 +108,13 @@ export const Controlled: Story = {
 	args: {
 		label: 'Controlled switch',
 		checked: true,
+	},
+};
+
+export const Unstyled: Story = {
+	args: {
+		label: 'Unstyled switch',
+		unstyled: true,
+		className: 'bg-purple-200',
 	},
 };

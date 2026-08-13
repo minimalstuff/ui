@@ -30,6 +30,10 @@ const meta = {
 			control: 'boolean',
 			description: 'Show max label (e.g. "x/y max")',
 		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in text styling',
+		},
 	},
 	args: {
 		current: 5,
@@ -115,5 +119,14 @@ export const BelowMin: Story = {
 		min: 5,
 		showMin: false,
 		showMax: false,
+	},
+};
+
+export const Unstyled: Story = {
+	args: {
+		current: 25,
+		max: 20,
+		unstyled: true,
+		className: 'text-purple-600',
 	},
 };

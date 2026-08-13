@@ -1,9 +1,12 @@
+import clsx from 'clsx';
+
 const CHARACTER_COUNT_STYLES =
 	'text-xs text-gray-500 dark:text-gray-400 mt-1 text-right';
 
 type BoundStatus = 'ok' | 'atLimit' | 'overLimit';
 
-function getBoundStatusClass(status: BoundStatus): string {
+function getBoundStatusClass(status: BoundStatus, unstyled: boolean): string {
+	if (unstyled) return '';
 	if (status === 'overLimit') return 'text-red-600 dark:text-red-400';
 	if (status === 'atLimit') return 'text-amber-600 dark:text-amber-400';
 	return '';
@@ -15,6 +18,8 @@ interface CharacterCountProps {
 	max?: number;
 	showMin?: boolean;
 	showMax?: boolean;
+	unstyled?: boolean;
+	className?: string;
 }
 
 export function CharacterCount({
@@ -23,6 +28,8 @@ export function CharacterCount({
 	max,
 	showMin,
 	showMax,
+	unstyled = false,
+	className,
 }: CharacterCountProps) {
 	const showLabels = showMin === true || showMax === true;
 
@@ -41,19 +48,27 @@ export function CharacterCount({
 	const maxText = showLabels ? `${current}/${max} max` : `${current}/${max}`;
 
 	return (
-		<div className={CHARACTER_COUNT_STYLES}>
+		<div className={clsx(!unstyled && CHARACTER_COUNT_STYLES, className)}>
 			{showMin && min !== undefined && (
-				<span className={getBoundStatusClass(minStatus)}>{minText}</span>
+				<span className={getBoundStatusClass(minStatus, unstyled)}>
+					{minText}
+				</span>
 			)}
 			{showMin && showMax && ' · '}
 			{showMax && max !== undefined && (
-				<span className={getBoundStatusClass(maxStatus)}>{maxText}</span>
+				<span className={getBoundStatusClass(maxStatus, unstyled)}>
+					{maxText}
+				</span>
 			)}
 			{!showMin && !showMax && max !== undefined && (
-				<span className={getBoundStatusClass(maxStatus)}>{maxText}</span>
+				<span className={getBoundStatusClass(maxStatus, unstyled)}>
+					{maxText}
+				</span>
 			)}
 			{!showMin && !showMax && min !== undefined && max === undefined && (
-				<span className={getBoundStatusClass(minStatus)}>{minText}</span>
+				<span className={getBoundStatusClass(minStatus, unstyled)}>
+					{minText}
+				</span>
 			)}
 		</div>
 	);

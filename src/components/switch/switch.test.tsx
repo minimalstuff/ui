@@ -70,4 +70,10 @@ describe('Switch', () => {
 		render(<Switch label="Enable notifications" disabled />);
 		expect(screen.getByRole('switch')).toBeDisabled();
 	});
+
+	test('unstyled drops the default track styling', () => {
+		render(<Switch label="Enable notifications" unstyled />);
+		const track = screen.getByRole('switch').parentElement;
+		expect(track).not.toHaveClass('rounded-full');
+	});
 });

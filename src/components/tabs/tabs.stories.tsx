@@ -32,6 +32,10 @@ const meta = {
 			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
 			description: 'Border radius applied to the tab list, tabs, and panel',
 		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in tab list, tab, and panel styling',
+		},
 	},
 	args: {
 		items: [
@@ -127,4 +131,11 @@ export const ManyTabs: Story = {
 			</div>
 		),
 	],
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		tabListClassName: 'gap-4',
+	},
 };

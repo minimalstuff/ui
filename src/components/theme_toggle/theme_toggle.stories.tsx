@@ -11,7 +11,11 @@ const meta = {
 	argTypes: {
 		size: {
 			control: 'select',
-			options: ['xs', 'sm', 'md', 'lg'],
+			options: ['sm', 'md', 'lg'],
+		},
+		variant: {
+			control: 'select',
+			options: ['solid', 'outline', 'ghost', 'subtle', 'unstyled'],
 		},
 	},
 	tags: ['autodocs'],

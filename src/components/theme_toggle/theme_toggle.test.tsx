@@ -34,4 +34,9 @@ describe('ThemeToggle', () => {
 		render(<ThemeToggle size="lg" />);
 		expect(screen.getByRole('button')).toHaveClass('p-3');
 	});
+
+	test('forwards variant to the underlying icon button', () => {
+		render(<ThemeToggle variant="unstyled" />);
+		expect(screen.getByRole('button')).not.toHaveClass('border');
+	});
 });

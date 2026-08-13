@@ -23,6 +23,7 @@ interface TabsProps {
 	items: TabItem[];
 	defaultIndex?: number;
 	radius?: Radius;
+	unstyled?: boolean;
 	className?: string;
 	tabListClassName?: string;
 	panelClassName?: string;
@@ -33,6 +34,7 @@ export function Tabs({
 	items,
 	defaultIndex = 0,
 	radius = 'md',
+	unstyled = false,
 	className,
 	tabListClassName,
 	panelClassName,
@@ -87,9 +89,12 @@ export function Tabs({
 			<div
 				role="tablist"
 				className={clsx(
-					'flex gap-1 p-1 bg-gray-100 dark:bg-gray-800/50 border',
-					SURFACE_BORDER,
-					RADIUS_CLASSES[radius],
+					'flex gap-1 p-1',
+					!unstyled && [
+						'bg-gray-100 dark:bg-gray-800/50 border',
+						SURFACE_BORDER,
+						RADIUS_CLASSES[radius],
+					],
 					tabListClassName
 				)}
 			>
@@ -111,18 +116,22 @@ export function Tabs({
 						onKeyDown={handleKeyDown}
 						className={clsx(
 							'flex items-center gap-2 px-4 py-2.5 text-sm font-medium',
-							RADIUS_CLASSES[radius],
-							activeIndex === index
-								? clsx(
-										'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm border',
-										SURFACE_BORDER
-									)
-								: clsx(
-										'text-gray-600 dark:text-gray-400 border border-transparent',
-										item.disabled
-											? 'opacity-50 cursor-not-allowed'
-											: 'cursor-pointer hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'
-									)
+							item.disabled
+								? 'opacity-50 cursor-not-allowed'
+								: 'cursor-pointer',
+							!unstyled && [
+								RADIUS_CLASSES[radius],
+								activeIndex === index
+									? clsx(
+											'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm border',
+											SURFACE_BORDER
+										)
+									: clsx(
+											'text-gray-600 dark:text-gray-400 border border-transparent',
+											!item.disabled &&
+												'hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'
+										),
+							]
 						)}
 					>
 						{item.icon && (
@@ -130,9 +139,10 @@ export function Tabs({
 								className={clsx(
 									'w-4 h-4 block shrink-0',
 									item.icon,
-									activeIndex === index
-										? 'text-blue-600 dark:text-blue-400'
-										: 'text-gray-500 dark:text-gray-400'
+									!unstyled &&
+										(activeIndex === index
+											? 'text-blue-600 dark:text-blue-400'
+											: 'text-gray-500 dark:text-gray-400')
 								)}
 							/>
 						)}
@@ -146,9 +156,12 @@ export function Tabs({
 				aria-labelledby={`${id}-tab-${activeIndex}`}
 				tabIndex={0}
 				className={clsx(
-					'mt-3 border bg-white dark:bg-gray-800/50 p-4 overflow-hidden focus:outline-none',
-					SURFACE_BORDER,
-					RADIUS_CLASSES[radius],
+					'mt-3 overflow-hidden focus:outline-none',
+					!unstyled && [
+						'border bg-white dark:bg-gray-800/50 p-4',
+						SURFACE_BORDER,
+						RADIUS_CLASSES[radius],
+					],
 					panelClassName
 				)}
 			>

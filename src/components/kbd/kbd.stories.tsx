@@ -17,6 +17,10 @@ const meta = {
 			control: 'select',
 			options: ['xs', 'sm', 'md', 'lg'],
 		},
+		unstyled: {
+			control: 'boolean',
+			description: 'Strip built-in box styling',
+		},
 	},
 	args: {
 		children: 'Ctrl',
@@ -48,4 +52,11 @@ export const AllSizes: Story = {
 			<Kbd size="lg">lg</Kbd>
 		</div>
 	),
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		className: 'text-purple-600 dark:text-purple-400',
+	},
 };

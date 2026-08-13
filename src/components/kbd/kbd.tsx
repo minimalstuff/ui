@@ -15,22 +15,27 @@ const SIZE_CLASSES: Record<KbdSize, string> = {
 interface KbdProps {
 	children: ReactNode;
 	size?: KbdSize;
+	unstyled?: boolean;
 	className?: string;
 }
 
 export const Kbd = ({
 	children,
 	size = 'sm',
+	unstyled = false,
 	className,
 }: Readonly<KbdProps>) => (
 	<kbd
 		className={clsx(
-			'inline-flex items-center border font-semibold uppercase',
-			'text-gray-500 dark:text-gray-400',
-			'bg-gray-100 dark:bg-gray-700',
-			'border-gray-200 dark:border-gray-600',
-			RADIUS_CLASSES.sm,
+			'inline-flex items-center',
 			SIZE_CLASSES[size],
+			!unstyled && [
+				'border font-semibold uppercase',
+				'text-gray-500 dark:text-gray-400',
+				'bg-gray-100 dark:bg-gray-700',
+				'border-gray-200 dark:border-gray-600',
+				RADIUS_CLASSES.sm,
+			],
 			className
 		)}
 	>

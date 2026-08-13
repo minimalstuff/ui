@@ -1,14 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
 import { act, render, screen } from '@testing-library/react';
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	test,
-	vi,
-} from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { CopyButton } from './copy_button';
 

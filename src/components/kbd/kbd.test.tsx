@@ -26,4 +26,9 @@ describe('Kbd', () => {
 		render(<Kbd size="lg">Ctrl</Kbd>);
 		expect(screen.getByText('Ctrl')).toHaveClass('text-base', 'px-3');
 	});
+
+	test('unstyled drops the default box styling', () => {
+		render(<Kbd unstyled>Ctrl</Kbd>);
+		expect(screen.getByText('Ctrl')).not.toHaveClass('bg-gray-100');
+	});
 });
