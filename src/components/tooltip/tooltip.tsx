@@ -97,7 +97,7 @@ export function Tooltip({
 	const resolvedSide = placement.split('-')[0] as TooltipPosition;
 
 	// Only start the enter transition once floating-ui has computed a real
-	// position — animating opacity/translate before that would either use a
+	// position: animating opacity/translate before that would either use a
 	// stale (0, 0) position or skip the transition's "closed" frame entirely.
 	useEffect(() => {
 		if (!isMounted || !isPositioned) return;
@@ -109,7 +109,7 @@ export function Tooltip({
 		clearTimeout(hideTimeoutRef.current);
 		setIsMounted(true);
 		// A fast leave-then-re-enter can cancel the unmount before it fires,
-		// leaving `isMounted`/`isPositioned` already true — the effect above
+		// leaving `isMounted`/`isPositioned` already true. The effect above
 		// only reacts to those *changing*, so it won't fire again on its own.
 		if (isPositioned) setIsVisible(true);
 	};
