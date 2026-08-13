@@ -10,6 +10,7 @@ export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';
 export { Combobox } from './combobox/combobox';
 export type { ComboboxOption } from './combobox/combobox';
+export { CopyButton } from './copy_button/copy_button';
 export {
 	Highlight,
 	type HighlightSegment,
