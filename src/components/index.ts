@@ -10,6 +10,7 @@ export { Checkbox } from './checkbox/checkbox';
 export { ClientOnly } from './client_only/client_only';
 export { Combobox } from './combobox/combobox';
 export type { ComboboxOption } from './combobox/combobox';
+export { ContextMenu } from './context_menu/context_menu';
 export { CopyButton } from './copy_button/copy_button';
 export {
 	Highlight,
@@ -19,6 +20,8 @@ export {
 export { IconButton } from './icon_button/icon_button';
 export { BASE_INPUT_STYLES, Input } from './input/input';
 export { Kbd, type KbdSize } from './kbd/kbd';
+export { Menu, type MenuAlign, type MenuSide } from './menu/menu';
+export { MenuItem } from './menu_item/menu_item';
 export {
 	ConfirmModal,
 	type ConfirmModalColor,
