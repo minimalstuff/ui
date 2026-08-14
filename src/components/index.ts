@@ -11,6 +11,8 @@ export {
 	type ButtonProps,
 	type ButtonVariant,
 } from './button/button';
+export { Card, type CardPadding, type CardProps } from './card/card';
+export { CardHeader, type CardHeaderProps } from './card/card_header';
 export {
 	CharacterCount,
 	type CharacterCountProps,
