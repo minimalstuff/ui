@@ -6,6 +6,7 @@ export interface MenuGroupProps {
 	children: ReactNode;
 	unstyled?: boolean;
 	className?: string;
+	wrapperClassName?: string;
 }
 
 /**
@@ -18,17 +19,22 @@ export interface MenuGroupProps {
  * across all its descendants, so keyboard navigation still walks into the
  * group, and close-on-select travels through React context rather than the
  * DOM tree.
+ *
+ * `className` styles the label — the only part of the group that carries any
+ * skin. `wrapperClassName` styles the `role="group"` element around both the
+ * label and the items.
  */
 export function MenuGroup({
 	label,
 	children,
 	unstyled = false,
 	className,
+	wrapperClassName,
 }: Readonly<MenuGroupProps>) {
 	const labelId = useId();
 
 	return (
-		<div role="group" aria-labelledby={labelId}>
+		<div role="group" aria-labelledby={labelId} className={wrapperClassName}>
 			<div
 				id={labelId}
 				role="presentation"

@@ -62,6 +62,20 @@ describe('MenuGroup', () => {
 		expect(screen.getByText('Theme')).toHaveClass('custom');
 	});
 
+	test('forwards a custom wrapperClassName to the group', () => {
+		render(
+			<MenuGroup label="Theme" wrapperClassName="custom">
+				<MenuItem onClick={vi.fn()}>Light</MenuItem>
+			</MenuGroup>
+		);
+		expect(screen.getByRole('group')).toHaveClass('custom');
+	});
+
+	test('leaves the group unstyled when no wrapperClassName is given', () => {
+		renderThemeGroup();
+		expect(screen.getByRole('group')).not.toHaveAttribute('class');
+	});
+
 	test('keeps its items reachable by the enclosing menu keyboard navigation', () => {
 		render(
 			<MenuSurface
