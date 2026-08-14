@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
+import { surfaceError } from '#lib/surface_error';
+
 const COPIED_INDICATOR_TIMEOUT = 2_000;
 
 interface CopyButtonProps {
@@ -8,9 +10,14 @@ interface CopyButtonProps {
 		copied: boolean;
 		copy: () => void | Promise<void>;
 	}) => ReactNode;
+	onError?: (error: unknown) => void;
 }
 
-export function CopyButton({ value, children }: Readonly<CopyButtonProps>) {
+export function CopyButton({
+	value,
+	children,
+	onError,
+}: Readonly<CopyButtonProps>) {
 	const [copied, setCopied] = useState(false);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -25,8 +32,8 @@ export function CopyButton({ value, children }: Readonly<CopyButtonProps>) {
 				() => setCopied(false),
 				COPIED_INDICATOR_TIMEOUT
 			);
-		} catch (err) {
-			console.error('Failed to copy:', err);
+		} catch (error) {
+			surfaceError(error, onError);
 		}
 	};
 

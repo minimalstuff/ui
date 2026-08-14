@@ -76,14 +76,12 @@ describe('CopyButton', () => {
 		expect(screen.getByText('idle')).toBeInTheDocument();
 	});
 
-	test('logs and stays uncopied when the clipboard write fails', async () => {
-		const consoleError = vi
-			.spyOn(console, 'error')
-			.mockImplementation(() => {});
+	test('stays uncopied when the clipboard write fails', async () => {
+		const onError = vi.fn();
 		stubClipboard(vi.fn().mockRejectedValue(new Error('denied')));
 
 		render(
-			<CopyButton value="hello">
+			<CopyButton value="hello" onError={onError}>
 				{({ copied, copy }) => (
 					<button onClick={() => void copy()}>
 						{copied ? 'copied' : 'idle'}
@@ -97,6 +95,23 @@ describe('CopyButton', () => {
 		});
 
 		expect(screen.getByText('idle')).toBeInTheDocument();
-		expect(consoleError).toHaveBeenCalled();
+	});
+
+	test('reports the failure to onError instead of swallowing it', async () => {
+		const onError = vi.fn();
+		const clipboardError = new Error('denied');
+		stubClipboard(vi.fn().mockRejectedValue(clipboardError));
+
+		render(
+			<CopyButton value="hello" onError={onError}>
+				{({ copy }) => <button onClick={() => void copy()}>copy</button>}
+			</CopyButton>
+		);
+
+		await act(async () => {
+			screen.getByRole('button').click();
+		});
+
+		expect(onError).toHaveBeenCalledWith(clipboardError);
 	});
 });
