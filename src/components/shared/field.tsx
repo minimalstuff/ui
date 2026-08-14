@@ -23,7 +23,7 @@ interface FieldProps {
  * to `fieldId`; any other node is rendered untouched so callers can supply
  * their own markup, with the required mark appended either way.
  */
-export function Field({
+export const Field = ({
 	fieldId,
 	errorId,
 	label,
@@ -31,26 +31,24 @@ export function Field({
 	required = false,
 	wrapperClassName,
 	children,
-}: Readonly<FieldProps>) {
-	return (
-		<div className={clsx('w-full', wrapperClassName)}>
-			{label !== undefined &&
-				(typeof label === 'string' ? (
-					<label
-						className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
-						htmlFor={fieldId}
-					>
-						{label}
-						{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-					</label>
-				) : (
-					<>
-						{label}
-						{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-					</>
-				))}
-			{children}
-			<FieldError id={errorId} error={error} className="mt-1" />
-		</div>
-	);
-}
+}: Readonly<FieldProps>) => (
+	<div className={clsx('w-full', wrapperClassName)}>
+		{label !== undefined &&
+			(typeof label === 'string' ? (
+				<label
+					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
+					htmlFor={fieldId}
+				>
+					{label}
+					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				</label>
+			) : (
+				<>
+					{label}
+					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				</>
+			))}
+		{children}
+		<FieldError id={errorId} error={error} className="mt-1" />
+	</div>
+);

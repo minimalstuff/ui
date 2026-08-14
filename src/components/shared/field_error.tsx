@@ -13,11 +13,11 @@ interface FieldErrorProps {
  * mount it unconditionally. Spacing is left to `className`: fields that indent
  * their message past a control need their own margins.
  */
-export function FieldError({
+export const FieldError = ({
 	id,
 	error,
 	className,
-}: Readonly<FieldErrorProps>) {
+}: Readonly<FieldErrorProps>) => {
 	if (!error) return null;
 
 	return (
@@ -25,4 +25,4 @@ export function FieldError({
 			{error}
 		</p>
 	);
-}
+};

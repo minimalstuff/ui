@@ -13,11 +13,11 @@ interface FieldDescriptionProps {
  * Helper text for a field. A string becomes a `<p>`; any other node becomes a
  * `<span>` so callers can nest block markup without landing inside a paragraph.
  */
-export function FieldDescription({
+export const FieldDescription = ({
 	id,
 	description,
 	className,
-}: Readonly<FieldDescriptionProps>) {
+}: Readonly<FieldDescriptionProps>) => {
 	if (!description) return null;
 
 	if (typeof description === 'string') {
@@ -33,4 +33,4 @@ export function FieldDescription({
 			{description}
 		</span>
 	);
-}
+};
