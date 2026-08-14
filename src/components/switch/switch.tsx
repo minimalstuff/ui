@@ -8,6 +8,10 @@ import {
 
 import { SELECTED_FILL } from '#components/shared/surface_tokens';
 import {
+	CONTROL_FOCUS_RING,
+	CONTROL_FOCUS_RING_COLOR,
+} from '#components/shared/focus_styles';
+import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
@@ -67,7 +71,8 @@ export function Switch({
 					className={clsx(
 						'relative inline-flex w-11 shrink-0',
 						'transition-colors duration-200 ease-in-out',
-						'focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2',
+						CONTROL_FOCUS_RING,
+						CONTROL_FOCUS_RING_COLOR,
 						!unstyled && [
 							'rounded-full border-2 border-transparent',
 							isChecked ? SELECTED_FILL : 'bg-gray-200 dark:bg-gray-600',
