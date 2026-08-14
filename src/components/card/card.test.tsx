@@ -18,6 +18,36 @@ describe('Card', () => {
 		).toBeInTheDocument();
 	});
 
+	test('renders the title as a level 2 heading by default', () => {
+		render(<Card title="Active sessions">Section body</Card>);
+		expect(
+			screen.getByRole('heading', { name: 'Active sessions', level: 2 })
+		).toBeInTheDocument();
+	});
+
+	test('renders the requested heading level', () => {
+		render(
+			<Card title="Active sessions" headingLevel={3}>
+				Section body
+			</Card>
+		);
+		expect(
+			screen.getByRole('heading', { name: 'Active sessions', level: 3 })
+		).toBeInTheDocument();
+	});
+
+	test('exposes a titled card as a region named after its title', () => {
+		render(<Card title="Active sessions">Section body</Card>);
+		expect(
+			screen.getByRole('region', { name: 'Active sessions' })
+		).toBeInTheDocument();
+	});
+
+	test('stays a plain container when it has no title to name it', () => {
+		render(<Card>Section body</Card>);
+		expect(screen.queryByRole('region')).not.toBeInTheDocument();
+	});
+
 	test('omits the heading when no title is given', () => {
 		render(<Card>Section body</Card>);
 		expect(screen.queryByRole('heading')).not.toBeInTheDocument();

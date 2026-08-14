@@ -19,6 +19,11 @@ const meta = {
 			control: 'select',
 			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
 		},
+		headingLevel: {
+			control: 'select',
+			options: [2, 3, 4],
+			description: 'Heading level of the title — match the page hierarchy.',
+		},
 		unstyled: {
 			control: 'boolean',
 			description: 'Strips surface, border, radius and padding.',
@@ -77,6 +82,14 @@ export const SmallPadding: Story = {
 	args: {
 		title: 'Active sessions',
 		padding: 'sm',
+	},
+};
+
+export const NestedHeadingLevel: Story = {
+	args: {
+		title: 'Import',
+		description: 'Sits under an existing section heading.',
+		headingLevel: 3,
 	},
 };
 
