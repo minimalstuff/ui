@@ -15,7 +15,7 @@ import {
 	CONTROL_FOCUS_RING_COLOR,
 } from '#components/shared/focus_styles';
 
-interface SwitchProps extends Omit<
+export interface SwitchProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
 > {

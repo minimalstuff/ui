@@ -4,7 +4,7 @@ import { surfaceError } from '#lib/surface_error';
 
 const COPIED_INDICATOR_TIMEOUT = 2_000;
 
-interface CopyButtonProps {
+export interface CopyButtonProps {
 	value: string;
 	children: (props: {
 		copied: boolean;

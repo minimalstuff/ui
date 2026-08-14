@@ -12,7 +12,7 @@ function getBoundStatusClass(status: BoundStatus, unstyled: boolean): string {
 	return '';
 }
 
-interface CharacterCountProps {
+export interface CharacterCountProps {
 	current: number;
 	min?: number;
 	max?: number;

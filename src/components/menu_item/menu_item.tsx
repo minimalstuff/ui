@@ -3,7 +3,7 @@ import type { MouseEvent, ReactNode } from 'react';
 
 import { useMenuClose } from '#components/menu/menu_context';
 
-interface MenuItemProps {
+export interface MenuItemProps {
 	icon?: string;
 	onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 	danger?: boolean;

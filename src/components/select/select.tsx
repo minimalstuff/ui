@@ -15,7 +15,7 @@ export interface SelectOption {
 	label: string;
 }
 
-interface SelectProps extends Omit<
+export interface SelectProps extends Omit<
 	ComponentPropsWithRef<'select'>,
 	'children'
 > {

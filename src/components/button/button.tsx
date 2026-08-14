@@ -30,7 +30,7 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	lg: 'w-5 h-5',
 };
 
-interface ButtonProps extends Omit<
+export interface ButtonProps extends Omit<
 	ComponentPropsWithRef<'button'>,
 	'children'
 > {

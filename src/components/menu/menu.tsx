@@ -39,7 +39,7 @@ interface TriggerProps {
 	'aria-expanded'?: boolean;
 }
 
-interface MenuProps {
+export interface MenuProps {
 	trigger: ReactElement;
 	children: ReactNode;
 	side?: MenuSide;

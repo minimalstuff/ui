@@ -1,6 +1,6 @@
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
 
-interface ClientOnlyProps extends React.PropsWithChildren {
+export interface ClientOnlyProps extends React.PropsWithChildren {
 	fallback?: React.ReactNode;
 }
 

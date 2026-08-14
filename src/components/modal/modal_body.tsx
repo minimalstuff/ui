@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { type ReactNode } from 'react';
 
-interface ModalBodyProps {
+export interface ModalBodyProps {
 	children: ReactNode;
 	className?: string;
 }

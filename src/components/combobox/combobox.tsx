@@ -17,7 +17,7 @@ export interface ComboboxOption {
 	label: string;
 }
 
-interface ComboboxProps {
+export interface ComboboxProps {
 	options: ComboboxOption[];
 	label?: string | ReactNode;
 	error?: string;

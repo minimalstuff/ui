@@ -30,7 +30,7 @@ export interface RadioOption {
 	disabled?: boolean;
 }
 
-interface RadioOptionsProps extends Omit<
+export interface RadioOptionsProps extends Omit<
 	ComponentPropsWithRef<'fieldset'>,
 	'onChange'
 > {

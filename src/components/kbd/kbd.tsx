@@ -13,7 +13,7 @@ const SIZE_CLASSES: Record<KbdSize, string> = {
 	lg: 'px-3 py-1 text-base',
 };
 
-interface KbdProps {
+export interface KbdProps {
 	children: ReactNode;
 	size?: KbdSize;
 	unstyled?: boolean;

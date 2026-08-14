@@ -25,7 +25,7 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	lg: 'w-6 h-6',
 };
 
-interface IconButtonProps extends ComponentPropsWithRef<'button'> {
+export interface IconButtonProps extends ComponentPropsWithRef<'button'> {
 	icon: string;
 	'aria-label': string;
 	variant?: ButtonVariant;

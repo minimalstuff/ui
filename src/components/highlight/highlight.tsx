@@ -1,6 +1,6 @@
 import { splitIntoHighlightSegments } from '#lib/split_into_highlight_segments';
 
-interface HighlightProps {
+export interface HighlightProps {
 	text: string;
 	ranges: readonly number[];
 }

@@ -18,7 +18,7 @@ import {
 
 const CURSOR_OFFSET = 2;
 
-interface ContextMenuProps {
+export interface ContextMenuProps {
 	/** The area that opens the menu on right-click. */
 	children: ReactNode;
 	/** `MenuItem` elements shown in the menu. */

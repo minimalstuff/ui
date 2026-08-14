@@ -12,7 +12,7 @@ import {
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
 
-interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
+export interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;

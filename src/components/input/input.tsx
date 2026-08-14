@@ -12,7 +12,7 @@ import {
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
 
-interface InputProps extends ComponentPropsWithRef<'input'> {
+export interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;

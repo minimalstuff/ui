@@ -22,7 +22,7 @@ import {
 	CONTROL_FOCUS_RING_ERROR_COLOR,
 } from '#components/shared/focus_styles';
 
-interface CheckboxProps extends Omit<
+export interface CheckboxProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
 > {

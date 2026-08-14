@@ -19,7 +19,7 @@ export interface TabItem {
 	icon?: string;
 }
 
-interface TabsProps {
+export interface TabsProps {
 	items: TabItem[];
 	defaultIndex?: number;
 	radius?: Radius;

@@ -3,7 +3,7 @@ import { type ReactNode } from 'react';
 
 import { OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
-interface ModalFooterProps {
+export interface ModalFooterProps {
 	children: ReactNode;
 	className?: string;
 }

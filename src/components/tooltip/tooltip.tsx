@@ -53,7 +53,7 @@ interface TriggerProps {
 	'aria-describedby'?: string;
 }
 
-interface TooltipProps {
+export interface TooltipProps {
 	content: ReactNode;
 	children: ReactNode;
 	position?: TooltipPosition;

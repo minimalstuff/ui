@@ -20,7 +20,7 @@ const SIZE_CLASSES: Record<BadgeSize, string> = {
 	lg: 'px-3.5 py-1.5 text-lg',
 };
 
-interface BadgeProps {
+export interface BadgeProps {
 	children: ReactNode;
 	color?: ButtonColor;
 	variant?: BadgeVariant;

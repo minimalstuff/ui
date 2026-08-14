@@ -18,7 +18,7 @@ const THEME_ICON_CLASSES: Record<Theme, string> = {
 
 const FALLBACK_ICON_CLASS = 'i-tabler-device-desktop text-gray-400';
 
-interface ThemeToggleProps {
+export interface ThemeToggleProps {
 	isTransitionEnabled?: boolean;
 	transitionDuration?: number;
 	transitionEasing?: string;
