@@ -62,4 +62,25 @@ describe('MenuItem', () => {
 		render(<MenuItem onClick={vi.fn()}>Move up</MenuItem>);
 		expect(() => fireEvent.click(screen.getByRole('menuitem'))).not.toThrow();
 	});
+
+	test('forwards a custom className alongside its own classes', () => {
+		render(
+			<MenuItem onClick={vi.fn()} className="custom">
+				Move up
+			</MenuItem>
+		);
+		const item = screen.getByRole('menuitem');
+		expect(item).toHaveClass('custom');
+		expect(item).toHaveClass('flex');
+	});
+
+	test('forwards a ref to the underlying button', () => {
+		const ref = { current: null as HTMLButtonElement | null };
+		render(
+			<MenuItem onClick={vi.fn()} ref={ref}>
+				Move up
+			</MenuItem>
+		);
+		expect(ref.current).toBe(screen.getByRole('menuitem'));
+	});
 });

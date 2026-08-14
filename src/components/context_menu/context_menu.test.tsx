@@ -132,4 +132,33 @@ describe('ContextMenu', () => {
 		);
 		expect(elsewhere).toHaveFocus();
 	});
+
+	test('forwards a custom className to the wrapper', () => {
+		render(
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				className="custom"
+			>
+				<div>Right-click area</div>
+			</ContextMenu>
+		);
+		expect(screen.getByText('Right-click area').parentElement).toHaveClass(
+			'custom'
+		);
+	});
+
+	test('forwards a ref to the wrapper', () => {
+		const ref = { current: null as HTMLDivElement | null };
+		render(
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				ref={ref}
+			>
+				<div>Right-click area</div>
+			</ContextMenu>
+		);
+		expect(ref.current).toBe(
+			screen.getByText('Right-click area').parentElement
+		);
+	});
 });

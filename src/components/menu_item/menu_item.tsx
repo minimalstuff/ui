@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode, Ref } from 'react';
 
 import { useMenuClose } from '#components/menu/menu_context';
 
@@ -9,6 +9,8 @@ export interface MenuItemProps {
 	danger?: boolean;
 	disabled?: boolean;
 	children: ReactNode;
+	className?: string;
+	ref?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -27,11 +29,14 @@ export function MenuItem({
 	danger = false,
 	disabled = false,
 	children,
+	className,
+	ref,
 }: Readonly<MenuItemProps>) {
 	const closeMenu = useMenuClose();
 
 	return (
 		<button
+			ref={ref}
 			type="button"
 			role="menuitem"
 			tabIndex={-1}
@@ -48,7 +53,8 @@ export function MenuItem({
 				'disabled:cursor-not-allowed disabled:opacity-50',
 				danger
 					? 'text-red-600 dark:text-red-400'
-					: 'text-gray-700 dark:text-gray-300'
+					: 'text-gray-700 dark:text-gray-300',
+				className
 			)}
 		>
 			{icon && <div className={clsx(icon, 'h-4 w-4 flex-shrink-0')} />}

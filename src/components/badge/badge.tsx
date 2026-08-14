@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 import { type ControlSize } from '#components/shared/sizes';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
@@ -20,7 +20,7 @@ const SIZE_CLASSES: Record<BadgeSize, string> = {
 	lg: 'px-3.5 py-1.5 text-lg',
 };
 
-export interface BadgeProps {
+export interface BadgeProps extends ComponentPropsWithRef<'span'> {
 	children: ReactNode;
 	color?: ButtonColor;
 	variant?: BadgeVariant;
@@ -34,14 +34,18 @@ export const Badge = ({
 	variant = 'subtle',
 	size = 'sm',
 	radius = 'md',
+	className,
+	...props
 }: Readonly<BadgeProps>) => (
 	<span
 		className={clsx(
 			'inline-flex items-center gap-1 border',
 			RADIUS_CLASSES[radius],
 			SIZE_CLASSES[size],
-			BUTTON_COLOR_TOKENS[color][variant]
+			BUTTON_COLOR_TOKENS[color][variant],
+			className
 		)}
+		{...props}
 	>
 		{children}
 	</span>

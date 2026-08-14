@@ -54,4 +54,17 @@ describe('Badge', () => {
 		render(<Badge radius="full">Pill</Badge>);
 		expect(screen.getByText('Pill')).toHaveClass('rounded-full');
 	});
+
+	test('forwards a custom className alongside its own classes', () => {
+		render(<Badge className="custom">Pill</Badge>);
+		const badge = screen.getByText('Pill');
+		expect(badge).toHaveClass('custom');
+		expect(badge).toHaveClass('inline-flex');
+	});
+
+	test('forwards a ref to the underlying span', () => {
+		const ref = { current: null as HTMLSpanElement | null };
+		render(<Badge ref={ref}>Pill</Badge>);
+		expect(ref.current).toBe(screen.getByText('Pill'));
+	});
 });

@@ -1,4 +1,10 @@
-import { type MouseEvent, type ReactNode, useCallback, useRef } from 'react';
+import {
+	type MouseEvent,
+	type ReactNode,
+	type Ref,
+	useCallback,
+	useRef,
+} from 'react';
 import {
 	autoUpdate,
 	flip,
@@ -24,6 +30,8 @@ export interface ContextMenuProps {
 	/** `MenuItem` elements shown in the menu. */
 	items: ReactNode;
 	radius?: Radius;
+	className?: string;
+	ref?: Ref<HTMLDivElement>;
 }
 
 function virtualElementAt(x: number, y: number): VirtualElement {
@@ -68,6 +76,8 @@ export function ContextMenu({
 	children,
 	items,
 	radius = 'md',
+	className,
+	ref,
 }: Readonly<ContextMenuProps>) {
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
@@ -102,7 +112,7 @@ export function ContextMenu({
 	};
 
 	return (
-		<div onContextMenu={handleContextMenu}>
+		<div ref={ref} className={className} onContextMenu={handleContextMenu}>
 			{children}
 			{isMounted && (
 				<MenuSurface

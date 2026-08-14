@@ -11,14 +11,17 @@ import {
 import {
 	cloneElement,
 	isValidElement,
+	useCallback,
 	useEffect,
 	useId,
 	useRef,
 	useState,
 	type MouseEvent,
 	type ReactNode,
+	type Ref,
 } from 'react';
 
+import { mergeRefs } from '#lib/merge_refs';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
@@ -63,6 +66,9 @@ export interface TooltipProps {
 	disabled?: boolean;
 	radius?: Radius;
 	onTemporaryShow?: () => void;
+	className?: string;
+	/** Attaches to the wrapper `<span>` around `children`, alongside `Tooltip`'s own internal ref. */
+	ref?: Ref<HTMLSpanElement>;
 }
 
 export function Tooltip({
@@ -75,6 +81,8 @@ export function Tooltip({
 	disabled = false,
 	radius = 'lg',
 	onTemporaryShow,
+	className,
+	ref,
 }: Readonly<TooltipProps>) {
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 	const [showTemporary, setShowTemporary] = useState(false);
@@ -98,6 +106,14 @@ export function Tooltip({
 	const resolvedSide = placement.split('-')[0] as TooltipPosition;
 
 	useEnterOnPositioned(isMounted, isPositioned, setIsVisible);
+
+	// Memoized so React doesn't call it with `null` then the node again on
+	// every re-render, which would needlessly reset floating-ui's reference.
+	const setTriggerRef = useCallback(
+		(node: HTMLSpanElement | null) =>
+			mergeRefs<HTMLSpanElement>(refs.setReference, ref)(node),
+		[refs, ref]
+	);
 
 	const closeTooltip = () => {
 		setShowTemporary(false);
@@ -154,8 +170,8 @@ export function Tooltip({
 	return (
 		<>
 			<span
-				ref={refs.setReference}
-				className="inline-block"
+				ref={setTriggerRef}
+				className={clsx('inline-block', className)}
 				onMouseEnter={handleShow}
 				onMouseLeave={handleHide}
 				onFocus={handleShow}

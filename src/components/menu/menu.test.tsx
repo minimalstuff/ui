@@ -192,4 +192,36 @@ describe('Menu', () => {
 			expect(trigger).toHaveAttribute('aria-expanded', 'true')
 		);
 	});
+
+	test('forwards a custom className to the wrapper', () => {
+		render(
+			<Menu trigger={<button>Options</button>} className="custom">
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+		expect(screen.getByText('Options').parentElement).toHaveClass('custom');
+	});
+
+	test('forwards a ref to the wrapper alongside its own', () => {
+		const ref = { current: null as HTMLSpanElement | null };
+		render(
+			<Menu trigger={<button>Options</button>} ref={ref}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+		expect(ref.current).toBe(screen.getByText('Options').parentElement);
+	});
+
+	test('still focuses the first menu item when a consumer ref is passed', async () => {
+		const ref = { current: null as HTMLSpanElement | null };
+		render(
+			<Menu trigger={<button>Options</button>} ref={ref}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+
+		fireEvent.click(screen.getByText('Options'));
+
+		await waitFor(() => expect(screen.getByText('Move up')).toHaveFocus());
+	});
 });

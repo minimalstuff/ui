@@ -203,4 +203,37 @@ describe('Tooltip', () => {
 			'data-[state=closed]:-translate-x-1'
 		);
 	});
+
+	test('forwards a custom className to the wrapper', () => {
+		render(
+			<Tooltip content="Helpful text" className="custom">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		expect(screen.getByText('Hover me').parentElement).toHaveClass('custom');
+	});
+
+	test('forwards a ref to the wrapper alongside its own', () => {
+		const ref = { current: null as HTMLSpanElement | null };
+		render(
+			<Tooltip content="Helpful text" ref={ref}>
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		expect(ref.current).toBe(screen.getByText('Hover me').parentElement);
+	});
+
+	test('still shows on hover when a consumer ref is passed', () => {
+		const ref = { current: null as HTMLSpanElement | null };
+		render(
+			<Tooltip content="Helpful text" ref={ref}>
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+
+		fireEvent.mouseEnter(wrapper);
+
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+	});
 });

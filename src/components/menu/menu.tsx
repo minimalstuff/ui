@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import {
 	autoUpdate,
 	flip,
@@ -14,8 +15,10 @@ import {
 	type MouseEvent,
 	type ReactElement,
 	type ReactNode,
+	type Ref,
 } from 'react';
 
+import { mergeRefs } from '#lib/merge_refs';
 import { type Radius } from '#components/shared/radius';
 import { MenuSurface } from '#components/menu/menu_surface';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
@@ -45,6 +48,9 @@ export interface MenuProps {
 	side?: MenuSide;
 	align?: MenuAlign;
 	radius?: Radius;
+	className?: string;
+	/** Attaches to the wrapper `<span>` around `trigger`, alongside `Menu`'s own internal ref. */
+	ref?: Ref<HTMLSpanElement>;
 }
 
 /**
@@ -62,6 +68,8 @@ export function Menu({
 	side = 'bottom',
 	align = 'start',
 	radius = 'md',
+	className,
+	ref,
 }: Readonly<MenuProps>) {
 	const wrapperRef = useRef<HTMLSpanElement>(null);
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
@@ -89,11 +97,9 @@ export function Menu({
 	// Memoized so React doesn't call it with `null` then the node again on
 	// every re-render, which would needlessly reset floating-ui's reference.
 	const setWrapperRef = useCallback(
-		(node: HTMLSpanElement | null) => {
-			refs.setReference(node);
-			wrapperRef.current = node;
-		},
-		[refs]
+		(node: HTMLSpanElement | null) =>
+			mergeRefs<HTMLSpanElement>(refs.setReference, wrapperRef, ref)(node),
+		[refs, ref]
 	);
 
 	const handleTriggerClick = (event: MouseEvent) => {
@@ -123,7 +129,7 @@ export function Menu({
 		: trigger;
 
 	return (
-		<span ref={setWrapperRef} className="inline-block">
+		<span ref={setWrapperRef} className={clsx('inline-block', className)}>
 			{clonedTrigger}
 			{isMounted && (
 				<MenuSurface
