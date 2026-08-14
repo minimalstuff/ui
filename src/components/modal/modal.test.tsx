@@ -4,7 +4,6 @@ import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { Modal } from './modal';
-import { ModalBody } from './modal_body';
 import { ModalFooter } from './modal_footer';
 
 describe('Modal', () => {
@@ -188,7 +187,7 @@ describe('Modal', () => {
 		expect(trigger).toHaveFocus();
 	});
 
-	test('renders a ModalBody/ModalFooter pair as a pinned footer, ignoring the footer prop', async () => {
+	test('renders a ModalFooter as a pinned footer, outside the scrollable content region', async () => {
 		render(<Modal />);
 
 		act(() => {
@@ -196,17 +195,38 @@ describe('Modal', () => {
 				title: 'Hello',
 				children: (
 					<>
-						<ModalBody>Body text</ModalBody>
+						Body text
 						<ModalFooter>Footer text</ModalFooter>
 					</>
 				),
-				footer: 'Ignored footer',
 			});
 		});
 
+		const body = await screen.findByText('Body text');
+		const footer = screen.getByText('Footer text');
+		expect(footer).toBeInTheDocument();
+		expect(body.closest('[role="dialog"]')).toContainElement(footer);
+		// The footer's own container must not be the scrollable body region.
+		expect(footer.closest('.overflow-y-auto')).not.toBeInTheDocument();
+	});
+
+	test('renders a ModalFooter declared inside a nested content component', async () => {
+		const NestedContent = () => (
+			<>
+				Body text
+				<ModalFooter>Footer text</ModalFooter>
+			</>
+		);
+
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({ title: 'Hello', children: <NestedContent /> });
+		});
+
 		expect(await screen.findByText('Body text')).toBeInTheDocument();
-		expect(screen.getByText('Footer text')).toBeInTheDocument();
-		expect(screen.queryByText('Ignored footer')).not.toBeInTheDocument();
+		const footer = screen.getByText('Footer text');
+		expect(footer.closest('.overflow-y-auto')).not.toBeInTheDocument();
 	});
 
 	test('throws when calling without a mounted Modal root', () => {

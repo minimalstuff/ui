@@ -4,6 +4,7 @@ import { Input } from '#components/input/input';
 import { Button } from '#components/button/button';
 import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
+import { ModalFooter } from '#components/modal/modal_footer';
 import { Modal, type ModalProps } from '#components/modal/modal';
 
 function ModalTrigger(props: ModalProps) {
@@ -128,13 +129,15 @@ export const LongContent: Story = {
 export const NonDismissible: Story = {
 	args: {
 		title: 'Complete your setup',
-		children:
-			'This modal cannot be closed via Escape, backdrop click, or the close button. Finish the action below to continue.',
 		dismissible: false,
-		footer: (close) => (
-			<Button size="sm" onClick={close}>
-				Finish setup
-			</Button>
+		children: (
+			<>
+				This modal cannot be closed via Escape, backdrop click, or the close
+				button. Finish the action below to continue.
+				<ModalFooter>
+					<Button size="sm">Finish setup</Button>
+				</ModalFooter>
+			</>
 		),
 	},
 };
@@ -142,13 +145,15 @@ export const NonDismissible: Story = {
 export const WithFooter: Story = {
 	args: {
 		title: 'Modal with footer',
-		children: 'This modal has a footer with action buttons.',
-		footer: (
+		children: (
 			<>
-				<Button variant="outline" color="neutral" size="sm">
-					Cancel
-				</Button>
-				<Button size="sm">Save</Button>
+				This modal has a footer with action buttons.
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Cancel
+					</Button>
+					<Button size="sm">Save</Button>
+				</ModalFooter>
 			</>
 		),
 	},
@@ -171,14 +176,12 @@ export const LongContentWithFooter: Story = {
 						anim id est laborum.
 					</p>
 				))}
-			</>
-		),
-		footer: (
-			<>
-				<Button variant="outline" color="neutral" size="sm">
-					Cancel
-				</Button>
-				<Button size="sm">Confirm</Button>
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Cancel
+					</Button>
+					<Button size="sm">Confirm</Button>
+				</ModalFooter>
 			</>
 		),
 	},
@@ -189,34 +192,69 @@ export const SmallForm: Story = {
 		title: 'Create user',
 		size: 'md',
 		children: (
-			<div className="space-y-4">
-				<Input label="Name" required placeholder="Enter your name" />
-				<Input
-					label="Email"
-					type="email"
-					required
-					placeholder="Enter your email"
-				/>
-				<Select
-					label="Role"
-					options={[
-						{ value: 'admin', label: 'Administrator' },
-						{ value: 'user', label: 'User' },
-						{ value: 'guest', label: 'Guest' },
-					]}
-					placeholder="Select a role"
-					required
-				/>
-			</div>
-		),
-		footer: (
 			<>
-				<Button variant="outline" color="neutral" size="sm">
-					Cancel
-				</Button>
-				<Button size="sm">Create</Button>
+				<div className="space-y-4">
+					<Input label="Name" required placeholder="Enter your name" />
+					<Input
+						label="Email"
+						type="email"
+						required
+						placeholder="Enter your email"
+					/>
+					<Select
+						label="Role"
+						options={[
+							{ value: 'admin', label: 'Administrator' },
+							{ value: 'user', label: 'User' },
+							{ value: 'guest', label: 'Guest' },
+						]}
+						placeholder="Select a role"
+						required
+					/>
+				</div>
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Cancel
+					</Button>
+					<Button size="sm">Create</Button>
+				</ModalFooter>
 			</>
 		),
+	},
+};
+
+// Mirrors real usage: the modal's `children` is a dedicated content
+// component, and `ModalFooter` is declared *inside* that component's own
+// render output — one level below what `Modal.call` sees directly. This is
+// the shape that broke the old structural-detection approach (it only ever
+// saw the outer `<NestedFormContent/>` element, never the `ModalFooter`
+// nested inside it) — regression coverage for that exact failure.
+const NestedFormContent = () => (
+	<>
+		<div className="space-y-4">
+			<Input label="Name" required placeholder="Enter a name" />
+			<Input
+				label="URL"
+				type="url"
+				required
+				placeholder="https://example.com"
+			/>
+			<Textarea label="Description" rows={3} />
+		</div>
+		<ModalFooter>
+			<Button variant="outline" color="neutral" size="sm">
+				Cancel
+			</Button>
+			<Button size="sm">Create</Button>
+		</ModalFooter>
+	</>
+);
+
+export const FooterFromNestedComponent: Story = {
+	args: {
+		title: 'Create a link',
+		size: 'md',
+		children: <NestedFormContent />,
 	},
 };
 
@@ -225,67 +263,67 @@ export const LongForm: Story = {
 		title: 'Complete profile',
 		size: 'lg',
 		children: (
-			<div className="space-y-4">
-				<div className="grid grid-cols-2 gap-4">
-					<Input label="First name" required placeholder="John" />
-					<Input label="Last name" required placeholder="Doe" />
-				</div>
-				<Input
-					label="Email"
-					type="email"
-					required
-					placeholder="john.doe@example.com"
-				/>
-				<Input label="Phone" type="tel" placeholder="+1 234 567 8900" />
-				<Input label="Address" placeholder="123 Main Street" />
-				<div className="grid grid-cols-2 gap-4">
-					<Input label="City" placeholder="New York" />
-					<Input label="State" placeholder="NY" />
-				</div>
-				<Input label="ZIP code" placeholder="10001" />
-				<Select
-					label="Country"
-					options={[
-						{ value: 'us', label: 'United States' },
-						{ value: 'ca', label: 'Canada' },
-						{ value: 'uk', label: 'United Kingdom' },
-						{ value: 'fr', label: 'France' },
-						{ value: 'de', label: 'Germany' },
-					]}
-					placeholder="Select a country"
-					required
-				/>
-				<Input label="Company" placeholder="Acme Inc." />
-				<Input label="Job title" placeholder="Software Engineer" />
-				<Textarea
-					label="Bio"
-					placeholder="Tell us about yourself..."
-					rows={4}
-				/>
-				<Input label="Website" type="url" placeholder="https://example.com" />
-				<Input
-					label="LinkedIn"
-					type="url"
-					placeholder="https://linkedin.com/in/username"
-				/>
-				<Input
-					label="Twitter"
-					type="url"
-					placeholder="https://twitter.com/username"
-				/>
-				<Textarea
-					label="Additional notes"
-					placeholder="Any additional information..."
-					rows={3}
-				/>
-			</div>
-		),
-		footer: (
 			<>
-				<Button variant="outline" color="neutral" size="sm">
-					Cancel
-				</Button>
-				<Button size="sm">Save profile</Button>
+				<div className="space-y-4">
+					<div className="grid grid-cols-2 gap-4">
+						<Input label="First name" required placeholder="John" />
+						<Input label="Last name" required placeholder="Doe" />
+					</div>
+					<Input
+						label="Email"
+						type="email"
+						required
+						placeholder="john.doe@example.com"
+					/>
+					<Input label="Phone" type="tel" placeholder="+1 234 567 8900" />
+					<Input label="Address" placeholder="123 Main Street" />
+					<div className="grid grid-cols-2 gap-4">
+						<Input label="City" placeholder="New York" />
+						<Input label="State" placeholder="NY" />
+					</div>
+					<Input label="ZIP code" placeholder="10001" />
+					<Select
+						label="Country"
+						options={[
+							{ value: 'us', label: 'United States' },
+							{ value: 'ca', label: 'Canada' },
+							{ value: 'uk', label: 'United Kingdom' },
+							{ value: 'fr', label: 'France' },
+							{ value: 'de', label: 'Germany' },
+						]}
+						placeholder="Select a country"
+						required
+					/>
+					<Input label="Company" placeholder="Acme Inc." />
+					<Input label="Job title" placeholder="Software Engineer" />
+					<Textarea
+						label="Bio"
+						placeholder="Tell us about yourself..."
+						rows={4}
+					/>
+					<Input label="Website" type="url" placeholder="https://example.com" />
+					<Input
+						label="LinkedIn"
+						type="url"
+						placeholder="https://linkedin.com/in/username"
+					/>
+					<Input
+						label="Twitter"
+						type="url"
+						placeholder="https://twitter.com/username"
+					/>
+					<Textarea
+						label="Additional notes"
+						placeholder="Any additional information..."
+						rows={3}
+					/>
+				</div>
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Cancel
+					</Button>
+					<Button size="sm">Save profile</Button>
+				</ModalFooter>
 			</>
 		),
 	},

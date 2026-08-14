@@ -4,7 +4,6 @@ import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { ModalShell } from './modal_shell';
-import { ModalFooter } from './modal_footer';
 
 describe('ModalShell', () => {
 	test('renders the title and children', () => {
@@ -189,25 +188,5 @@ describe('ModalShell', () => {
 			</ModalShell>
 		);
 		expect(screen.getByText('Confirm')).toBeInTheDocument();
-	});
-
-	test('skips the footer prop slot when children already include a ModalFooter', () => {
-		render(
-			<ModalShell
-				isEnded={false}
-				onDismiss={vi.fn()}
-				title="Title"
-				footer={<button>From footer prop</button>}
-			>
-				<>
-					<div>Body</div>
-					<ModalFooter>
-						<button>From children</button>
-					</ModalFooter>
-				</>
-			</ModalShell>
-		);
-		expect(screen.getByText('From children')).toBeInTheDocument();
-		expect(screen.queryByText('From footer prop')).not.toBeInTheDocument();
 	});
 });
