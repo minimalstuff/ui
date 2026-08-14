@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 import { RADIUS_CLASSES } from '#components/shared/radius';
+import { type ControlSize } from '#components/shared/sizes';
 
-export type KbdSize = 'xs' | 'sm' | 'md' | 'lg';
+export type KbdSize = ControlSize;
 
 const SIZE_CLASSES: Record<KbdSize, string> = {
 	xs: 'px-1.5 py-0.5 text-xs',

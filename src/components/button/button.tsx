@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
+import { type ControlSize } from '#components/shared/sizes';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
@@ -15,16 +16,14 @@ export type {
 	ButtonVariant,
 } from '#components/shared/button_styles';
 
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
-
-const SIZE_CLASSES: Record<ButtonSize, string> = {
+const SIZE_CLASSES: Record<ControlSize, string> = {
 	xs: 'px-2 py-1 text-xs',
 	sm: 'px-3 py-1.5 text-sm',
 	md: 'px-4 py-2 text-sm',
 	lg: 'px-4 py-3 text-base',
 };
 
-const ICON_SIZE_CLASSES: Record<ButtonSize, string> = {
+const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	xs: 'w-3.5 h-3.5',
 	sm: 'w-4 h-4',
 	md: 'w-4 h-4',
@@ -37,7 +36,7 @@ interface ButtonProps extends Omit<
 > {
 	variant?: ButtonVariant;
 	color?: ButtonColor;
-	size?: ButtonSize;
+	size?: ControlSize;
 	radius?: Radius;
 	children: ReactNode;
 	className?: string;

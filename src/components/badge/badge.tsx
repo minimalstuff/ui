@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
+import { type ControlSize } from '#components/shared/sizes';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
@@ -10,7 +11,7 @@ import {
 export type { ButtonColor as BadgeColor } from '#components/shared/button_styles';
 
 export type BadgeVariant = 'solid' | 'outline' | 'subtle';
-export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
+export type BadgeSize = ControlSize;
 
 const SIZE_CLASSES: Record<BadgeSize, string> = {
 	xs: 'px-1.5 py-0.5 text-xs',
