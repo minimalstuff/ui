@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.1](https://github.com/minimalstuff/ui/compare/3.0.0...3.0.1) (2026-08-14)
+
+### ⚠ BREAKING CHANGES
+
+* **modal:** `Modal`'s `footer` prop and the `ModalBody` component are
+  removed. Declare pinned footer content with `<ModalFooter>` anywhere in
+  `children` instead.
+
+### Bug Fixes
+
+* **modal:** register ModalFooter through context instead of structural detection ([7857297](https://github.com/minimalstuff/ui/commit/78572977d2b7098b29e6786b7aadd119b249e845))
+
 ## [3.0.0](https://github.com/minimalstuff/ui/compare/2.1.1...3.0.0) (2026-08-14)
 
 ### ⚠ BREAKING CHANGES
