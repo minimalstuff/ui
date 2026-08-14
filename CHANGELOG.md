@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.2.0](https://github.com/minimalstuff/ui/compare/3.1.0...3.2.0) (2026-08-14)
+
+### Features
+
+* **avatar:** add initial and picture avatar ([c2ce8d6](https://github.com/minimalstuff/ui/commit/c2ce8d63f0f3d071759419a53ed142d40a356f3a))
+* **card:** add section container with optional header ([3daa050](https://github.com/minimalstuff/ui/commit/3daa0505cbc4bad758dc37d583833551cabf22ab))
+* **card:** allow heading level and expose titled card as region ([e9fcc9e](https://github.com/minimalstuff/ui/commit/e9fcc9e0927e5e5a535dd6516ec3ac97efe9224f))
+* **menu-group:** add labelled group of menu items ([77991be](https://github.com/minimalstuff/ui/commit/77991be8f86358074a1ab52b942aa91ea7982d58))
+* **menu-group:** expose the group element through wrapperClassName ([ccee37e](https://github.com/minimalstuff/ui/commit/ccee37eb8e31d01427ca1ee51556ecf42d20a467))
+* **menu-item:** add selected state for option rows ([f31d602](https://github.com/minimalstuff/ui/commit/f31d602e772cd9a8b410fc7aa60b7b5f189687b8))
+* **menu-item:** add trailing slot for shortcuts and values ([77b1e9c](https://github.com/minimalstuff/ui/commit/77b1e9c3610f72efc4e79d20498a3eb9d7daa2de))
+* **menu-separator:** add divider between menu item groups ([247c67d](https://github.com/minimalstuff/ui/commit/247c67d9fde76a41be57d768c32a1117e743ba22))
+
+### Bug Fixes
+
+* **avatar:** derive the initial by grapheme instead of code unit ([01bb405](https://github.com/minimalstuff/ui/commit/01bb405a7ccdd0e6f172a5fb3b798a0869630f45))
+* **avatar:** hide avatar from assistive tech when unnamed ([ab67576](https://github.com/minimalstuff/ui/commit/ab6757672148bc489cbe88dc022fc4bd5ce4de3d))
+* **menu-item:** group trailing content and check mark behind one auto margin ([e83a237](https://github.com/minimalstuff/ui/commit/e83a23709403e3fdc9ecf163f0eb9c75f7bf6ac5))
+
 ## [3.1.0](https://github.com/minimalstuff/ui/compare/3.0.1...3.1.0) (2026-08-14)
 
 ### Features
