@@ -17,7 +17,12 @@ export {
 	type ButtonProps,
 	type ButtonVariant,
 } from './button/button';
-export { Card, type CardPadding, type CardProps } from './card/card';
+export {
+	Card,
+	type CardHeadingLevel,
+	type CardPadding,
+	type CardProps,
+} from './card/card';
 export { CardHeader, type CardHeaderProps } from './card/card_header';
 export {
 	CharacterCount,
@@ -53,6 +58,7 @@ export {
 	type MenuItemLinkProps,
 	type MenuItemProps,
 } from './menu_item/menu_item';
+export { MenuGroup, type MenuGroupProps } from './menu_group/menu_group';
 export {
 	MenuSeparator,
 	type MenuSeparatorProps,
