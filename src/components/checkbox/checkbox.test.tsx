@@ -84,4 +84,10 @@ describe('Checkbox', () => {
 		render(<Checkbox label={<span>Accept terms</span>} required />);
 		expect(screen.getByText('*')).toBeInTheDocument();
 	});
+
+	test('applies the radius to the focus ring wrapper and the box alike', () => {
+		render(<Checkbox label="Accept terms" radius="full" />);
+		const box = screen.getByRole('checkbox').nextElementSibling;
+		expect(box?.parentElement).toHaveClass('rounded-full');
+	});
 });
