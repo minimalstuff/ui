@@ -1,7 +1,10 @@
 import clsx from 'clsx';
-import { type ComponentPropsWithRef, useId, useState } from 'react';
+import { type ComponentPropsWithRef } from 'react';
 
+import { FieldError } from '#components/shared/field_error';
+import { useFieldIds } from '#components/shared/use_field_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { useControlledState } from '#components/shared/use_controlled_state';
 import {
 	CONTROL_BORDER,
 	SELECTED_FILL,
@@ -15,7 +18,6 @@ import {
 import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_BORDER,
-	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
@@ -66,22 +68,20 @@ export function RadioOptions({
 	id,
 	...props
 }: RadioOptionsProps) {
-	const generatedId = useId();
-	const groupId = id ?? generatedId;
+	const { fieldId: groupId, errorId } = useFieldIds(id);
 	const name = nameProp ?? groupId;
 
-	const [internalValue, setInternalValue] = useState(defaultValue ?? '');
-	const isControlled = value !== undefined;
-	const selectedValue = isControlled ? value : internalValue;
+	const [selectedValue, setSelectedValue] = useControlledState(
+		value,
+		defaultValue ?? ''
+	);
 
 	const normalizedOptions: RadioOption[] = options.map((opt) =>
 		typeof opt === 'string' ? { value: opt, label: opt } : opt
 	);
 
-	const errorId = `${groupId}-error`;
-
 	const handleChange = (optionValue: string) => {
-		if (!isControlled) setInternalValue(optionValue);
+		setSelectedValue(optionValue);
 		onChange?.(optionValue);
 	};
 
@@ -223,11 +223,7 @@ export function RadioOptions({
 				})}
 			</div>
 
-			{error && (
-				<p id={errorId} className={clsx(FIELD_ERROR_TEXT, 'mt-2')} role="alert">
-					{error}
-				</p>
-			)}
+			<FieldError id={errorId} error={error} className="mt-2" />
 		</fieldset>
 	);
 }
