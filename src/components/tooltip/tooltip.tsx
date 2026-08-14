@@ -220,11 +220,13 @@ export function Tooltip({
 								ref={arrowRef}
 								style={{
 									position: 'absolute',
+									width: `${ARROW_SIZE_PX}px`,
+									height: `${ARROW_SIZE_PX}px`,
 									left: arrowX !== undefined ? `${arrowX}px` : undefined,
 									top: arrowY !== undefined ? `${arrowY}px` : undefined,
 									[arrowStaticSide]: `-${ARROW_SIZE_PX / 2}px`,
 								}}
-								className="h-2 w-2 rotate-45 bg-gray-900 dark:bg-gray-100"
+								className="rotate-45 bg-gray-900 dark:bg-gray-100"
 							/>
 						</div>
 					</div>,
