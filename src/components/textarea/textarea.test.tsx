@@ -74,4 +74,9 @@ describe('Textarea', () => {
 		render(<Textarea label={<span>Bio</span>} required />);
 		expect(screen.getByText('*')).toBeInTheDocument();
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Textarea required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });
