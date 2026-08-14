@@ -7,8 +7,8 @@ import { type Radius } from '#components/shared/radius';
 import { useThemeStore } from '#stores/theme_store/theme_store';
 import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
+import { getNextTheme, switchTheme } from '#lib/theme_transition';
 import { type ButtonVariant } from '#components/shared/button_styles';
-import { getNextTheme, switchTheme } from '../../lib/theme_transition';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
 	light: 'i-tabler-sun text-yellow-500',

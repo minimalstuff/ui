@@ -15,6 +15,7 @@
 	"imports": {
 		"#components/*": "./src/components/*.js",
 		"#hooks/*": "./src/hooks/*.js",
+		"#lib/*": "./src/lib/*.js",
 		"#types/*": "./src/types/*.js",
 		"#stores/*": "./src/stores/*.js"
 	},

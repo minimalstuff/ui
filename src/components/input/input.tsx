@@ -6,7 +6,7 @@ import {
 	useState,
 } from 'react';
 
-import { CharacterCount } from '../char_count/char_count';
+import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { CONTROL_BG, CONTROL_BORDER } from '#components/shared/surface_tokens';
 import {

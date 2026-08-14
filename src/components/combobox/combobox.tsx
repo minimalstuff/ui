@@ -7,7 +7,7 @@ import {
 	useState,
 } from 'react';
 
-import { BASE_INPUT_STYLES } from '../input/input';
+import { BASE_INPUT_STYLES } from '#components/input/input';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import {
