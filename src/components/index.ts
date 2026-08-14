@@ -39,7 +39,12 @@ export {
 	type MenuProps,
 	type MenuSide,
 } from './menu/menu';
-export { MenuItem, type MenuItemProps } from './menu_item/menu_item';
+export {
+	MenuItem,
+	type MenuItemButtonProps,
+	type MenuItemLinkProps,
+	type MenuItemProps,
+} from './menu_item/menu_item';
 export {
 	ConfirmModal,
 	type ConfirmModalColor,

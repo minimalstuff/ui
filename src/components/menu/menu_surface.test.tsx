@@ -104,6 +104,28 @@ describe('MenuSurface', () => {
 		expect(screen.getByText('Third')).toHaveFocus();
 	});
 
+	test('skips aria-disabled menu items when navigating', () => {
+		render(
+			<MenuSurface
+				setFloating={vi.fn()}
+				floatingStyles={{}}
+				isVisible={true}
+				isPositioned={true}
+				radius="md"
+				onClose={vi.fn()}
+			>
+				<button role="menuitem">First</button>
+				<a role="menuitem" aria-disabled="true" tabIndex={-1}>
+					Second
+				</a>
+				<button role="menuitem">Third</button>
+			</MenuSurface>
+		);
+		screen.getByText('First').focus();
+		fireEvent.keyDown(screen.getByRole('menu'), { key: 'ArrowDown' });
+		expect(screen.getByText('Third')).toHaveFocus();
+	});
+
 	test('Escape calls onClose', () => {
 		const handleClose = vi.fn();
 		renderSurface({ onClose: handleClose });

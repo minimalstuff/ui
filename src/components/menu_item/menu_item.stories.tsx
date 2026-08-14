@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { MenuItem } from '#components/menu_item/menu_item';
+import {
+	MenuItem,
+	type MenuItemButtonProps,
+	type MenuItemLinkProps,
+} from '#components/menu_item/menu_item';
 
 const meta = {
 	title: 'Example/MenuItem',
@@ -32,7 +36,7 @@ const meta = {
 			</div>
 		),
 	],
-} satisfies Meta<typeof MenuItem>;
+} satisfies Meta<MenuItemButtonProps>;
 
 export default meta;
 
@@ -59,4 +63,37 @@ export const Disabled: Story = {
 		icon: 'i-mdi-arrow-up',
 		disabled: true,
 	},
+};
+
+function renderLink(linkProps: Readonly<MenuItemLinkProps>) {
+	return <MenuItem {...linkProps} />;
+}
+
+export const AsLink: Story = {
+	render: () =>
+		renderLink({
+			icon: 'i-mdi-cog',
+			href: '/settings',
+			children: 'Settings',
+		}),
+};
+
+export const AsExternalLink: Story = {
+	render: () =>
+		renderLink({
+			icon: 'i-mdi-open-in-new',
+			href: 'https://example.com',
+			target: '_blank',
+			children: 'Documentation',
+		}),
+};
+
+export const DisabledLink: Story = {
+	render: () =>
+		renderLink({
+			icon: 'i-mdi-cog',
+			href: '/settings',
+			disabled: true,
+			children: 'Settings',
+		}),
 };

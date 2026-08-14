@@ -83,4 +83,110 @@ describe('MenuItem', () => {
 		);
 		expect(ref.current).toBe(screen.getByRole('menuitem'));
 	});
+
+	describe('as a link', () => {
+		test('renders an anchor with the given href', () => {
+			render(<MenuItem href="/settings">Settings</MenuItem>);
+
+			const item = screen.getByRole('menuitem');
+			expect(item.tagName).toBe('A');
+			expect(item).toHaveAttribute('href', '/settings');
+		});
+
+		test('adds a safe rel when opening in a new tab', () => {
+			render(
+				<MenuItem href="https://example.com" target="_blank">
+					Docs
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveAttribute(
+				'rel',
+				'noopener noreferrer'
+			);
+		});
+
+		test('keeps an explicit rel over the default one', () => {
+			render(
+				<MenuItem href="https://example.com" target="_blank" rel="external">
+					Docs
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveAttribute('rel', 'external');
+		});
+
+		test('closes the enclosing menu when followed', () => {
+			const closeMenu = vi.fn();
+			render(
+				<MenuCloseContext.Provider value={closeMenu}>
+					<MenuItem href="/settings">Settings</MenuItem>
+				</MenuCloseContext.Provider>
+			);
+
+			fireEvent.click(screen.getByRole('menuitem'));
+
+			expect(closeMenu).toHaveBeenCalledTimes(1);
+		});
+
+		test('stops click propagation', () => {
+			const handleParentClick = vi.fn();
+			render(
+				<div onClick={handleParentClick}>
+					<MenuItem href="/settings">Settings</MenuItem>
+				</div>
+			);
+
+			fireEvent.click(screen.getByRole('menuitem'));
+
+			expect(handleParentClick).not.toHaveBeenCalled();
+		});
+
+		test('drops the href when disabled', () => {
+			render(
+				<MenuItem href="/settings" disabled>
+					Settings
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).not.toHaveAttribute('href');
+		});
+
+		test('marks itself aria-disabled when disabled', () => {
+			render(
+				<MenuItem href="/settings" disabled>
+					Settings
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveAttribute(
+				'aria-disabled',
+				'true'
+			);
+		});
+
+		test('applies danger color', () => {
+			render(
+				<MenuItem href="/settings" danger>
+					Settings
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveClass('text-red-600');
+		});
+
+		test('renders the icon', () => {
+			const { container } = render(
+				<MenuItem href="/settings" icon="i-mdi-cog">
+					Settings
+				</MenuItem>
+			);
+			expect(container.querySelector('.i-mdi-cog')).toBeInTheDocument();
+		});
+
+		test('forwards a ref to the underlying anchor', () => {
+			const ref = { current: null as HTMLAnchorElement | null };
+			render(
+				<MenuItem href="/settings" ref={ref}>
+					Settings
+				</MenuItem>
+			);
+			expect(ref.current).toBe(screen.getByRole('menuitem'));
+		});
+	});
 });
