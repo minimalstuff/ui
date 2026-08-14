@@ -32,7 +32,7 @@ function ModalProviderDemo() {
 			children: 'This action cannot be undone.',
 			confirmLabel: 'Delete',
 			cancelLabel: 'Cancel',
-			confirmColor: 'red',
+			confirmColor: 'danger',
 			onConfirm: async () => {
 				await new Promise((r) => setTimeout(r, 500));
 			},

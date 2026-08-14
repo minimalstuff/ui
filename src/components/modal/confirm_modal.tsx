@@ -9,24 +9,22 @@ import { Button, type ButtonColor } from '#components/button/button';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
-export type ConfirmModalColor = 'red' | 'blue' | 'green';
-
-const CONFIRM_BUTTON_COLOR: Record<ConfirmModalColor, ButtonColor> = {
-	red: 'danger',
-	blue: 'primary',
-	green: 'success',
-};
+export type ConfirmModalColor = Extract<
+	ButtonColor,
+	'primary' | 'danger' | 'success'
+>;
 
 const BADGE_ICON: Record<ConfirmModalColor, string> = {
-	red: 'i-mdi-alert-circle',
-	blue: 'i-mdi-help-circle',
-	green: 'i-mdi-check-circle',
+	danger: 'i-mdi-alert-circle',
+	primary: 'i-mdi-help-circle',
+	success: 'i-mdi-check-circle',
 };
 
 const BADGE_COLOR_CLASSES: Record<ConfirmModalColor, string> = {
-	red: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-	blue: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
-	green: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
+	danger: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
+	primary: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+	success:
+		'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
 };
 
 function ConfirmModalTitle({
@@ -105,7 +103,7 @@ export const ConfirmModal = createCallable<
 		const isDisabled = isConfirming;
 		const resolvedConfirmLabel = confirmLabel ?? 'Confirm';
 		const resolvedCancelLabel = cancelLabel ?? 'Cancel';
-		const resolvedConfirmColor = confirmColor ?? 'blue';
+		const resolvedConfirmColor = confirmColor ?? 'primary';
 
 		return (
 			<ModalShell
@@ -126,7 +124,7 @@ export const ConfirmModal = createCallable<
 							{resolvedCancelLabel}
 						</Button>
 						<Button
-							color={CONFIRM_BUTTON_COLOR[resolvedConfirmColor]}
+							color={resolvedConfirmColor}
 							onClick={() => {
 								void handleConfirm();
 							}}

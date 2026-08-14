@@ -39,7 +39,7 @@ const meta = {
 		},
 		confirmColor: {
 			control: 'select',
-			options: ['red', 'blue', 'green'],
+			options: ['primary', 'danger', 'success'],
 			description: 'Confirm button color',
 		},
 		radius: {
@@ -52,7 +52,7 @@ const meta = {
 		title: 'Confirm action',
 		confirmLabel: 'Confirm',
 		cancelLabel: 'Cancel',
-		confirmColor: 'blue',
+		confirmColor: 'primary',
 		onConfirm: async () => {
 			await new Promise((r) => setTimeout(r, 800));
 		},
@@ -85,7 +85,7 @@ export const Danger: Story = {
 		children: 'Your account and all data will be permanently deleted.',
 		confirmLabel: 'Delete account',
 		cancelLabel: 'Cancel',
-		confirmColor: 'red',
+		confirmColor: 'danger',
 	},
 };
 
