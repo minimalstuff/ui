@@ -126,6 +126,27 @@ describe('MenuSurface', () => {
 		expect(screen.getByText('Third')).toHaveFocus();
 	});
 
+	test('navigates onto radio menu items', () => {
+		render(
+			<MenuSurface
+				setFloating={vi.fn()}
+				floatingStyles={{}}
+				isVisible={true}
+				isPositioned={true}
+				radius="md"
+				onClose={vi.fn()}
+			>
+				<button role="menuitem">First</button>
+				<button role="menuitemradio" aria-checked="true">
+					Second
+				</button>
+			</MenuSurface>
+		);
+		screen.getByText('First').focus();
+		fireEvent.keyDown(screen.getByRole('menu'), { key: 'ArrowDown' });
+		expect(screen.getByText('Second')).toHaveFocus();
+	});
+
 	test('Escape calls onClose', () => {
 		const handleClose = vi.fn();
 		renderSurface({ onClose: handleClose });

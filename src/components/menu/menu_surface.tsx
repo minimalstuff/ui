@@ -6,8 +6,8 @@ import { MenuCloseContext } from '#components/menu/menu_context';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
-const MENU_ITEM_SELECTOR =
-	'[role="menuitem"]:not(:disabled):not([aria-disabled="true"])';
+const ENABLED = ':not(:disabled):not([aria-disabled="true"])';
+const MENU_ITEM_SELECTOR = `[role="menuitem"]${ENABLED}, [role="menuitemradio"]${ENABLED}`;
 
 interface MenuSurfaceProps {
 	setFloating: (node: HTMLElement | null) => void;

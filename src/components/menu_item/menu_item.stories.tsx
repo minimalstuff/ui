@@ -65,6 +65,22 @@ export const Disabled: Story = {
 	},
 };
 
+export const Selected: Story = {
+	args: {
+		children: 'Dark',
+		icon: 'i-mdi-weather-night',
+		selected: true,
+	},
+};
+
+export const NotSelected: Story = {
+	args: {
+		children: 'Light',
+		icon: 'i-mdi-white-balance-sunny',
+		selected: false,
+	},
+};
+
 function renderLink(linkProps: Readonly<MenuItemLinkProps>) {
 	return <MenuItem {...linkProps} />;
 }

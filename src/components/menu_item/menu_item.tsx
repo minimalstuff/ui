@@ -21,6 +21,13 @@ type MenuItemBaseProps = {
 
 export type MenuItemButtonProps = MenuItemBaseProps & {
 	onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+	/**
+	 * Turns the item into one option of a choice: it reports as
+	 * `menuitemradio`, carries `aria-checked`, and shows a check mark when
+	 * true. Leave it out for plain actions — an unset `selected` is not the
+	 * same as `false`, which reads as "an option, currently not the one".
+	 */
+	selected?: boolean;
 	href?: never;
 	target?: never;
 	rel?: never;
@@ -84,6 +91,7 @@ const MenuItemContent = ({
 function MenuItemButton({
 	icon,
 	onClick,
+	selected,
 	danger = false,
 	disabled = false,
 	children,
@@ -91,6 +99,7 @@ function MenuItemButton({
 	ref,
 }: Readonly<MenuItemButtonProps>) {
 	const closeMenu = useMenuClose();
+	const isOption = selected !== undefined;
 
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		event.stopPropagation();
@@ -102,13 +111,25 @@ function MenuItemButton({
 		<button
 			ref={ref}
 			type="button"
-			role="menuitem"
+			role={isOption ? 'menuitemradio' : 'menuitem'}
+			aria-checked={selected}
 			tabIndex={-1}
 			onClick={handleClick}
 			disabled={disabled}
 			className={menuItemClasses(BUTTON_STATE_CLASSES, danger, className)}
 		>
 			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			{isOption && (
+				// Rendered either way so picking another option doesn't reflow the
+				// row it left behind.
+				<span
+					className={clsx(
+						'i-mdi-check ml-auto h-4 w-4 flex-shrink-0',
+						!selected && 'invisible'
+					)}
+					aria-hidden="true"
+				/>
+			)}
 		</button>
 	);
 }
@@ -150,11 +171,11 @@ function MenuItemLink({
 }
 
 /**
- * A row inside a `Menu` or `ContextMenu`. Must be a direct child of one of
- * those (or of a `<>` fragment passed as their `children`/`items`): arrow
- * key navigation and close-on-select both rely on `role="menuitem"` being a
- * direct descendant. Wrapping items in another element (e.g. a `<div>` for
- * a labeled section) will render fine but breaks both.
+ * A row inside a `Menu` or `ContextMenu`, at any depth: the menu collects
+ * `[role="menuitem"]`/`[role="menuitemradio"]` across all its descendants
+ * for keyboard navigation, and close-on-select travels through React
+ * context rather than the DOM tree. `MenuGroup` relies on that to wrap the
+ * items it names.
  *
  * Renders either a `<button>` (pass `onClick`) or a native `<a>` (pass
  * `href`, plus optional `target`/`rel`); the two are mutually exclusive.

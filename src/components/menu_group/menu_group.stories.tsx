@@ -56,6 +56,29 @@ export const Unstyled: Story = {
 	},
 };
 
+export const ThemeChoice: Story = {
+	args: {
+		label: 'Theme',
+		children: (
+			<>
+				<MenuItem
+					icon="i-mdi-white-balance-sunny"
+					selected={false}
+					onClick={() => {}}
+				>
+					Light
+				</MenuItem>
+				<MenuItem icon="i-mdi-weather-night" selected onClick={() => {}}>
+					Dark
+				</MenuItem>
+				<MenuItem icon="i-mdi-monitor" selected={false} onClick={() => {}}>
+					System
+				</MenuItem>
+			</>
+		),
+	},
+};
+
 export const AfterAnUngroupedItem: Story = {
 	render: (args) => (
 		<>

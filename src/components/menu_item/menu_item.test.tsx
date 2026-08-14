@@ -84,6 +84,85 @@ describe('MenuItem', () => {
 		expect(ref.current).toBe(screen.getByRole('menuitem'));
 	});
 
+	describe('as one option of a choice', () => {
+		test('reports as a radio menu item when selected is given', () => {
+			render(
+				<MenuItem onClick={vi.fn()} selected={false}>
+					Light
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitemradio')).toBeInTheDocument();
+		});
+
+		test('stays a plain menu item when selected is omitted', () => {
+			render(<MenuItem onClick={vi.fn()}>Move up</MenuItem>);
+			expect(screen.queryByRole('menuitemradio')).not.toBeInTheDocument();
+			expect(screen.getByRole('menuitem')).toBeInTheDocument();
+		});
+
+		test('reports itself as checked when selected', () => {
+			render(
+				<MenuItem onClick={vi.fn()} selected>
+					Light
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitemradio')).toBeChecked();
+		});
+
+		test('reports itself as unchecked when not selected', () => {
+			render(
+				<MenuItem onClick={vi.fn()} selected={false}>
+					Light
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitemradio')).not.toBeChecked();
+		});
+
+		test('shows a check mark when selected', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()} selected>
+					Light
+				</MenuItem>
+			);
+			expect(container.querySelector('.i-mdi-check')).not.toHaveClass(
+				'invisible'
+			);
+		});
+
+		test('keeps the check mark space when not selected', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()} selected={false}>
+					Light
+				</MenuItem>
+			);
+			expect(container.querySelector('.i-mdi-check')).toHaveClass('invisible');
+		});
+
+		test('renders no check mark for a plain action', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			);
+			expect(container.querySelector('.i-mdi-check')).not.toBeInTheDocument();
+		});
+
+		test('still calls onClick and closes the menu', () => {
+			const handleClick = vi.fn();
+			const closeMenu = vi.fn();
+			render(
+				<MenuCloseContext.Provider value={closeMenu}>
+					<MenuItem onClick={handleClick} selected={false}>
+						Light
+					</MenuItem>
+				</MenuCloseContext.Provider>
+			);
+
+			fireEvent.click(screen.getByRole('menuitemradio'));
+
+			expect(handleClick).toHaveBeenCalledTimes(1);
+			expect(closeMenu).toHaveBeenCalledTimes(1);
+		});
+	});
+
 	describe('as a link', () => {
 		test('renders an anchor with the given href', () => {
 			render(<MenuItem href="/settings">Settings</MenuItem>);
