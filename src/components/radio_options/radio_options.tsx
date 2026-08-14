@@ -58,11 +58,11 @@ export function RadioOptions({
 	unstyled = false,
 	className,
 	wrapperClassName,
-	id = 'radio',
+	id,
 	...props
 }: RadioOptionsProps) {
-	const _id = useId();
-	const groupId = `${id}-${_id}`;
+	const generatedId = useId();
+	const groupId = id ?? generatedId;
 	const name = nameProp ?? groupId;
 
 	const [internalValue, setInternalValue] = useState(defaultValue ?? '');

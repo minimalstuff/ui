@@ -39,11 +39,11 @@ export function Checkbox({
 	checked,
 	defaultChecked = false,
 	onChange,
-	id = 'checkbox',
+	id,
 	...props
 }: CheckboxProps) {
-	const _checkboxId = useId();
-	const checkboxId = `${id}-${_checkboxId}`;
+	const generatedId = useId();
+	const checkboxId = id ?? generatedId;
 	const [internalChecked, setInternalChecked] = useState(defaultChecked);
 	const isControlled = checked !== undefined;
 	const isChecked = isControlled ? checked : internalChecked;

@@ -73,4 +73,12 @@ describe('RadioOptions', () => {
 		expect(screen.getByRole('radio', { name: 'Option A' })).toBeDisabled();
 		expect(screen.getByRole('radio', { name: 'Option B' })).toBeDisabled();
 	});
+
+	test('uses the caller id verbatim for the radio group', () => {
+		render(<RadioOptions options={OPTIONS} id="plan" />);
+		expect(screen.getByRole('radio', { name: 'Option A' })).toHaveAttribute(
+			'id',
+			'plan-0'
+		);
+	});
 });

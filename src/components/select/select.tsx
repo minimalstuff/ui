@@ -41,11 +41,11 @@ export function Select({
 	value,
 	defaultValue,
 	onChange,
-	id = 'select',
+	id,
 	...props
 }: SelectProps) {
-	const _selectId = useId();
-	const selectId = `${id}-${_selectId}`;
+	const generatedId = useId();
+	const selectId = id ?? generatedId;
 
 	return (
 		<div className={clsx('w-full', wrapperClassName)}>

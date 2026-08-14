@@ -43,11 +43,11 @@ export function Input({
 	value,
 	defaultValue,
 	onChange,
-	id = 'input',
+	id,
 	...props
 }: InputProps) {
-	const _inputId = useId();
-	const inputId = `${id}-${_inputId}`;
+	const generatedId = useId();
+	const inputId = id ?? generatedId;
 
 	const [uncontrolledLength, setUncontrolledLength] = useState(
 		typeof defaultValue === 'string' ? defaultValue.length : 0

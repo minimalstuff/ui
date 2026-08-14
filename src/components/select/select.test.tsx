@@ -83,4 +83,9 @@ describe('Select', () => {
 		render(<Select label="Country" options={OPTIONS} unstyled />);
 		expect(screen.getByLabelText('Country')).not.toHaveClass('border-gray-300');
 	});
+
+	test('uses the caller id verbatim so external labels can target it', () => {
+		render(<Select label="Country" options={OPTIONS} id="country" />);
+		expect(screen.getByLabelText('Country')).toHaveAttribute('id', 'country');
+	});
 });

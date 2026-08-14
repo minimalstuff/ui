@@ -55,10 +55,10 @@ export function Combobox({
 	value,
 	defaultValue = '',
 	onChange,
-	id = 'combobox',
+	id,
 }: ComboboxProps) {
-	const _comboboxId = useId();
-	const comboboxId = `${id}-${_comboboxId}`;
+	const generatedId = useId();
+	const comboboxId = id ?? generatedId;
 	const listboxId = `${comboboxId}-listbox`;
 
 	const [internalValue, setInternalValue] = useState(defaultValue);

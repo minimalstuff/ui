@@ -74,4 +74,9 @@ describe('Checkbox', () => {
 		const box = screen.getByRole('checkbox').nextElementSibling;
 		expect(box).not.toHaveClass('border-gray-300');
 	});
+
+	test('uses the caller id verbatim so external labels can target it', () => {
+		render(<Checkbox label="Accept terms" id="terms" />);
+		expect(screen.getByRole('checkbox')).toHaveAttribute('id', 'terms');
+	});
 });

@@ -76,4 +76,9 @@ describe('Switch', () => {
 		const track = screen.getByRole('switch').parentElement;
 		expect(track).not.toHaveClass('rounded-full');
 	});
+
+	test('uses the caller id verbatim so external labels can target it', () => {
+		render(<Switch label="Enable notifications" id="notifications" />);
+		expect(screen.getByRole('switch')).toHaveAttribute('id', 'notifications');
+	});
 });

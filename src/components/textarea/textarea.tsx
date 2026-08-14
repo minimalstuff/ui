@@ -41,11 +41,11 @@ export function Textarea({
 	value,
 	defaultValue,
 	onChange,
-	id = 'textarea',
+	id,
 	...props
 }: TextareaProps) {
-	const _textareaId = useId();
-	const textareaId = `${id}-${_textareaId}`;
+	const generatedId = useId();
+	const textareaId = id ?? generatedId;
 
 	const [uncontrolledLength, setUncontrolledLength] = useState(
 		typeof defaultValue === 'string' ? defaultValue.length : 0

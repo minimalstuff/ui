@@ -64,4 +64,21 @@ describe('Input', () => {
 		render(<Input label="Email" unstyled />);
 		expect(screen.getByLabelText('Email')).not.toHaveClass('border-gray-300');
 	});
+
+	test('uses the caller id verbatim so external labels can target it', () => {
+		render(<Input label="Email" id="email" />);
+		expect(screen.getByLabelText('Email')).toHaveAttribute('id', 'email');
+	});
+
+	test('generates a unique id when none is given', () => {
+		render(
+			<>
+				<Input label="First" />
+				<Input label="Second" />
+			</>
+		);
+		expect(screen.getByLabelText('First').id).not.toBe(
+			screen.getByLabelText('Second').id
+		);
+	});
 });

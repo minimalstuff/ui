@@ -64,4 +64,9 @@ describe('Textarea', () => {
 		render(<Textarea label="Bio" unstyled />);
 		expect(screen.getByLabelText('Bio')).not.toHaveClass('border-gray-300');
 	});
+
+	test('uses the caller id verbatim so external labels can target it', () => {
+		render(<Textarea label="Bio" id="bio" />);
+		expect(screen.getByLabelText('Bio')).toHaveAttribute('id', 'bio');
+	});
 });

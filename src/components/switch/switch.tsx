@@ -36,11 +36,11 @@ export function Switch({
 	checked,
 	defaultChecked = false,
 	onChange,
-	id = 'switch',
+	id,
 	...props
 }: SwitchProps) {
-	const _switchId = useId();
-	const switchId = `${id}-${_switchId}`;
+	const generatedId = useId();
+	const switchId = id ?? generatedId;
 	const [internalChecked, setInternalChecked] = useState(defaultChecked);
 	const isControlled = checked !== undefined;
 	const isChecked = isControlled ? checked : internalChecked;
