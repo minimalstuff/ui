@@ -77,5 +77,10 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	},
 };
 
+/** Kept even when `unstyled`: without these, icon slots and disabled state stop working. */
+export const BUTTON_LAYOUT_CLASSES =
+	'inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed';
+
+/** Visual chrome, dropped entirely when `unstyled`. */
 export const BUTTON_INTERACTIVE_CLASSES =
-	'cursor-pointer inline-flex items-center justify-center transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95] outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+	'cursor-pointer transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95] outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2';

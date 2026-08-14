@@ -48,4 +48,14 @@ describe('Button', () => {
 		render(<Button>Submit</Button>);
 		expect(screen.getByRole('button')).not.toHaveAttribute('aria-busy');
 	});
+
+	test('unstyled variant drops the padding and typography classes', () => {
+		render(<Button variant="unstyled">Submit</Button>);
+		expect(screen.getByRole('button')).not.toHaveClass('px-4');
+	});
+
+	test('unstyled variant keeps the icon layout classes', () => {
+		render(<Button variant="unstyled">Submit</Button>);
+		expect(screen.getByRole('button')).toHaveClass('inline-flex');
+	});
 });

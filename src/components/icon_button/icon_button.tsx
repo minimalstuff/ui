@@ -5,6 +5,7 @@ import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
 	BUTTON_INTERACTIVE_CLASSES,
+	BUTTON_LAYOUT_CLASSES,
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
@@ -53,14 +54,15 @@ export const IconButton = ({
 			type="button"
 			aria-label={ariaLabel}
 			className={clsx(
-				BUTTON_INTERACTIVE_CLASSES,
+				BUTTON_LAYOUT_CLASSES,
 				variant !== 'unstyled' && [
+					BUTTON_INTERACTIVE_CLASSES,
 					'border',
 					RADIUS_CLASSES[radius],
+					SIZE_CLASSES[size],
 					tokens[variant],
 					tokens.focusOutline,
 				],
-				SIZE_CLASSES[size],
 				className
 			)}
 			{...props}

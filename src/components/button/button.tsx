@@ -5,6 +5,7 @@ import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
 	BUTTON_INTERACTIVE_CLASSES,
+	BUTTON_LAYOUT_CLASSES,
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
@@ -67,15 +68,15 @@ export const Button = ({
 		<button
 			type="button"
 			className={clsx(
-				BUTTON_INTERACTIVE_CLASSES,
-				'gap-2 font-medium',
+				BUTTON_LAYOUT_CLASSES,
 				variant !== 'unstyled' && [
-					'border',
+					BUTTON_INTERACTIVE_CLASSES,
+					'gap-2 font-medium border',
 					RADIUS_CLASSES[radius],
+					SIZE_CLASSES[size],
 					tokens[variant],
 					tokens.focusOutline,
 				],
-				SIZE_CLASSES[size],
 				fullWidth && 'w-full',
 				className
 			)}
