@@ -51,13 +51,13 @@ export {
 	type MenuProps,
 	type MenuSide,
 } from './menu/menu';
+export { MenuGroup, type MenuGroupProps } from './menu_group/menu_group';
 export {
 	MenuItem,
 	type MenuItemButtonProps,
 	type MenuItemLinkProps,
 	type MenuItemProps,
 } from './menu_item/menu_item';
-export { MenuGroup, type MenuGroupProps } from './menu_group/menu_group';
 export {
 	MenuSeparator,
 	type MenuSeparatorProps,
