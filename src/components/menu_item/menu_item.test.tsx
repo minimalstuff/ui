@@ -84,6 +84,76 @@ describe('MenuItem', () => {
 		expect(ref.current).toBe(screen.getByRole('menuitem'));
 	});
 
+	describe('with trailing content', () => {
+		test('renders it inside the row', () => {
+			render(
+				<MenuItem onClick={vi.fn()} trailing={<span>⌘K</span>}>
+					Shortcuts
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveTextContent('⌘K');
+		});
+
+		test('dims it without dropping below readable contrast', () => {
+			render(
+				<MenuItem onClick={vi.fn()} trailing="Dark">
+					Theme
+				</MenuItem>
+			);
+			expect(screen.getByText('Dark')).toHaveClass('text-gray-500');
+		});
+
+		test('announces itself as part of the row', () => {
+			render(
+				<MenuItem onClick={vi.fn()} trailing="Dark">
+					Theme
+				</MenuItem>
+			);
+			expect(
+				screen.getByRole('menuitem', { name: 'Theme Dark' })
+			).toBeInTheDocument();
+		});
+
+		test('renders nothing extra when omitted', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()}>Shortcuts</MenuItem>
+			);
+			expect(container.querySelector('.ml-auto')).not.toBeInTheDocument();
+		});
+
+		test('leaves the row as the only control', () => {
+			render(
+				<MenuItem onClick={vi.fn()} trailing="Dark">
+					Theme
+				</MenuItem>
+			);
+			expect(screen.getAllByRole('menuitem')).toHaveLength(1);
+			expect(
+				screen.queryByRole('button', { name: 'Dark' })
+			).not.toBeInTheDocument();
+		});
+
+		test('works on a link too', () => {
+			render(
+				<MenuItem href="/docs" trailing={<span>↗</span>}>
+					Documentation
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveTextContent('↗');
+		});
+
+		test('coexists with the selected check mark', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()} selected trailing="⌘D">
+					Dark
+				</MenuItem>
+			);
+
+			expect(screen.getByText('⌘D')).toBeInTheDocument();
+			expect(container.querySelector('.i-mdi-check')).toBeInTheDocument();
+		});
+	});
+
 	describe('as one option of a choice', () => {
 		test('reports as a radio menu item when selected is given', () => {
 			render(

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Kbd } from '#components/kbd/kbd';
 import {
 	MenuItem,
 	type MenuItemButtonProps,
@@ -62,6 +63,31 @@ export const Disabled: Story = {
 	args: {
 		icon: 'i-mdi-arrow-up',
 		disabled: true,
+	},
+};
+
+export const WithTrailingShortcut: Story = {
+	args: {
+		children: 'Shortcuts',
+		icon: 'i-mdi-keyboard',
+		trailing: <Kbd size="xs">⌘K</Kbd>,
+	},
+};
+
+export const WithTrailingValue: Story = {
+	args: {
+		children: 'Theme',
+		icon: 'i-mdi-palette',
+		trailing: 'Dark',
+	},
+};
+
+export const SelectedWithTrailing: Story = {
+	args: {
+		children: 'Dark',
+		icon: 'i-mdi-weather-night',
+		trailing: <Kbd size="xs">⌘D</Kbd>,
+		selected: true,
 	},
 };
 

@@ -13,6 +13,17 @@ const EXTERNAL_REL = 'noopener noreferrer';
 
 type MenuItemBaseProps = {
 	icon?: string;
+	/**
+	 * Content pinned to the end of the row, dimmed by default — a `Kbd`, the
+	 * current value of a setting. Keep it inert: the whole row is already the
+	 * control, so anything focusable or separately clickable in here breaks
+	 * both the menu's keyboard navigation and its `menuitem` semantics.
+	 *
+	 * It sits inside the row, so it is part of what the row announces:
+	 * "Theme, Dark" for a value, "Shortcuts, Command K" for a shortcut. That
+	 * is usually what you want; pass already-hidden content if it is not.
+	 */
+	trailing?: ReactNode;
 	danger?: boolean;
 	disabled?: boolean;
 	children: ReactNode;
@@ -78,18 +89,26 @@ function menuItemClasses(
 
 const MenuItemContent = ({
 	icon,
+	trailing,
 	children,
-}: Readonly<Pick<MenuItemBaseProps, 'icon' | 'children'>>) => (
+}: Readonly<Pick<MenuItemBaseProps, 'icon' | 'trailing' | 'children'>>) => (
 	<>
 		{icon && (
 			<div className={clsx(icon, 'h-4 w-4 flex-shrink-0')} aria-hidden="true" />
 		)}
 		{children}
+		{trailing && (
+			// Dimmed, but not below AA: gray-400 sits at 2.5:1 on white.
+			<span className="ml-auto flex-shrink-0 pl-2 text-xs text-gray-500 dark:text-gray-400">
+				{trailing}
+			</span>
+		)}
 	</>
 );
 
 function MenuItemButton({
 	icon,
+	trailing,
 	onClick,
 	selected,
 	danger = false,
@@ -118,7 +137,9 @@ function MenuItemButton({
 			disabled={disabled}
 			className={menuItemClasses(BUTTON_STATE_CLASSES, danger, className)}
 		>
-			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemContent icon={icon} trailing={trailing}>
+				{children}
+			</MenuItemContent>
 			{isOption && (
 				// Rendered either way so picking another option doesn't reflow the
 				// row it left behind.
@@ -136,6 +157,7 @@ function MenuItemButton({
 
 function MenuItemLink({
 	icon,
+	trailing,
 	href,
 	target,
 	rel,
@@ -165,7 +187,9 @@ function MenuItemLink({
 			onClick={handleClick}
 			className={menuItemClasses(LINK_STATE_CLASSES, danger, className)}
 		>
-			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemContent icon={icon} trailing={trailing}>
+				{children}
+			</MenuItemContent>
 		</a>
 	);
 }
