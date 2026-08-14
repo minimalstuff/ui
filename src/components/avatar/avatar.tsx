@@ -31,8 +31,19 @@ export interface AvatarProps {
 	className?: string;
 }
 
+// Segment by grapheme rather than slicing code units: `charAt(0)` cuts a
+// surrogate pair in half, and even iterating code points splits clusters
+// that read as one character (a flag, an emoji carrying a skin tone).
+const GRAPHEME_SEGMENTER = new Intl.Segmenter(undefined, {
+	granularity: 'grapheme',
+});
+
 function deriveInitial(name: string): string {
-	return name.trim().charAt(0).toUpperCase();
+	const trimmedName = name.trim();
+	if (trimmedName.length === 0) return '';
+
+	const [firstGrapheme] = GRAPHEME_SEGMENTER.segment(trimmedName);
+	return firstGrapheme.segment.toUpperCase();
 }
 
 /**
