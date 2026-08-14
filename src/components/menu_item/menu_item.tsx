@@ -55,6 +55,11 @@ export type MenuItemLinkProps = MenuItemBaseProps & {
 
 export type MenuItemProps = MenuItemButtonProps | MenuItemLinkProps;
 
+type MenuItemEndProps = {
+	trailing?: ReactNode;
+	selected?: boolean;
+};
+
 const BASE_CLASSES = [
 	'flex w-full cursor-pointer items-center gap-2 whitespace-nowrap px-4 py-2 text-left text-sm transition-colors',
 	'focus-visible:bg-gray-100 focus-visible:outline-none dark:focus-visible:bg-gray-700',
@@ -89,22 +94,46 @@ function menuItemClasses(
 
 const MenuItemContent = ({
 	icon,
-	trailing,
 	children,
-}: Readonly<Pick<MenuItemBaseProps, 'icon' | 'trailing' | 'children'>>) => (
+}: Readonly<Pick<MenuItemBaseProps, 'icon' | 'children'>>) => (
 	<>
 		{icon && (
 			<div className={clsx(icon, 'h-4 w-4 flex-shrink-0')} aria-hidden="true" />
 		)}
 		{children}
-		{trailing && (
-			// Dimmed, but not below AA: gray-400 sits at 2.5:1 on white.
-			<span className="ml-auto flex-shrink-0 pl-2 text-xs text-gray-500 dark:text-gray-400">
-				{trailing}
-			</span>
-		)}
 	</>
 );
+
+/**
+ * Everything pinned to the end of a row. It exists as one element because
+ * `ml-auto` is how the pinning happens, and flexbox splits the free space
+ * *evenly* between every auto margin on the axis: two of them in the same
+ * row leaves each half the gap, scattering the end content instead of
+ * grouping it.
+ */
+function MenuItemEnd({ trailing, selected }: Readonly<MenuItemEndProps>) {
+	const isOption = selected !== undefined;
+	if (!trailing && !isOption) return null;
+
+	return (
+		<span className="ml-auto flex flex-shrink-0 items-center gap-2 pl-2">
+			{trailing && (
+				// Dimmed, but not below AA: gray-400 sits at 2.5:1 on white.
+				<span className="text-xs text-gray-500 dark:text-gray-400">
+					{trailing}
+				</span>
+			)}
+			{isOption && (
+				// Rendered either way so picking another option doesn't reflow the
+				// row it left behind.
+				<span
+					className={clsx('i-mdi-check h-4 w-4', !selected && 'invisible')}
+					aria-hidden="true"
+				/>
+			)}
+		</span>
+	);
+}
 
 function MenuItemButton({
 	icon,
@@ -137,20 +166,8 @@ function MenuItemButton({
 			disabled={disabled}
 			className={menuItemClasses(BUTTON_STATE_CLASSES, danger, className)}
 		>
-			<MenuItemContent icon={icon} trailing={trailing}>
-				{children}
-			</MenuItemContent>
-			{isOption && (
-				// Rendered either way so picking another option doesn't reflow the
-				// row it left behind.
-				<span
-					className={clsx(
-						'i-mdi-check ml-auto h-4 w-4 flex-shrink-0',
-						!selected && 'invisible'
-					)}
-					aria-hidden="true"
-				/>
-			)}
+			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemEnd trailing={trailing} selected={selected} />
 		</button>
 	);
 }
@@ -187,9 +204,8 @@ function MenuItemLink({
 			onClick={handleClick}
 			className={menuItemClasses(LINK_STATE_CLASSES, danger, className)}
 		>
-			<MenuItemContent icon={icon} trailing={trailing}>
-				{children}
-			</MenuItemContent>
+			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemEnd trailing={trailing} />
 		</a>
 	);
 }

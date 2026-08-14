@@ -152,6 +152,28 @@ describe('MenuItem', () => {
 			expect(screen.getByText('⌘D')).toBeInTheDocument();
 			expect(container.querySelector('.i-mdi-check')).toBeInTheDocument();
 		});
+
+		test('groups with the check mark behind a single auto margin', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()} selected trailing="⌘D">
+					Dark
+				</MenuItem>
+			);
+
+			// Flexbox splits free space evenly across every auto margin on the
+			// axis, so a second one would scatter the end content instead of
+			// pinning it as one block.
+			expect(container.querySelectorAll('.ml-auto')).toHaveLength(1);
+		});
+
+		test('pins the check mark on its own when there is no trailing content', () => {
+			const { container } = render(
+				<MenuItem onClick={vi.fn()} selected>
+					Dark
+				</MenuItem>
+			);
+			expect(container.querySelectorAll('.ml-auto')).toHaveLength(1);
+		});
 	});
 
 	describe('as one option of a choice', () => {
