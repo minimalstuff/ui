@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { createCallable } from 'react-call';
 import { type ReactNode, useState } from 'react';
 
+import { surfaceError } from '#lib/surface_error';
 import { type Radius } from '#components/shared/radius';
 import { ModalShell } from '#components/modal/modal_shell';
 import { Button, type ButtonColor } from '#components/button/button';
@@ -58,6 +59,7 @@ export interface ConfirmModalProps {
 	confirmColor?: ConfirmModalColor;
 	radius?: Radius;
 	onConfirm?: () => void | Promise<void>;
+	onError?: (error: unknown) => void;
 }
 
 export type ConfirmModalResponse = boolean;
@@ -77,6 +79,7 @@ export const ConfirmModal = createCallable<
 		confirmColor,
 		radius,
 		onConfirm,
+		onError,
 	}) => {
 		useDisableHotkeysWhileMounted();
 		const [isConfirming, setIsConfirming] = useState(false);
@@ -93,8 +96,10 @@ export const ConfirmModal = createCallable<
 			try {
 				await onConfirm();
 				call.end(true);
-			} finally {
+			} catch (error) {
+				// The modal stays open so the user can retry or cancel.
 				setIsConfirming(false);
+				surfaceError(error, onError);
 			}
 		};
 

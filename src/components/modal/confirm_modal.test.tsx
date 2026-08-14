@@ -92,6 +92,47 @@ describe('ConfirmModal', () => {
 		await expect(result).resolves.toBe(true);
 	});
 
+	test('reports a rejected onConfirm to onError', async () => {
+		const confirmError = new Error('network down');
+		const onError = vi.fn();
+
+		render(<ConfirmModal />);
+
+		act(() => {
+			void ConfirmModal.call({
+				title: 'Delete item?',
+				onConfirm: () => Promise.reject(confirmError),
+				onError,
+			});
+		});
+		await screen.findByText('Delete item?');
+
+		await act(async () => {
+			fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+		});
+
+		expect(onError).toHaveBeenCalledWith(confirmError);
+	});
+
+	test('stays open and re-enables its actions when onConfirm rejects', async () => {
+		render(<ConfirmModal />);
+
+		act(() => {
+			void ConfirmModal.call({
+				title: 'Delete item?',
+				onConfirm: () => Promise.reject(new Error('network down')),
+				onError: vi.fn(),
+			});
+		});
+		await screen.findByText('Delete item?');
+
+		await act(async () => {
+			fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+		});
+
+		expect(screen.getByRole('button', { name: 'Cancel' })).toBeEnabled();
+	});
+
 	test('throws when calling without a mounted ConfirmModal root', () => {
 		expect(() => {
 			void ConfirmModal.call({ title: 'Delete item?' });
