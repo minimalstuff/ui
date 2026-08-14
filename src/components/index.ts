@@ -14,7 +14,7 @@ export {
 export {
 	CharacterCount,
 	type CharacterCountProps,
-} from './char_count/char_count';
+} from './character_count/character_count';
 export { Checkbox, type CheckboxProps } from './checkbox/checkbox';
 export { ClientOnly, type ClientOnlyProps } from './client_only/client_only';
 export { Combobox, type ComboboxProps } from './combobox/combobox';

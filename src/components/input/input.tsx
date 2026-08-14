@@ -3,9 +3,9 @@ import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 import { Field } from '#components/shared/field';
 import { useFieldIds } from '#components/shared/use_field_ids';
-import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
+import { CharacterCount } from '#components/character_count/character_count';
 import { useControlledLength } from '#components/shared/use_controlled_length';
 import {
 	BASE_INPUT_STYLES,
