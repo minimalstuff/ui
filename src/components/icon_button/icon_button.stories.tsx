@@ -21,9 +21,13 @@ const meta = {
 		},
 		variant: {
 			control: 'select',
-			options: ['solid', 'outline', 'ghost', 'subtle', 'unstyled'],
+			options: ['solid', 'outline', 'ghost', 'subtle'],
+			description: 'Visual shape of the button.',
+		},
+		unstyled: {
+			control: 'boolean',
 			description:
-				'Visual shape of the button. "unstyled" strips all built-in styling.',
+				'Strips all built-in styling. Mutually exclusive with variant/color/radius.',
 		},
 		color: {
 			control: 'select',
