@@ -46,6 +46,10 @@ export {
 	type MenuItemProps,
 } from './menu_item/menu_item';
 export {
+	MenuSeparator,
+	type MenuSeparatorProps,
+} from './menu_separator/menu_separator';
+export {
 	ConfirmModal,
 	type ConfirmModalColor,
 	type ConfirmModalProps,

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
 import { IconButton } from '#components/icon_button/icon_button';
+import { MenuSeparator } from '#components/menu_separator/menu_separator';
 
 const meta = {
 	title: 'Example/Menu',
@@ -37,6 +38,7 @@ const meta = {
 				<MenuItem icon="i-mdi-arrow-down" onClick={() => {}}>
 					Move down
 				</MenuItem>
+				<MenuSeparator />
 				<MenuItem icon="i-mdi-delete" danger onClick={() => {}}>
 					Delete
 				</MenuItem>
