@@ -1,16 +1,11 @@
 import './tabs.css';
 
 import clsx from 'clsx';
-import {
-	type KeyboardEvent,
-	type ReactNode,
-	useId,
-	useRef,
-	useState,
-} from 'react';
+import { type KeyboardEvent, type ReactNode, useId, useRef } from 'react';
 
 import { SURFACE_BORDER } from '#components/shared/surface_tokens';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { useControlledState } from '#components/shared/use_controlled_state';
 
 export interface TabItem {
 	title: string;
@@ -21,6 +16,7 @@ export interface TabItem {
 
 export interface TabsProps {
 	items: TabItem[];
+	value?: number;
 	defaultIndex?: number;
 	radius?: Radius;
 	unstyled?: boolean;
@@ -32,6 +28,7 @@ export interface TabsProps {
 
 export function Tabs({
 	items,
+	value,
 	defaultIndex = 0,
 	radius = 'md',
 	unstyled = false,
@@ -40,7 +37,7 @@ export function Tabs({
 	panelClassName,
 	onChange,
 }: Readonly<TabsProps>) {
-	const [activeIndex, setActiveIndex] = useState(defaultIndex);
+	const [activeIndex, setActiveIndex] = useControlledState(value, defaultIndex);
 	const id = useId();
 	const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 

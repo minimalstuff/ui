@@ -152,4 +152,29 @@ describe('Tabs', () => {
 			'cursor-not-allowed'
 		);
 	});
+
+	test('stays on the caller value when controlled', () => {
+		render(<Tabs items={ITEMS} value={0} onChange={vi.fn()} />);
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+	});
+
+	test('still calls onChange when controlled', () => {
+		const handleChange = vi.fn();
+		render(<Tabs items={ITEMS} value={0} onChange={handleChange} />);
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+
+		expect(handleChange).toHaveBeenCalledWith(1);
+	});
+
+	test('renders the panel for the caller-controlled index', () => {
+		render(<Tabs items={ITEMS} value={1} onChange={vi.fn()} />);
+		expect(screen.getByText('Second content')).toBeInTheDocument();
+	});
 });
