@@ -58,7 +58,10 @@ export function Select({
 					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
-				label
+				<>
+					{label}
+					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				</>
 			)}
 			<select
 				id={selectId}

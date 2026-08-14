@@ -143,4 +143,11 @@ describe('Combobox', () => {
 		render(<Combobox label="Country" options={OPTIONS} id="country" />);
 		expect(screen.getByLabelText('Country')).toHaveAttribute('id', 'country');
 	});
+
+	test('marks a node label as required', () => {
+		render(
+			<Combobox label={<span>Country</span>} options={OPTIONS} required />
+		);
+		expect(screen.getByText('*')).toBeInTheDocument();
+	});
 });

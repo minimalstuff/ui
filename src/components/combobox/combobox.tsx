@@ -169,7 +169,10 @@ export function Combobox({
 					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
-				label
+				<>
+					{label}
+					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				</>
 			)}
 			<div className="relative">
 				{!unstyled && (

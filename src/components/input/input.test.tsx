@@ -81,4 +81,9 @@ describe('Input', () => {
 			screen.getByLabelText('Second').id
 		);
 	});
+
+	test('marks a node label as required', () => {
+		render(<Input label={<span>Email</span>} required />);
+		expect(screen.getByText('*')).toBeInTheDocument();
+	});
 });

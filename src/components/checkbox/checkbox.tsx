@@ -119,7 +119,10 @@ export function Checkbox({
 						{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 					</span>
 				) : (
-					label
+					<>
+						{label}
+						{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+					</>
 				)}
 			</label>
 			{description &&

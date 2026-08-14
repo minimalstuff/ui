@@ -69,4 +69,9 @@ describe('Textarea', () => {
 		render(<Textarea label="Bio" id="bio" />);
 		expect(screen.getByLabelText('Bio')).toHaveAttribute('id', 'bio');
 	});
+
+	test('marks a node label as required', () => {
+		render(<Textarea label={<span>Bio</span>} required />);
+		expect(screen.getByText('*')).toBeInTheDocument();
+	});
 });

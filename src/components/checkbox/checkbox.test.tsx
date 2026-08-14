@@ -79,4 +79,9 @@ describe('Checkbox', () => {
 		render(<Checkbox label="Accept terms" id="terms" />);
 		expect(screen.getByRole('checkbox')).toHaveAttribute('id', 'terms');
 	});
+
+	test('marks a node label as required', () => {
+		render(<Checkbox label={<span>Accept terms</span>} required />);
+		expect(screen.getByText('*')).toBeInTheDocument();
+	});
 });

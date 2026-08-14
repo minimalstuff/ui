@@ -76,7 +76,10 @@ export function Textarea({
 					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</label>
 			) : (
-				label
+				<>
+					{label}
+					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				</>
 			)}
 			<textarea
 				id={textareaId}
