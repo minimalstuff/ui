@@ -1,24 +1,26 @@
 import clsx from 'clsx';
-import { type ComponentPropsWithRef, useId, useState } from 'react';
+import { type ComponentPropsWithRef } from 'react';
 
+import { FieldError } from '#components/shared/field_error';
+import { useFieldIds } from '#components/shared/use_field_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { FieldDescription } from '#components/shared/field_description';
+import { useControlledState } from '#components/shared/use_controlled_state';
 import {
 	CONTROL_BG,
 	CONTROL_BORDER,
 	SELECTED_FILL,
 } from '#components/shared/surface_tokens';
 import {
+	FIELD_ERROR_BORDER,
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
+import {
 	CONTROL_FOCUS_RING,
 	CONTROL_FOCUS_RING_COLOR,
 	CONTROL_FOCUS_RING_ERROR_COLOR,
 } from '#components/shared/focus_styles';
-import {
-	FIELD_DESCRIPTION_TEXT,
-	FIELD_ERROR_BORDER,
-	FIELD_ERROR_TEXT,
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
-} from '#components/shared/field_styles';
 
 interface CheckboxProps extends Omit<
 	ComponentPropsWithRef<'input'>,
@@ -47,19 +49,16 @@ export function Checkbox({
 	id,
 	...props
 }: CheckboxProps) {
-	const generatedId = useId();
-	const checkboxId = id ?? generatedId;
-	const [internalChecked, setInternalChecked] = useState(defaultChecked);
-	const isControlled = checked !== undefined;
-	const isChecked = isControlled ? checked : internalChecked;
+	const { fieldId: checkboxId, errorId, descriptionId } = useFieldIds(id);
+	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const describedBy =
-		[description && `${checkboxId}-description`, error && `${checkboxId}-error`]
+		[description && descriptionId, error && errorId]
 			.filter(Boolean)
 			.join(' ') || undefined;
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!isControlled) setInternalChecked(e.target.checked);
-		onChange?.(e);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setIsChecked(event.target.checked);
+		onChange?.(event);
 	};
 
 	return (
@@ -132,31 +131,12 @@ export function Checkbox({
 						</>
 					))}
 			</label>
-			{description &&
-				(typeof description === 'string' ? (
-					<p
-						id={`${checkboxId}-description`}
-						className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-1 ml-8')}
-					>
-						{description}
-					</p>
-				) : (
-					<span
-						id={`${checkboxId}-description`}
-						className={clsx(FIELD_DESCRIPTION_TEXT, 'block mt-1 ml-8')}
-					>
-						{description}
-					</span>
-				))}
-			{error && (
-				<p
-					id={`${checkboxId}-error`}
-					className={clsx(FIELD_ERROR_TEXT, 'mt-1 ml-8')}
-					role="alert"
-				>
-					{error}
-				</p>
-			)}
+			<FieldDescription
+				id={descriptionId}
+				description={description}
+				className="mt-1 ml-8"
+			/>
+			<FieldError id={errorId} error={error} className="mt-1 ml-8" />
 		</div>
 	);
 }
