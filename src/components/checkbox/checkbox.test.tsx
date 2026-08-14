@@ -90,4 +90,9 @@ describe('Checkbox', () => {
 		const box = screen.getByRole('checkbox').nextElementSibling;
 		expect(box?.parentElement).toHaveClass('rounded-full');
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Checkbox required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });

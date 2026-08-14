@@ -119,17 +119,18 @@ export function Checkbox({
 						)}
 					</span>
 				</span>
-				{typeof label === 'string' ? (
-					<span className={clsx(FIELD_LABEL_TEXT, 'select-none')}>
-						{label}
-						{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-					</span>
-				) : (
-					<>
-						{label}
-						{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-					</>
-				)}
+				{label !== undefined &&
+					(typeof label === 'string' ? (
+						<span className={clsx(FIELD_LABEL_TEXT, 'select-none')}>
+							{label}
+							{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+						</span>
+					) : (
+						<>
+							{label}
+							{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+						</>
+					))}
 			</label>
 			{description &&
 				(typeof description === 'string' ? (
