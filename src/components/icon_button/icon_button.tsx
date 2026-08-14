@@ -35,7 +35,7 @@ interface IconButtonProps extends ComponentPropsWithRef<'button'> {
 	children?: ReactNode;
 }
 
-export const IconButton = ({
+export function IconButton({
 	icon,
 	'aria-label': ariaLabel,
 	variant = 'outline',
@@ -46,7 +46,7 @@ export const IconButton = ({
 	children,
 	ref,
 	...props
-}: IconButtonProps) => {
+}: Readonly<IconButtonProps>) {
 	const tokens = BUTTON_COLOR_TOKENS[color];
 
 	return (
@@ -74,4 +74,4 @@ export const IconButton = ({
 			{children}
 		</button>
 	);
-};
+}

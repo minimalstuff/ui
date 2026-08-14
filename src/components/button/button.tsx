@@ -46,7 +46,7 @@ interface ButtonProps extends Omit<
 	endIcon?: string;
 }
 
-export const Button = ({
+export function Button({
 	variant = 'solid',
 	color = 'primary',
 	size = 'md',
@@ -59,7 +59,7 @@ export const Button = ({
 	endIcon,
 	disabled,
 	...props
-}: ButtonProps) => {
+}: Readonly<ButtonProps>) {
 	const tokens = BUTTON_COLOR_TOKENS[color];
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
 
@@ -98,4 +98,4 @@ export const Button = ({
 			)}
 		</button>
 	);
-};
+}
