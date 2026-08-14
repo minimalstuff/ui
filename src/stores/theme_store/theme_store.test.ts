@@ -43,6 +43,15 @@ describe('useThemeStore', () => {
 		expect(useThemeStore.getState().theme).toBe('dark');
 	});
 
+	test('applies the stored theme to the document as soon as the module loads, before any setTheme call', async () => {
+		localStorage.setItem('theme', 'dark');
+		vi.resetModules();
+
+		await import('./theme_store');
+
+		expect(document.documentElement.classList.contains('dark')).toBe(true);
+	});
+
 	test('setTheme adds dark class and persists for dark theme', () => {
 		useThemeStore.getState().setTheme('dark');
 

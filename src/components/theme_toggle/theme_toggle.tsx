@@ -1,6 +1,6 @@
 import './theme_toggle.css';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { type Theme } from '#types/theme';
 import { type Radius } from '#components/shared/radius';
@@ -45,10 +45,6 @@ export function ThemeToggle({
 	const setTheme = useThemeStore((state) => state.setTheme);
 	const isClient = useIsClient();
 	const buttonRef = useRef<HTMLButtonElement>(null);
-
-	useEffect(() => {
-		setTheme(useThemeStore.getState().theme);
-	}, [setTheme]);
 
 	const toggleTheme = useCallback(async () => {
 		const newTheme = getNextTheme(theme);

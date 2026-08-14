@@ -34,8 +34,17 @@ interface ThemeStore {
 	setTheme: (theme: Theme) => void;
 }
 
+const initialTheme = readStoredTheme();
+
+// Applied once here, at module load, rather than from a component's mount
+// effect: a `useEffect` only runs after first paint, which can flash the
+// wrong theme. This runs as the script evaluates, before React ever mounts.
+if (isBrowserEnvironment()) {
+	applyThemeToDocument(initialTheme);
+}
+
 export const useThemeStore = create<ThemeStore>((set) => ({
-	theme: readStoredTheme(),
+	theme: initialTheme,
 	setTheme: (theme) => {
 		applyThemeToDocument(theme);
 
