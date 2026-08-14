@@ -81,4 +81,9 @@ describe('Switch', () => {
 		render(<Switch label="Enable notifications" id="notifications" />);
 		expect(screen.getByRole('switch')).toHaveAttribute('id', 'notifications');
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Switch required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });

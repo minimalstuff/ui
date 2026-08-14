@@ -1,22 +1,19 @@
 import clsx from 'clsx';
-import {
-	type ComponentPropsWithRef,
-	type ReactNode,
-	useId,
-	useState,
-} from 'react';
+import { type ComponentPropsWithRef, type ReactNode } from 'react';
 
+import { FieldError } from '#components/shared/field_error';
+import { useFieldIds } from '#components/shared/use_field_ids';
 import { SELECTED_FILL } from '#components/shared/surface_tokens';
+import { FieldDescription } from '#components/shared/field_description';
+import { useControlledState } from '#components/shared/use_controlled_state';
+import {
+	FIELD_LABEL_TEXT,
+	FIELD_REQUIRED_MARK,
+} from '#components/shared/field_styles';
 import {
 	CONTROL_FOCUS_RING,
 	CONTROL_FOCUS_RING_COLOR,
 } from '#components/shared/focus_styles';
-import {
-	FIELD_DESCRIPTION_TEXT,
-	FIELD_ERROR_TEXT,
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
-} from '#components/shared/field_styles';
 
 interface SwitchProps extends Omit<
 	ComponentPropsWithRef<'input'>,
@@ -43,19 +40,16 @@ export function Switch({
 	id,
 	...props
 }: SwitchProps) {
-	const generatedId = useId();
-	const switchId = id ?? generatedId;
-	const [internalChecked, setInternalChecked] = useState(defaultChecked);
-	const isControlled = checked !== undefined;
-	const isChecked = isControlled ? checked : internalChecked;
+	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
+	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const describedBy =
-		[description && `${switchId}-description`, error && `${switchId}-error`]
+		[description && descriptionId, error && errorId]
 			.filter(Boolean)
 			.join(' ') || undefined;
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!isControlled) setInternalChecked(e.target.checked);
-		onChange?.(e);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setIsChecked(event.target.checked);
+		onChange?.(event);
 	};
 
 	return (
@@ -121,31 +115,12 @@ export function Switch({
 					</>
 				)}
 			</label>
-			{description &&
-				(typeof description === 'string' ? (
-					<p
-						id={`${switchId}-description`}
-						className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-1 ml-14')}
-					>
-						{description}
-					</p>
-				) : (
-					<span
-						id={`${switchId}-description`}
-						className={clsx(FIELD_DESCRIPTION_TEXT, 'block mt-1 ml-14')}
-					>
-						{description}
-					</span>
-				))}
-			{error && (
-				<p
-					id={`${switchId}-error`}
-					className={clsx(FIELD_ERROR_TEXT, 'mt-1 ml-14')}
-					role="alert"
-				>
-					{error}
-				</p>
-			)}
+			<FieldDescription
+				id={descriptionId}
+				description={description}
+				className="mt-1 ml-14"
+			/>
+			<FieldError id={errorId} error={error} className="mt-1 ml-14" />
 		</div>
 	);
 }
