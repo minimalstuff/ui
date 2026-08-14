@@ -48,7 +48,7 @@ export function Checkbox({
 	onChange,
 	id,
 	...props
-}: CheckboxProps) {
+}: Readonly<CheckboxProps>) {
 	const { fieldId: checkboxId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const describedBy =

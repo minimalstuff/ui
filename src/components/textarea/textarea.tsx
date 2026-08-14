@@ -39,7 +39,7 @@ export function Textarea({
 	onChange,
 	id,
 	...props
-}: TextareaProps) {
+}: Readonly<TextareaProps>) {
 	const { fieldId, errorId } = useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 

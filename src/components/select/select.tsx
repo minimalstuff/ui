@@ -43,7 +43,7 @@ export function Select({
 	onChange,
 	id,
 	...props
-}: SelectProps) {
+}: Readonly<SelectProps>) {
 	const { fieldId, errorId } = useFieldIds(id);
 
 	return (

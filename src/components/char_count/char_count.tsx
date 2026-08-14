@@ -30,7 +30,7 @@ export function CharacterCount({
 	showMax,
 	unstyled = false,
 	className,
-}: CharacterCountProps) {
+}: Readonly<CharacterCountProps>) {
 	const showLabels = showMin === true || showMax === true;
 
 	const minStatus: BoundStatus =

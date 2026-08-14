@@ -39,7 +39,7 @@ export function Tabs({
 	tabListClassName,
 	panelClassName,
 	onChange,
-}: TabsProps) {
+}: Readonly<TabsProps>) {
 	const [activeIndex, setActiveIndex] = useState(defaultIndex);
 	const id = useId();
 	const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);

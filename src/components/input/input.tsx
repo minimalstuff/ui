@@ -39,7 +39,7 @@ export function Input({
 	onChange,
 	id,
 	...props
-}: InputProps) {
+}: Readonly<InputProps>) {
 	const { fieldId, errorId } = useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 

@@ -67,7 +67,7 @@ export function RadioOptions({
 	wrapperClassName,
 	id,
 	...props
-}: RadioOptionsProps) {
+}: Readonly<RadioOptionsProps>) {
 	const { fieldId: groupId, errorId } = useFieldIds(id);
 	const name = nameProp ?? groupId;
 

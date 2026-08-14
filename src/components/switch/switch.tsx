@@ -39,7 +39,7 @@ export function Switch({
 	onChange,
 	id,
 	...props
-}: SwitchProps) {
+}: Readonly<SwitchProps>) {
 	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const describedBy =

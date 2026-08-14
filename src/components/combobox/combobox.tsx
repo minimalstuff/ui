@@ -51,7 +51,7 @@ export function Combobox({
 	defaultValue = '',
 	onChange,
 	id,
-}: ComboboxProps) {
+}: Readonly<ComboboxProps>) {
 	const { fieldId: comboboxId, errorId } = useFieldIds(id);
 	const listboxId = `${comboboxId}-listbox`;
 
