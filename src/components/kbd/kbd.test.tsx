@@ -31,4 +31,9 @@ describe('Kbd', () => {
 		render(<Kbd unstyled>Ctrl</Kbd>);
 		expect(screen.getByText('Ctrl')).not.toHaveClass('bg-gray-100');
 	});
+
+	test('applies radius class', () => {
+		render(<Kbd radius="full">Ctrl</Kbd>);
+		expect(screen.getByText('Ctrl')).toHaveClass('rounded-full');
+	});
 });

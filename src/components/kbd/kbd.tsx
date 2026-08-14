@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
-import { RADIUS_CLASSES } from '#components/shared/radius';
 import { type ControlSize } from '#components/shared/sizes';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 export type KbdSize = ControlSize;
 
@@ -16,6 +16,7 @@ const SIZE_CLASSES: Record<KbdSize, string> = {
 export interface KbdProps {
 	children: ReactNode;
 	size?: KbdSize;
+	radius?: Radius;
 	unstyled?: boolean;
 	className?: string;
 }
@@ -23,6 +24,7 @@ export interface KbdProps {
 export const Kbd = ({
 	children,
 	size = 'sm',
+	radius = 'sm',
 	unstyled = false,
 	className,
 }: Readonly<KbdProps>) => (
@@ -35,7 +37,7 @@ export const Kbd = ({
 				'text-gray-500 dark:text-gray-400',
 				'bg-gray-100 dark:bg-gray-700',
 				'border-gray-200 dark:border-gray-600',
-				RADIUS_CLASSES.sm,
+				RADIUS_CLASSES[radius],
 			],
 			className
 		)}
