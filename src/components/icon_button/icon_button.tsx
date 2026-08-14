@@ -25,28 +25,45 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	lg: 'w-6 h-6',
 };
 
-export interface IconButtonProps extends ComponentPropsWithRef<'button'> {
+type IconButtonStyle =
+	| { unstyled: true }
+	| {
+			unstyled?: false;
+			variant?: ButtonVariant;
+			color?: ButtonColor;
+			radius?: Radius;
+	  };
+
+export type IconButtonProps = ComponentPropsWithRef<'button'> & {
 	icon: string;
 	'aria-label': string;
+	size?: ControlSize;
+	children?: ReactNode;
+} & IconButtonStyle;
+
+// See Button's `FlatButtonStyle` for why this cast is here: it only widens
+// the destructuring inside this implementation, not the public prop type.
+type FlatIconButtonStyle = {
+	unstyled?: boolean;
 	variant?: ButtonVariant;
 	color?: ButtonColor;
-	size?: ControlSize;
 	radius?: Radius;
-	children?: ReactNode;
-}
+};
 
-export function IconButton({
-	icon,
-	'aria-label': ariaLabel,
-	variant = 'outline',
-	color = 'neutral',
-	size = 'md',
-	radius = 'md',
-	className,
-	children,
-	ref,
-	...props
-}: Readonly<IconButtonProps>) {
+export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
+	const {
+		icon,
+		'aria-label': ariaLabel,
+		unstyled = false,
+		variant = 'outline',
+		color = 'neutral',
+		size = 'md',
+		radius = 'md',
+		className,
+		children,
+		ref,
+		...props
+	} = iconButtonProps as IconButtonProps & FlatIconButtonStyle;
 	const tokens = BUTTON_COLOR_TOKENS[color];
 
 	return (
@@ -56,7 +73,7 @@ export function IconButton({
 			aria-label={ariaLabel}
 			className={clsx(
 				BUTTON_LAYOUT_CLASSES,
-				variant !== 'unstyled' && [
+				!unstyled && [
 					BUTTON_INTERACTIVE_CLASSES,
 					'border',
 					RADIUS_CLASSES[radius],

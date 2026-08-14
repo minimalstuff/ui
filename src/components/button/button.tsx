@@ -30,36 +30,52 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	lg: 'w-5 h-5',
 };
 
-export interface ButtonProps extends Omit<
-	ComponentPropsWithRef<'button'>,
-	'children'
-> {
-	variant?: ButtonVariant;
-	color?: ButtonColor;
-	size?: ControlSize;
-	radius?: Radius;
+type ButtonStyle =
+	| { unstyled: true }
+	| {
+			unstyled?: false;
+			variant?: ButtonVariant;
+			color?: ButtonColor;
+			radius?: Radius;
+	  };
+
+export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 	children: ReactNode;
+	size?: ControlSize;
 	className?: string;
 	fullWidth?: boolean;
 	loading?: boolean;
 	startIcon?: string;
 	endIcon?: string;
-}
+} & ButtonStyle;
 
-export function Button({
-	variant = 'solid',
-	color = 'primary',
-	size = 'md',
-	radius = 'md',
-	children,
-	className,
-	fullWidth = false,
-	loading = false,
-	startIcon,
-	endIcon,
-	disabled,
-	...props
-}: Readonly<ButtonProps>) {
+// Widens `ButtonStyle`'s two branches to all-optional for destructuring below:
+// the public `ButtonProps` union still rejects `unstyled` combined with the
+// other style props at every call site, this is purely an internal ergonomics
+// bridge past that same union once we're inside the implementation.
+type FlatButtonStyle = {
+	unstyled?: boolean;
+	variant?: ButtonVariant;
+	color?: ButtonColor;
+	radius?: Radius;
+};
+
+export function Button(buttonProps: Readonly<ButtonProps>) {
+	const {
+		unstyled = false,
+		variant = 'solid',
+		color = 'primary',
+		size = 'md',
+		radius = 'md',
+		children,
+		className,
+		fullWidth = false,
+		loading = false,
+		startIcon,
+		endIcon,
+		disabled,
+		...props
+	} = buttonProps as ButtonProps & FlatButtonStyle;
 	const tokens = BUTTON_COLOR_TOKENS[color];
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
 
@@ -68,7 +84,7 @@ export function Button({
 			type="button"
 			className={clsx(
 				BUTTON_LAYOUT_CLASSES,
-				variant !== 'unstyled' && [
+				!unstyled && [
 					BUTTON_INTERACTIVE_CLASSES,
 					'gap-2 font-medium border',
 					RADIUS_CLASSES[radius],

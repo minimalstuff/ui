@@ -150,7 +150,7 @@ export const RadiusMatrix: Story = {
 
 export const Unstyled: Story = {
 	args: {
-		variant: 'unstyled',
+		unstyled: true,
 		icon: 'i-mdi-heart',
 		'aria-label': 'Unstyled',
 		className: 'text-fuchsia-600 hover:text-fuchsia-700 p-2',

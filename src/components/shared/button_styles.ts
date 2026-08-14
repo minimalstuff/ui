@@ -1,11 +1,6 @@
 import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
 
-export type ButtonVariant =
-	| 'solid'
-	| 'outline'
-	| 'ghost'
-	| 'subtle'
-	| 'unstyled';
+export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'subtle';
 export type ButtonColor =
 	| 'primary'
 	| 'neutral'

@@ -173,7 +173,7 @@ export const RadiusMatrix: Story = {
 export const Unstyled: Story = {
 	render: () => (
 		<Button
-			variant="unstyled"
+			unstyled
 			className="bg-fuchsia-600 text-white px-4 py-2 rounded-full hover:bg-fuchsia-700"
 		>
 			Bring your own styles

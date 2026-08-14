@@ -64,10 +64,8 @@ describe('IconButton', () => {
 		expect(handleClick).toHaveBeenCalledTimes(1);
 	});
 
-	test('unstyled variant drops the default button styling', () => {
-		render(
-			<IconButton icon="i-mdi-close" aria-label="Close" variant="unstyled" />
-		);
+	test('unstyled drops the default button styling', () => {
+		render(<IconButton icon="i-mdi-close" aria-label="Close" unstyled />);
 		expect(screen.getByRole('button')).not.toHaveClass('border-gray-300');
 	});
 });

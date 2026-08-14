@@ -36,7 +36,7 @@ describe('ThemeToggle', () => {
 	});
 
 	test('forwards variant to the underlying icon button', () => {
-		render(<ThemeToggle variant="unstyled" />);
-		expect(screen.getByRole('button')).not.toHaveClass('border');
+		render(<ThemeToggle variant="ghost" />);
+		expect(screen.getByRole('button')).not.toHaveClass('border-gray-300');
 	});
 });
