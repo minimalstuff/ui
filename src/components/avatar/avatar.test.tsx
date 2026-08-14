@@ -21,6 +21,16 @@ describe('Avatar', () => {
 		expect(screen.getByRole('img')).toHaveTextContent('S');
 	});
 
+	test('keeps an astral-plane character whole', () => {
+		render(<Avatar name="𝒮onny" />);
+		expect(screen.getByRole('img')).toHaveTextContent('𝒮');
+	});
+
+	test('keeps a multi-code-point grapheme whole', () => {
+		render(<Avatar name="👋🏽 Sonny" />);
+		expect(screen.getByRole('img')).toHaveTextContent('👋🏽');
+	});
+
 	test('renders no initial for a blank name', () => {
 		const { container } = render(<Avatar name="   " />);
 		expect(container.firstChild).toHaveTextContent('');
