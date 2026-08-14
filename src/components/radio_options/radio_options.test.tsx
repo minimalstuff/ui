@@ -94,4 +94,16 @@ describe('RadioOptions', () => {
 		);
 		expect(screen.getByRole('radio', { name: 'Option B' })).toBeDisabled();
 	});
+
+	test('forwards className to each option row, not the legend', () => {
+		render(<RadioOptions options={OPTIONS} label="Plan" className="custom" />);
+		const optionLabel = screen
+			.getByRole('radio', {
+				name: 'Option A',
+			})
+			.closest('label');
+
+		expect(optionLabel).toHaveClass('custom');
+		expect(screen.getByText('Plan')).not.toHaveClass('custom');
+	});
 });

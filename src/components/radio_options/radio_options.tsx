@@ -83,7 +83,7 @@ export function RadioOptions({
 			{...props}
 		>
 			{label && (
-				<legend className={clsx(FIELD_LABEL_TEXT, 'mb-2', className)}>
+				<legend className={clsx(FIELD_LABEL_TEXT, 'mb-2')}>
 					{label}
 					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
 				</legend>
@@ -111,6 +111,7 @@ export function RadioOptions({
 						error={error}
 						radius={radius}
 						unstyled={unstyled}
+						className={className}
 						onSelect={handleChange}
 					/>
 				))}

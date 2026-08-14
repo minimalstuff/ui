@@ -30,6 +30,7 @@ interface RadioOptionRowProps {
 	error: string | undefined;
 	radius: Radius;
 	unstyled: boolean;
+	className: string | undefined;
 	onSelect: (value: string) => void;
 }
 
@@ -47,6 +48,7 @@ export function RadioOptionRow({
 	error,
 	radius,
 	unstyled,
+	className,
 	onSelect,
 }: Readonly<RadioOptionRowProps>) {
 	return (
@@ -71,7 +73,8 @@ export function RadioOptionRow({
 									'bg-gray-50 hover:border-gray-300 hover:bg-white dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800'
 								),
 				],
-				isDisabled && 'cursor-not-allowed opacity-50'
+				isDisabled && 'cursor-not-allowed opacity-50',
+				className
 			)}
 		>
 			<input
