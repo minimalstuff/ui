@@ -1,5 +1,52 @@
 # Changelog
 
+## [3.0.0](https://github.com/minimalstuff/ui/compare/2.1.1...3.0.0) (2026-08-14)
+
+### ⚠ BREAKING CHANGES
+
+* **radio-options:** forward className to each option row instead of the legend
+* **button:** model unstyled as a discriminated union instead of a variant string
+* **confirm-modal:** use semantic ButtonColor names instead of red/blue/green
+
+### Features
+
+* add unstyled escape hatch to Switch, Kbd, Tabs, CharacterCount, ThemeToggle ([27f31b3](https://github.com/minimalstuff/ui/commit/27f31b35fbaee9ab6600faa86d7ae9bf38ba03a9))
+* **badge:** add Badge component ([0d42762](https://github.com/minimalstuff/ui/commit/0d42762f68bb879ec9d23515f68ebea690b1d30f))
+* **button:** model unstyled as a discriminated union instead of a variant string ([17152f1](https://github.com/minimalstuff/ui/commit/17152f1e2f12967df5e3222d8a07a0696078a99e))
+* **confirm-modal:** report onConfirm rejections through onError ([2e6082e](https://github.com/minimalstuff/ui/commit/2e6082eb52a475dcdbc8e07802cd3cd8c69b36d9))
+* **confirm-modal:** use semantic ButtonColor names instead of red/blue/green ([aa6cb49](https://github.com/minimalstuff/ui/commit/aa6cb49bd814e0c8c5081fb4ae00077685938fd8))
+* **copy-button:** add CopyButton component ([0226670](https://github.com/minimalstuff/ui/commit/0226670440668b8d77b881a54161988ae08a690d))
+* **copy-button:** report clipboard failures through onError ([898cba9](https://github.com/minimalstuff/ui/commit/898cba9970bd1589eadbf4395adff19e985cac14))
+* export every component's props type ([a5b214a](https://github.com/minimalstuff/ui/commit/a5b214a563230943a8354d28e9761e7bf7d87cfc))
+* forward className and ref on Badge, MenuItem, ContextMenu, Menu, and Tooltip ([09f7f44](https://github.com/minimalstuff/ui/commit/09f7f44c752bafa05fad2de86d640cf6f7e9a19a))
+* **highlight:** add Highlight component ([e94be2f](https://github.com/minimalstuff/ui/commit/e94be2f7d712b2b8a66f9ed481cd78e0de042239))
+* **kbd:** accept a radius prop ([e6c12ad](https://github.com/minimalstuff/ui/commit/e6c12ad434be3174fd61d425fd0d4586777610a0))
+* **kbd:** add Kbd component ([af74d4d](https://github.com/minimalstuff/ui/commit/af74d4d743c4401a548a088424076f53a0f64f6c))
+* make hardcoded UI strings overridable and drop the French default ([7184cd0](https://github.com/minimalstuff/ui/commit/7184cd0fa1279d8ecfad758bdbfd97e41936f690))
+* **menu:** add Menu, ContextMenu, and MenuItem components ([2020375](https://github.com/minimalstuff/ui/commit/20203756ce9009b04d706eb9c463d2f2afce2a39))
+* **modal:** add ModalBody/ModalFooter for pinned-footer layouts ([6158f04](https://github.com/minimalstuff/ui/commit/6158f04699eae114ed6b780156e15bc333c7ef01))
+* **tabs:** support controlled mode via the value prop ([63e2fe9](https://github.com/minimalstuff/ui/commit/63e2fe9246b605e5b4b0b0ee336262702e6bfd08))
+* **tooltip:** add Tooltip component with floating-ui collision handling ([03be1a5](https://github.com/minimalstuff/ui/commit/03be1a5922e5fd787bc2d2efff9f894b608971f3))
+
+### Bug Fixes
+
+* **button:** drop every style class for the unstyled variant ([8a6e443](https://github.com/minimalstuff/ui/commit/8a6e443cb9af778579f638454bcb0720d1efb216))
+* **checkbox:** apply the radius to the focus ring wrapper ([120814c](https://github.com/minimalstuff/ui/commit/120814c770b662a2ed54205280eed23c59a09b27))
+* **checkbox:** render no required mark when there is no label ([b153497](https://github.com/minimalstuff/ui/commit/b153497a7b900e8b392de08306616dea1319783b))
+* **context-menu:** anchor keyboard-invoked menus to the focused element ([cc81ccb](https://github.com/minimalstuff/ui/commit/cc81ccb4c7ba7f0ef07ebb76368f6b89ddae3ec1))
+* **fields:** render the required mark for node labels ([6694097](https://github.com/minimalstuff/ui/commit/66940979303dd48023b7347f3eddead85c6179cf))
+* **fields:** use the caller-supplied id verbatim ([c760b4a](https://github.com/minimalstuff/ui/commit/c760b4a0754bc2dd63a0a29586944e98d168eb5a))
+* **icon-button:** match Button height at every size ([1726951](https://github.com/minimalstuff/ui/commit/17269517638d37b33e4762939698d67fe7971740))
+* **radio-options:** forward className to each option row instead of the legend ([1acc49b](https://github.com/minimalstuff/ui/commit/1acc49b16c90661b5d5da231d62f4d0d3325dfde))
+* **radio-options:** keep option-level disabled when the group is enabled ([230238b](https://github.com/minimalstuff/ui/commit/230238bd555bc0d4c96124b0de8d8a4fe6064d08))
+* replace array-index keys with stable keys in Highlight and Tabs ([209ecb8](https://github.com/minimalstuff/ui/commit/209ecb8fcac25eebf224bf46702d657f7c172bea))
+* **stories:** pin trigger displayName to survive prod minification ([086a0d5](https://github.com/minimalstuff/ui/commit/086a0d5b66fc56887368ca127f68038a80360914))
+* **switch:** match the focus ring offsets of the other controls ([983f152](https://github.com/minimalstuff/ui/commit/983f152312a939858ff5f96c61bfa87fec7f55a8))
+* **switch:** remove the inert disabled class from the track ([7c52205](https://github.com/minimalstuff/ui/commit/7c52205c45cbeffc5cf9a611111c788cce9f47da))
+* **theme-store:** apply the stored theme at module load instead of on ThemeToggle mount ([67644ba](https://github.com/minimalstuff/ui/commit/67644ba9b94f6ef1b64464e7ff762e29b3644e04))
+* **tooltip:** derive the arrow size from a single constant ([070e30a](https://github.com/minimalstuff/ui/commit/070e30a5c35364d2acc81d135921a5642b955180))
+* **typecheck:** run tsc in build mode so the script actually checks the project ([a06d481](https://github.com/minimalstuff/ui/commit/a06d481fe727a1ea13f76e064bafba627a7d062c))
+
 ## [2.1.1](https://github.com/minimalstuff/ui/compare/2.1.0...2.1.1) (2026-08-01)
 
 ### Bug Fixes
