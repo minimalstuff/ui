@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef, type ReactNode, useId } from 'react';
 
-import { BASE_INPUT_STYLES } from '#components/input/input';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import {
+	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,

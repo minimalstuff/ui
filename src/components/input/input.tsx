@@ -8,19 +8,14 @@ import {
 
 import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { CONTROL_BG, CONTROL_BORDER } from '#components/shared/surface_tokens';
+import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import {
-	FIELD_FOCUS_RING,
-	FIELD_FOCUS_RING_ERROR,
-} from '#components/shared/focus_styles';
-import {
+	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
-
-export const BASE_INPUT_STYLES = `w-full border ${CONTROL_BORDER} ${CONTROL_BG} text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${FIELD_FOCUS_RING} transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`;
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;

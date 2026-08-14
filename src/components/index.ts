@@ -18,7 +18,8 @@ export {
 	splitIntoHighlightSegments,
 } from './highlight/highlight';
 export { IconButton } from './icon_button/icon_button';
-export { BASE_INPUT_STYLES, Input } from './input/input';
+export { Input } from './input/input';
+export { BASE_INPUT_STYLES } from './shared/field_styles';
 export { Kbd, type KbdSize } from './kbd/kbd';
 export { Menu, type MenuAlign, type MenuSide } from './menu/menu';
 export { MenuItem } from './menu_item/menu_item';
