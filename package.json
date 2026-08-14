@@ -44,7 +44,7 @@
 		"ci": "storybook dev -p 6006 --ci",
 		"lint:fix": "oxlint . --fix --fix-suggestions --fix-dangerously",
 		"format:check": "oxfmt . --check",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --build --force",
 		"knip": "knip",
 		"check": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run knip"
 	},
