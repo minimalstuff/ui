@@ -1,20 +1,15 @@
 import clsx from 'clsx';
-import {
-	type ComponentPropsWithRef,
-	type ReactNode,
-	useId,
-	useState,
-} from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 
+import { Field } from '#components/shared/field';
+import { useFieldIds } from '#components/shared/use_field_ids';
 import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
+import { useControlledLength } from '#components/shared/use_controlled_length';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
-	FIELD_ERROR_TEXT,
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
@@ -45,45 +40,28 @@ export function Input({
 	id,
 	...props
 }: InputProps) {
-	const generatedId = useId();
-	const inputId = id ?? generatedId;
+	const { fieldId, errorId } = useFieldIds(id);
+	const { length, trackLength } = useControlledLength(value, defaultValue);
 
-	const [uncontrolledLength, setUncontrolledLength] = useState(
-		typeof defaultValue === 'string' ? defaultValue.length : 0
-	);
-
-	const currentLength =
-		typeof value === 'string'
-			? value.length
-			: value === undefined
-				? uncontrolledLength
-				: 0;
 	const hasCharCount =
 		showCharCount && (minLength !== undefined || maxLength !== undefined);
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (value === undefined) setUncontrolledLength(e.target.value.length);
-		onChange?.(e);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		trackLength(event.target.value);
+		onChange?.(event);
 	};
 
 	return (
-		<div className={clsx('w-full', wrapperClassName)}>
-			{typeof label === 'string' ? (
-				<label
-					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
-					htmlFor={inputId}
-				>
-					{label}
-					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-				</label>
-			) : (
-				<>
-					{label}
-					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-				</>
-			)}
+		<Field
+			fieldId={fieldId}
+			errorId={errorId}
+			label={label}
+			error={error}
+			required={props.required}
+			wrapperClassName={wrapperClassName}
+		>
 			<input
-				id={inputId}
+				id={fieldId}
 				className={clsx(
 					'w-full disabled:opacity-50 disabled:cursor-not-allowed',
 					!unstyled && [
@@ -101,27 +79,18 @@ export function Input({
 				maxLength={maxLength}
 				onChange={handleChange}
 				aria-invalid={!!error}
-				aria-describedby={error ? `${inputId}-error` : undefined}
+				aria-describedby={error ? errorId : undefined}
 				{...props}
 			/>
 			{hasCharCount && (
 				<CharacterCount
-					current={currentLength}
+					current={length}
 					min={minLength}
 					max={maxLength}
 					showMin={minLength !== undefined}
 					showMax={maxLength !== undefined}
 				/>
 			)}
-			{error && (
-				<p
-					id={`${inputId}-error`}
-					className={clsx(FIELD_ERROR_TEXT, 'mt-1')}
-					role="alert"
-				>
-					{error}
-				</p>
-			)}
-		</div>
+		</Field>
 	);
 }

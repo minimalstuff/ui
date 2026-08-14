@@ -86,4 +86,9 @@ describe('Input', () => {
 		render(<Input label={<span>Email</span>} required />);
 		expect(screen.getByText('*')).toBeInTheDocument();
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Input required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });
