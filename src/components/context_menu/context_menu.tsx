@@ -42,6 +42,20 @@ function virtualElementAt(x: number, y: number): VirtualElement {
 }
 
 /**
+ * Keyboard-invoked context menus (Shift+F10, the Menu key) fire `contextmenu`
+ * with no cursor, reported as (0, 0). Anchoring there would pin the menu to
+ * the viewport corner, so fall back to the focused element's own corner.
+ */
+function resolveAnchorPoint(event: MouseEvent): { x: number; y: number } {
+	if (event.clientX !== 0 || event.clientY !== 0) {
+		return { x: event.clientX, y: event.clientY };
+	}
+
+	const rect = (event.target as HTMLElement | null)?.getBoundingClientRect();
+	return rect ? { x: rect.left, y: rect.bottom } : { x: 0, y: 0 };
+}
+
+/**
  * Wraps `children` (the right-click target area) and opens `items`, a list
  * of `MenuItem` elements as direct children (see `MenuItem`'s own doc
  * comment), at the cursor position. Right-click again elsewhere on the
@@ -79,7 +93,8 @@ export function ContextMenu({
 	const handleContextMenu = (event: MouseEvent) => {
 		event.preventDefault();
 		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
-		refs.setReference(virtualElementAt(event.clientX, event.clientY));
+		const { x, y } = resolveAnchorPoint(event);
+		refs.setReference(virtualElementAt(x, y));
 		// Always a fresh position for a new click point: defer to the
 		// enter-transition effect rather than trying to reuse `isPositioned`
 		// from wherever the previous click happened.
