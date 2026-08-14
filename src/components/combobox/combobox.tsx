@@ -23,6 +23,7 @@ export interface ComboboxProps {
 	error?: string;
 	placeholder?: string;
 	noResultsText?: string;
+	clearLabel?: string;
 	radius?: Radius;
 	unstyled?: boolean;
 	disabled?: boolean;
@@ -41,6 +42,7 @@ export function Combobox({
 	error,
 	placeholder,
 	noResultsText = 'No results found',
+	clearLabel = 'Clear selection',
 	radius = 'md',
 	unstyled = false,
 	disabled = false,
@@ -203,7 +205,7 @@ export function Combobox({
 				{!unstyled && selectedOption && !disabled && (
 					<button
 						type="button"
-						aria-label="Clear selection"
+						aria-label={clearLabel}
 						onMouseDown={(e) => e.preventDefault()}
 						onClick={clearSelection}
 						className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"

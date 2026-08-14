@@ -18,6 +18,7 @@ export interface ModalProps {
 	radius?: Radius;
 	className?: string;
 	dismissible?: boolean;
+	closeLabel?: string;
 }
 
 function resolveRenderProp(
@@ -28,7 +29,17 @@ function resolveRenderProp(
 }
 
 export const Modal = createCallable<ModalProps, void>(
-	({ call, title, children, footer, size, radius, className, dismissible }) => {
+	({
+		call,
+		title,
+		children,
+		footer,
+		size,
+		radius,
+		className,
+		dismissible,
+		closeLabel,
+	}) => {
 		useDisableHotkeysWhileMounted();
 
 		const handleDismiss = () => call.end();
@@ -43,6 +54,7 @@ export const Modal = createCallable<ModalProps, void>(
 				radius={radius}
 				className={className}
 				dismissible={dismissible}
+				closeLabel={closeLabel}
 			>
 				{resolveRenderProp(children, handleDismiss)}
 			</ModalShell>

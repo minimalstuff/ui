@@ -227,4 +227,18 @@ describe('Modal', () => {
 			void Modal.call({ title: 'Hello', children: 'Body' });
 		}).toThrow('Multiple instances of <Root> found!');
 	});
+
+	test('accepts a custom close label', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body',
+				closeLabel: 'Fermer',
+			});
+		});
+
+		expect(await screen.findByLabelText('Fermer')).toBeInTheDocument();
+	});
 });

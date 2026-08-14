@@ -18,6 +18,10 @@ const THEME_ICON_CLASSES: Record<Theme, string> = {
 
 const FALLBACK_ICON_CLASS = 'i-tabler-device-desktop text-gray-400';
 
+function defaultAriaLabel(theme: Theme): string {
+	return `Current theme: ${theme}`;
+}
+
 export interface ThemeToggleProps {
 	isTransitionEnabled?: boolean;
 	transitionDuration?: number;
@@ -25,6 +29,7 @@ export interface ThemeToggleProps {
 	size?: 'sm' | 'md' | 'lg';
 	radius?: Radius;
 	variant?: ButtonVariant;
+	getAriaLabel?: (theme: Theme) => string;
 }
 
 export function ThemeToggle({
@@ -34,6 +39,7 @@ export function ThemeToggle({
 	size = 'md',
 	radius,
 	variant,
+	getAriaLabel = defaultAriaLabel,
 }: Readonly<ThemeToggleProps>) {
 	const theme = useThemeStore((state) => state.theme);
 	const setTheme = useThemeStore((state) => state.setTheme);
@@ -73,7 +79,7 @@ export function ThemeToggle({
 		<IconButton
 			ref={buttonRef}
 			icon={iconClass}
-			aria-label={`Thème actuel: ${theme}`}
+			aria-label={getAriaLabel(theme)}
 			size={size}
 			radius={radius}
 			variant={variant}

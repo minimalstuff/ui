@@ -155,4 +155,16 @@ describe('Combobox', () => {
 		render(<Combobox options={OPTIONS} required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
 	});
+
+	test('accepts a custom clear label', () => {
+		render(
+			<Combobox
+				label="Country"
+				options={OPTIONS}
+				defaultValue="a"
+				clearLabel="Effacer"
+			/>
+		);
+		expect(screen.getByRole('button', { name: 'Effacer' })).toBeInTheDocument();
+	});
 });

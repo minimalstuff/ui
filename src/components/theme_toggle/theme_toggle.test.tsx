@@ -16,7 +16,15 @@ describe('ThemeToggle', () => {
 		render(<ThemeToggle />);
 		expect(screen.getByRole('button')).toHaveAttribute(
 			'aria-label',
-			'Thème actuel: system'
+			'Current theme: system'
+		);
+	});
+
+	test('accepts a custom aria-label', () => {
+		render(<ThemeToggle getAriaLabel={(theme) => `Theme: ${theme}`} />);
+		expect(screen.getByRole('button')).toHaveAttribute(
+			'aria-label',
+			'Theme: system'
 		);
 	});
 

@@ -31,6 +31,7 @@ interface ModalShellProps {
 	radius?: Radius;
 	className?: string;
 	dismissible?: boolean;
+	closeLabel?: string;
 }
 
 // `Children.toArray` treats a `<>...</>` as one opaque element rather than
@@ -62,6 +63,7 @@ export function ModalShell({
 	radius = 'xl',
 	className,
 	dismissible = true,
+	closeLabel = 'Close',
 }: Readonly<ModalShellProps>) {
 	const [isOpening, setIsOpening] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
@@ -192,7 +194,7 @@ export function ModalShell({
 							<IconButton
 								icon="i-mdi-close"
 								onClick={onDismiss}
-								aria-label="Close"
+								aria-label={closeLabel}
 								variant="subtle"
 								size="sm"
 								radius="full"

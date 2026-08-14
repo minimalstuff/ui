@@ -151,4 +151,14 @@ describe('ConfirmModal', () => {
 			void ConfirmModal.call({ title: 'Delete item?' });
 		}).toThrow('Multiple instances of <Root> found!');
 	});
+
+	test('accepts a custom close label', async () => {
+		render(<ConfirmModal />);
+
+		act(() => {
+			void ConfirmModal.call({ title: 'Delete item?', closeLabel: 'Fermer' });
+		});
+
+		expect(await screen.findByLabelText('Fermer')).toBeInTheDocument();
+	});
 });

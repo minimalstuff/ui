@@ -57,6 +57,7 @@ export interface ConfirmModalProps {
 	cancelLabel?: ReactNode;
 	confirmColor?: ConfirmModalColor;
 	radius?: Radius;
+	closeLabel?: string;
 	onConfirm?: () => void | Promise<void>;
 	onError?: (error: unknown) => void;
 }
@@ -75,6 +76,7 @@ export const ConfirmModal = createCallable<
 		cancelLabel,
 		confirmColor,
 		radius,
+		closeLabel,
 		onConfirm,
 		onError,
 	}) => {
@@ -112,6 +114,7 @@ export const ConfirmModal = createCallable<
 				title={<ConfirmModalTitle title={title} color={resolvedConfirmColor} />}
 				size="sm"
 				radius={radius}
+				closeLabel={closeLabel}
 				footer={
 					<>
 						<Button
