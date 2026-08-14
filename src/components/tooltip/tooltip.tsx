@@ -19,9 +19,12 @@ import {
 	type ReactNode,
 } from 'react';
 
-import { OVERLAY_EXIT_DURATION_MS } from '#components/shared/animation';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	useEnterOnPositioned,
+	useOverlayState,
+} from '#components/shared/use_overlay_state';
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -73,12 +76,10 @@ export function Tooltip({
 	radius = 'lg',
 	onTemporaryShow,
 }: Readonly<TooltipProps>) {
-	const [isMounted, setIsMounted] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
+	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 	const [showTemporary, setShowTemporary] = useState(false);
 	const tooltipId = useId();
 	const arrowRef = useRef<HTMLDivElement>(null);
-	const hideTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 	const temporaryTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
 	const { refs, floatingStyles, placement, middlewareData, isPositioned } =
@@ -96,38 +97,17 @@ export function Tooltip({
 
 	const resolvedSide = placement.split('-')[0] as TooltipPosition;
 
-	// Only start the enter transition once floating-ui has computed a real
-	// position: animating opacity/translate before that would either use a
-	// stale (0, 0) position or skip the transition's "closed" frame entirely.
-	useEffect(() => {
-		if (!isMounted || !isPositioned) return;
-		const frameId = requestAnimationFrame(() => setIsVisible(true));
-		return () => cancelAnimationFrame(frameId);
-	}, [isMounted, isPositioned]);
-
-	const openTooltip = () => {
-		clearTimeout(hideTimeoutRef.current);
-		setIsMounted(true);
-		// A fast leave-then-re-enter can cancel the unmount before it fires,
-		// leaving `isMounted`/`isPositioned` already true. The effect above
-		// only reacts to those *changing*, so it won't fire again on its own.
-		if (isPositioned) setIsVisible(true);
-	};
+	useEnterOnPositioned(isMounted, isPositioned, setIsVisible);
 
 	const closeTooltip = () => {
-		clearTimeout(hideTimeoutRef.current);
-		setIsVisible(false);
 		setShowTemporary(false);
-		hideTimeoutRef.current = setTimeout(
-			() => setIsMounted(false),
-			OVERLAY_EXIT_DURATION_MS
-		);
+		close();
 	};
 
 	const showTemporaryContent = () => {
 		if (disabled || !temporaryContent) return;
 		setShowTemporary(true);
-		openTooltip();
+		open(isPositioned);
 		clearTimeout(temporaryTimeoutRef.current);
 		temporaryTimeoutRef.current = setTimeout(closeTooltip, temporaryDuration);
 		onTemporaryShow?.();
@@ -135,7 +115,7 @@ export function Tooltip({
 
 	const handleShow = () => {
 		if (disabled) return;
-		openTooltip();
+		open(isPositioned);
 	};
 
 	const handleHide = () => {
@@ -143,13 +123,7 @@ export function Tooltip({
 		closeTooltip();
 	};
 
-	useEffect(
-		() => () => {
-			clearTimeout(hideTimeoutRef.current);
-			clearTimeout(temporaryTimeoutRef.current);
-		},
-		[]
-	);
+	useEffect(() => () => clearTimeout(temporaryTimeoutRef.current), []);
 
 	const isTooltipShown = isMounted && !disabled;
 	const displayContent =

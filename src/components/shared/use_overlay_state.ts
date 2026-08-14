@@ -3,17 +3,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { OVERLAY_EXIT_DURATION_MS } from '#components/shared/animation';
 
 /**
- * Mount/visible state machine shared by `Menu` and `ContextMenu`. `open`
- * takes floating-ui's `isPositioned` as a call-time argument rather than a
- * hook dependency, since the caller must call `useFloating({ open: isMounted })`
- * *after* this hook to get `isMounted` in the first place: threading
- * `isPositioned` back in as a constructor argument would be circular.
+ * Mount/visible state machine shared by every floating-ui overlay (`Menu`,
+ * `ContextMenu`, `Tooltip`). `open` takes floating-ui's `isPositioned` as a
+ * call-time argument rather than a hook dependency, since the caller must
+ * call `useFloating({ open: isMounted })` *after* this hook to get
+ * `isMounted` in the first place: threading `isPositioned` back in as a
+ * constructor argument would be circular.
  *
  * Re-showing before the delayed unmount fires must re-apply `isVisible`
  * directly (via the `isPositioned` check in `open`), since `isMounted` won't
  * change value in that case and `useEnterOnPositioned` alone won't re-fire.
  */
-export function useMenuState() {
+export function useOverlayState() {
 	const [isMounted, setIsMounted] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const hideTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -41,7 +42,7 @@ export function useMenuState() {
 /**
  * Starts the enter transition only once floating-ui has computed a real
  * position: animating before that would use a stale (0, 0) position or
- * skip the transition's "closed" frame entirely (see Tooltip).
+ * skip the transition's "closed" frame entirely.
  */
 export function useEnterOnPositioned(
 	isMounted: boolean,

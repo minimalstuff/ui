@@ -13,8 +13,8 @@ import { MenuSurface } from '#components/menu/menu_surface';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import {
 	useEnterOnPositioned,
-	useMenuState,
-} from '#components/menu/use_menu_state';
+	useOverlayState,
+} from '#components/shared/use_overlay_state';
 
 const CURSOR_OFFSET = 2;
 
@@ -70,7 +70,7 @@ export function ContextMenu({
 	radius = 'md',
 }: Readonly<ContextMenuProps>) {
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-	const { isMounted, isVisible, setIsVisible, open, close } = useMenuState();
+	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 
 	const { refs, floatingStyles, isPositioned } = useFloating({
 		placement: 'bottom-start',
