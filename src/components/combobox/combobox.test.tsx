@@ -150,4 +150,9 @@ describe('Combobox', () => {
 		);
 		expect(screen.getByText('*')).toBeInTheDocument();
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Combobox options={OPTIONS} required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });
