@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.0](https://github.com/minimalstuff/ui/compare/3.0.1...3.1.0) (2026-08-14)
+
+### Features
+
+* **menu-item:** render as native link when href is passed ([6eb82ee](https://github.com/minimalstuff/ui/commit/6eb82eecccb50426d8d7c62ae8ab70fef8eb8975))
+
 ## [3.0.1](https://github.com/minimalstuff/ui/compare/3.0.0...3.0.1) (2026-08-14)
 
 ### ⚠ BREAKING CHANGES
