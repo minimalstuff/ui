@@ -55,9 +55,9 @@ export interface MenuProps {
 
 /**
  * A dropdown anchored to `trigger` (e.g. a kebab `IconButton`): click to
- * open, click again/click outside/Escape to close. `children` must be
- * `MenuItem` elements as direct children (see `MenuItem`'s own doc comment)
- * for keyboard nav and close-on-select to work.
+ * open, click again/click outside/Escape to close. `children` is made of
+ * `MenuItem`s, optionally wrapped in `MenuGroup`s and split by
+ * `MenuSeparator`s.
  *
  * For "right-click anywhere on this area" instead of a specific trigger
  * button, use `ContextMenu`.

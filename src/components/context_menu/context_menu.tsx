@@ -64,10 +64,10 @@ function resolveAnchorPoint(event: MouseEvent): { x: number; y: number } {
 }
 
 /**
- * Wraps `children` (the right-click target area) and opens `items`, a list
- * of `MenuItem` elements as direct children (see `MenuItem`'s own doc
- * comment), at the cursor position. Right-click again elsewhere on the
- * wrapped area to reposition it.
+ * Wraps `children` (the right-click target area) and opens `items` — made
+ * of `MenuItem`s, optionally wrapped in `MenuGroup`s and split by
+ * `MenuSeparator`s — at the cursor position. Right-click again elsewhere on
+ * the wrapped area to reposition it.
  *
  * For a menu anchored to a specific button (e.g. a kebab icon) instead of a
  * right-click, use `Menu`.
