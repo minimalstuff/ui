@@ -61,6 +61,14 @@ export interface MenuProps {
  *
  * For "right-click anywhere on this area" instead of a specific trigger
  * button, use `ContextMenu`.
+ *
+ * Opening a `Modal` from a `MenuItem`'s `onClick` is safe: the menu returns
+ * focus to `trigger` synchronously during the click, then the modal mounts a
+ * render later and takes focus from there. That ordering is what makes the
+ * modal record `trigger` as its restore target, so focus lands back on the
+ * trigger when the modal closes. The menu panel outlives the click by one
+ * exit animation, but the modal sits above it and owns Escape (a document
+ * listener), so the fading panel is inert. See `menu_with_modal.test.tsx`.
  */
 export function Menu({
 	trigger,
