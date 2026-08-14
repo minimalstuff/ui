@@ -1,13 +1,13 @@
-import { useClientOnly } from '#hooks/use_client_only/use_client_only';
+import { useIsClient } from '#hooks/use_is_client/use_is_client';
 
 interface ClientOnlyProps extends React.PropsWithChildren {
 	fallback?: React.ReactNode;
 }
 
-export function ClientOnly({ children, fallback }: ClientOnlyProps) {
-	const hasMounted = useClientOnly();
+export function ClientOnly({ children, fallback }: Readonly<ClientOnlyProps>) {
+	const isClient = useIsClient();
 
-	if (!hasMounted) {
+	if (!isClient) {
 		return fallback ?? null;
 	}
 
