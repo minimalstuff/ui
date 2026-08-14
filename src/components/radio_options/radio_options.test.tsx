@@ -81,4 +81,17 @@ describe('RadioOptions', () => {
 			'plan-0'
 		);
 	});
+
+	test('keeps an option disabled when the group is explicitly enabled', () => {
+		render(
+			<RadioOptions
+				disabled={false}
+				options={[
+					{ value: 'a', label: 'Option A' },
+					{ value: 'b', label: 'Option B', disabled: true },
+				]}
+			/>
+		);
+		expect(screen.getByRole('radio', { name: 'Option B' })).toBeDisabled();
+	});
 });

@@ -106,7 +106,7 @@ export function RadioOptions({
 					const optionId = `${groupId}-${index}`;
 					const descriptionId = `${groupId}-${index}-desc`;
 					const isSelected = selectedValue === option.value;
-					const isDisabled = disabled ?? option.disabled;
+					const isDisabled = disabled === true || option.disabled === true;
 
 					return (
 						<label
