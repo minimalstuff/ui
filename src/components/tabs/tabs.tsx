@@ -100,7 +100,7 @@ export function Tabs({
 			>
 				{items.map((item, index) => (
 					<button
-						key={index}
+						key={item.title}
 						ref={(el) => {
 							tabRefs.current[index] = el;
 						}}
