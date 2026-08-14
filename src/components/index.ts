@@ -12,11 +12,11 @@ export { Combobox } from './combobox/combobox';
 export type { ComboboxOption } from './combobox/combobox';
 export { ContextMenu } from './context_menu/context_menu';
 export { CopyButton } from './copy_button/copy_button';
+export { Highlight } from './highlight/highlight';
 export {
-	Highlight,
 	type HighlightSegment,
 	splitIntoHighlightSegments,
-} from './highlight/highlight';
+} from '#lib/split_into_highlight_segments';
 export { IconButton } from './icon_button/icon_button';
 export { Input } from './input/input';
 export { BASE_INPUT_STYLES } from './shared/field_styles';
