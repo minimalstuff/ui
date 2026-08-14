@@ -1,14 +1,13 @@
 import clsx from 'clsx';
-import { type ComponentPropsWithRef, type ReactNode, useId } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 
+import { Field } from '#components/shared/field';
+import { useFieldIds } from '#components/shared/use_field_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
-	FIELD_ERROR_TEXT,
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
 
 export interface SelectOption {
@@ -45,27 +44,19 @@ export function Select({
 	id,
 	...props
 }: SelectProps) {
-	const generatedId = useId();
-	const selectId = id ?? generatedId;
+	const { fieldId, errorId } = useFieldIds(id);
 
 	return (
-		<div className={clsx('w-full', wrapperClassName)}>
-			{typeof label === 'string' ? (
-				<label
-					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
-					htmlFor={selectId}
-				>
-					{label}
-					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-				</label>
-			) : (
-				<>
-					{label}
-					{props.required && <span className={FIELD_REQUIRED_MARK}>*</span>}
-				</>
-			)}
+		<Field
+			fieldId={fieldId}
+			errorId={errorId}
+			label={label}
+			error={error}
+			required={props.required}
+			wrapperClassName={wrapperClassName}
+		>
 			<select
-				id={selectId}
+				id={fieldId}
 				className={clsx(
 					'w-full disabled:opacity-50 disabled:cursor-not-allowed',
 					!unstyled && [
@@ -82,25 +73,16 @@ export function Select({
 				{...(value === undefined ? { defaultValue } : { value })}
 				onChange={onChange}
 				aria-invalid={!!error}
-				aria-describedby={error ? `${selectId}-error` : undefined}
+				aria-describedby={error ? errorId : undefined}
 				{...props}
 			>
 				{placeholder !== undefined && <option value="">{placeholder}</option>}
-				{options.map((opt) => (
-					<option key={opt.value} value={opt.value}>
-						{opt.label}
+				{options.map((option) => (
+					<option key={option.value} value={option.value}>
+						{option.label}
 					</option>
 				))}
 			</select>
-			{error && (
-				<p
-					id={`${selectId}-error`}
-					className={clsx(FIELD_ERROR_TEXT, 'mt-1')}
-					role="alert"
-				>
-					{error}
-				</p>
-			)}
-		</div>
+		</Field>
 	);
 }

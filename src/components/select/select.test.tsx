@@ -93,4 +93,9 @@ describe('Select', () => {
 		render(<Select label={<span>Country</span>} options={OPTIONS} required />);
 		expect(screen.getByText('*')).toBeInTheDocument();
 	});
+
+	test('renders no required mark when there is no label', () => {
+		render(<Select options={OPTIONS} required />);
+		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
 });
