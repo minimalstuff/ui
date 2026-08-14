@@ -1,3 +1,5 @@
+import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
+
 export type ButtonVariant =
 	| 'solid'
 	| 'outline'
@@ -82,5 +84,4 @@ export const BUTTON_LAYOUT_CLASSES =
 	'inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed';
 
 /** Visual chrome, dropped entirely when `unstyled`. */
-export const BUTTON_INTERACTIVE_CLASSES =
-	'cursor-pointer transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95] outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2';
+export const BUTTON_INTERACTIVE_CLASSES = `cursor-pointer transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95] ${BUTTON_FOCUS_OUTLINE}`;

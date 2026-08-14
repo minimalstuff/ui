@@ -8,6 +8,11 @@ import {
 	SURFACE_BORDER,
 } from '#components/shared/surface_tokens';
 import {
+	CONTROL_FOCUS_RING,
+	CONTROL_FOCUS_RING_COLOR,
+	CONTROL_FOCUS_RING_ERROR_COLOR,
+} from '#components/shared/focus_styles';
+import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
@@ -115,11 +120,10 @@ export function RadioOptions({
 							className={clsx(
 								'flex cursor-pointer items-start gap-3 transition-colors duration-150',
 								orientation === 'horizontal' && 'flex-1',
-								'focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2',
-								'focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900',
+								CONTROL_FOCUS_RING,
 								error
-									? 'focus-within:ring-red-500'
-									: 'focus-within:ring-blue-500',
+									? CONTROL_FOCUS_RING_ERROR_COLOR
+									: CONTROL_FOCUS_RING_COLOR,
 								!unstyled && [
 									RADIUS_CLASSES[radius],
 									'border px-3 py-2.5',

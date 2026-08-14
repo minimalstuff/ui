@@ -9,6 +9,7 @@ import {
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import { CharacterCount } from '#components/char_count/char_count';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import {
 	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
@@ -90,7 +91,9 @@ export function Textarea({
 						RADIUS_CLASSES[radius],
 						'px-3 py-2 text-sm',
 					],
-					!unstyled && error && clsx(FIELD_ERROR_BORDER, 'focus:ring-red-500'),
+					!unstyled &&
+						error &&
+						clsx(FIELD_ERROR_BORDER, FIELD_FOCUS_RING_ERROR),
 					className
 				)}
 				{...(value === undefined ? { defaultValue } : { value })}

@@ -8,6 +8,11 @@ import {
 	SELECTED_FILL,
 } from '#components/shared/surface_tokens';
 import {
+	CONTROL_FOCUS_RING,
+	CONTROL_FOCUS_RING_COLOR,
+	CONTROL_FOCUS_RING_ERROR_COLOR,
+} from '#components/shared/focus_styles';
+import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_BORDER,
 	FIELD_ERROR_TEXT,
@@ -70,8 +75,8 @@ export function Checkbox({
 					className={clsx(
 						'relative shrink-0',
 						RADIUS_CLASSES[radius],
-						'focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900',
-						error ? 'focus-within:ring-red-500' : 'focus-within:ring-blue-500'
+						CONTROL_FOCUS_RING,
+						error ? CONTROL_FOCUS_RING_ERROR_COLOR : CONTROL_FOCUS_RING_COLOR
 					)}
 				>
 					<input

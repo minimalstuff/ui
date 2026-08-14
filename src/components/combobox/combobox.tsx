@@ -9,6 +9,7 @@ import {
 
 import { BASE_INPUT_STYLES } from '#components/input/input';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import {
 	FIELD_ERROR_BORDER,
@@ -208,7 +209,7 @@ export function Combobox({
 						],
 						!unstyled &&
 							error &&
-							clsx(FIELD_ERROR_BORDER, 'focus:ring-red-500'),
+							clsx(FIELD_ERROR_BORDER, FIELD_FOCUS_RING_ERROR),
 						className
 					)}
 				/>
