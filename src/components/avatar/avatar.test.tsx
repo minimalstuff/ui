@@ -22,8 +22,15 @@ describe('Avatar', () => {
 	});
 
 	test('renders no initial for a blank name', () => {
-		render(<Avatar name="   " />);
-		expect(screen.getByRole('img')).toHaveTextContent('');
+		const { container } = render(<Avatar name="   " />);
+		expect(container.firstChild).toHaveTextContent('');
+	});
+
+	test('hides itself from assistive tech when there is no name to announce', () => {
+		const { container } = render(<Avatar name="   " />);
+
+		expect(screen.queryByRole('img')).not.toBeInTheDocument();
+		expect(container.firstChild).toHaveAttribute('aria-hidden', 'true');
 	});
 
 	test('announces the full name instead of the initial', () => {

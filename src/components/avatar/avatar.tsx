@@ -60,13 +60,29 @@ export function Avatar({
 }: Readonly<AvatarProps>) {
 	const [failedSource, setFailedSource] = useState<string | null>(null);
 	const isShowingImage = src !== undefined && src !== failedSource;
+	// An `img` role with no accessible name is an error, not a nameless
+	// picture: a blank name means there is nobody to announce, so the whole
+	// circle becomes decoration instead.
+	const hasName = name.trim().length > 0;
 
 	const handleImageError = () => setFailedSource(src ?? null);
 
+	const content = isShowingImage ? (
+		<img
+			src={src}
+			alt=""
+			onError={handleImageError}
+			className="h-full w-full object-cover"
+		/>
+	) : (
+		<span aria-hidden="true">{deriveInitial(name)}</span>
+	);
+
 	return (
 		<span
-			role="img"
-			aria-label={name}
+			role={hasName ? 'img' : undefined}
+			aria-label={hasName ? name : undefined}
+			aria-hidden={hasName ? undefined : true}
 			className={clsx(
 				'inline-flex flex-shrink-0 items-center justify-center overflow-hidden',
 				SIZE_CLASSES[size],
@@ -82,16 +98,7 @@ export function Avatar({
 				className
 			)}
 		>
-			{isShowingImage ? (
-				<img
-					src={src}
-					alt=""
-					onError={handleImageError}
-					className="h-full w-full object-cover"
-				/>
-			) : (
-				<span aria-hidden="true">{deriveInitial(name)}</span>
-			)}
+			{content}
 		</span>
 	);
 }
