@@ -19,12 +19,12 @@ import {
 	type ReactNode,
 } from 'react';
 
+import { OVERLAY_EXIT_DURATION_MS } from '#components/shared/animation';
+import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
-const EXIT_ANIMATION_DURATION_MS = 150;
-const VIEWPORT_PADDING = 8;
 const OFFSET_FROM_TRIGGER = 8;
 const ARROW_SIZE_PX = 8;
 
@@ -89,7 +89,7 @@ export function Tooltip({
 			middleware: [
 				offset(OFFSET_FROM_TRIGGER),
 				flip(),
-				shift({ padding: VIEWPORT_PADDING }),
+				shift({ padding: FLOATING_VIEWPORT_PADDING }),
 				arrow({ element: arrowRef }),
 			],
 		});
@@ -120,7 +120,7 @@ export function Tooltip({
 		setShowTemporary(false);
 		hideTimeoutRef.current = setTimeout(
 			() => setIsMounted(false),
-			EXIT_ANIMATION_DURATION_MS
+			OVERLAY_EXIT_DURATION_MS
 		);
 	};
 

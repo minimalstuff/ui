@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import { createCallable } from 'react-call';
 
 import { type Radius } from '#components/shared/radius';
+import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 import { ModalShell, type ModalSize } from '#components/modal/modal_shell';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
@@ -18,8 +19,6 @@ export interface ModalProps {
 	className?: string;
 	dismissible?: boolean;
 }
-
-const EXIT_ANIMATION_DURATION_MS = 200;
 
 function resolveRenderProp(
 	prop: ModalRenderProp,
@@ -49,5 +48,5 @@ export const Modal = createCallable<ModalProps, void>(
 			</ModalShell>
 		);
 	},
-	EXIT_ANIMATION_DURATION_MS
+	MODAL_EXIT_DURATION_MS
 );

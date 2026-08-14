@@ -18,13 +18,13 @@ import {
 
 import { type Radius } from '#components/shared/radius';
 import { MenuSurface } from '#components/menu/menu_surface';
+import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import {
 	useEnterOnPositioned,
 	useMenuState,
 } from '#components/menu/use_menu_state';
 
 const OFFSET_FROM_TRIGGER = 4;
-const VIEWPORT_PADDING = 8;
 
 export type MenuSide = 'top' | 'bottom' | 'left' | 'right';
 export type MenuAlign = 'start' | 'center' | 'end';
@@ -73,7 +73,7 @@ export function Menu({
 		middleware: [
 			offset(OFFSET_FROM_TRIGGER),
 			flip(),
-			shift({ padding: VIEWPORT_PADDING }),
+			shift({ padding: FLOATING_VIEWPORT_PADDING }),
 		],
 	});
 

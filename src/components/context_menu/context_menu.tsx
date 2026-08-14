@@ -10,13 +10,13 @@ import {
 
 import { type Radius } from '#components/shared/radius';
 import { MenuSurface } from '#components/menu/menu_surface';
+import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import {
 	useEnterOnPositioned,
 	useMenuState,
 } from '#components/menu/use_menu_state';
 
 const CURSOR_OFFSET = 2;
-const VIEWPORT_PADDING = 8;
 
 interface ContextMenuProps {
 	/** The area that opens the menu on right-click. */
@@ -79,7 +79,7 @@ export function ContextMenu({
 		middleware: [
 			offset(CURSOR_OFFSET),
 			flip(),
-			shift({ padding: VIEWPORT_PADDING }),
+			shift({ padding: FLOATING_VIEWPORT_PADDING }),
 		],
 	});
 

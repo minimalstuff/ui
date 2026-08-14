@@ -6,6 +6,7 @@ import { surfaceError } from '#lib/surface_error';
 import { type Radius } from '#components/shared/radius';
 import { ModalShell } from '#components/modal/modal_shell';
 import { Button, type ButtonColor } from '#components/button/button';
+import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
 export type ConfirmModalColor = 'red' | 'blue' | 'green';
@@ -63,8 +64,6 @@ export interface ConfirmModalProps {
 }
 
 export type ConfirmModalResponse = boolean;
-
-const EXIT_ANIMATION_DURATION_MS = 200;
 
 export const ConfirmModal = createCallable<
 	ConfirmModalProps,
@@ -144,5 +143,5 @@ export const ConfirmModal = createCallable<
 			</ModalShell>
 		);
 	},
-	EXIT_ANIMATION_DURATION_MS
+	MODAL_EXIT_DURATION_MS
 );

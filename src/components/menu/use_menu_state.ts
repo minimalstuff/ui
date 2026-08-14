@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const EXIT_ANIMATION_DURATION_MS = 150;
+import { OVERLAY_EXIT_DURATION_MS } from '#components/shared/animation';
 
 /**
  * Mount/visible state machine shared by `Menu` and `ContextMenu`. `open`
@@ -31,7 +31,7 @@ export function useMenuState() {
 		setIsVisible(false);
 		hideTimeoutRef.current = setTimeout(
 			() => setIsMounted(false),
-			EXIT_ANIMATION_DURATION_MS
+			OVERLAY_EXIT_DURATION_MS
 		);
 	}, []);
 
