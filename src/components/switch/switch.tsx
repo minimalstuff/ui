@@ -23,6 +23,7 @@ export interface SwitchProps extends Omit<
 	description?: string | ReactNode;
 	error?: string;
 	unstyled?: boolean;
+	fullWidth?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -32,6 +33,7 @@ export function Switch({
 	description,
 	error,
 	unstyled = false,
+	fullWidth = false,
 	className,
 	wrapperClassName,
 	checked,
@@ -53,7 +55,7 @@ export function Switch({
 	};
 
 	return (
-		<div className={clsx('w-full', wrapperClassName)}>
+		<div className={clsx(fullWidth ? 'w-full' : 'w-fit', wrapperClassName)}>
 			<label
 				htmlFor={switchId}
 				className={clsx(

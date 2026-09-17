@@ -30,6 +30,10 @@ const meta = {
 			control: 'boolean',
 			description: 'Strip built-in track/thumb styling from the switch',
 		},
+		fullWidth: {
+			control: 'boolean',
+			description: 'Stretch the wrapper to the full width of its container',
+		},
 	},
 	decorators: [
 		(Story) => (
