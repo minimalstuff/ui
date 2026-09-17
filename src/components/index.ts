@@ -72,6 +72,11 @@ export { Modal, type ModalProps, type ModalSize } from './modal/modal';
 export { ModalFooter, type ModalFooterProps } from './modal/modal_footer';
 export { ModalProvider } from './modal_provider/modal_provider';
 export {
+	MultiCombobox,
+	type MultiComboboxProps,
+} from './multi_combobox/multi_combobox';
+export type { MultiComboboxOption } from './multi_combobox/multi_combobox';
+export {
 	RadioOptions,
 	type RadioOptionsProps,
 } from './radio_options/radio_options';

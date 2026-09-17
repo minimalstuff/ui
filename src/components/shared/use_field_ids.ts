@@ -4,6 +4,7 @@ interface FieldIds {
 	fieldId: string;
 	errorId: string;
 	descriptionId: string;
+	labelId: string;
 }
 
 /**
@@ -19,5 +20,6 @@ export function useFieldIds(id: string | undefined): FieldIds {
 		fieldId,
 		errorId: `${fieldId}-error`,
 		descriptionId: `${fieldId}-description`,
+		labelId: `${fieldId}-label`,
 	};
 }
