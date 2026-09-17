@@ -36,6 +36,7 @@ export const Field = ({
 		{label !== undefined &&
 			(typeof label === 'string' ? (
 				<label
+					id={`${fieldId}-label`}
 					className={clsx(FIELD_LABEL_TEXT, 'block mb-1')}
 					htmlFor={fieldId}
 				>

@@ -8,3 +8,13 @@ export const RADIUS_CLASSES: Record<Radius, string> = {
 	xl: 'rounded-xl',
 	full: 'rounded-full',
 };
+
+/**
+ * Panels are taller than they are round: `rounded-full` would bow their sides
+ * into an ellipse, so the panel scale caps at the largest corner that still
+ * reads as a rectangle.
+ */
+export const PANEL_RADIUS_CLASSES: Record<Radius, string> = {
+	...RADIUS_CLASSES,
+	full: RADIUS_CLASSES.lg,
+};
