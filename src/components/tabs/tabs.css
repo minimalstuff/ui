@@ -12,3 +12,9 @@
 .tabs-panel-inner {
 	animation: tabs-panel-in 0.25s ease-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.tabs-panel-inner {
+		animation: none;
+	}
+}
