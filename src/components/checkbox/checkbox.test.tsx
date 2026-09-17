@@ -75,6 +75,16 @@ describe('Checkbox', () => {
 		expect(box).not.toHaveClass('border-gray-300');
 	});
 
+	test('shrinks to content width by default', () => {
+		const { container } = render(<Checkbox label="Accept terms" />);
+		expect(container.firstChild).toHaveClass('w-fit');
+	});
+
+	test('spans the full width when fullWidth is set', () => {
+		const { container } = render(<Checkbox label="Accept terms" fullWidth />);
+		expect(container.firstChild).toHaveClass('w-full');
+	});
+
 	test('uses the caller id verbatim so external labels can target it', () => {
 		render(<Checkbox label="Accept terms" id="terms" />);
 		expect(screen.getByRole('checkbox')).toHaveAttribute('id', 'terms');

@@ -77,6 +77,18 @@ describe('Switch', () => {
 		expect(track).not.toHaveClass('rounded-full');
 	});
 
+	test('shrinks to content width by default', () => {
+		const { container } = render(<Switch label="Enable notifications" />);
+		expect(container.firstChild).toHaveClass('w-fit');
+	});
+
+	test('spans the full width when fullWidth is set', () => {
+		const { container } = render(
+			<Switch label="Enable notifications" fullWidth />
+		);
+		expect(container.firstChild).toHaveClass('w-full');
+	});
+
 	test('uses the caller id verbatim so external labels can target it', () => {
 		render(<Switch label="Enable notifications" id="notifications" />);
 		expect(screen.getByRole('switch')).toHaveAttribute('id', 'notifications');

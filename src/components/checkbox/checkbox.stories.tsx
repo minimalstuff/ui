@@ -35,6 +35,10 @@ const meta = {
 			control: 'boolean',
 			description: 'Strip built-in border/background styling from the box',
 		},
+		fullWidth: {
+			control: 'boolean',
+			description: 'Stretch the wrapper to the full width of its container',
+		},
 	},
 	decorators: [
 		(Story) => (

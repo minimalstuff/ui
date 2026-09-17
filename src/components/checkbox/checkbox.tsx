@@ -31,6 +31,7 @@ export interface CheckboxProps extends Omit<
 	error?: string;
 	radius?: Radius;
 	unstyled?: boolean;
+	fullWidth?: boolean;
 	className?: string;
 	wrapperClassName?: string;
 }
@@ -41,6 +42,7 @@ export function Checkbox({
 	error,
 	radius = 'sm',
 	unstyled = false,
+	fullWidth = false,
 	className,
 	wrapperClassName,
 	checked,
@@ -62,7 +64,7 @@ export function Checkbox({
 	};
 
 	return (
-		<div className={clsx('w-full', wrapperClassName)}>
+		<div className={clsx(fullWidth ? 'w-full' : 'w-fit', wrapperClassName)}>
 			<label
 				htmlFor={checkboxId}
 				className={clsx(
