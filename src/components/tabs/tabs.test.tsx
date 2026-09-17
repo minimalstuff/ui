@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { renderToString } from 'react-dom/server';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -138,10 +139,10 @@ describe('Tabs', () => {
 
 	test('unstyled drops the default tablist and panel styling', () => {
 		render(<Tabs items={ITEMS} unstyled />);
-		expect(screen.getByRole('tablist')).not.toHaveClass('bg-gray-100');
-		expect(screen.getByRole('tabpanel')).not.toHaveClass('bg-white');
+		expect(screen.getByRole('tablist')).not.toHaveClass('border-b');
+		expect(screen.getByRole('tabpanel')).not.toHaveClass('mt-4');
 		expect(screen.getByRole('tab', { name: 'First' })).not.toHaveClass(
-			'bg-white'
+			'border-blue-600'
 		);
 	});
 
@@ -151,6 +152,60 @@ describe('Tabs', () => {
 			'opacity-50',
 			'cursor-not-allowed'
 		);
+	});
+
+	test('line variant is the default', () => {
+		render(<Tabs items={ITEMS} />);
+		expect(screen.getByRole('tablist')).toHaveClass('border-b');
+	});
+
+	test('segmented variant renders the track', () => {
+		render(<Tabs items={ITEMS} variant="segmented" />);
+		expect(screen.getByRole('tablist')).toHaveClass('bg-gray-100');
+	});
+
+	test('segmented variant rounds the track', () => {
+		render(<Tabs items={ITEMS} variant="segmented" radius="lg" />);
+		expect(screen.getByRole('tablist')).toHaveClass('rounded-lg');
+	});
+
+	test('line variant leaves the track unrounded', () => {
+		render(<Tabs items={ITEMS} radius="lg" />);
+		expect(screen.getByRole('tablist')).not.toHaveClass('rounded-lg');
+	});
+
+	test('tabs carry a focus-visible outline when styled', () => {
+		render(<Tabs items={ITEMS} />);
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveClass(
+			'focus-visible:outline-2'
+		);
+	});
+
+	test('fullWidth stretches the tabs', () => {
+		render(<Tabs items={ITEMS} fullWidth />);
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveClass('flex-1');
+	});
+
+	test('size drives the tab padding', () => {
+		render(<Tabs items={ITEMS} size="sm" />);
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveClass('px-3');
+	});
+
+	test('icons render', () => {
+		const itemsWithIcon = [
+			{ title: 'First', content: 'First content', icon: 'i-lucide-home' },
+			{ title: 'Second', content: 'Second content' },
+		];
+		const { container } = render(<Tabs items={itemsWithIcon} />);
+		expect(container.querySelector('.i-lucide-home')).toBeInTheDocument();
+	});
+
+	test('renders the indicator in server-rendered markup', () => {
+		expect(renderToString(<Tabs items={ITEMS} />)).toContain('tabs-indicator');
+	});
+
+	test('renders the active panel content in server-rendered markup', () => {
+		expect(renderToString(<Tabs items={ITEMS} />)).toContain('First content');
 	});
 
 	test('stays on the caller value when controlled', () => {
@@ -176,5 +231,55 @@ describe('Tabs', () => {
 	test('renders the panel for the caller-controlled index', () => {
 		render(<Tabs items={ITEMS} value={1} onChange={vi.fn()} />);
 		expect(screen.getByText('Second content')).toBeInTheDocument();
+	});
+
+	test('indicator renders inside the active tab by default', () => {
+		render(<Tabs items={ITEMS} />);
+		const activeTab = screen.getByRole('tab', { name: 'First' });
+		expect(activeTab.querySelector('.tabs-indicator')).toBeInTheDocument();
+	});
+
+	test('indicator moves with the active tab', () => {
+		render(<Tabs items={ITEMS} />);
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+
+		const secondTab = screen.getByRole('tab', { name: 'Second' });
+		expect(secondTab.querySelector('.tabs-indicator')).toBeInTheDocument();
+	});
+
+	test('indicator leaves the previously active tab', () => {
+		render(<Tabs items={ITEMS} />);
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+
+		const firstTab = screen.getByRole('tab', { name: 'First' });
+		expect(firstTab.querySelector('.tabs-indicator')).not.toBeInTheDocument();
+	});
+
+	test('no indicator when unstyled', () => {
+		const { container } = render(<Tabs items={ITEMS} unstyled />);
+		expect(container.querySelector('.tabs-indicator')).not.toBeInTheDocument();
+	});
+
+	test('animated={false} still renders the indicator', () => {
+		render(<Tabs items={ITEMS} animated={false} />);
+		const activeTab = screen.getByRole('tab', { name: 'First' });
+		expect(activeTab.querySelector('.tabs-indicator')).toBeInTheDocument();
+	});
+
+	test('animated={false} drops the panel animation', () => {
+		const { container } = render(<Tabs items={ITEMS} animated={false} />);
+		expect(
+			container.querySelector('.tabs-panel-inner')
+		).not.toBeInTheDocument();
+	});
+
+	test('segmented indicator is rounded', () => {
+		render(<Tabs items={ITEMS} variant="segmented" radius="lg" />);
+		const activeTab = screen.getByRole('tab', { name: 'First' });
+		const indicator = activeTab.querySelector('.tabs-indicator');
+		expect(indicator).toBeInTheDocument();
+		expect(indicator).toHaveClass('rounded-lg');
 	});
 });

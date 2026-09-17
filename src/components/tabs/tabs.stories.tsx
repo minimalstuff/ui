@@ -1,6 +1,11 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Tabs } from '#components/tabs/tabs';
+
+const panelText = (text: string) => (
+	<p className="text-sm text-gray-700 dark:text-gray-300">{text}</p>
+);
 
 const meta = {
 	title: 'Example/Tabs',
@@ -27,21 +32,40 @@ const meta = {
 			control: 'text',
 			description: 'Class name for the tab panel',
 		},
+		variant: {
+			control: 'select',
+			options: ['line', 'segmented'],
+			description: 'Visual style of the tab list',
+		},
+		size: {
+			control: 'select',
+			options: ['xs', 'sm', 'md', 'lg'],
+			description: 'Size of the tabs',
+		},
 		radius: {
 			control: 'select',
 			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
-			description: 'Border radius applied to the tab list, tabs, and panel',
+			description:
+				"Border radius applied to the segmented variant's track and tabs (no effect on the line variant)",
+		},
+		fullWidth: {
+			control: 'boolean',
+			description: 'Stretch tabs to fill the available width',
 		},
 		unstyled: {
 			control: 'boolean',
 			description: 'Strip built-in tab list, tab, and panel styling',
 		},
+		animated: {
+			control: 'boolean',
+			description: 'Animate the sliding indicator and panel transition',
+		},
 	},
 	args: {
 		items: [
-			{ title: 'Tab 1', content: 'Content for tab 1.' },
-			{ title: 'Tab 2', content: 'Content for tab 2.' },
-			{ title: 'Tab 3', content: 'Content for tab 3.' },
+			{ title: 'Tab 1', content: panelText('Content for tab 1.') },
+			{ title: 'Tab 2', content: panelText('Content for tab 2.') },
+			{ title: 'Tab 3', content: panelText('Content for tab 3.') },
 		],
 	},
 	decorators: [
@@ -64,9 +88,12 @@ export const DefaultIndex: Story = {
 	args: {
 		defaultIndex: 1,
 		items: [
-			{ title: 'First', content: 'First tab content.' },
-			{ title: 'Second', content: 'Second tab content (selected by default).' },
-			{ title: 'Third', content: 'Third tab content.' },
+			{ title: 'First', content: panelText('First tab content.') },
+			{
+				title: 'Second',
+				content: panelText('Second tab content (selected by default).'),
+			},
+			{ title: 'Third', content: panelText('Third tab content.') },
 		],
 	},
 };
@@ -74,13 +101,13 @@ export const DefaultIndex: Story = {
 export const WithDisabledTab: Story = {
 	args: {
 		items: [
-			{ title: 'Active', content: 'This tab is active.' },
+			{ title: 'Active', content: panelText('This tab is active.') },
 			{
 				title: 'Disabled',
-				content: 'You cannot select this tab.',
+				content: panelText('You cannot select this tab.'),
 				disabled: true,
 			},
-			{ title: 'Another', content: 'Another tab content.' },
+			{ title: 'Another', content: panelText('Another tab content.') },
 		],
 	},
 };
@@ -92,7 +119,9 @@ export const WithRichContent: Story = {
 				title: 'Summary',
 				content: (
 					<div>
-						<h3 className="text-sm font-semibold mb-2">Summary</h3>
+						<h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
+							Summary
+						</h3>
 						<p className="text-gray-600 dark:text-gray-400">
 							This panel can contain any React content: lists, forms, or
 							components.
@@ -103,7 +132,7 @@ export const WithRichContent: Story = {
 			{
 				title: 'Details',
 				content: (
-					<ul className="list-disc list-inside space-y-1 text-sm">
+					<ul className="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
 						<li>Detail one</li>
 						<li>Detail two</li>
 						<li>Detail three</li>
@@ -117,11 +146,11 @@ export const WithRichContent: Story = {
 export const ManyTabs: Story = {
 	args: {
 		items: [
-			{ title: 'One', content: 'Content 1' },
-			{ title: 'Two', content: 'Content 2' },
-			{ title: 'Three', content: 'Content 3' },
-			{ title: 'Four', content: 'Content 4' },
-			{ title: 'Five', content: 'Content 5' },
+			{ title: 'One', content: panelText('Content 1') },
+			{ title: 'Two', content: panelText('Content 2') },
+			{ title: 'Three', content: panelText('Content 3') },
+			{ title: 'Four', content: panelText('Content 4') },
+			{ title: 'Five', content: panelText('Content 5') },
 		],
 	},
 	decorators: [
@@ -137,5 +166,96 @@ export const Unstyled: Story = {
 	args: {
 		unstyled: true,
 		tabListClassName: 'gap-4',
+	},
+};
+
+export const Segmented: Story = {
+	args: {
+		variant: 'segmented',
+	},
+};
+
+const SIZE_ITEMS = [
+	{ title: 'One', content: panelText('Content 1') },
+	{ title: 'Two', content: panelText('Content 2') },
+	{ title: 'Three', content: panelText('Content 3') },
+];
+
+export const Sizes: Story = {
+	render: () => (
+		<div className="flex flex-col gap-4">
+			<Tabs size="xs" items={SIZE_ITEMS} />
+			<Tabs size="sm" items={SIZE_ITEMS} />
+			<Tabs size="md" items={SIZE_ITEMS} />
+			<Tabs size="lg" items={SIZE_ITEMS} />
+		</div>
+	),
+};
+
+export const FullWidth: Story = {
+	args: {
+		fullWidth: true,
+	},
+};
+
+export const WithIcons: Story = {
+	args: {
+		items: [
+			{
+				title: 'Home',
+				content: panelText('Home content.'),
+				icon: 'i-lucide-home',
+			},
+			{
+				title: 'Settings',
+				content: panelText('Settings content.'),
+				icon: 'i-lucide-settings',
+			},
+		],
+	},
+};
+
+const CONTROLLED_ITEMS = [
+	{
+		slug: 'overview',
+		title: 'Overview',
+		content: panelText('Overview content.'),
+	},
+	{
+		slug: 'settings',
+		title: 'Settings',
+		content: panelText('Settings content.'),
+	},
+	{ slug: 'billing', title: 'Billing', content: panelText('Billing content.') },
+];
+
+function ControlledTabsExample() {
+	const [currentSlug, setCurrentSlug] = useState('overview');
+	const value = Math.max(
+		0,
+		CONTROLLED_ITEMS.findIndex((item) => item.slug === currentSlug)
+	);
+
+	const handleChange = (targetIndex: number) => {
+		setCurrentSlug(CONTROLLED_ITEMS[targetIndex].slug);
+	};
+
+	return (
+		<div>
+			<Tabs items={CONTROLLED_ITEMS} value={value} onChange={handleChange} />
+			<p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+				?tab={currentSlug}
+			</p>
+		</div>
+	);
+}
+
+export const Controlled: Story = {
+	render: () => <ControlledTabsExample />,
+};
+
+export const NoAnimation: Story = {
+	args: {
+		animated: false,
 	},
 };
