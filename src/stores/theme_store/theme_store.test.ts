@@ -16,6 +16,7 @@ type MediaQueryMock = {
 
 let useThemeStore: typeof import('./theme_store').useThemeStore;
 let mediaQueryMock: MediaQueryMock;
+let systemThemeChangeHandler: () => void;
 
 beforeAll(async () => {
 	localStorage.setItem('theme', 'dark');
@@ -28,6 +29,9 @@ beforeAll(async () => {
 	vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(mediaQueryMock));
 
 	({ useThemeStore } = await import('./theme_store'));
+
+	systemThemeChangeHandler = mediaQueryMock.addEventListener.mock
+		.calls[0][1] as () => void;
 });
 
 describe('useThemeStore', () => {
@@ -111,14 +115,21 @@ describe('useThemeStore', () => {
 		expect(useThemeStore.getState().theme).toBe('light');
 	});
 
-	test('reacts to system preference change only when theme is system', () => {
+	test('applies dark class on system preference change when theme is system', () => {
 		useThemeStore.getState().setTheme('system');
 
-		const mediaQueryHandler = mediaQueryMock.addEventListener.mock
-			.calls[0][1] as () => void;
 		mediaQueryMock.matches = true;
-		mediaQueryHandler();
+		systemThemeChangeHandler();
 
 		expect(document.documentElement.classList.contains('dark')).toBe(true);
+	});
+
+	test('ignores system preference change when theme is not system', () => {
+		useThemeStore.getState().setTheme('light');
+
+		mediaQueryMock.matches = true;
+		systemThemeChangeHandler();
+
+		expect(document.documentElement.classList.contains('dark')).toBe(false);
 	});
 });
