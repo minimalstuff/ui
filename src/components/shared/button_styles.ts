@@ -52,7 +52,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	},
 	success: {
 		solid:
-			'border-transparent bg-green-600 text-white enabled:hover:bg-green-700 enabled:active:bg-green-800 dark:bg-green-500 dark:enabled:hover:bg-green-600 dark:enabled:active:bg-green-700',
+			'border-transparent bg-green-700 text-white enabled:hover:bg-green-800 enabled:active:bg-green-900 dark:bg-green-500 dark:enabled:hover:bg-green-600 dark:enabled:active:bg-green-700',
 		outline:
 			'border-green-300 bg-transparent text-green-700 enabled:hover:bg-green-50 enabled:active:bg-green-100 dark:border-green-800 dark:text-green-400 dark:enabled:hover:bg-green-950/40 dark:enabled:active:bg-green-950/60',
 		ghost:

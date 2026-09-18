@@ -32,7 +32,7 @@ const VARIANT_TOKENS: Record<TabsVariant, VariantTokens> = {
 		list: 'gap-1 p-1 bg-gray-100 dark:bg-gray-800/50',
 		tab: '',
 		activeTab: 'text-gray-900 dark:text-gray-100',
-		idleTab: 'text-gray-500 dark:text-gray-400',
+		idleTab: 'text-gray-600 dark:text-gray-400',
 		idleHover: 'hover:text-gray-900 dark:hover:text-gray-100',
 		indicator: `absolute inset-0 ${CONTROL_BG} border border-gray-200 dark:border-gray-700`,
 	},
