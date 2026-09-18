@@ -12,7 +12,8 @@ import {
 	CONTROL_FOCUS_RING_ERROR_COLOR,
 } from '#components/shared/focus_styles';
 
-export interface OptionItem {
+/** One choice in a `RadioOptions` or `CheckboxOptions` list. */
+export interface ChoiceOption {
 	value: string;
 	label: string;
 	description?: string;
