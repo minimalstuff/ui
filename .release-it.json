@@ -1,6 +1,11 @@
 {
 	"hooks": {
-		"before:init": ["pnpm lint", "pnpm test", "pnpm build"]
+		"before:init": [
+			"pnpm check",
+			"pnpm test",
+			"pnpm test:stories",
+			"pnpm build"
+		]
 	},
 	"git": {
 		"requireCleanWorkingDir": true,
