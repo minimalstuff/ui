@@ -8,7 +8,7 @@ type BoundStatus = 'ok' | 'atLimit' | 'overLimit';
 function getBoundStatusClass(status: BoundStatus, unstyled: boolean): string {
 	if (unstyled) return '';
 	if (status === 'overLimit') return 'text-red-600 dark:text-red-400';
-	if (status === 'atLimit') return 'text-amber-600 dark:text-amber-400';
+	if (status === 'atLimit') return 'text-amber-700 dark:text-amber-400';
 	return '';
 }
 

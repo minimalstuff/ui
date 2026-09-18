@@ -24,7 +24,7 @@ describe('CharacterCount', () => {
 
 	test('flags the max label amber at the max boundary', () => {
 		render(<CharacterCount current={20} max={20} />);
-		expect(screen.getByText('20/20')).toHaveClass('text-amber-600');
+		expect(screen.getByText('20/20')).toHaveClass('text-amber-700');
 	});
 
 	test('flags the max label red past the max boundary', () => {
@@ -34,13 +34,13 @@ describe('CharacterCount', () => {
 
 	test('flags the min label amber at the min boundary', () => {
 		render(<CharacterCount current={5} min={5} />);
-		expect(screen.getByText('5 (min 5)')).toHaveClass('text-amber-600');
+		expect(screen.getByText('5 (min 5)')).toHaveClass('text-amber-700');
 	});
 
 	test('does not flag counts within bounds', () => {
 		render(<CharacterCount current={10} max={20} />);
 		const count = screen.getByText('10/20');
-		expect(count).not.toHaveClass('text-amber-600');
+		expect(count).not.toHaveClass('text-amber-700');
 		expect(count).not.toHaveClass('text-red-600');
 	});
 
