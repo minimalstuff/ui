@@ -13,6 +13,7 @@ import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
 import { Combobox } from '#components/combobox/combobox';
 import { ModalFooter } from '#components/modal/modal_footer';
+import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal, type ModalProps } from '#components/modal/modal';
 import { RadioOptions } from '#components/radio_options/radio_options';
 import {
@@ -370,6 +371,17 @@ export const LongForm: Story = {
 	},
 };
 
+function DeleteConfirmationContent() {
+	const handleDeleteClick = () => {
+		void ConfirmModal.call({
+			title: 'Delete item?',
+			children: 'This action cannot be undone.',
+		});
+	};
+
+	return <Button onClick={handleDeleteClick}>Delete…</Button>;
+}
+
 export const ComboboxInModal: Story = {
 	args: {
 		title: 'Pick a fruit',
@@ -418,6 +430,40 @@ export const ComboboxInModal: Story = {
 			await userEvent.keyboard('{Escape}');
 			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
 			await expectFocusOn(trigger);
+		});
+	},
+};
+
+export const StackedModals: Story = {
+	args: {
+		title: 'Manage item',
+		children: <DeleteConfirmationContent />,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('open the modal and trigger the confirm modal', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Manage item' });
+			await userEvent.click(body.getByRole('button', { name: 'Delete…' }));
+			await body.findByRole('alertdialog');
+		});
+
+		await step('Escape closes only the alertdialog', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+			await waitPastModalExitAnimation();
+			await expect(
+				body.getByRole('dialog', { name: 'Manage item' })
+			).toBeInTheDocument();
+			await expectFocusOn(body.getByRole('button', { name: 'Delete…' }));
+		});
+
+		await step('Escape closes the remaining dialog', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
 		});
 	},
 };
