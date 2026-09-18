@@ -1,15 +1,23 @@
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import {
+	type ReactNode,
+	type RefObject,
+	useEffect,
+	useId,
+	useRef,
+	useState,
+} from 'react';
 
 import { IconButton } from '#components/icon_button/icon_button';
+import { getTabbableElements } from '#components/shared/tabbable';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
-const FOCUSABLE_SELECTOR =
-	'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+type ModalRole = 'dialog' | 'alertdialog';
 
 interface ModalShellProps {
 	isEnded: boolean;
@@ -22,6 +30,10 @@ interface ModalShellProps {
 	className?: string;
 	dismissible?: boolean;
 	closeLabel?: string;
+	/** `alertdialog` is described by its body content, so this sets `aria-describedby` to the content wrapper's id when there are children. */
+	role?: ModalRole;
+	/** Wins over the first-tabbable rule for where focus lands on open, once it holds an element. */
+	initialFocusRef?: RefObject<HTMLElement | null>;
 }
 
 const SIZE_CLASSES = {
@@ -42,12 +54,21 @@ export function ModalShell({
 	className,
 	dismissible = true,
 	closeLabel = 'Close',
+	role = 'dialog',
+	initialFocusRef,
 }: Readonly<ModalShellProps>) {
 	const [isOpening, setIsOpening] = useState(false);
+	const [modalToken] = useState(() => Symbol('modal'));
 	const dialogRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 	const titleId = useId();
+	const contentId = useId();
+
+	useEffect(() => {
+		if (isEnded) return;
+		return registerModal(modalToken);
+	}, [isEnded, modalToken]);
 
 	useEffect(() => {
 		document.body.style.overflow = 'hidden';
@@ -55,9 +76,9 @@ export function ModalShell({
 
 		const dialog = dialogRef.current;
 		const firstFocusable =
-			contentRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ??
-			dialog?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-		(firstFocusable ?? dialog)?.focus();
+			(contentRef.current && getTabbableElements(contentRef.current)[0]) ??
+			(dialog && getTabbableElements(dialog)[0]);
+		(initialFocusRef?.current ?? firstFocusable ?? dialog)?.focus();
 
 		const frameId = requestAnimationFrame(() => {
 			requestAnimationFrame(() => setIsOpening(true));
@@ -67,6 +88,7 @@ export function ModalShell({
 			cancelAnimationFrame(frameId);
 			document.body.style.overflow = '';
 		};
+		// oxlint-disable-next-line react-hooks/exhaustive-deps -- initial focus is only computed once, on mount; a later change to initialFocusRef shouldn't re-run it
 	}, []);
 
 	useEffect(() => {
@@ -76,40 +98,62 @@ export function ModalShell({
 	useEffect(() => {
 		if (isEnded) return;
 
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (!isTopmostModal(modalToken)) return;
+
+			if (event.key === 'Escape') {
+				if (event.defaultPrevented) return;
+				event.preventDefault();
 				if (dismissible) onDismiss();
 				return;
 			}
-			if (e.key !== 'Tab') return;
+			if (event.key !== 'Tab') return;
 
 			const dialog = dialogRef.current;
 			if (!dialog) return;
 
-			const focusable = Array.from(
-				dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-			);
-			if (focusable.length === 0) return;
+			const tabbable = getTabbableElements(dialog);
+			if (tabbable.length === 0) {
+				event.preventDefault();
+				dialog.focus();
+				return;
+			}
 
-			const first = focusable[0];
-			const last = focusable[focusable.length - 1];
+			const first = tabbable[0];
+			const last = tabbable[tabbable.length - 1];
+			const activeElement = document.activeElement;
+			const activeIndex =
+				activeElement instanceof HTMLElement
+					? tabbable.indexOf(activeElement)
+					: -1;
 
-			if (e.shiftKey && document.activeElement === first) {
-				e.preventDefault();
+			// Not (any longer) one of the dialog's tabbable elements — e.g. focus
+			// is outside the dialog, or it sat on a control that just became
+			// disabled. Either way, put it back inside the trap.
+			if (activeIndex === -1) {
+				event.preventDefault();
+				(event.shiftKey ? last : first).focus();
+				return;
+			}
+
+			if (event.shiftKey && activeElement === first) {
+				event.preventDefault();
 				last.focus();
-			} else if (!e.shiftKey && document.activeElement === last) {
-				e.preventDefault();
+			} else if (!event.shiftKey && activeElement === last) {
+				event.preventDefault();
 				first.focus();
 			}
 		};
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isEnded, onDismiss, dismissible]);
+	}, [isEnded, onDismiss, dismissible, modalToken]);
 
 	const handleBackdropClick = () => {
 		if (!isEnded && dismissible) onDismiss();
 	};
+
+	const hasDescribedByContent = role === 'alertdialog' && Boolean(children);
 
 	const isVisible = isOpening && !isEnded;
 
@@ -133,9 +177,10 @@ export function ModalShell({
 			/>
 			<div
 				ref={dialogRef}
-				role="dialog"
+				role={role}
 				aria-modal="true"
 				aria-labelledby={title ? titleId : undefined}
+				aria-describedby={hasDescribedByContent ? contentId : undefined}
 				tabIndex={-1}
 				className={clsx(
 					'relative w-full',
@@ -175,6 +220,7 @@ export function ModalShell({
 				)}
 				<div
 					ref={contentRef}
+					id={hasDescribedByContent ? contentId : undefined}
 					className={clsx(
 						'flex-1 overflow-y-auto px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
 						!title && 'pt-6',
