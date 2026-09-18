@@ -9,7 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci-and-publish:
+  verify:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,12 +35,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Test
-        run: pnpm run test
 
       - name: Build
         run: pnpm run build
