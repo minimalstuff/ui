@@ -99,6 +99,7 @@ export function Tooltip({
 				offset(OFFSET_FROM_TRIGGER),
 				flip(),
 				shift({ padding: FLOATING_VIEWPORT_PADDING }),
+				// oxlint-disable-next-line react/refs -- floating-ui's arrow middleware takes the ref object by design and reads .current at positioning time, not during render
 				arrow({ element: arrowRef }),
 			],
 		});
@@ -160,7 +161,8 @@ export function Tooltip({
 	};
 
 	const trigger = isValidElement<TriggerProps>(children)
-		? cloneElement(children, triggerProps)
+		? // oxlint-disable-next-line react/refs -- triggerProps.onClick reaches temporaryTimeoutRef.current only when the handler fires, never during render
+			cloneElement(children, triggerProps)
 		: children;
 
 	const arrowX = middlewareData.arrow?.x;

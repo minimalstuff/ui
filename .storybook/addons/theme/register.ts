@@ -17,10 +17,6 @@ function ThemeTool() {
 	const [preference, setPreference] =
 		React.useState<ThemePreference>(getThemePreference);
 
-	React.useEffect(() => {
-		setPreference(getThemePreference());
-	}, []);
-
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value as ThemePreference;
 		window.localStorage.setItem(THEME_STORAGE_KEY, value);
