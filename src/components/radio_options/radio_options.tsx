@@ -74,7 +74,6 @@ export function RadioOptions({
 			className={clsx('m-0 border-0 p-0', wrapperClassName)}
 			disabled={disabled}
 			aria-describedby={error ? errorId : undefined}
-			aria-required={required}
 			{...props}
 		>
 			{label && (
