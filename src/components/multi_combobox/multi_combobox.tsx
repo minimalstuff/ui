@@ -149,7 +149,7 @@ export function MultiCombobox({
 	formatOverflowCount = (hiddenCount) => `+${hiddenCount} more`,
 	formatSelectedCount = (selectedCount) => `${selectedCount} selected`,
 	formatMaxSelectedHint = (max) => `You can select up to ${max} items`,
-	radius = 'md',
+	radius = 'sm',
 	unstyled = false,
 	disabled = false,
 	required = false,

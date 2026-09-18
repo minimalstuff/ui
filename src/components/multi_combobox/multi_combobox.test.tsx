@@ -220,6 +220,14 @@ describe('MultiCombobox', () => {
 		).not.toHaveTextContent('Option B');
 	});
 
+	test('should use a small radius by default', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+
+		expect(screen.getByRole('combobox', { name: 'Fruits' })).toHaveClass(
+			'rounded-sm'
+		);
+	});
+
 	test('caps the dropdown panel radius so a full radius keeps its box', () => {
 		render(<MultiCombobox label="Fruits" options={OPTIONS} radius="full" />);
 		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));

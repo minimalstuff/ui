@@ -153,10 +153,10 @@ export const Radius: Story = {
 				radius="none"
 			/>
 			<MultiCombobox
-				label="sm"
+				label="md"
 				options={defaultOptions}
 				placeholder="Select fruits..."
-				radius="sm"
+				radius="md"
 			/>
 			<MultiCombobox
 				label="lg"
