@@ -92,7 +92,7 @@ export type { SelectOption } from './select/select';
 export { Switch, type SwitchProps } from './switch/switch';
 export { Tabs, type TabsProps } from './tabs/tabs';
 export type { TabItem } from './tabs/tabs';
-export type { TabsVariant } from './tabs/tabs_styles';
+export type { TabsVariant } from '#components/tabs/tabs_styles';
 export { Textarea, type TextareaProps } from './textarea/textarea';
 export {
 	ThemeToggle,
