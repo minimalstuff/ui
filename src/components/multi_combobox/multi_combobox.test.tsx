@@ -19,6 +19,13 @@ describe('MultiCombobox', () => {
 		).toBeInTheDocument();
 	});
 
+	test('should name the combobox from aria-label when no label is given', () => {
+		render(<MultiCombobox aria-label="Fruits" options={OPTIONS} />);
+		expect(
+			screen.getByRole('combobox', { name: 'Fruits' })
+		).toBeInTheDocument();
+	});
+
 	test('opens the dropdown and lists every option', () => {
 		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
 		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));

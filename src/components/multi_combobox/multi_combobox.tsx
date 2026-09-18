@@ -44,6 +44,7 @@ export interface MultiComboboxOption {
 export interface MultiComboboxProps {
 	options: readonly MultiComboboxOption[];
 	label?: string | ReactNode;
+	'aria-label'?: string;
 	error?: string;
 	placeholder?: string;
 	searchPlaceholder?: string;
@@ -135,6 +136,7 @@ const PILL_CLASSES =
 export function MultiCombobox({
 	options,
 	label,
+	'aria-label': ariaLabel,
 	error,
 	placeholder,
 	searchPlaceholder = 'Search',
@@ -321,6 +323,7 @@ export function MultiCombobox({
 					aria-invalid={!!error}
 					aria-describedby={error ? errorId : undefined}
 					aria-labelledby={typeof label === 'string' ? labelId : undefined}
+					aria-label={ariaLabel}
 					aria-activedescendant={activeOptionId}
 					onClick={handleTriggerClick}
 					onKeyDown={handleKeyDown}
