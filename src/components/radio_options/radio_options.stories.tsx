@@ -272,7 +272,9 @@ export const Controlled: Story = {
 					value={val}
 					onChange={setVal}
 				/>
-				<p className="text-sm text-gray-500">Selected: {val}</p>
+				<p className="text-sm text-gray-500 dark:text-gray-400">
+					Selected: {val}
+				</p>
 			</div>
 		);
 	},

@@ -127,6 +127,6 @@ export const Unstyled: Story = {
 		current: 25,
 		max: 20,
 		unstyled: true,
-		className: 'text-purple-600',
+		className: 'text-purple-600 dark:text-purple-400',
 	},
 };

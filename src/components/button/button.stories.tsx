@@ -128,13 +128,13 @@ export const VariantColorMatrix: Story = {
 		<div className="flex flex-col gap-3">
 			{(['solid', 'outline', 'ghost', 'subtle'] as const).map((variant) => (
 				<div key={variant} className="flex flex-wrap items-center gap-3">
-					{(['primary', 'neutral', 'danger', 'success'] as const).map(
-						(color) => (
-							<Button key={color} variant={variant} color={color} size="sm">
-								{variant} / {color}
-							</Button>
-						)
-					)}
+					{(
+						['primary', 'neutral', 'danger', 'success', 'warning'] as const
+					).map((color) => (
+						<Button key={color} variant={variant} color={color} size="sm">
+							{variant} / {color}
+						</Button>
+					))}
 				</div>
 			))}
 		</div>

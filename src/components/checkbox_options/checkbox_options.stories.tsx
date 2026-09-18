@@ -245,7 +245,7 @@ export const Controlled: Story = {
 					values={selectedValues}
 					onChange={setSelectedValues}
 				/>
-				<p className="text-sm text-gray-500">
+				<p className="text-sm text-gray-500 dark:text-gray-400">
 					Selected: {selectedValues.join(', ') || 'none'}
 				</p>
 			</div>
