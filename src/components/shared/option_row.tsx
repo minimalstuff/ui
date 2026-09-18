@@ -5,11 +5,11 @@ import { type Radius } from '#components/shared/radius';
 import { FIELD_DESCRIPTION_TEXT } from '#components/shared/field_styles';
 import {
 	optionCardClasses,
-	type OptionItem,
+	type ChoiceOption,
 } from '#components/shared/option_card_styles';
 
 interface OptionRowProps {
-	item: OptionItem;
+	item: ChoiceOption;
 	htmlFor: string;
 	descriptionId: string;
 	orientation: 'vertical' | 'horizontal';

@@ -33,6 +33,7 @@ export {
 	type CheckboxOptionsProps,
 } from './checkbox_options/checkbox_options';
 export type { CheckboxOption } from './checkbox_options/checkbox_options';
+export type { ChoiceOption } from '#components/shared/option_card_styles';
 export { ClientOnly, type ClientOnlyProps } from './client_only/client_only';
 export { Combobox, type ComboboxProps } from './combobox/combobox';
 export type { ComboboxOption } from './combobox/combobox';

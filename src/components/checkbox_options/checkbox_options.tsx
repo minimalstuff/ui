@@ -4,7 +4,7 @@ import { type ComponentPropsWithRef } from 'react';
 import { type Radius } from '#components/shared/radius';
 import { FieldError } from '#components/shared/field_error';
 import { useFieldIds } from '#components/shared/use_field_ids';
-import { type OptionItem } from '#components/shared/option_card_styles';
+import { type ChoiceOption } from '#components/shared/option_card_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { CheckboxOptionRow } from '#components/checkbox_options/checkbox_option_row';
 import {
@@ -12,7 +12,7 @@ import {
 	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
 
-export type CheckboxOption = OptionItem;
+export type CheckboxOption = ChoiceOption;
 
 export interface CheckboxOptionsProps extends Omit<
 	ComponentPropsWithRef<'fieldset'>,
