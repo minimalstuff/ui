@@ -46,14 +46,18 @@ export function themeSyncDecorator(
 	context: { globals: { theme?: ThemePreference } }
 ): React.ReactElement {
 	const globalTheme = context.globals.theme;
-	if (
-		globalTheme &&
-		['light', 'dark', 'system'].includes(globalTheme) &&
-		typeof window !== 'undefined' &&
-		window.localStorage.getItem(THEME_STORAGE_KEY) !== globalTheme
-	) {
-		window.localStorage.setItem(THEME_STORAGE_KEY, globalTheme);
+	if (!globalTheme) return Story();
+	if (!['light', 'dark', 'system'].includes(globalTheme)) return Story();
+	if (typeof window === 'undefined') return Story();
+
+	const storedPreference = window.localStorage.getItem(THEME_STORAGE_KEY);
+	window.localStorage.setItem(THEME_STORAGE_KEY, globalTheme);
+
+	const wasGenuineThemeSwitch =
+		storedPreference !== null && storedPreference !== globalTheme;
+	if (wasGenuineThemeSwitch) {
 		window.top?.location?.reload();
 	}
+
 	return Story();
 }
