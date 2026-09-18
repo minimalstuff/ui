@@ -127,4 +127,38 @@ describe('CheckboxOptions', () => {
 		const errorMessage = screen.getByRole('alert');
 		expect(fieldset).toHaveAttribute('aria-describedby', errorMessage.id);
 	});
+
+	test('should announce the group as required to assistive technology when required', () => {
+		render(<CheckboxOptions options={OPTIONS} label="Consent" required />);
+		expect(
+			screen.getByRole('group', { name: 'Consent (required)' })
+		).toBeInTheDocument();
+	});
+
+	test('should use a custom required label when provided', () => {
+		render(
+			<CheckboxOptions
+				options={OPTIONS}
+				label="Consent"
+				required
+				requiredLabel="obligatoire"
+			/>
+		);
+		expect(
+			screen.getByRole('group', { name: 'Consent (obligatoire)' })
+		).toBeInTheDocument();
+	});
+
+	test('should not announce required when not required', () => {
+		render(<CheckboxOptions options={OPTIONS} label="Consent" />);
+		expect(screen.getByRole('group', { name: 'Consent' })).toBeInTheDocument();
+	});
+
+	test('should hide the visual required mark from assistive technology', () => {
+		const { container } = render(
+			<CheckboxOptions options={OPTIONS} label="Consent" required />
+		);
+		const requiredMark = container.querySelector('legend > span');
+		expect(requiredMark).toHaveAttribute('aria-hidden', 'true');
+	});
 });

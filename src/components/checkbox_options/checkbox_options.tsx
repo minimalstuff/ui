@@ -27,6 +27,7 @@ export interface CheckboxOptionsProps extends Omit<
 	label?: string | React.ReactNode;
 	error?: string;
 	required?: boolean;
+	requiredLabel?: string;
 	radius?: Radius;
 	unstyled?: boolean;
 	className?: string;
@@ -63,6 +64,7 @@ export function CheckboxOptions({
 	label,
 	error,
 	required,
+	requiredLabel = 'required',
 	disabled,
 	radius = 'lg',
 	unstyled = false,
@@ -103,7 +105,14 @@ export function CheckboxOptions({
 			{label && (
 				<legend className={clsx(FIELD_LABEL_TEXT, 'mb-2')}>
 					{label}
-					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+					{required && (
+						<>
+							<span className={FIELD_REQUIRED_MARK} aria-hidden="true">
+								*
+							</span>
+							<span className="sr-only">{` (${requiredLabel})`}</span>
+						</>
+					)}
 				</legend>
 			)}
 
