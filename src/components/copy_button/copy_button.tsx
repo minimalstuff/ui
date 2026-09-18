@@ -37,5 +37,6 @@ export function CopyButton({
 		}
 	};
 
+	// oxlint-disable-next-line react/refs -- copy is an event handler passed to a render prop; it reads timeoutRef.current only when invoked, never during render
 	return <>{children({ copied, copy })}</>;
 }
