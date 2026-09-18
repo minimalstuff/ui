@@ -29,6 +29,15 @@ function teardownGlobalModalRoot(): void {
 	globalRootContainer = null;
 }
 
+/**
+ * Tears down the global modal root so the next story starts with no modal
+ * open. The decorator lazily recreates it (see `ensureGlobalModalRoot`), so
+ * this is safe to call before every test.
+ */
+export function resetGlobalModalRoot(): void {
+	teardownGlobalModalRoot();
+}
+
 export const modalRootDecorator: Decorator = (Story, context) => {
 	if (context.parameters.skipGlobalModalRoot) {
 		teardownGlobalModalRoot();
