@@ -34,7 +34,7 @@ export const Kbd = ({
 			SIZE_CLASSES[size],
 			!unstyled && [
 				'border font-semibold uppercase',
-				'text-gray-600 dark:text-gray-400',
+				'text-gray-600 dark:text-gray-300',
 				'bg-gray-100 dark:bg-gray-700',
 				'border-gray-200 dark:border-gray-600',
 				RADIUS_CLASSES[radius],

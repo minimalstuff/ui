@@ -19,7 +19,7 @@ interface ButtonColorTokens {
 export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	primary: {
 		solid:
-			'border-transparent bg-blue-600 text-white enabled:hover:bg-blue-700 enabled:active:bg-blue-800 dark:bg-blue-500 dark:enabled:hover:bg-blue-600 dark:enabled:active:bg-blue-700',
+			'border-transparent bg-blue-600 text-white enabled:hover:bg-blue-700 enabled:active:bg-blue-800',
 		outline:
 			'border-blue-300 bg-transparent text-blue-700 enabled:hover:bg-blue-50 enabled:active:bg-blue-100 dark:border-blue-800 dark:text-blue-400 dark:enabled:hover:bg-blue-950/40 dark:enabled:active:bg-blue-950/60',
 		ghost:
@@ -41,7 +41,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	},
 	danger: {
 		solid:
-			'border-transparent bg-red-600 text-white enabled:hover:bg-red-700 enabled:active:bg-red-800 dark:bg-red-500 dark:enabled:hover:bg-red-600 dark:enabled:active:bg-red-700',
+			'border-transparent bg-red-600 text-white enabled:hover:bg-red-700 enabled:active:bg-red-800',
 		outline:
 			'border-red-300 bg-transparent text-red-700 enabled:hover:bg-red-50 enabled:active:bg-red-100 dark:border-red-800 dark:text-red-400 dark:enabled:hover:bg-red-950/40 dark:enabled:active:bg-red-950/60',
 		ghost:
@@ -52,7 +52,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	},
 	success: {
 		solid:
-			'border-transparent bg-green-700 text-white enabled:hover:bg-green-800 enabled:active:bg-green-900 dark:bg-green-500 dark:enabled:hover:bg-green-600 dark:enabled:active:bg-green-700',
+			'border-transparent bg-green-700 text-white enabled:hover:bg-green-800 enabled:active:bg-green-900',
 		outline:
 			'border-green-300 bg-transparent text-green-700 enabled:hover:bg-green-50 enabled:active:bg-green-100 dark:border-green-800 dark:text-green-400 dark:enabled:hover:bg-green-950/40 dark:enabled:active:bg-green-950/60',
 		ghost:
@@ -63,7 +63,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	},
 	warning: {
 		solid:
-			'border-transparent bg-yellow-600 text-white enabled:hover:bg-yellow-700 enabled:active:bg-yellow-800 dark:bg-yellow-500 dark:enabled:hover:bg-yellow-600 dark:enabled:active:bg-yellow-700',
+			'border-transparent bg-yellow-700 text-white enabled:hover:bg-yellow-800 enabled:active:bg-yellow-900',
 		outline:
 			'border-yellow-300 bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:border-yellow-800 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
 		ghost:
