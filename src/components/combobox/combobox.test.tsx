@@ -156,6 +156,11 @@ describe('Combobox', () => {
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
 	});
 
+	test('should name the combobox from aria-label when no label is given', () => {
+		render(<Combobox aria-label="Fruit" options={OPTIONS} />);
+		expect(screen.getByRole('combobox', { name: 'Fruit' })).toBeInTheDocument();
+	});
+
 	test('accepts a custom clear label', () => {
 		render(
 			<Combobox
