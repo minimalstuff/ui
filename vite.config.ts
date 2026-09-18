@@ -11,6 +11,10 @@ const dirname = import.meta.dirname;
 
 const isLibBuild = process.env.VITE_BUILD_LIB === '1';
 
+const STORYBOOK_BROWSER_LAUNCH_OPTIONS = {
+	args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+};
+
 export default defineConfig({
 	plugins: [
 		UnoCSS(),
@@ -53,21 +57,32 @@ export default defineConfig({
 				test: {
 					name: 'storybook',
 					retry: 2,
+					setupFiles: [path.join(dirname, '.storybook/vitest.setup.ts')],
 					browser: {
 						enabled: true,
 						headless: true,
-						provider: playwright({
-							launchOptions: {
-								args: [
-									'--no-sandbox',
-									'--disable-setuid-sandbox',
-									'--disable-dev-shm-usage',
-								],
-							},
-						}),
 						instances: [
 							{
 								browser: 'chromium',
+								name: 'light',
+								provider: playwright({
+									launchOptions: STORYBOOK_BROWSER_LAUNCH_OPTIONS,
+									contextOptions: {
+										colorScheme: 'light',
+										reducedMotion: 'reduce',
+									},
+								}),
+							},
+							{
+								browser: 'chromium',
+								name: 'dark',
+								provider: playwright({
+									launchOptions: STORYBOOK_BROWSER_LAUNCH_OPTIONS,
+									contextOptions: {
+										colorScheme: 'dark',
+										reducedMotion: 'reduce',
+									},
+								}),
 							},
 						],
 					},

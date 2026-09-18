@@ -1,4 +1,5 @@
 import 'virtual:uno.css';
+import './dark_canvas.css';
 
 import { themes } from 'storybook/theming';
 import type { Preview } from '@storybook/react-vite';

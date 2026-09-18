@@ -1,0 +1,24 @@
+/**
+ * The library's controls sit on `dark:bg-gray-800` (see `CONTROL_BG` in
+ * `src/components/shared/surface_tokens.ts`), so the page behind them needs
+ * to be one step darker. Nothing in the app shell provides that background
+ * for us here, so the Storybook canvas has to paint it itself whenever the
+ * `dark` class is on the root element (toggled by `theme/toolbar.tsx`).
+ *
+ * `--colors-gray-900` is emitted by UnoCSS's presetWind4 theme preflight
+ * (`:root, :host { --colors-gray-900: ... }`), so this stays in sync with
+ * the same gray-900 every `dark:bg-gray-900` utility class resolves to.
+ */
+
+:root {
+	color-scheme: light;
+}
+
+:root.dark {
+	color-scheme: dark;
+	background-color: var(--colors-gray-900);
+}
+
+:root.dark body {
+	background-color: var(--colors-gray-900);
+}
