@@ -33,7 +33,7 @@
 	"scripts": {
 		"dev": "storybook dev -p 6006",
 		"build": "tsc -b && VITE_BUILD_LIB=1 vite build",
-		"lint": "oxlint .",
+		"lint": "oxlint . --deny-warnings",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
 		"preview": "vite preview --outDir storybook-static --port 6006 --host 0.0.0.0",
