@@ -48,7 +48,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {},
+	args: {
+		'aria-label': 'Enable notifications',
+	},
 };
 
 export const WithLabel: Story = {
