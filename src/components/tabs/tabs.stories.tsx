@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Tabs } from '#components/tabs/tabs';
+import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const panelText = (text: string) => (
 	<p className="text-sm text-gray-700 dark:text-gray-300">{text}</p>
@@ -82,6 +84,49 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step(
+			'Tab into the tablist focuses and selects the first tab',
+			async () => {
+				await userEvent.tab();
+				const firstTab = canvas.getByRole('tab', { name: 'Tab 1' });
+				await expectFocusOn(firstTab);
+				await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+			}
+		);
+
+		await step(
+			'ArrowRight moves focus and selection to the second tab',
+			async () => {
+				await userEvent.keyboard('{ArrowRight}');
+				const secondTab = canvas.getByRole('tab', { name: 'Tab 2' });
+				await expectFocusOn(secondTab);
+				await expect(secondTab).toHaveAttribute('aria-selected', 'true');
+				await expect(
+					canvas.getByRole('tabpanel', { name: 'Tab 2' })
+				).toBeInTheDocument();
+			}
+		);
+
+		await step('End moves focus and selection to the last tab', async () => {
+			await userEvent.keyboard('{End}');
+			const lastTab = canvas.getByRole('tab', { name: 'Tab 3' });
+			await expectFocusOn(lastTab);
+			await expect(lastTab).toHaveAttribute('aria-selected', 'true');
+		});
+
+		await step(
+			'Home moves focus and selection back to the first tab',
+			async () => {
+				await userEvent.keyboard('{Home}');
+				const firstTab = canvas.getByRole('tab', { name: 'Tab 1' });
+				await expectFocusOn(firstTab);
+				await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+			}
+		);
+	},
 };
 
 export const DefaultIndex: Story = {
