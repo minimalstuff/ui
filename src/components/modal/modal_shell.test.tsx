@@ -1,9 +1,21 @@
 import '@testing-library/jest-dom/vitest';
 
+import { useRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { ModalShell } from './modal_shell';
+
+function ModalShellWithInitialFocus() {
+	const cancelRef = useRef<HTMLButtonElement>(null);
+
+	return (
+		<ModalShell isEnded={false} onDismiss={vi.fn()} initialFocusRef={cancelRef}>
+			<button>First</button>
+			<button ref={cancelRef}>Cancel</button>
+		</ModalShell>
+	);
+}
 
 describe('ModalShell', () => {
 	test('renders the title and children', () => {
@@ -188,5 +200,155 @@ describe('ModalShell', () => {
 			</ModalShell>
 		);
 		expect(screen.getByText('Confirm')).toBeInTheDocument();
+	});
+
+	test('uses role="dialog" by default', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog')).toBeInTheDocument();
+	});
+
+	test('renders as an alertdialog when role is alertdialog', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				role="alertdialog"
+			>
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+	});
+
+	test('describes an alertdialog by its content', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				role="alertdialog"
+			>
+				Are you sure?
+			</ModalShell>
+		);
+		const dialog = screen.getByRole('alertdialog');
+		const describedById = dialog.getAttribute('aria-describedby');
+		expect(describedById).toBeTruthy();
+		expect(document.getElementById(describedById as string)).toHaveTextContent(
+			'Are you sure?'
+		);
+	});
+
+	test('does not add aria-describedby for a plain dialog', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog')).not.toHaveAttribute('aria-describedby');
+	});
+
+	test('focuses initialFocusRef instead of the first tabbable element', () => {
+		render(<ModalShellWithInitialFocus />);
+		expect(screen.getByText('Cancel')).toHaveFocus();
+	});
+
+	test('Escape does nothing when the event was already handled', () => {
+		const handleDismiss = vi.fn();
+		render(
+			<ModalShell isEnded={false} onDismiss={handleDismiss} title="Title">
+				Body
+			</ModalShell>
+		);
+
+		const event = new KeyboardEvent('keydown', {
+			key: 'Escape',
+			bubbles: true,
+			cancelable: true,
+		});
+		event.preventDefault();
+		document.dispatchEvent(event);
+
+		expect(handleDismiss).not.toHaveBeenCalled();
+	});
+
+	test('only the topmost modal responds to Escape when modals are stacked', () => {
+		const handleDismissFirst = vi.fn();
+		const handleDismissSecond = vi.fn();
+		render(
+			<>
+				<ModalShell
+					isEnded={false}
+					onDismiss={handleDismissFirst}
+					title="First"
+				>
+					Body
+				</ModalShell>
+				<ModalShell
+					isEnded={false}
+					onDismiss={handleDismissSecond}
+					title="Second"
+				>
+					Body
+				</ModalShell>
+			</>
+		);
+
+		fireEvent.keyDown(document, { key: 'Escape' });
+
+		expect(handleDismissSecond).toHaveBeenCalledTimes(1);
+		expect(handleDismissFirst).not.toHaveBeenCalled();
+	});
+
+	test('the modal beneath regains Escape handling once the topmost one ends', () => {
+		const handleDismissFirst = vi.fn();
+		const handleDismissSecond = vi.fn();
+		const { rerender } = render(
+			<>
+				<ModalShell
+					isEnded={false}
+					onDismiss={handleDismissFirst}
+					title="First"
+				>
+					Body
+				</ModalShell>
+				<ModalShell
+					isEnded={false}
+					onDismiss={handleDismissSecond}
+					title="Second"
+				>
+					Body
+				</ModalShell>
+			</>
+		);
+
+		rerender(
+			<>
+				<ModalShell
+					isEnded={false}
+					onDismiss={handleDismissFirst}
+					title="First"
+				>
+					Body
+				</ModalShell>
+				<ModalShell
+					isEnded={true}
+					onDismiss={handleDismissSecond}
+					title="Second"
+				>
+					Body
+				</ModalShell>
+			</>
+		);
+
+		fireEvent.keyDown(document, { key: 'Escape' });
+
+		expect(handleDismissFirst).toHaveBeenCalledTimes(1);
+		expect(handleDismissSecond).not.toHaveBeenCalled();
 	});
 });

@@ -1,11 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import {
+	expect,
+	userEvent,
+	waitFor,
+	waitForElementToBeRemoved,
+	within,
+} from 'storybook/test';
 
 import { Input } from '#components/input/input';
 import { Button } from '#components/button/button';
 import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
+import { Combobox } from '#components/combobox/combobox';
 import { ModalFooter } from '#components/modal/modal_footer';
 import { Modal, type ModalProps } from '#components/modal/modal';
+import { RadioOptions } from '#components/radio_options/radio_options';
+import {
+	expectFocusOn,
+	getPortalScope,
+	waitPastModalExitAnimation,
+} from '../../../.storybook/play_helpers';
 
 function ModalTrigger(props: ModalProps) {
 	const handleOpen = () => {
@@ -58,6 +72,33 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('Tab to the trigger and open it with Enter', async () => {
+			await userEvent.tab();
+			await expectFocusOn(trigger);
+			await userEvent.keyboard('{Enter}');
+		});
+
+		const dialog = await body.findByRole('dialog', { name: 'Modal title' });
+
+		await step('Tab cycles inside the dialog', async () => {
+			await userEvent.tab();
+			await expect(dialog.contains(document.activeElement)).toBe(true);
+		});
+
+		await step(
+			'Escape closes the dialog and returns focus to the trigger',
+			async () => {
+				await userEvent.keyboard('{Escape}');
+				await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+				await expectFocusOn(trigger);
+			}
+		);
+	},
 };
 
 export const WithoutTitle: Story = {
@@ -326,5 +367,91 @@ export const LongForm: Story = {
 				</ModalFooter>
 			</>
 		),
+	},
+};
+
+export const ComboboxInModal: Story = {
+	args: {
+		title: 'Pick a fruit',
+		children: (
+			<div className="space-y-4">
+				<Combobox
+					label="Fruit"
+					options={[
+						{ value: 'apple', label: 'Apple' },
+						{ value: 'banana', label: 'Banana' },
+						{ value: 'orange', label: 'Orange' },
+					]}
+				/>
+				<Input label="Notes" />
+			</div>
+		),
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('opening the modal focuses the combobox', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Pick a fruit' });
+			await expectFocusOn(body.getByRole('combobox', { name: 'Fruit' }));
+		});
+
+		await step(
+			'ArrowDown then Escape closes the listbox, not the dialog',
+			async () => {
+				await userEvent.keyboard('{ArrowDown}');
+				await body.findByRole('listbox');
+				await userEvent.keyboard('{Escape}');
+				await waitFor(async () => {
+					await expect(body.queryByRole('listbox')).not.toBeInTheDocument();
+				});
+				await waitPastModalExitAnimation();
+				await expect(
+					body.getByRole('dialog', { name: 'Pick a fruit' })
+				).toBeInTheDocument();
+			}
+		);
+
+		await step('Escape again closes the dialog', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await expectFocusOn(trigger);
+		});
+	},
+};
+
+export const RadioLast: Story = {
+	args: {
+		title: 'Choose a size',
+		children: (
+			<RadioOptions
+				label="Size"
+				options={['Small', 'Medium', 'Large']}
+				defaultValue="Medium"
+			/>
+		),
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('opening the modal focuses the checked radio', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Choose a size' });
+			await expectFocusOn(body.getByRole('radio', { name: 'Medium' }));
+		});
+
+		await step('Tab wraps back to the close button', async () => {
+			await userEvent.tab();
+			await expectFocusOn(body.getByRole('button', { name: 'Close' }));
+		});
+
+		await step('close it', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		});
 	},
 };
