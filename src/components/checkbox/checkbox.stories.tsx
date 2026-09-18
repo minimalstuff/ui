@@ -39,6 +39,11 @@ const meta = {
 			control: 'boolean',
 			description: 'Stretch the wrapper to the full width of its container',
 		},
+		variant: {
+			control: 'radio',
+			options: ['inline', 'card'],
+			description: 'Renders the checkbox as a plain inline control or a card',
+		},
 	},
 	decorators: [
 		(Story) => (
@@ -117,5 +122,30 @@ export const Controlled: Story = {
 	args: {
 		label: 'Controlled checkbox',
 		checked: true,
+	},
+};
+
+export const Card: Story = {
+	args: {
+		label: 'Email notifications',
+		description: 'Receive updates about your account activity',
+		variant: 'card',
+	},
+};
+
+export const CardChecked: Story = {
+	args: {
+		label: 'Email notifications',
+		description: 'Receive updates about your account activity',
+		variant: 'card',
+		defaultChecked: true,
+	},
+};
+
+export const CardWithError: Story = {
+	args: {
+		label: 'Accept terms and conditions',
+		variant: 'card',
+		error: 'You must accept the terms to continue',
 	},
 };

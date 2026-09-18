@@ -105,4 +105,57 @@ describe('Checkbox', () => {
 		render(<Checkbox required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
 	});
+
+	test('defaults to the inline variant when variant is omitted', () => {
+		render(<Checkbox label="Accept terms" />);
+		const label = screen.getByRole('checkbox').closest('label');
+		expect(label).not.toHaveClass('border');
+	});
+
+	test('card variant applies card chrome to the label', () => {
+		render(<Checkbox label="Accept terms" variant="card" />);
+		const label = screen.getByRole('checkbox').closest('label');
+		expect(label).toHaveClass('border');
+	});
+
+	test('card variant applies the selected styling when checked', () => {
+		render(<Checkbox label="Accept terms" variant="card" defaultChecked />);
+		const label = screen.getByRole('checkbox').closest('label');
+		expect(label).toHaveClass('border-blue-500');
+	});
+
+	test('card variant applies the error styling when there is an error', () => {
+		render(
+			<Checkbox label="Accept terms" variant="card" error="Required field" />
+		);
+		const label = screen.getByRole('checkbox').closest('label');
+		expect(label).toHaveClass('border-red-300');
+	});
+
+	test('description stays associated with the input in the card variant', () => {
+		render(
+			<Checkbox
+				label="Accept terms"
+				description="Read the fine print"
+				variant="card"
+			/>
+		);
+		const checkbox = screen.getByRole('checkbox');
+		const description = screen.getByText('Read the fine print');
+
+		expect(checkbox).toHaveAttribute('aria-describedby', description.id);
+	});
+
+	test('card variant with unstyled drops the card padding', () => {
+		render(<Checkbox label="Accept terms" variant="card" unstyled />);
+		const label = screen.getByRole('checkbox').closest('label');
+		expect(label).not.toHaveClass('px-3');
+	});
+
+	test('renders the error message in the card variant', () => {
+		render(
+			<Checkbox label="Accept terms" variant="card" error="Required field" />
+		);
+		expect(screen.getByRole('alert')).toHaveTextContent('Required field');
+	});
 });
