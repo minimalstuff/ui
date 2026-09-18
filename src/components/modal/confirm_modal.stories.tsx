@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
+import {
+	expectFocusOn,
+	getPortalScope,
+} from '../../../.storybook/play_helpers';
 import {
 	ConfirmModal,
 	type ConfirmModalProps,
@@ -66,6 +71,53 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		children: 'Modal content goes here.',
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open confirm' });
+
+		await step('open the confirm modal', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('alertdialog', { name: 'Confirm action' });
+		});
+
+		const alertDialog = body.getByRole('alertdialog');
+
+		await step('is described by its body content', async () => {
+			const describedById = alertDialog.getAttribute('aria-describedby');
+			await expect(describedById).toBeTruthy();
+			await expect(
+				document.getElementById(describedById ?? '')
+			).toHaveTextContent('Modal content goes here.');
+		});
+
+		await step('Cancel has initial focus', async () => {
+			await expectFocusOn(body.getByRole('button', { name: 'Cancel' }));
+		});
+
+		await step('Tab moves focus to Confirm', async () => {
+			await userEvent.tab();
+			await expectFocusOn(body.getByRole('button', { name: 'Confirm' }));
+		});
+
+		await step(
+			'Enter confirms; focus stays inside the alertdialog while it loads',
+			async () => {
+				await userEvent.keyboard('{Enter}');
+				await waitFor(async () => {
+					await expect(alertDialog.contains(document.activeElement)).toBe(true);
+				});
+				await userEvent.tab();
+				await expect(alertDialog.contains(document.activeElement)).toBe(true);
+			}
+		);
+
+		await step('closes once confirmed', async () => {
+			await waitFor(async () => {
+				await expect(body.queryByRole('alertdialog')).not.toBeInTheDocument();
+			});
+		});
 	},
 };
 

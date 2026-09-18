@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { createCallable } from 'react-call';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 
 import { surfaceError } from '#lib/surface_error';
 import { type Radius } from '#components/shared/radius';
@@ -82,6 +82,7 @@ export const ConfirmModal = createCallable<
 	}) => {
 		useDisableHotkeysWhileMounted();
 		const [isConfirming, setIsConfirming] = useState(false);
+		const cancelButtonRef = useRef<HTMLButtonElement>(null);
 
 		const handleCancel = () => call.end(false);
 
@@ -115,9 +116,12 @@ export const ConfirmModal = createCallable<
 				size="sm"
 				radius={radius}
 				closeLabel={closeLabel}
+				role="alertdialog"
+				initialFocusRef={cancelButtonRef}
 				footer={
 					<>
 						<Button
+							ref={cancelButtonRef}
 							variant="outline"
 							color="neutral"
 							onClick={handleCancel}

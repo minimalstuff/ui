@@ -161,4 +161,34 @@ describe('ConfirmModal', () => {
 
 		expect(await screen.findByLabelText('Fermer')).toBeInTheDocument();
 	});
+
+	test('announces itself as an alertdialog described by its body', async () => {
+		render(<ConfirmModal />);
+
+		act(() => {
+			void ConfirmModal.call({
+				title: 'Delete item?',
+				children: 'This cannot be undone.',
+			});
+		});
+		await screen.findByText('Delete item?');
+
+		const alertDialog = screen.getByRole('alertdialog');
+		const describedById = alertDialog.getAttribute('aria-describedby');
+		expect(describedById).toBeTruthy();
+		expect(document.getElementById(describedById as string)).toHaveTextContent(
+			'This cannot be undone.'
+		);
+	});
+
+	test('focuses Cancel first instead of the header close button', async () => {
+		render(<ConfirmModal />);
+
+		act(() => {
+			void ConfirmModal.call({ title: 'Delete item?' });
+		});
+		await screen.findByText('Delete item?');
+
+		expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+	});
 });
