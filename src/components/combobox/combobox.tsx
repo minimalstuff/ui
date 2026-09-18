@@ -20,6 +20,7 @@ export interface ComboboxOption {
 export interface ComboboxProps {
 	options: ComboboxOption[];
 	label?: string | ReactNode;
+	'aria-label'?: string;
 	error?: string;
 	placeholder?: string;
 	noResultsText?: string;
@@ -39,6 +40,7 @@ export interface ComboboxProps {
 export function Combobox({
 	options,
 	label,
+	'aria-label': ariaLabel,
 	error,
 	placeholder,
 	noResultsText = 'No results found',
@@ -186,6 +188,7 @@ export function Combobox({
 					aria-expanded={isOpen}
 					aria-controls={listboxId}
 					aria-autocomplete="list"
+					aria-label={ariaLabel}
 					aria-activedescendant={activeOptionId}
 					aria-invalid={!!error}
 					aria-describedby={error ? errorId : undefined}
