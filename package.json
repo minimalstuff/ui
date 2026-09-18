@@ -32,7 +32,7 @@
 	},
 	"scripts": {
 		"dev": "storybook dev -p 6006",
-		"build": "tsc -b && VITE_BUILD_LIB=1 vite build",
+		"build": "tsc -b && VITE_BUILD_LIB=1 vite build && node scripts/verify_bundled_types.ts",
 		"lint": "oxlint . --deny-warnings",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
