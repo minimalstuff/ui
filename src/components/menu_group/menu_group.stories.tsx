@@ -36,7 +36,11 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div className="w-48 rounded-md border border-gray-200 py-1 shadow-sm dark:border-gray-700">
+			<div
+				className="w-48 rounded-md border border-gray-200 py-1 shadow-sm dark:border-gray-700"
+				role="menu"
+				aria-label="Actions"
+			>
 				<Story />
 			</div>
 		),
