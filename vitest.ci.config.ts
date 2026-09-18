@@ -12,7 +12,7 @@ export default defineConfig({
 		},
 	},
 	test: {
-		include: ['src/**/*.test.{ts,tsx}'],
+		include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
 		environment: 'happy-dom',
 		globals: true,
 		setupFiles: ['./vitest.setup.ci.ts'],
