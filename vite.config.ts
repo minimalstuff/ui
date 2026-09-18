@@ -3,15 +3,11 @@ import UnoCSS from 'unocss/vite';
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'node:url';
 import { playwright } from '@vitest/browser-playwright';
 /// <reference types="vitest/config" />
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 
-const dirname =
-	typeof __dirname !== 'undefined'
-		? __dirname
-		: path.dirname(fileURLToPath(import.meta.url));
+const dirname = import.meta.dirname;
 
 const isLibBuild = process.env.VITE_BUILD_LIB === '1';
 
@@ -75,7 +71,6 @@ export default defineConfig({
 							},
 						],
 					},
-					setupFiles: ['.storybook/vitest.setup.ts'],
 				},
 			},
 		],
