@@ -1,5 +1,63 @@
 # Changelog
 
+## [4.0.0](https://github.com/minimalstuff/ui/compare/3.2.0...4.0.0) (2026-09-19)
+
+### ⚠ BREAKING CHANGES
+
+* **checkbox,switch:** the wrapper no longer stretches by default. Both
+  components shrink to their content unless `fullWidth` is set, so
+  layouts that relied on the implicit full width must pass it explicitly.
+* **combobox:** the dropdown no longer opens when the input receives focus.
+  It opens on typing, on `ArrowDown`/`ArrowUp` and on click, as the ARIA
+  authoring practices describe. Tabbing through a form no longer opens every
+  combobox on the way. No API change.
+* **focus:** keyboard focus indicators changed on purpose. The active menu
+  item and the active listbox option now carry a 2px inner outline on top of
+  their background, the tab panel and the combobox clear buttons gained an
+  outline, and the focus ring of option cards, Checkbox and Switch now shows
+  on keyboard focus only instead of on mouse click too. Several focus outline
+  and text colors were darkened to meet WCAG contrast. Visual change only; no
+  API change.
+
+### Features
+
+* **checkbox-options:** add a card-style multi-select group ([be14abe](https://github.com/minimalstuff/ui/commit/be14abef9102a195165e7db963ab36abcf1398de))
+* **checkbox,switch:** make the wrapper width opt-in ([ba4ae6a](https://github.com/minimalstuff/ui/commit/ba4ae6a7de6fc05b911a216d9bcf3bcff1c90995))
+* **checkbox:** add a card variant ([9befe98](https://github.com/minimalstuff/ui/commit/9befe9831cf72370b7e71e66433e58478b178c1b))
+* **combobox:** accept aria-label to name the input without a visible label ([4de1cd3](https://github.com/minimalstuff/ui/commit/4de1cd35abd8bb49146976074dda5b974d9fe9df))
+* **components:** export ChoiceOption shared by RadioOption and CheckboxOption ([6d58e7f](https://github.com/minimalstuff/ui/commit/6d58e7f859c4623d297d6edab2cd055e788a2db8))
+* **context-menu:** add aria-label and document keyboard access ([496b90b](https://github.com/minimalstuff/ui/commit/496b90beb418243efcf7cb55a719f8521b3f14f7))
+* **modal:** add aria-label for modals without a title ([733c8c8](https://github.com/minimalstuff/ui/commit/733c8c848f713c9fad11fd0d9c2f9b4f8a73d4e4))
+* **multi-combobox:** accept aria-label to name the trigger without a visible label ([ec2d0d0](https://github.com/minimalstuff/ui/commit/ec2d0d045bb4d40f7da7e17d528211fa25cb13c1))
+* **multi-combobox:** add searchable multi-select combobox ([abc30fb](https://github.com/minimalstuff/ui/commit/abc30fb84c25e99f88fe0a8f9af4822ee61ad7df))
+* **multi-combobox:** default radius to sm ([25ccb37](https://github.com/minimalstuff/ui/commit/25ccb374f24d6996c2d258466af1abc9e879621b))
+* **tabs:** redesign with line and segmented variants ([0f6d98c](https://github.com/minimalstuff/ui/commit/0f6d98c7cbe7d7d329ede7ad0c5a07d7a9354c99))
+
+### Bug Fixes
+
+* **a11y:** meet contrast for solid buttons in dark mode and warning, and dark kbd text ([30e723c](https://github.com/minimalstuff/ui/commit/30e723c5086606345d70912f396688f848951544))
+* **a11y:** raise light-mode contrast of low-contrast color tokens ([ee16ce3](https://github.com/minimalstuff/ui/commit/ee16ce3c6bdb0f520c8072a82acaf1de47c6583f))
+* **button:** raise focus outline contrast for neutral, success and warning ([b644254](https://github.com/minimalstuff/ui/commit/b6442540655bd92682345d3f23a909da3844001b))
+* **checkbox-options:** announce required groups to screen readers ([ef47cdb](https://github.com/minimalstuff/ui/commit/ef47cdb4582d926d91b439a60468590f409cd1dc))
+* **combobox:** stop opening on focus and fix keyboard and screen reader support ([8823a1a](https://github.com/minimalstuff/ui/commit/8823a1a3156e4550ae1e070e185ef52ecc2f8e1f))
+* **confirm-modal:** announce as an alertdialog and focus Cancel first ([5d256c0](https://github.com/minimalstuff/ui/commit/5d256c00a7130fb33016f8232e936c783c4ee2b0))
+* **field:** hide the required mark from the accessible name ([9af741d](https://github.com/minimalstuff/ui/commit/9af741d1ca9abc682a4a82c35aaf6c9ee41c559a))
+* **fields:** merge the caller's aria-describedby with the error and description ids ([ed7c15e](https://github.com/minimalstuff/ui/commit/ed7c15ef4d668ed350742255cd97e55d86fe006e))
+* **focus:** outline the active menu item, listbox option and clear buttons ([c637299](https://github.com/minimalstuff/ui/commit/c637299fe1e1033fb44b9dd3c255badfaa15b0ea))
+* **focus:** show the control focus ring on keyboard focus only ([5dae512](https://github.com/minimalstuff/ui/commit/5dae5129d069ee0500428afcfdff2c5c0298230b))
+* **input, textarea:** merge the caller's aria-describedby and link the character count ([c4bde91](https://github.com/minimalstuff/ui/commit/c4bde91823bde7b01dbc969253b89e8e7f88353f))
+* **menu-item:** meet text contrast for danger items ([a3b0b03](https://github.com/minimalstuff/ui/commit/a3b0b032cdf2fd2fcb34bef0550e5d32cd557a22))
+* **menu:** name the menu and add arrow-key opening, typeahead and nested Escape handling ([844486b](https://github.com/minimalstuff/ui/commit/844486b5c77eb904e39f43835420f4f3c300d038))
+* **modal:** scope Escape and the focus trap to the topmost modal ([6841eaa](https://github.com/minimalstuff/ui/commit/6841eaaf2e8a4f678eea582cfd7e4e13be17899e))
+* **multi-combobox:** fire onDropdownClose when clearing from the closed trigger ([8d3acc3](https://github.com/minimalstuff/ui/commit/8d3acc36715a424f8180d0c4506e8b57cd0a2430))
+* **multi-combobox:** fix keyboard focus and screen reader support ([63a436c](https://github.com/minimalstuff/ui/commit/63a436ca9466d682add7d8e7ddeec4e3fced4315))
+* **radio-options,checkbox-options:** drop invalid aria-required from fieldset ([b851832](https://github.com/minimalstuff/ui/commit/b851832375e77cf509e1beff7649c0ba0e6042c7))
+* **storybook:** stop the theme decorator reloading the page during render ([327a85d](https://github.com/minimalstuff/ui/commit/327a85d74ed52e0e7d5e5bb709a15a1c69fbb59d))
+* **tabs:** keep the tablist reachable when the active tab is disabled and drop dangling aria-controls ([5135b2b](https://github.com/minimalstuff/ui/commit/5135b2bbbcf1303d194da07589b62646e35aec3f))
+* **tabs:** show a focus outline on the tab panel ([e33d05e](https://github.com/minimalstuff/ui/commit/e33d05ea857dd6e71e85aa7a7d5988046f4a4116))
+* **tooltip:** dismiss on Escape, keep the trigger's description and announce temporary content ([90ec3a4](https://github.com/minimalstuff/ui/commit/90ec3a401acc073c29665547442ee97963037892))
+* **types:** export TabsVariant and Theme through their alias path to avoid duplicate declarations ([5249401](https://github.com/minimalstuff/ui/commit/5249401a4f2c92b010de7540c8aec768b59fc694))
+
 ## [3.2.0](https://github.com/minimalstuff/ui/compare/3.1.0...3.2.0) (2026-08-14)
 
 ### Features
