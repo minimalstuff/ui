@@ -16,9 +16,15 @@ describe('Combobox', () => {
 		expect(screen.getByLabelText('Country')).toBeInTheDocument();
 	});
 
-	test('shows all options on focus', () => {
+	test('does not open the listbox on focus', () => {
 		render(<Combobox label="Country" options={OPTIONS} />);
 		fireEvent.focus(screen.getByLabelText('Country'));
+		expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+	});
+
+	test('opens the listbox when clicked', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		fireEvent.click(screen.getByLabelText('Country'));
 		expect(
 			screen.getByRole('option', { name: 'Option A' })
 		).toBeInTheDocument();
@@ -30,7 +36,7 @@ describe('Combobox', () => {
 	test('filters options as the user types', () => {
 		render(<Combobox label="Country" options={OPTIONS} />);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		fireEvent.change(input, { target: { value: 'B' } });
 
 		expect(
@@ -44,10 +50,21 @@ describe('Combobox', () => {
 	test('shows noResultsText when nothing matches', () => {
 		render(<Combobox label="Country" options={OPTIONS} noResultsText="Nada" />);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		fireEvent.change(input, { target: { value: 'zzz' } });
 
 		expect(screen.getByText('Nada')).toBeInTheDocument();
+	});
+
+	test('renders "No results" in a status region, not inside the listbox', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.click(input);
+		fireEvent.change(input, { target: { value: 'zzz' } });
+
+		const status = screen.getByRole('status');
+		expect(status).toHaveTextContent('No results found');
+		expect(screen.queryByRole('option')).not.toBeInTheDocument();
 	});
 
 	test('calls onChange with the value when an option is clicked', () => {
@@ -56,7 +73,7 @@ describe('Combobox', () => {
 			<Combobox label="Country" options={OPTIONS} onChange={handleChange} />
 		);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		fireEvent.click(screen.getByRole('option', { name: 'Option B' }));
 
 		expect(handleChange).toHaveBeenCalledWith('b');
@@ -69,17 +86,76 @@ describe('Combobox', () => {
 			<Combobox label="Country" options={OPTIONS} onChange={handleChange} />
 		);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		fireEvent.keyDown(input, { key: 'ArrowDown' });
 		fireEvent.keyDown(input, { key: 'Enter' });
 
 		expect(handleChange).toHaveBeenCalledWith('a');
 	});
 
+	test('activates the first option and opens when ArrowDown is pressed while closed', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+		expect(input).toHaveAttribute('aria-expanded', 'true');
+		const firstOption = screen.getByRole('option', { name: 'Option A' });
+		expect(input).toHaveAttribute('aria-activedescendant', firstOption.id);
+	});
+
+	test('activates the last option and opens when ArrowUp is pressed while closed', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.keyDown(input, { key: 'ArrowUp' });
+
+		expect(input).toHaveAttribute('aria-expanded', 'true');
+		const lastOption = screen.getByRole('option', { name: 'Option B' });
+		expect(input).toHaveAttribute('aria-activedescendant', lastOption.id);
+	});
+
+	test('Alt+ArrowDown opens the listbox without activating an option', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.keyDown(input, { key: 'ArrowDown', altKey: true });
+
+		expect(input).toHaveAttribute('aria-expanded', 'true');
+		expect(input).not.toHaveAttribute('aria-activedescendant');
+	});
+
+	test('Alt+ArrowUp closes the listbox', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.click(input);
+		expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+		fireEvent.keyDown(input, { key: 'ArrowUp', altKey: true });
+		expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+	});
+
+	test('is not defaultPrevented when Enter is pressed with no active option', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.click(input);
+
+		const notPrevented = fireEvent.keyDown(input, { key: 'Enter' });
+		expect(notPrevented).toBe(true);
+	});
+
+	test('should not prevent Enter when the query matches nothing', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		const input = screen.getByLabelText('Country');
+		fireEvent.click(input);
+		fireEvent.change(input, { target: { value: 'zzz' } });
+
+		expect(input).not.toHaveAttribute('aria-activedescendant');
+		const notPrevented = fireEvent.keyDown(input, { key: 'Enter' });
+		expect(notPrevented).toBe(true);
+	});
+
 	test('closes the listbox on Escape', () => {
 		render(<Combobox label="Country" options={OPTIONS} />);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		expect(screen.getByRole('listbox')).toBeInTheDocument();
 
 		fireEvent.keyDown(input, { key: 'Escape' });
@@ -97,7 +173,7 @@ describe('Combobox', () => {
 			/>
 		);
 		const input = screen.getByLabelText('Country');
-		fireEvent.focus(input);
+		fireEvent.click(input);
 		fireEvent.click(screen.getByRole('option', { name: 'Option B' }));
 
 		expect(handleChange).toHaveBeenCalledWith('b');
@@ -132,6 +208,21 @@ describe('Combobox', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
 
 		expect(handleChange).toHaveBeenCalledWith('');
+	});
+
+	test('returns focus to the input when the clear button is clicked', () => {
+		render(<Combobox label="Country" options={OPTIONS} defaultValue="a" />);
+		fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
+
+		expect(screen.getByLabelText('Country')).toHaveFocus();
+	});
+
+	test('marks the input as required for assistive tech when required', () => {
+		render(<Combobox label="Country" options={OPTIONS} required />);
+		expect(screen.getByRole('combobox')).toHaveAttribute(
+			'aria-required',
+			'true'
+		);
 	});
 
 	test('unstyled variant drops the default input styling', () => {
