@@ -147,6 +147,28 @@ describe('ContextMenu', () => {
 		);
 	});
 
+	test('names the menu via the aria-label prop', async () => {
+		render(
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				aria-label="File actions"
+			>
+				<div>Right-click area</div>
+			</ContextMenu>
+		);
+
+		fireEvent.contextMenu(screen.getByText('Right-click area'), {
+			clientX: 100,
+			clientY: 200,
+		});
+
+		await waitFor(() =>
+			expect(
+				screen.getByRole('menu', { name: 'File actions' })
+			).toBeInTheDocument()
+		);
+	});
+
 	test('forwards a ref to the wrapper', () => {
 		const ref = { current: null as HTMLDivElement | null };
 		render(
