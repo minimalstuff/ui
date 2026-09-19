@@ -56,6 +56,13 @@ interface TriggerProps {
 	'aria-describedby'?: string;
 }
 
+function describedByWithTooltip(
+	childDescribedBy: string | undefined,
+	tooltipId: string | undefined
+): string | undefined {
+	return [childDescribedBy, tooltipId].filter(Boolean).join(' ') || undefined;
+}
+
 export interface TooltipProps {
 	content: ReactNode;
 	children: ReactNode;
@@ -71,6 +78,12 @@ export interface TooltipProps {
 	ref?: Ref<HTMLSpanElement>;
 }
 
+/**
+ * The trigger (`children`) must be focusable, otherwise the tooltip is
+ * unreachable by keyboard. Shows on hover and focus; Escape dismisses it.
+ * `temporaryContent` is announced to screen readers through a polite status
+ * region.
+ */
 export function Tooltip({
 	content,
 	children,
@@ -116,10 +129,10 @@ export function Tooltip({
 		[refs, ref]
 	);
 
-	const closeTooltip = () => {
+	const closeTooltip = useCallback(() => {
 		setShowTemporary(false);
 		close();
-	};
+	}, [close]);
 
 	const showTemporaryContent = () => {
 		if (disabled || !temporaryContent) return;
@@ -135,12 +148,23 @@ export function Tooltip({
 		open(isPositioned);
 	};
 
-	const handleHide = () => {
+	const handleHide = useCallback(() => {
 		clearTimeout(temporaryTimeoutRef.current);
 		closeTooltip();
-	};
+	}, [closeTooltip]);
 
 	useEffect(() => () => clearTimeout(temporaryTimeoutRef.current), []);
+
+	useEffect(() => {
+		if (!isMounted) return;
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') handleHide();
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [isMounted, handleHide]);
 
 	const isTooltipShown = isMounted && !disabled;
 	const displayContent =
@@ -155,9 +179,16 @@ export function Tooltip({
 		}
 	};
 
+	const childDescribedBy = isValidElement<TriggerProps>(children)
+		? children.props['aria-describedby']
+		: undefined;
+
 	const triggerProps: TriggerProps = {
 		onClick: handleTriggerClick,
-		'aria-describedby': isTooltipShown ? tooltipId : undefined,
+		'aria-describedby': describedByWithTooltip(
+			childDescribedBy,
+			isTooltipShown ? tooltipId : undefined
+		),
 	};
 
 	const trigger = isValidElement<TriggerProps>(children)
@@ -180,6 +211,11 @@ export function Tooltip({
 				onBlur={handleHide}
 			>
 				{trigger}
+				{temporaryContent !== undefined && (
+					<span role="status" className="sr-only">
+						{showTemporary ? temporaryContent : null}
+					</span>
+				)}
 			</span>
 			{isTooltipShown &&
 				createPortal(
