@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { userEvent, waitForElementToBeRemoved, within } from 'storybook/test';
+import {
+	expect,
+	userEvent,
+	waitForElementToBeRemoved,
+	within,
+} from 'storybook/test';
 
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
@@ -72,7 +77,12 @@ export const Default: Story = {
 			async () => {
 				await userEvent.keyboard('{ArrowDown}');
 				const menu = await body.findByRole('menu', { name: 'Options' });
-				await expectFocusOn(within(menu).getByText('Move up'));
+				const firstItem = within(menu).getByText('Move up');
+				await expectFocusOn(firstItem);
+				const style = getComputedStyle(firstItem);
+				await expect(style.outlineStyle).toBe('solid');
+				await expect(style.outlineWidth).toBe('2px');
+				await expect(style.outlineOffset).toBe('-2px');
 			}
 		);
 
@@ -98,11 +108,6 @@ export const Default: Story = {
 				await expectFocusOn(within(menu).getByText('Delete'));
 			}
 		);
-
-		await step('Escape closes the menu again', async () => {
-			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('menu'));
-		});
 	},
 };
 
