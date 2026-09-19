@@ -32,6 +32,8 @@ export interface ContextMenuProps {
 	radius?: Radius;
 	className?: string;
 	ref?: Ref<HTMLDivElement>;
+	/** Names the menu for assistive tech, since there is no trigger element to label it from. */
+	'aria-label'?: string;
 }
 
 function virtualElementAt(x: number, y: number): VirtualElement {
@@ -69,6 +71,12 @@ function resolveAnchorPoint(event: MouseEvent): { x: number; y: number } {
  * `MenuSeparator`s — at the cursor position. Right-click again elsewhere on
  * the wrapped area to reposition it.
  *
+ * Keyboard-only users reach it via Shift+F10 or the Menu key instead of a
+ * right-click, but only once the wrapped area (or something inside it) can
+ * hold focus — give `children` a focusable element, or a `tabIndex={0}` plus
+ * a `role` and `aria-label` on the wrapper itself, or Shift+F10 has nothing
+ * to fire on. See `context_menu.stories.tsx`'s `Default` story.
+ *
  * For a menu anchored to a specific button (e.g. a kebab icon) instead of a
  * right-click, use `Menu`.
  */
@@ -78,6 +86,7 @@ export function ContextMenu({
 	radius = 'md',
 	className,
 	ref,
+	'aria-label': ariaLabel,
 }: Readonly<ContextMenuProps>) {
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
@@ -116,6 +125,7 @@ export function ContextMenu({
 			{children}
 			{isMounted && (
 				<MenuSurface
+					aria-label={ariaLabel}
 					setFloating={refs.setFloating}
 					floatingStyles={floatingStyles}
 					isVisible={isVisible}
