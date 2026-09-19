@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef } from 'react';
 
+import { joinIds } from '#components/shared/join_ids';
 import { type Radius } from '#components/shared/radius';
 import { FieldError } from '#components/shared/field_error';
 import { useFieldIds } from '#components/shared/use_field_ids';
@@ -71,6 +72,7 @@ export function CheckboxOptions({
 	className,
 	wrapperClassName,
 	id,
+	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<CheckboxOptionsProps>) {
 	const { fieldId: groupId, errorId } = useFieldIds(id);
@@ -99,7 +101,7 @@ export function CheckboxOptions({
 		<fieldset
 			className={clsx('m-0 border-0 p-0', wrapperClassName)}
 			disabled={disabled}
-			aria-describedby={error ? errorId : undefined}
+			aria-describedby={joinIds(callerDescribedBy, error && errorId)}
 			{...props}
 		>
 			{label && (

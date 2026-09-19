@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef, type ReactNode } from 'react';
 
+import { joinIds } from '#components/shared/join_ids';
 import { FieldError } from '#components/shared/field_error';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { SELECTED_FILL } from '#components/shared/surface_tokens';
@@ -40,14 +41,16 @@ export function Switch({
 	defaultChecked = false,
 	onChange,
 	id,
+	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<SwitchProps>) {
 	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
-	const describedBy =
-		[description && descriptionId, error && errorId]
-			.filter(Boolean)
-			.join(' ') || undefined;
+	const describedBy = joinIds(
+		callerDescribedBy,
+		Boolean(description) && descriptionId,
+		error && errorId
+	);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setIsChecked(event.target.checked);

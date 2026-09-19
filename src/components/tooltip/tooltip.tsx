@@ -22,6 +22,7 @@ import {
 } from 'react';
 
 import { mergeRefs } from '#lib/merge_refs';
+import { joinIds } from '#components/shared/join_ids';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
@@ -54,13 +55,6 @@ const ARROW_STATIC_SIDE: Record<
 interface TriggerProps {
 	onClick?: (event: MouseEvent) => void;
 	'aria-describedby'?: string;
-}
-
-function describedByWithTooltip(
-	childDescribedBy: string | undefined,
-	tooltipId: string | undefined
-): string | undefined {
-	return [childDescribedBy, tooltipId].filter(Boolean).join(' ') || undefined;
 }
 
 export interface TooltipProps {
@@ -185,10 +179,7 @@ export function Tooltip({
 
 	const triggerProps: TriggerProps = {
 		onClick: handleTriggerClick,
-		'aria-describedby': describedByWithTooltip(
-			childDescribedBy,
-			isTooltipShown ? tooltipId : undefined
-		),
+		'aria-describedby': joinIds(childDescribedBy, isTooltipShown && tooltipId),
 	};
 
 	const trigger = isValidElement<TriggerProps>(children)

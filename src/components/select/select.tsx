@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 import { Field } from '#components/shared/field';
+import { joinIds } from '#components/shared/join_ids';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
@@ -42,6 +43,7 @@ export function Select({
 	defaultValue,
 	onChange,
 	id,
+	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<SelectProps>) {
 	const { fieldId, errorId } = useFieldIds(id);
@@ -73,7 +75,7 @@ export function Select({
 				{...(value === undefined ? { defaultValue } : { value })}
 				onChange={onChange}
 				aria-invalid={!!error}
-				aria-describedby={error ? errorId : undefined}
+				aria-describedby={joinIds(callerDescribedBy, error && errorId)}
 				{...props}
 			>
 				{placeholder !== undefined && <option value="">{placeholder}</option>}

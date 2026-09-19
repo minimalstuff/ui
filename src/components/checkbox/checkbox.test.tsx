@@ -64,6 +64,30 @@ describe('Checkbox', () => {
 		expect(checkbox).toHaveAttribute('aria-describedby', description.id);
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		render(
+			<Checkbox
+				label="Accept terms"
+				aria-describedby="hint"
+				error="Required field"
+			/>
+		);
+		const checkbox = screen.getByRole('checkbox');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = checkbox.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when nothing else applies', () => {
+		render(<Checkbox label="Accept terms" aria-describedby="hint" />);
+		expect(screen.getByRole('checkbox')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
 	test('forwards disabled to the input', () => {
 		render(<Checkbox label="Accept terms" disabled />);
 		expect(screen.getByRole('checkbox')).toBeDisabled();

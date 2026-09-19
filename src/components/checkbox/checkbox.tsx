@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { type ComponentPropsWithRef } from 'react';
 
+import { joinIds } from '#components/shared/join_ids';
 import { FieldError } from '#components/shared/field_error';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { CheckmarkIcon } from '#components/shared/checkmark_icon';
@@ -84,15 +85,17 @@ export function Checkbox({
 	defaultChecked = false,
 	onChange,
 	id,
+	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<CheckboxProps>) {
 	const { fieldId: checkboxId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const isCardVariant = variant === 'card';
-	const describedBy =
-		[description && descriptionId, error && errorId]
-			.filter(Boolean)
-			.join(' ') || undefined;
+	const describedBy = joinIds(
+		callerDescribedBy,
+		Boolean(description) && descriptionId,
+		error && errorId
+	);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setIsChecked(event.target.checked);
