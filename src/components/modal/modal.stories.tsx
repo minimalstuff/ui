@@ -7,13 +7,16 @@ import {
 	within,
 } from 'storybook/test';
 
+import { Menu } from '#components/menu/menu';
 import { Input } from '#components/input/input';
 import { Button } from '#components/button/button';
 import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
 import { Combobox } from '#components/combobox/combobox';
+import { MenuItem } from '#components/menu_item/menu_item';
 import { ModalFooter } from '#components/modal/modal_footer';
 import { ConfirmModal } from '#components/modal/confirm_modal';
+import { IconButton } from '#components/icon_button/icon_button';
 import { Modal, type ModalProps } from '#components/modal/modal';
 import { RadioOptions } from '#components/radio_options/radio_options';
 import {
@@ -447,6 +450,68 @@ export const ComboboxInModal: Story = {
 			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
 			await expectFocusOn(trigger);
 		});
+	},
+};
+
+export const MenuInModal: Story = {
+	args: {
+		title: 'Item actions',
+		children: (
+			<Menu
+				trigger={
+					<IconButton
+						icon="i-mdi-dots-vertical"
+						aria-label="Options"
+						size="sm"
+					/>
+				}
+			>
+				<MenuItem icon="i-mdi-arrow-up" onClick={() => {}}>
+					Move up
+				</MenuItem>
+				<MenuItem icon="i-mdi-delete" danger onClick={() => {}}>
+					Delete
+				</MenuItem>
+			</Menu>
+		),
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('opening the modal focuses the menu trigger', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Item actions' });
+			await expectFocusOn(body.getByRole('button', { name: 'Options' }));
+		});
+
+		await step('ArrowDown opens the menu', async () => {
+			await userEvent.keyboard('{ArrowDown}');
+			const menu = await body.findByRole('menu');
+			await expectFocusOn(within(menu).getByText('Move up'));
+		});
+
+		await step(
+			'Escape closes the menu but leaves the dialog open',
+			async () => {
+				await userEvent.keyboard('{Escape}');
+				await waitForElementToBeRemoved(() => body.queryByRole('menu'));
+				await waitPastModalExitAnimation();
+				await expect(
+					body.getByRole('dialog', { name: 'Item actions' })
+				).toBeInTheDocument();
+			}
+		);
+
+		await step(
+			'Escape again closes the dialog and returns focus to the "Open modal" trigger',
+			async () => {
+				await userEvent.keyboard('{Escape}');
+				await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+				await expectFocusOn(trigger);
+			}
+		);
 	},
 };
 

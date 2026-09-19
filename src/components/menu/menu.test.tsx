@@ -224,4 +224,95 @@ describe('Menu', () => {
 
 		await waitFor(() => expect(screen.getByText('Move up')).toHaveFocus());
 	});
+
+	test('names the menu by the trigger via aria-labelledby', async () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+
+		fireEvent.click(screen.getByText('Options'));
+
+		await waitFor(() =>
+			expect(screen.getByRole('menu', { name: 'Options' })).toBeInTheDocument()
+		);
+	});
+
+	test('generates a trigger id when the trigger has none', () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+		expect(screen.getByText('Options')).toHaveAttribute('id');
+	});
+
+	test('preserves the trigger own id when it already has one', () => {
+		render(
+			<Menu trigger={<button id="custom-trigger-id">Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+		expect(screen.getByText('Options')).toHaveAttribute(
+			'id',
+			'custom-trigger-id'
+		);
+	});
+
+	test('sets aria-controls on the trigger while the menu is mounted', async () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+		const trigger = screen.getByText('Options');
+		expect(trigger).not.toHaveAttribute('aria-controls');
+
+		fireEvent.click(trigger);
+
+		await waitFor(() => expect(trigger).toHaveAttribute('aria-controls'));
+		expect(trigger.getAttribute('aria-controls')).toBe(
+			screen.getByRole('menu').id
+		);
+	});
+
+	test('ArrowDown on the closed trigger opens the menu and focuses the first item', async () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+			</Menu>
+		);
+
+		fireEvent.keyDown(screen.getByText('Options'), { key: 'ArrowDown' });
+
+		await waitFor(() => expect(screen.getByText('Move up')).toHaveFocus());
+	});
+
+	test('ArrowUp on the closed trigger opens the menu and focuses the last item', async () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+			</Menu>
+		);
+
+		fireEvent.keyDown(screen.getByText('Options'), { key: 'ArrowUp' });
+
+		await waitFor(() => expect(screen.getByText('Move down')).toHaveFocus());
+	});
+
+	test('still calls the trigger own onKeyDown when ArrowDown opens the menu', () => {
+		const handleTriggerKeyDown = vi.fn();
+		render(
+			<Menu trigger={<button onKeyDown={handleTriggerKeyDown}>Options</button>}>
+				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+			</Menu>
+		);
+
+		fireEvent.keyDown(screen.getByText('Options'), { key: 'ArrowDown' });
+
+		expect(handleTriggerKeyDown).toHaveBeenCalledTimes(1);
+	});
 });
