@@ -302,6 +302,38 @@ describe('MultiCombobox', () => {
 		expect(handleDropdownClose).not.toHaveBeenCalled();
 	});
 
+	test('should call onDropdownClose with [] when clearing from the trigger while closed', () => {
+		const handleDropdownClose = vi.fn();
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				defaultValues={['a', 'b']}
+				onDropdownClose={handleDropdownClose}
+			/>
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
+
+		expect(handleDropdownClose).toHaveBeenCalledTimes(1);
+		expect(handleDropdownClose).toHaveBeenCalledWith([]);
+	});
+
+	test('should not call onDropdownClose when clearing from the trigger while open', () => {
+		const handleDropdownClose = vi.fn();
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				defaultValues={['a', 'b']}
+				onDropdownClose={handleDropdownClose}
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
+
+		expect(handleDropdownClose).not.toHaveBeenCalled();
+	});
+
 	test('should focus the trigger after clearing the selection via the X button', () => {
 		render(
 			<MultiCombobox label="Fruits" options={OPTIONS} defaultValues={['a']} />
