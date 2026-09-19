@@ -76,6 +76,12 @@ export interface MultiComboboxProps {
 	values?: readonly string[];
 	defaultValues?: readonly string[];
 	onChange?: (values: readonly string[]) => void;
+	/**
+	 * Fires with the final selection whenever the user is done editing:
+	 * when the dropdown closes (Escape, outside click, focus leaving the
+	 * wrapper), and when the selection is cleared from the trigger's X
+	 * button while the dropdown is closed.
+	 */
 	onDropdownClose?: (values: readonly string[]) => void;
 	id?: string;
 }
@@ -252,6 +258,7 @@ export function MultiCombobox({
 	const handleTriggerClearClick = (event: MouseEvent) => {
 		event.stopPropagation();
 		clearSelection();
+		if (!isOpen) onDropdownClose?.([]);
 		triggerRef.current?.focus();
 	};
 
