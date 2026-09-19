@@ -41,12 +41,20 @@ export const Field = ({
 					htmlFor={fieldId}
 				>
 					{label}
-					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+					{required && (
+						<span className={FIELD_REQUIRED_MARK} aria-hidden="true">
+							*
+						</span>
+					)}
 				</label>
 			) : (
 				<>
 					{label}
-					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+					{required && (
+						<span className={FIELD_REQUIRED_MARK} aria-hidden="true">
+							*
+						</span>
+					)}
 				</>
 			))}
 		{children}
