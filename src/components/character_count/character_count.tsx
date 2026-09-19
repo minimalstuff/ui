@@ -19,6 +19,7 @@ export interface CharacterCountProps {
 	showMin?: boolean;
 	showMax?: boolean;
 	unstyled?: boolean;
+	id?: string;
 	className?: string;
 }
 
@@ -29,6 +30,7 @@ export function CharacterCount({
 	showMin,
 	showMax,
 	unstyled = false,
+	id,
 	className,
 }: Readonly<CharacterCountProps>) {
 	const showLabels = showMin === true || showMax === true;
@@ -48,7 +50,10 @@ export function CharacterCount({
 	const maxText = showLabels ? `${current}/${max} max` : `${current}/${max}`;
 
 	return (
-		<div className={clsx(!unstyled && CHARACTER_COUNT_STYLES, className)}>
+		<div
+			id={id}
+			className={clsx(!unstyled && CHARACTER_COUNT_STYLES, className)}
+		>
 			{showMin && min !== undefined && (
 				<span className={getBoundStatusClass(minStatus, unstyled)}>
 					{minText}

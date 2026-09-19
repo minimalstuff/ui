@@ -55,6 +55,39 @@ describe('Input', () => {
 		);
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		render(<Input label="Email" aria-describedby="hint" error="Invalid" />);
+		const input = screen.getByLabelText('Email');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = input.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when nothing else applies', () => {
+		render(<Input label="Email" aria-describedby="hint" />);
+		expect(screen.getByLabelText('Email')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
+	test('includes the character count id in the accessible description', () => {
+		render(
+			<Input label="Bio" showCharCount maxLength={10} defaultValue="hello" />
+		);
+		const input = screen.getByLabelText('Bio');
+		expect(input).toHaveAccessibleDescription('5/10 max');
+	});
+
+	test('does not add a character count id when showCharCount is off', () => {
+		render(<Input label="Bio" maxLength={10} defaultValue="hello" />);
+		expect(screen.getByLabelText('Bio')).not.toHaveAttribute(
+			'aria-describedby'
+		);
+	});
+
 	test('forwards disabled to the input', () => {
 		render(<Input label="Email" disabled />);
 		expect(screen.getByLabelText('Email')).toBeDisabled();

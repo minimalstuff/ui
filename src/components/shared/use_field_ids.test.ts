@@ -9,6 +9,7 @@ describe('useFieldIds', () => {
 		expect(result.current.fieldId).toBe('email');
 		expect(result.current.errorId).toBe('email-error');
 		expect(result.current.descriptionId).toBe('email-description');
+		expect(result.current.characterCountId).toBe('email-character-count');
 	});
 
 	test('generates a unique id when none is given', () => {
