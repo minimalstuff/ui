@@ -14,6 +14,7 @@ import {
 
 import { Field } from '#components/shared/field';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useActiveOption } from '#components/shared/use_active_option';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import {
@@ -173,7 +174,6 @@ export function MultiCombobox({
 
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
-	const [activeIndex, setActiveIndex] = useState(-1);
 
 	const filteredOptions = useMemo(() => {
 		const normalizedQuery = query.trim().toLowerCase();
@@ -182,6 +182,17 @@ export function MultiCombobox({
 			option.label.toLowerCase().includes(normalizedQuery)
 		);
 	}, [options, query]);
+
+	const {
+		activeIndex,
+		activeOptionId,
+		move: moveActiveOption,
+		reset: resetActiveOption,
+	} = useActiveOption({
+		optionCount: filteredOptions.length,
+		getOptionId: (index) => `${listboxId}-option-${index}`,
+		isOpen,
+	});
 
 	const selectedOptions = useMemo(
 		() => options.filter((option) => selectedValues.includes(option.value)),
@@ -201,9 +212,9 @@ export function MultiCombobox({
 	const closeDropdown = useCallback(() => {
 		setIsOpen(false);
 		setQuery('');
-		setActiveIndex(-1);
+		resetActiveOption();
 		onDropdownClose?.(selectedValues);
-	}, [onDropdownClose, selectedValues]);
+	}, [resetActiveOption, onDropdownClose, selectedValues]);
 
 	const toggleOpen = () => {
 		if (isOpen) closeDropdown();
@@ -240,30 +251,20 @@ export function MultiCombobox({
 
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setQuery(event.target.value);
-		setActiveIndex(-1);
-	};
-
-	const moveActiveIndex = (delta: number) => {
-		if (filteredOptions.length === 0) return;
-		setActiveIndex((current) => {
-			const next = current + delta;
-			if (next < 0) return filteredOptions.length - 1;
-			if (next >= filteredOptions.length) return 0;
-			return next;
-		});
+		resetActiveOption();
 	};
 
 	const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
 		if (event.key === 'ArrowDown') {
 			event.preventDefault();
 			if (!isOpen) openDropdown();
-			else moveActiveIndex(1);
+			else moveActiveOption(1);
 			return;
 		}
 		if (event.key === 'ArrowUp') {
 			event.preventDefault();
 			if (!isOpen) openDropdown();
-			else moveActiveIndex(-1);
+			else moveActiveOption(-1);
 			return;
 		}
 		if (event.key === 'Enter') {
@@ -295,11 +296,6 @@ export function MultiCombobox({
 		return () =>
 			document.removeEventListener('mousedown', handleOutsideInteraction);
 	}, [isOpen, closeDropdown]);
-
-	const activeOptionId =
-		isOpen && activeIndex >= 0
-			? `${listboxId}-option-${activeIndex}`
-			: undefined;
 
 	return (
 		<Field
