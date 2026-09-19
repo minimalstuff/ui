@@ -47,6 +47,15 @@ describe('Field', () => {
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
 	});
 
+	test('excludes the required mark from the accessible name', () => {
+		render(
+			<Field fieldId="email" errorId="email-error" label="Email" required>
+				<input id="email" />
+			</Field>
+		);
+		expect(screen.getByRole('textbox', { name: 'Email' })).toBeInTheDocument();
+	});
+
 	test('shows the error message wired to the given errorId', () => {
 		render(
 			<Field fieldId="email" errorId="email-error" error="Invalid email">
