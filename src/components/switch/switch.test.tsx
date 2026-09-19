@@ -66,6 +66,30 @@ describe('Switch', () => {
 		expect(toggle).toHaveAttribute('aria-describedby', description.id);
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		render(
+			<Switch
+				label="Enable notifications"
+				aria-describedby="hint"
+				error="Required field"
+			/>
+		);
+		const toggle = screen.getByRole('switch');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = toggle.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when nothing else applies', () => {
+		render(<Switch label="Enable notifications" aria-describedby="hint" />);
+		expect(screen.getByRole('switch')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
 	test('forwards disabled to the input', () => {
 		render(<Switch label="Enable notifications" disabled />);
 		expect(screen.getByRole('switch')).toBeDisabled();

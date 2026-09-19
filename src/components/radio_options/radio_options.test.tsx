@@ -59,6 +59,32 @@ describe('RadioOptions', () => {
 		expect(errorMessage).toHaveTextContent('Pick one');
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		const { container } = render(
+			<RadioOptions
+				options={OPTIONS}
+				aria-describedby="hint"
+				error="Pick one"
+			/>
+		);
+		const fieldset = container.querySelector('fieldset');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = fieldset?.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when there is no error', () => {
+		const { container } = render(
+			<RadioOptions options={OPTIONS} aria-describedby="hint" />
+		);
+		expect(container.querySelector('fieldset')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
 	test('renders option description', () => {
 		render(
 			<RadioOptions

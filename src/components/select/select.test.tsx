@@ -74,6 +74,33 @@ describe('Select', () => {
 		expect(select).toHaveAttribute('aria-describedby', errorMessage.id);
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		render(
+			<Select
+				label="Country"
+				options={OPTIONS}
+				aria-describedby="hint"
+				error="Required"
+			/>
+		);
+		const select = screen.getByLabelText('Country');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = select.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when there is no error', () => {
+		render(
+			<Select label="Country" options={OPTIONS} aria-describedby="hint" />
+		);
+		expect(screen.getByLabelText('Country')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
 	test('forwards disabled to the select', () => {
 		render(<Select label="Country" options={OPTIONS} disabled />);
 		expect(screen.getByLabelText('Country')).toBeDisabled();
