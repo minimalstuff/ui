@@ -37,7 +37,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-gray-700 enabled:hover:bg-gray-100 enabled:active:bg-gray-200 dark:text-gray-300 dark:enabled:hover:bg-gray-700/50 dark:enabled:active:bg-gray-700/80',
 		subtle:
 			'border-transparent bg-gray-100 text-gray-700 enabled:hover:bg-gray-200 enabled:active:bg-gray-300 dark:bg-gray-700/50 dark:text-gray-300 dark:enabled:hover:bg-gray-600/50 dark:enabled:active:bg-gray-600/80',
-		focusOutline: 'focus-visible:outline-gray-400',
+		focusOutline:
+			'focus-visible:outline-gray-500 dark:focus-visible:outline-gray-400',
 	},
 	danger: {
 		solid:
@@ -59,7 +60,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-green-700 enabled:hover:bg-green-50 enabled:active:bg-green-100 dark:text-green-400 dark:enabled:hover:bg-green-950/40 dark:enabled:active:bg-green-950/60',
 		subtle:
 			'border-transparent bg-green-50 text-green-700 enabled:hover:bg-green-100 enabled:active:bg-green-200 dark:bg-green-500/10 dark:text-green-400 dark:enabled:hover:bg-green-500/20 dark:enabled:active:bg-green-500/30',
-		focusOutline: 'focus-visible:outline-green-500',
+		focusOutline: 'focus-visible:outline-green-600',
 	},
 	warning: {
 		solid:
@@ -70,7 +71,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
 		subtle:
 			'border-transparent bg-yellow-50 text-yellow-700 enabled:hover:bg-yellow-100 enabled:active:bg-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:enabled:hover:bg-yellow-500/20 dark:enabled:active:bg-yellow-500/30',
-		focusOutline: 'focus-visible:outline-yellow-500',
+		focusOutline:
+			'focus-visible:outline-yellow-700 dark:focus-visible:outline-yellow-500',
 	},
 };
 

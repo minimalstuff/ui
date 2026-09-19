@@ -1,7 +1,9 @@
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from '#components/button/button';
 import { IconButton } from '#components/icon_button/icon_button';
+import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const meta = {
 	title: 'Example/IconButton',
@@ -59,7 +61,23 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Close' });
+
+		await step(
+			'Tab focuses the button with a solid, 2px focus-visible outline',
+			async () => {
+				await userEvent.tab();
+				await expectFocusOn(button);
+				const style = getComputedStyle(button);
+				await expect(style.outlineStyle).toBe('solid');
+				await expect(style.outlineWidth).toBe('2px');
+			}
+		);
+	},
+};
 
 export const SizeXS: Story = {
 	args: {
