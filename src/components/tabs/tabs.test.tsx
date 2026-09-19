@@ -233,6 +233,88 @@ describe('Tabs', () => {
 		expect(screen.getByText('Second content')).toBeInTheDocument();
 	});
 
+	test('defaultIndex on a disabled tab moves the tab stop to the first enabled tab', () => {
+		render(<Tabs items={ITEMS} defaultIndex={2} />);
+
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
+			'tabindex',
+			'0'
+		);
+		expect(screen.getByRole('tab', { name: 'Third' })).toHaveAttribute(
+			'tabindex',
+			'-1'
+		);
+		expect(screen.getByRole('tab', { name: 'Third' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+	});
+
+	test('the fallback tab stop is reachable and keeps the disabled tab active', () => {
+		render(<Tabs items={ITEMS} defaultIndex={2} />);
+
+		screen.getByRole('tab', { name: 'First' }).focus();
+
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveFocus();
+		expect(screen.getByRole('tab', { name: 'Third' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+	});
+
+	test('a controlled value pointing at a disabled tab also falls the tab stop back', () => {
+		render(<Tabs items={ITEMS} value={2} onChange={vi.fn()} />);
+
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
+			'tabindex',
+			'0'
+		);
+		expect(screen.getByRole('tab', { name: 'Third' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+	});
+
+	test('ArrowRight from the fallback tab stop moves to the next enabled tab', () => {
+		render(<Tabs items={ITEMS} defaultIndex={2} />);
+		const firstTab = screen.getByRole('tab', { name: 'First' });
+		firstTab.focus();
+
+		fireEvent.keyDown(firstTab, { key: 'ArrowRight' });
+
+		const secondTab = screen.getByRole('tab', { name: 'Second' });
+		expect(secondTab).toHaveAttribute('aria-selected', 'true');
+		expect(secondTab).toHaveFocus();
+	});
+
+	test('only the active tab carries aria-controls, pointing at the rendered tabpanel', () => {
+		render(<Tabs items={ITEMS} />);
+		const panel = screen.getByRole('tabpanel');
+
+		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
+			'aria-controls',
+			panel.id
+		);
+		expect(screen.getByRole('tab', { name: 'Second' })).not.toHaveAttribute(
+			'aria-controls'
+		);
+		expect(screen.getByRole('tab', { name: 'Third' })).not.toHaveAttribute(
+			'aria-controls'
+		);
+	});
+
+	test('the tab icon is hidden from assistive technology', () => {
+		const itemsWithIcon = [
+			{ title: 'First', content: 'First content', icon: 'i-lucide-home' },
+			{ title: 'Second', content: 'Second content' },
+		];
+		const { container } = render(<Tabs items={itemsWithIcon} />);
+		expect(container.querySelector('.i-lucide-home')).toHaveAttribute(
+			'aria-hidden',
+			'true'
+		);
+	});
+
 	test('indicator renders inside the active tab by default', () => {
 		render(<Tabs items={ITEMS} />);
 		const activeTab = screen.getByRole('tab', { name: 'First' });

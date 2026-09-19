@@ -167,6 +167,27 @@ export const WithDisabledTab: Story = {
 	},
 };
 
+export const DefaultOnDisabledTab: Story = {
+	args: {
+		defaultIndex: 1,
+		items: [
+			{ title: 'Active', content: panelText('This tab is active.') },
+			{
+				title: 'Disabled',
+				content: panelText('You cannot select this tab.'),
+				disabled: true,
+			},
+			{ title: 'Another', content: panelText('Another tab content.') },
+		],
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		await userEvent.tab();
+		await expectFocusOn(canvas.getByRole('tab', { name: 'Active' }));
+	},
+};
+
 export const WithRichContent: Story = {
 	args: {
 		items: [
