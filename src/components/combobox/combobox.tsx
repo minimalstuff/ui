@@ -1,8 +1,16 @@
 import clsx from 'clsx';
-import { type KeyboardEvent, type ReactNode, useMemo, useState } from 'react';
+import {
+	type KeyboardEvent,
+	type MouseEvent,
+	type ReactNode,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
 import { Field } from '#components/shared/field';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useActiveOption } from '#components/shared/use_active_option';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
@@ -58,6 +66,7 @@ export function Combobox({
 }: Readonly<ComboboxProps>) {
 	const { fieldId: comboboxId, errorId } = useFieldIds(id);
 	const listboxId = `${comboboxId}-listbox`;
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [selectedValue, setSelectedValue] = useControlledState(
 		value,
@@ -68,7 +77,6 @@ export function Combobox({
 	const [query, setQuery] = useState('');
 	const [isFiltering, setIsFiltering] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
-	const [activeIndex, setActiveIndex] = useState(-1);
 
 	const filteredOptions = useMemo(
 		() =>
@@ -80,6 +88,19 @@ export function Combobox({
 		[options, isFiltering, query]
 	);
 
+	const {
+		activeIndex,
+		activeOptionId,
+		move: moveActiveOption,
+		first: firstActiveOption,
+		last: lastActiveOption,
+		reset: resetActiveOption,
+	} = useActiveOption({
+		optionCount: filteredOptions.length,
+		getOptionId: (index) => `${listboxId}-option-${index}`,
+		isOpen,
+	});
+
 	const displayValue = isOpen ? query : (selectedOption?.label ?? '');
 
 	const openDropdown = () => {
@@ -87,13 +108,13 @@ export function Combobox({
 		setQuery(selectedOption?.label ?? '');
 		setIsFiltering(false);
 		setIsOpen(true);
-		setActiveIndex(-1);
+		resetActiveOption();
 	};
 
 	const closeDropdown = () => {
 		setIsOpen(false);
 		setIsFiltering(false);
-		setActiveIndex(-1);
+		resetActiveOption();
 	};
 
 	const selectOption = (option: ComboboxOption) => {
@@ -106,56 +127,75 @@ export function Combobox({
 		setSelectedValue('');
 		onChange?.('');
 		setQuery('');
+		inputRef.current?.focus();
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setQuery(e.target.value);
 		setIsFiltering(true);
 		setIsOpen(true);
-		setActiveIndex(0);
+		firstActiveOption();
 	};
 
-	const moveActiveIndex = (delta: number) => {
-		if (filteredOptions.length === 0) return;
-		setActiveIndex((current) => {
-			const next = current + delta;
-			if (next < 0) return filteredOptions.length - 1;
-			if (next >= filteredOptions.length) return 0;
-			return next;
-		});
+	const handleInputClick = () => {
+		if (!isOpen) openDropdown();
+	};
+
+	const handleArrowDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		if (e.altKey) {
+			if (!isOpen) openDropdown();
+			return;
+		}
+		if (!isOpen) {
+			openDropdown();
+			firstActiveOption();
+			return;
+		}
+		moveActiveOption(1);
+	};
+
+	const handleArrowUp = (e: KeyboardEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		if (e.altKey) {
+			if (isOpen) closeDropdown();
+			return;
+		}
+		if (!isOpen) {
+			openDropdown();
+			lastActiveOption();
+			return;
+		}
+		moveActiveOption(-1);
+	};
+
+	const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (!isOpen) return;
+		const option = filteredOptions[activeIndex];
+		if (!option) {
+			closeDropdown();
+			return;
+		}
+		e.preventDefault();
+		selectOption(option);
+	};
+
+	const handleEscape = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (!isOpen) return;
+		e.preventDefault();
+		closeDropdown();
 	};
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'ArrowDown') {
-			e.preventDefault();
-			if (!isOpen) openDropdown();
-			else moveActiveIndex(1);
-			return;
-		}
-		if (e.key === 'ArrowUp') {
-			e.preventDefault();
-			if (!isOpen) openDropdown();
-			else moveActiveIndex(-1);
-			return;
-		}
-		if (e.key === 'Enter') {
-			if (!isOpen) return;
-			e.preventDefault();
-			const option = filteredOptions[activeIndex];
-			if (option) selectOption(option);
-			return;
-		}
-		if (e.key === 'Escape') {
-			if (!isOpen) return;
-			e.preventDefault();
-			closeDropdown();
-		}
+		if (e.key === 'ArrowDown') return handleArrowDown(e);
+		if (e.key === 'ArrowUp') return handleArrowUp(e);
+		if (e.key === 'Enter') return handleEnter(e);
+		if (e.key === 'Escape') return handleEscape(e);
 	};
 
-	const activeOptionId =
-		isOpen && activeIndex >= 0
-			? `${listboxId}-option-${activeIndex}`
-			: undefined;
+	const handleClearMouseDown = (e: MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+	};
 
 	return (
 		<Field
@@ -174,6 +214,7 @@ export function Combobox({
 					/>
 				)}
 				<input
+					ref={inputRef}
 					id={comboboxId}
 					role="combobox"
 					type="text"
@@ -182,7 +223,7 @@ export function Combobox({
 					placeholder={placeholder}
 					value={displayValue}
 					onChange={handleInputChange}
-					onFocus={openDropdown}
+					onClick={handleInputClick}
 					onBlur={closeDropdown}
 					onKeyDown={handleKeyDown}
 					aria-expanded={isOpen}
@@ -191,6 +232,7 @@ export function Combobox({
 					aria-label={ariaLabel}
 					aria-activedescendant={activeOptionId}
 					aria-invalid={!!error}
+					aria-required={required || undefined}
 					aria-describedby={error ? errorId : undefined}
 					className={clsx(
 						'w-full disabled:opacity-50 disabled:cursor-not-allowed',
@@ -209,7 +251,7 @@ export function Combobox({
 					<button
 						type="button"
 						aria-label={clearLabel}
-						onMouseDown={(e) => e.preventDefault()}
+						onMouseDown={handleClearMouseDown}
 						onClick={clearSelection}
 						className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
 					>
@@ -217,11 +259,9 @@ export function Combobox({
 					</button>
 				)}
 				{isOpen && (
-					<ul
-						id={listboxId}
-						role="listbox"
+					<div
 						className={clsx(
-							'absolute z-10 mt-1 w-full max-h-60 overflow-auto py-1 text-sm shadow-lg',
+							'absolute z-10 mt-1 w-full text-sm shadow-lg',
 							!unstyled && [
 								'border',
 								OVERLAY_BG,
@@ -230,12 +270,12 @@ export function Combobox({
 							]
 						)}
 					>
-						{filteredOptions.length === 0 ? (
-							<li className="px-3 py-2 text-gray-500 dark:text-gray-400">
-								{noResultsText}
-							</li>
-						) : (
-							filteredOptions.map((opt, index) => (
+						<ul
+							id={listboxId}
+							role="listbox"
+							className="max-h-60 overflow-auto py-1"
+						>
+							{filteredOptions.map((opt, index) => (
 								<li
 									key={opt.value}
 									id={`${listboxId}-option-${index}`}
@@ -253,9 +293,19 @@ export function Combobox({
 								>
 									{opt.label}
 								</li>
-							))
-						)}
-					</ul>
+							))}
+						</ul>
+						<div
+							role="status"
+							className={
+								filteredOptions.length === 0
+									? 'px-3 py-2 text-gray-500 dark:text-gray-400'
+									: undefined
+							}
+						>
+							{filteredOptions.length === 0 ? noResultsText : ''}
+						</div>
+					</div>
 				)}
 			</div>
 		</Field>
