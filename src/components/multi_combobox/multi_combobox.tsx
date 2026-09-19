@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import {
 	type ChangeEvent,
+	type FocusEvent,
 	type KeyboardEvent,
 	type MouseEvent,
 	type ReactElement,
@@ -164,8 +165,10 @@ export function MultiCombobox({
 }: Readonly<MultiComboboxProps>): ReactElement {
 	const { fieldId, errorId, labelId } = useFieldIds(id);
 	const listboxId = `${fieldId}-listbox`;
+	const maxHintId = `${fieldId}-max-hint`;
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
+	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	const [selectedValues, setSelectedValues] = useControlledState(
 		values,
@@ -187,6 +190,8 @@ export function MultiCombobox({
 		activeIndex,
 		activeOptionId,
 		move: moveActiveOption,
+		first: firstActiveOption,
+		last: lastActiveOption,
 		reset: resetActiveOption,
 	} = useActiveOption({
 		optionCount: filteredOptions.length,
@@ -239,9 +244,15 @@ export function MultiCombobox({
 		onChange?.([]);
 	};
 
-	const handleClearClick = (event: MouseEvent) => {
+	const handleTriggerClearClick = (event: MouseEvent) => {
 		event.stopPropagation();
 		clearSelection();
+		triggerRef.current?.focus();
+	};
+
+	const handleFooterClearClick = () => {
+		clearSelection();
+		searchInputRef.current?.focus();
 	};
 
 	const handleTriggerClick = () => {
@@ -254,32 +265,60 @@ export function MultiCombobox({
 		resetActiveOption();
 	};
 
+	const handleArrowDown = (event: KeyboardEvent<HTMLElement>) => {
+		event.preventDefault();
+		if (!isOpen) {
+			openDropdown();
+			firstActiveOption();
+			return;
+		}
+		moveActiveOption(1);
+	};
+
+	const handleArrowUp = (event: KeyboardEvent<HTMLElement>) => {
+		event.preventDefault();
+		if (!isOpen) {
+			openDropdown();
+			lastActiveOption();
+			return;
+		}
+		moveActiveOption(-1);
+	};
+
+	const handleEnter = (event: KeyboardEvent<HTMLElement>) => {
+		if (!isOpen) return;
+		event.preventDefault();
+		const option = filteredOptions[activeIndex];
+		if (option) toggleOption(option.value);
+	};
+
+	const handleEscape = (event: KeyboardEvent<HTMLElement>) => {
+		if (!isOpen) return;
+		event.preventDefault();
+		closeDropdown();
+		triggerRef.current?.focus();
+	};
+
 	const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-		if (event.key === 'ArrowDown') {
-			event.preventDefault();
-			if (!isOpen) openDropdown();
-			else moveActiveOption(1);
-			return;
-		}
-		if (event.key === 'ArrowUp') {
-			event.preventDefault();
-			if (!isOpen) openDropdown();
-			else moveActiveOption(-1);
-			return;
-		}
-		if (event.key === 'Enter') {
-			if (!isOpen) return;
-			event.preventDefault();
-			const option = filteredOptions[activeIndex];
-			if (option) toggleOption(option.value);
-			return;
-		}
-		if (event.key === 'Escape') {
-			if (!isOpen) return;
-			event.preventDefault();
-			closeDropdown();
-			triggerRef.current?.focus();
-		}
+		if (event.key === 'ArrowDown') return handleArrowDown(event);
+		if (event.key === 'ArrowUp') return handleArrowUp(event);
+		if (event.key === 'Enter') return handleEnter(event);
+		if (event.key === 'Escape') return handleEscape(event);
+	};
+
+	const handleWrapperBlur = (event: FocusEvent<HTMLDivElement>) => {
+		if (!isOpen) return;
+		const nextFocusTarget = event.relatedTarget;
+		const staysInsideWrapper =
+			nextFocusTarget instanceof Node &&
+			wrapperRef.current?.contains(nextFocusTarget);
+		if (staysInsideWrapper) return;
+		closeDropdown();
+	};
+
+	const handlePanelMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+		if (event.target === searchInputRef.current) return;
+		event.preventDefault();
 	};
 
 	useEffect(() => {
@@ -306,7 +345,7 @@ export function MultiCombobox({
 			required={required}
 			wrapperClassName={wrapperClassName}
 		>
-			<div ref={wrapperRef} className="relative">
+			<div ref={wrapperRef} className="relative" onBlur={handleWrapperBlur}>
 				<button
 					ref={triggerRef}
 					type="button"
@@ -317,10 +356,10 @@ export function MultiCombobox({
 					aria-controls={listboxId}
 					aria-haspopup="listbox"
 					aria-invalid={!!error}
+					aria-required={required || undefined}
 					aria-describedby={error ? errorId : undefined}
 					aria-labelledby={typeof label === 'string' ? labelId : undefined}
 					aria-label={ariaLabel}
-					aria-activedescendant={activeOptionId}
 					onClick={handleTriggerClick}
 					onKeyDown={handleKeyDown}
 					className={clsx(
@@ -365,7 +404,7 @@ export function MultiCombobox({
 						type="button"
 						aria-label={clearLabel}
 						onMouseDown={(event) => event.preventDefault()}
-						onClick={handleClearClick}
+						onClick={handleTriggerClearClick}
 						className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
 					>
 						<span className="i-mdi-close block w-4 h-4" aria-hidden />
@@ -373,6 +412,7 @@ export function MultiCombobox({
 				)}
 				{isOpen && (
 					<div
+						onMouseDown={handlePanelMouseDown}
 						className={clsx(
 							'absolute z-10 mt-1 w-full text-sm shadow-lg',
 							!unstyled && [
@@ -384,6 +424,7 @@ export function MultiCombobox({
 						)}
 					>
 						<input
+							ref={searchInputRef}
 							type="text"
 							autoFocus
 							autoComplete="off"
@@ -391,8 +432,12 @@ export function MultiCombobox({
 							onChange={handleSearchChange}
 							onKeyDown={handleKeyDown}
 							placeholder={searchPlaceholder}
+							aria-label={searchPlaceholder}
 							aria-controls={listboxId}
 							aria-activedescendant={activeOptionId}
+							aria-describedby={
+								maxSelectedValues !== undefined ? maxHintId : undefined
+							}
 							className={clsx(
 								'w-full',
 								!unstyled && [
@@ -404,6 +449,7 @@ export function MultiCombobox({
 						/>
 						{maxSelectedValues !== undefined && (
 							<div
+								id={maxHintId}
 								className={clsx(
 									'px-3 py-1 text-xs',
 									!unstyled && ['border-b', OVERLAY_BORDER],
@@ -419,75 +465,78 @@ export function MultiCombobox({
 							aria-multiselectable
 							className="max-h-60 overflow-auto py-1"
 						>
-							{filteredOptions.length === 0 ? (
-								<li className="px-3 py-2 text-gray-500 dark:text-gray-400">
-									{noResultsText}
-								</li>
-							) : (
-								filteredOptions.map((option, index) => {
-									const isSelected = selectedValues.includes(option.value);
-									const isDisabled = resolveIsOptionDisabled(
-										option.value,
-										selectedValues,
-										maxSelectedValues,
-										isOptionDisabled
-									);
-									return (
-										<li
-											key={option.value}
-											id={`${listboxId}-option-${index}`}
-											role="option"
-											aria-selected={isSelected}
-											aria-disabled={isDisabled}
-											onMouseDown={(event) => event.preventDefault()}
-											onClick={() => toggleOption(option.value)}
+							{filteredOptions.map((option, index) => {
+								const isSelected = selectedValues.includes(option.value);
+								const isDisabled = resolveIsOptionDisabled(
+									option.value,
+									selectedValues,
+									maxSelectedValues,
+									isOptionDisabled
+								);
+								return (
+									<li
+										key={option.value}
+										id={`${listboxId}-option-${index}`}
+										role="option"
+										aria-selected={isSelected}
+										aria-disabled={isDisabled}
+										onClick={() => toggleOption(option.value)}
+										className={clsx(
+											'px-3 py-2 flex items-center gap-2 text-gray-900 dark:text-gray-100',
+											isDisabled
+												? 'opacity-50 cursor-not-allowed'
+												: 'cursor-pointer',
+											index === activeIndex
+												? 'bg-blue-50 dark:bg-blue-900/40'
+												: !isDisabled &&
+														'hover:bg-gray-50 dark:hover:bg-gray-800/60'
+										)}
+									>
+										<span
+											aria-hidden
 											className={clsx(
-												'px-3 py-2 flex items-center gap-2 text-gray-900 dark:text-gray-100',
-												isDisabled
-													? 'opacity-50 cursor-not-allowed'
-													: 'cursor-pointer',
-												!isDisabled &&
-													(index === activeIndex
-														? 'bg-blue-50 dark:bg-blue-900/40'
-														: 'hover:bg-gray-50 dark:hover:bg-gray-800/60')
+												'flex h-4 w-4 shrink-0 items-center justify-center',
+												!unstyled && [
+													'border-2',
+													RADIUS_CLASSES[radius],
+													isSelected
+														? clsx(
+																'border-blue-600 dark:border-blue-500',
+																SELECTED_FILL
+															)
+														: clsx(CONTROL_BORDER, CONTROL_BG),
+												]
 											)}
 										>
-											<span
-												aria-hidden
-												className={clsx(
-													'flex h-4 w-4 shrink-0 items-center justify-center',
-													!unstyled && [
-														'border-2',
-														RADIUS_CLASSES[radius],
-														isSelected
-															? clsx(
-																	'border-blue-600 dark:border-blue-500',
-																	SELECTED_FILL
-																)
-															: clsx(CONTROL_BORDER, CONTROL_BG),
-													]
-												)}
-											>
-												{isSelected && (
-													<svg
-														className="h-3 w-3 text-white"
-														viewBox="0 0 12 12"
-														fill="none"
-														stroke="currentColor"
-														strokeWidth="2.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													>
-														<polyline points="2 6 5 9 10 3" />
-													</svg>
-												)}
-											</span>
-											{option.label}
-										</li>
-									);
-								})
-							)}
+											{isSelected && (
+												<svg
+													className="h-3 w-3 text-white"
+													viewBox="0 0 12 12"
+													fill="none"
+													stroke="currentColor"
+													strokeWidth="2.5"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+												>
+													<polyline points="2 6 5 9 10 3" />
+												</svg>
+											)}
+										</span>
+										{option.label}
+									</li>
+								);
+							})}
 						</ul>
+						<div
+							role="status"
+							className={
+								filteredOptions.length === 0
+									? 'px-3 py-2 text-gray-500 dark:text-gray-400'
+									: undefined
+							}
+						>
+							{filteredOptions.length === 0 ? noResultsText : ''}
+						</div>
 						{maxSelectedValues !== undefined && (
 							<div
 								className={clsx(
@@ -501,7 +550,7 @@ export function MultiCombobox({
 								<button
 									type="button"
 									disabled={selectedValues.length === 0}
-									onClick={clearSelection}
+									onClick={handleFooterClearClick}
 									className="text-xs font-medium text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:text-blue-400 dark:hover:text-blue-300"
 								>
 									{clearText}

@@ -1,5 +1,7 @@
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { expectFocusOn } from '../../../.storybook/play_helpers';
 import { MultiCombobox, type MultiComboboxOption } from './multi_combobox';
 
 const defaultOptions: MultiComboboxOption[] = [
@@ -116,6 +118,61 @@ export const WithLabel: Story = {
 	args: {
 		label: 'Fruits',
 	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('combobox', { name: 'Fruits' });
+
+		await step('Tab focuses the trigger', async () => {
+			await userEvent.tab();
+			await expectFocusOn(trigger);
+		});
+
+		await step(
+			'ArrowUp opens the listbox with the last option active',
+			async () => {
+				await userEvent.keyboard('{ArrowUp}');
+				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const lastOption = canvas.getByRole('option', { name: 'Mango' });
+				await expect(searchInput).toHaveAttribute(
+					'aria-activedescendant',
+					lastOption.id
+				);
+			}
+		);
+
+		await step('Enter selects the active option', async () => {
+			await userEvent.keyboard('{Enter}');
+			await expect(
+				canvas.getByRole('option', { name: 'Mango' })
+			).toHaveAttribute('aria-selected', 'true');
+		});
+
+		await step(
+			'Escape closes the listbox, returns focus to the trigger, and leaves no stale aria-activedescendant on it',
+			async () => {
+				await userEvent.keyboard('{Escape}');
+				await expect(canvas.queryByRole('listbox')).not.toBeInTheDocument();
+				await expectFocusOn(trigger);
+				await expect(trigger).not.toHaveAttribute('aria-activedescendant');
+			}
+		);
+
+		await step('Tab moves focus to the "Clear selection" button', async () => {
+			await userEvent.tab();
+			await expectFocusOn(
+				canvas.getByRole('button', { name: 'Clear selection' })
+			);
+		});
+
+		await step(
+			'activating the clear button empties the selection, returns focus to the trigger, and restores the placeholder',
+			async () => {
+				await userEvent.keyboard('{Enter}');
+				await expectFocusOn(trigger);
+				await expect(trigger).toHaveTextContent('Select fruits...');
+			}
+		);
+	},
 };
 
 export const Capped: Story = {
@@ -125,6 +182,100 @@ export const Capped: Story = {
 		placeholder: 'Select sort order...',
 		maxSelectedValues: 2,
 		isOptionDisabled: isSortOptionDisabled,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('combobox', { name: 'Sort by' });
+
+		await step('Tab focuses the trigger', async () => {
+			await userEvent.tab();
+			await expectFocusOn(trigger);
+		});
+
+		await step(
+			'ArrowDown opens the listbox with the first option active and moves focus into the named search input',
+			async () => {
+				await userEvent.keyboard('{ArrowDown}');
+				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				await expectFocusOn(searchInput);
+				await expect(searchInput).toHaveAccessibleDescription(
+					'You can select up to 2 items'
+				);
+				const nameOption = canvas.getByRole('option', { name: 'Name' });
+				await expect(searchInput).toHaveAttribute(
+					'aria-activedescendant',
+					nameOption.id
+				);
+			}
+		);
+
+		await step('Enter selects "Name"', async () => {
+			await userEvent.keyboard('{Enter}');
+			await expect(
+				canvas.getByRole('option', { name: 'Name' })
+			).toHaveAttribute('aria-selected', 'true');
+		});
+
+		await step(
+			'moving to "Date" and pressing Enter selects it, reaching the cap',
+			async () => {
+				await userEvent.keyboard('{ArrowDown}{ArrowDown}{Enter}');
+				await expect(
+					canvas.getByRole('option', { name: 'Date' })
+				).toHaveAttribute('aria-selected', 'true');
+			}
+		);
+
+		await step(
+			'ArrowDown lands on the disabled "Date (desc)" option, which still shows as active',
+			async () => {
+				await userEvent.keyboard('{ArrowDown}');
+				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const dateDescOption = canvas.getByRole('option', {
+					name: 'Date (desc)',
+				});
+				await expect(searchInput).toHaveAttribute(
+					'aria-activedescendant',
+					dateDescOption.id
+				);
+				await expect(dateDescOption).toHaveAttribute('aria-disabled', 'true');
+				await expect(getComputedStyle(dateDescOption).backgroundColor).not.toBe(
+					'rgba(0, 0, 0, 0)'
+				);
+			}
+		);
+
+		await step(
+			'Enter on the disabled active option does not select it',
+			async () => {
+				await userEvent.keyboard('{Enter}');
+				await expect(
+					canvas.getByRole('option', { name: 'Date (desc)' })
+				).toHaveAttribute('aria-selected', 'false');
+			}
+		);
+
+		await step(
+			'Tab moves focus straight to the footer Clear button',
+			async () => {
+				await userEvent.tab();
+				await expectFocusOn(canvas.getByRole('button', { name: 'Clear' }));
+			}
+		);
+
+		await step(
+			'activating the footer Clear button empties the selection and refocuses the search input',
+			async () => {
+				await userEvent.keyboard('{Enter}');
+				await expectFocusOn(canvas.getByRole('textbox', { name: 'Search' }));
+				await expect(
+					canvas.getByRole('option', { name: 'Name' })
+				).toHaveAttribute('aria-selected', 'false');
+				await expect(
+					canvas.getByRole('option', { name: 'Date' })
+				).toHaveAttribute('aria-selected', 'false');
+			}
+		);
 	},
 };
 
@@ -178,5 +329,83 @@ export const Unstyled: Story = {
 	args: {
 		label: 'Fruits',
 		unstyled: true,
+	},
+};
+
+export const Required: Story = {
+	args: {
+		label: 'Fruits',
+		required: true,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step(
+			'the trigger is marked as required for assistive tech',
+			async () => {
+				await expect(canvas.getByRole('combobox')).toHaveAttribute(
+					'aria-required',
+					'true'
+				);
+			}
+		);
+	},
+};
+
+function FollowedByButtonExample() {
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+			<MultiCombobox label="Fruits" options={defaultOptions} />
+			<button type="button">Next</button>
+		</div>
+	);
+}
+
+export const FollowedByButton: Story = {
+	render: () => <FollowedByButtonExample />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('combobox', { name: 'Fruits' });
+
+		await step('Tab focuses the trigger', async () => {
+			await userEvent.tab();
+			await expectFocusOn(trigger);
+		});
+
+		await step('ArrowDown opens the listbox', async () => {
+			await userEvent.keyboard('{ArrowDown}');
+			await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+		});
+
+		await step(
+			'Tab moves focus to the "Next" button and closes the dropdown',
+			async () => {
+				await userEvent.tab();
+				await expectFocusOn(canvas.getByRole('button', { name: 'Next' }));
+				await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+			}
+		);
+	},
+};
+
+export const NoResults: Story = {
+	args: {
+		label: 'Fruits',
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const trigger = canvas.getByRole('combobox', { name: 'Fruits' });
+
+		await step(
+			'typing a query with no matches announces "No results found"',
+			async () => {
+				await userEvent.click(trigger);
+				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				await userEvent.type(searchInput, 'zzz');
+				await expect(canvas.getByRole('status')).toHaveTextContent(
+					'No results found'
+				);
+			}
+		);
 	},
 };

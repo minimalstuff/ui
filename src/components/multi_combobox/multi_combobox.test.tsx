@@ -243,4 +243,151 @@ describe('MultiCombobox', () => {
 		fireEvent.click(trigger);
 		expect(screen.getByRole('listbox')).toBeInTheDocument();
 	});
+
+	test('should show the active indicator on the active option even when it is disabled', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				isOptionDisabled={(optionValue) => optionValue === 'b'}
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		const searchInput = screen.getByPlaceholderText('Search');
+		fireEvent.keyDown(searchInput, { key: 'ArrowDown' });
+		fireEvent.keyDown(searchInput, { key: 'ArrowDown' });
+
+		expect(screen.getByRole('option', { name: 'Option B' })).toHaveClass(
+			'bg-blue-50'
+		);
+	});
+
+	test('should close the dropdown when focus moves outside the wrapper', () => {
+		const handleDropdownClose = vi.fn();
+		render(
+			<div>
+				<MultiCombobox
+					label="Fruits"
+					options={OPTIONS}
+					onDropdownClose={handleDropdownClose}
+				/>
+				<button type="button">Outside</button>
+			</div>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		fireEvent.blur(screen.getByPlaceholderText('Search'), {
+			relatedTarget: screen.getByRole('button', { name: 'Outside' }),
+		});
+
+		expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+		expect(handleDropdownClose).toHaveBeenCalledWith([]);
+	});
+
+	test('should not call onDropdownClose when the closed trigger blurs', () => {
+		const handleDropdownClose = vi.fn();
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				onDropdownClose={handleDropdownClose}
+			/>
+		);
+		const trigger = screen.getByRole('combobox', { name: 'Fruits' });
+		fireEvent.focus(trigger);
+		fireEvent.blur(trigger, { relatedTarget: null });
+
+		expect(handleDropdownClose).not.toHaveBeenCalled();
+	});
+
+	test('should focus the trigger after clearing the selection via the X button', () => {
+		render(
+			<MultiCombobox label="Fruits" options={OPTIONS} defaultValues={['a']} />
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
+
+		expect(screen.getByRole('combobox', { name: 'Fruits' })).toHaveFocus();
+	});
+
+	test('should focus the search input after clearing the selection via the footer Clear button', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				defaultValues={['a', 'b']}
+				maxSelectedValues={2}
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		const footerClearButton = screen.getByRole('button', { name: 'Clear' });
+		footerClearButton.focus();
+		fireEvent.click(footerClearButton);
+
+		expect(screen.getByPlaceholderText('Search')).toHaveFocus();
+	});
+
+	test('should give the search input an accessible name and describe it by the max-selected hint', () => {
+		render(
+			<MultiCombobox label="Fruits" options={OPTIONS} maxSelectedValues={2} />
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		const searchInput = screen.getByRole('textbox', { name: 'Search' });
+		expect(searchInput).toHaveAccessibleDescription(
+			'You can select up to 2 items'
+		);
+	});
+
+	test('should not put aria-activedescendant on the trigger', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		const trigger = screen.getByRole('combobox', { name: 'Fruits' });
+		fireEvent.click(trigger);
+		fireEvent.keyDown(screen.getByPlaceholderText('Search'), {
+			key: 'ArrowDown',
+		});
+
+		expect(trigger).not.toHaveAttribute('aria-activedescendant');
+	});
+
+	test('should open the dropdown with the first option active when ArrowDown is pressed on the closed trigger', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		const trigger = screen.getByRole('combobox', { name: 'Fruits' });
+		fireEvent.keyDown(trigger, { key: 'ArrowDown' });
+
+		const searchInput = screen.getByPlaceholderText('Search');
+		const firstOption = screen.getByRole('option', { name: 'Option A' });
+		expect(searchInput).toHaveAttribute(
+			'aria-activedescendant',
+			firstOption.id
+		);
+	});
+
+	test('should open the dropdown with the last option active when ArrowUp is pressed on the closed trigger', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		const trigger = screen.getByRole('combobox', { name: 'Fruits' });
+		fireEvent.keyDown(trigger, { key: 'ArrowUp' });
+
+		const searchInput = screen.getByPlaceholderText('Search');
+		const lastOption = screen.getByRole('option', { name: 'Option C' });
+		expect(searchInput).toHaveAttribute('aria-activedescendant', lastOption.id);
+	});
+
+	test('should mark the trigger as aria-required when required', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} required />);
+		expect(screen.getByRole('combobox')).toHaveAttribute(
+			'aria-required',
+			'true'
+		);
+	});
+
+	test('renders "No results" in a status region, not inside the listbox', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		fireEvent.change(screen.getByPlaceholderText('Search'), {
+			target: { value: 'zzz' },
+		});
+
+		const status = screen.getByRole('status');
+		expect(status).toHaveTextContent('No results found');
+		expect(screen.queryByRole('option')).not.toBeInTheDocument();
+	});
 });
