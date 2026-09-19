@@ -33,7 +33,7 @@ describe('MenuItem', () => {
 				Delete
 			</MenuItem>
 		);
-		expect(screen.getByText('Delete')).toHaveClass('text-red-600');
+		expect(screen.getByText('Delete')).toHaveClass('text-red-700');
 	});
 
 	test('disables the button', () => {
@@ -338,7 +338,7 @@ describe('MenuItem', () => {
 					Settings
 				</MenuItem>
 			);
-			expect(screen.getByRole('menuitem')).toHaveClass('text-red-600');
+			expect(screen.getByRole('menuitem')).toHaveClass('text-red-700');
 		});
 
 		test('renders the icon', () => {
