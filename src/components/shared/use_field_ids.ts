@@ -5,6 +5,7 @@ interface FieldIds {
 	errorId: string;
 	descriptionId: string;
 	labelId: string;
+	characterCountId: string;
 }
 
 /**
@@ -21,5 +22,6 @@ export function useFieldIds(id: string | undefined): FieldIds {
 		errorId: `${fieldId}-error`,
 		descriptionId: `${fieldId}-description`,
 		labelId: `${fieldId}-label`,
+		characterCountId: `${fieldId}-character-count`,
 	};
 }

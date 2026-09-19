@@ -1,3 +1,4 @@
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Input } from './input';
@@ -98,6 +99,44 @@ export const WithCharCount: Story = {
 		minLength: 3,
 		maxLength: 20,
 		defaultValue: 'ab',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByLabelText('Username');
+
+		await expect(input).toHaveAccessibleDescription('2/3 min · 2/20 max');
+
+		await userEvent.type(input, 'c');
+
+		await expect(input).toHaveAccessibleDescription('3/3 min · 3/20 max');
+	},
+};
+
+export const WithExternalDescription: Story = {
+	render: (args) => (
+		<>
+			<p
+				id="email-hint"
+				className="mb-1 text-sm text-gray-700 dark:text-gray-300"
+			>
+				We will only use this to send receipts.
+			</p>
+			<Input {...args} />
+		</>
+	),
+	args: {
+		label: 'Email',
+		'aria-describedby': 'email-hint',
+		error: 'Invalid email',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByLabelText('Email');
+		const errorMessage = canvas.getByRole('alert');
+		const describedBy = input.getAttribute('aria-describedby')?.split(' ');
+
+		await expect(describedBy).toContain('email-hint');
+		await expect(describedBy).toContain(errorMessage.id);
 	},
 };
 

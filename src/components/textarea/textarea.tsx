@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 import { Field } from '#components/shared/field';
+import { joinIds } from '#components/shared/join_ids';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
@@ -38,9 +39,10 @@ export function Textarea({
 	defaultValue,
 	onChange,
 	id,
+	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<TextareaProps>) {
-	const { fieldId, errorId } = useFieldIds(id);
+	const { fieldId, errorId, characterCountId } = useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 
 	const hasCharCount =
@@ -79,11 +81,16 @@ export function Textarea({
 				maxLength={maxLength}
 				onChange={handleChange}
 				aria-invalid={!!error}
-				aria-describedby={error ? errorId : undefined}
+				aria-describedby={joinIds(
+					callerDescribedBy,
+					error && errorId,
+					hasCharCount && characterCountId
+				)}
 				{...props}
 			/>
 			{hasCharCount && (
 				<CharacterCount
+					id={characterCountId}
 					current={length}
 					min={minLength}
 					max={maxLength}

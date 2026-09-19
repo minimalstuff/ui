@@ -55,6 +55,40 @@ describe('Textarea', () => {
 		);
 	});
 
+	test('merges a caller-supplied aria-describedby with the error id', () => {
+		render(<Textarea label="Bio" aria-describedby="hint" error="Too long" />);
+		const textarea = screen.getByLabelText('Bio');
+		const errorMessage = screen.getByRole('alert');
+		const describedBy = textarea.getAttribute('aria-describedby');
+
+		expect(describedBy).toContain('hint');
+		expect(describedBy).toContain(errorMessage.id);
+	});
+
+	test('keeps only the caller-supplied aria-describedby when nothing else applies', () => {
+		render(<Textarea label="Bio" aria-describedby="hint" />);
+		expect(screen.getByLabelText('Bio')).toHaveAttribute(
+			'aria-describedby',
+			'hint'
+		);
+	});
+
+	test('includes the character count id in the accessible description', () => {
+		render(
+			<Textarea label="Bio" showCharCount maxLength={10} defaultValue="hello" />
+		);
+		expect(screen.getByLabelText('Bio')).toHaveAccessibleDescription(
+			'5/10 max'
+		);
+	});
+
+	test('does not add a character count id when showCharCount is off', () => {
+		render(<Textarea label="Bio" maxLength={10} defaultValue="hello" />);
+		expect(screen.getByLabelText('Bio')).not.toHaveAttribute(
+			'aria-describedby'
+		);
+	});
+
 	test('forwards disabled to the textarea', () => {
 		render(<Textarea label="Bio" disabled />);
 		expect(screen.getByLabelText('Bio')).toBeDisabled();
