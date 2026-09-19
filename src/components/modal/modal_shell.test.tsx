@@ -253,6 +253,29 @@ describe('ModalShell', () => {
 		expect(screen.getByRole('dialog')).not.toHaveAttribute('aria-describedby');
 	});
 
+	test('names the dialog with aria-label when there is no title', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} aria-label="Notice">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog', { name: 'Notice' })).toBeInTheDocument();
+	});
+
+	test('ignores aria-label once a title is set', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				aria-label="Notice"
+			>
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog', { name: 'Title' })).toBeInTheDocument();
+	});
+
 	test('focuses initialFocusRef instead of the first tabbable element', () => {
 		render(<ModalShellWithInitialFocus />);
 		expect(screen.getByText('Cancel')).toHaveFocus();

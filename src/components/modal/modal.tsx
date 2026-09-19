@@ -18,6 +18,8 @@ export interface ModalProps {
 	className?: string;
 	dismissible?: boolean;
 	closeLabel?: string;
+	/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
+	'aria-label'?: string;
 }
 
 function resolveRenderProp(
@@ -42,6 +44,7 @@ export const Modal = createCallable<ModalProps, void>(
 		className,
 		dismissible,
 		closeLabel,
+		'aria-label': ariaLabel,
 	}) => {
 		useDisableHotkeysWhileMounted();
 		const [footer, setFooter] = useState<ReactNode>(null);
@@ -59,6 +62,7 @@ export const Modal = createCallable<ModalProps, void>(
 				className={className}
 				dismissible={dismissible}
 				closeLabel={closeLabel}
+				aria-label={ariaLabel}
 			>
 				<ModalFooterSetterContext.Provider value={setFooter}>
 					{resolveRenderProp(children, handleDismiss)}

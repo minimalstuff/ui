@@ -106,6 +106,22 @@ export const WithoutTitle: Story = {
 	args: {
 		title: undefined,
 		children: 'This modal has no header.',
+		'aria-label': 'Notice',
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('opens named by aria-label', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Notice' });
+		});
+
+		await step('close it', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		});
 	},
 };
 
