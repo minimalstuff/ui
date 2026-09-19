@@ -126,6 +126,16 @@ export const Default: Story = {
 				await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 			}
 		);
+
+		await step(
+			'Tab from the focused tab moves focus into the tabpanel with a visible outline',
+			async () => {
+				await userEvent.tab();
+				const panel = canvas.getByRole('tabpanel', { name: 'Tab 1' });
+				await expectFocusOn(panel);
+				await expect(getComputedStyle(panel).outlineStyle).not.toBe('none');
+			}
+		);
 	},
 };
 
