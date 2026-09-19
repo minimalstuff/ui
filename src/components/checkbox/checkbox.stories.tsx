@@ -1,6 +1,8 @@
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Checkbox } from './checkbox';
+import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const meta = {
 	title: 'Example/Checkbox',
@@ -60,6 +62,23 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		'aria-label': 'Accept terms and conditions',
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const checkbox = canvas.getByRole('checkbox', {
+			name: 'Accept terms and conditions',
+		});
+
+		await step(
+			'Tab focuses the checkbox and shows the focus ring',
+			async () => {
+				await userEvent.tab();
+				await expectFocusOn(checkbox);
+				const ring = checkbox.parentElement;
+				if (!ring) throw new Error('expected a focus-ring wrapper element');
+				await expect(getComputedStyle(ring).boxShadow).not.toBe('none');
+			}
+		);
 	},
 };
 
