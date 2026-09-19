@@ -14,7 +14,7 @@ export function menuItemClasses(
 		BASE_CLASSES,
 		stateClasses,
 		danger
-			? 'text-red-600 dark:text-red-400'
+			? 'text-red-700 dark:text-red-300'
 			: 'text-gray-700 dark:text-gray-300',
 		className
 	);
