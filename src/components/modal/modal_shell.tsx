@@ -34,6 +34,8 @@ interface ModalShellProps {
 	role?: ModalRole;
 	/** Wins over the first-tabbable rule for where focus lands on open, once it holds an element. */
 	initialFocusRef?: RefObject<HTMLElement | null>;
+	/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
+	'aria-label'?: string;
 }
 
 const SIZE_CLASSES = {
@@ -56,6 +58,7 @@ export function ModalShell({
 	closeLabel = 'Close',
 	role = 'dialog',
 	initialFocusRef,
+	'aria-label': ariaLabel,
 }: Readonly<ModalShellProps>) {
 	const [isOpening, setIsOpening] = useState(false);
 	const [modalToken] = useState(() => Symbol('modal'));
@@ -180,6 +183,7 @@ export function ModalShell({
 				role={role}
 				aria-modal="true"
 				aria-labelledby={title ? titleId : undefined}
+				aria-label={title ? undefined : ariaLabel}
 				aria-describedby={hasDescribedByContent ? contentId : undefined}
 				tabIndex={-1}
 				className={clsx(
