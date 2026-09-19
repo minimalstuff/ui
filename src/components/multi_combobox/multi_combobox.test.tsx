@@ -258,7 +258,10 @@ describe('MultiCombobox', () => {
 		fireEvent.keyDown(searchInput, { key: 'ArrowDown' });
 
 		expect(screen.getByRole('option', { name: 'Option B' })).toHaveClass(
-			'bg-blue-50'
+			'bg-blue-50',
+			'outline-2',
+			'-outline-offset-2',
+			'outline-blue-500'
 		);
 	});
 

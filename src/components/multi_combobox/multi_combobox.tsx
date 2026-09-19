@@ -16,7 +16,7 @@ import {
 import { Field } from '#components/shared/field';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useActiveOption } from '#components/shared/use_active_option';
-import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
+import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import {
 	PANEL_RADIUS_CLASSES,
@@ -28,6 +28,11 @@ import {
 	FIELD_ERROR_BORDER,
 	FIELD_TEXT_COLORS,
 } from '#components/shared/field_styles';
+import {
+	ACTIVE_OPTION_OUTLINE,
+	BUTTON_FOCUS_OUTLINE,
+	FIELD_FOCUS_RING_ERROR,
+} from '#components/shared/focus_styles';
 import {
 	CONTROL_BG,
 	CONTROL_BORDER,
@@ -405,7 +410,11 @@ export function MultiCombobox({
 						aria-label={clearLabel}
 						onMouseDown={(event) => event.preventDefault()}
 						onClick={handleTriggerClearClick}
-						className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+						className={clsx(
+							'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300',
+							BUTTON_FOCUS_OUTLINE,
+							BUTTON_COLOR_TOKENS.primary.focusOutline
+						)}
 					>
 						<span className="i-mdi-close block w-4 h-4" aria-hidden />
 					</button>
@@ -487,7 +496,10 @@ export function MultiCombobox({
 												? 'opacity-50 cursor-not-allowed'
 												: 'cursor-pointer',
 											index === activeIndex
-												? 'bg-blue-50 dark:bg-blue-900/40'
+												? clsx(
+														'bg-blue-50 dark:bg-blue-900/40',
+														ACTIVE_OPTION_OUTLINE
+													)
 												: !isDisabled &&
 														'hover:bg-gray-50 dark:hover:bg-gray-800/60'
 										)}

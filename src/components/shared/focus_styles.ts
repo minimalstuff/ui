@@ -1,8 +1,9 @@
 /**
- * The three focus recipes in the library. Buttons draw an outline; text fields
+ * The four focus recipes in the library. Buttons draw an outline; text fields
  * draw a ring on `focus`; controls that hide their real input behind a custom
  * box (Checkbox, Switch, RadioOptions) draw the same ring on the box when the
- * input inside it is `:focus-visible`, so a mouse click shows no ring.
+ * input inside it is `:focus-visible`, so a mouse click shows no ring; menu
+ * items and listbox options draw an inner outline.
  */
 
 /** Pair with a `focus-visible:outline-*` colour from `BUTTON_COLOR_TOKENS`. */
@@ -19,3 +20,14 @@ export const CONTROL_FOCUS_RING =
 export const CONTROL_FOCUS_RING_COLOR = 'has-[:focus-visible]:ring-blue-500';
 export const CONTROL_FOCUS_RING_ERROR_COLOR =
 	'has-[:focus-visible]:ring-red-500';
+
+/** `MenuItem`: items receive real focus, so the outline follows `focus-visible`. */
+export const ACTIVE_ITEM_FOCUS_OUTLINE =
+	'outline-hidden focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-500 dark:focus-visible:outline-blue-400';
+
+/**
+ * `Combobox`/`MultiCombobox` listbox options. The active option never gets DOM
+ * focus (`aria-activedescendant`), so apply this whenever it is active.
+ */
+export const ACTIVE_OPTION_OUTLINE =
+	'outline-2 -outline-offset-2 outline-blue-500 dark:outline-blue-400';

@@ -239,9 +239,11 @@ export const Capped: Story = {
 					dateDescOption.id
 				);
 				await expect(dateDescOption).toHaveAttribute('aria-disabled', 'true');
-				await expect(getComputedStyle(dateDescOption).backgroundColor).not.toBe(
+				const dateDescStyle = getComputedStyle(dateDescOption);
+				await expect(dateDescStyle.backgroundColor).not.toBe(
 					'rgba(0, 0, 0, 0)'
 				);
+				await expect(dateDescStyle.outlineStyle).toBe('solid');
 			}
 		);
 
