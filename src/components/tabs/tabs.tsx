@@ -6,6 +6,8 @@ import { type ReactNode, useId, useRef } from 'react';
 import type { Radius } from '#components/shared/radius';
 import { TabButton } from '#components/tabs/tab_button';
 import type { ControlSize } from '#components/shared/sizes';
+import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
+import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import {
 	tabsListClasses,
@@ -125,8 +127,11 @@ export function Tabs({
 				aria-labelledby={`${id}-tab-${activeIndex}`}
 				tabIndex={0}
 				className={clsx(
-					'focus:outline-none',
-					!unstyled && 'mt-4',
+					!unstyled && [
+						'mt-4',
+						BUTTON_FOCUS_OUTLINE,
+						BUTTON_COLOR_TOKENS.primary.focusOutline,
+					],
 					panelClassName
 				)}
 			>
