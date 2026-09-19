@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { RadioOptions } from './radio_options';
+import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const meta = {
 	title: 'Example/RadioOptions',
@@ -68,6 +70,21 @@ export const StringOptions: Story = {
 	args: {
 		label: 'Pick a fruit',
 		options: ['Apple', 'Banana', 'Cherry'],
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const firstOption = canvas.getByRole('radio', { name: 'Apple' });
+
+		await step(
+			'Tab focuses the first option card and shows the focus ring',
+			async () => {
+				await userEvent.tab();
+				await expectFocusOn(firstOption);
+				const ring = firstOption.closest('label');
+				if (!ring) throw new Error('expected a focus-ring wrapper label');
+				await expect(getComputedStyle(ring).boxShadow).not.toBe('none');
+			}
+		);
 	},
 };
 
