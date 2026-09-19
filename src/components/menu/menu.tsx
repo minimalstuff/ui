@@ -11,7 +11,10 @@ import {
 	cloneElement,
 	isValidElement,
 	useCallback,
+	useId,
 	useRef,
+	useState,
+	type KeyboardEvent,
 	type MouseEvent,
 	type ReactElement,
 	type ReactNode,
@@ -37,9 +40,12 @@ function toPlacement(side: MenuSide, align: MenuAlign): Placement {
 }
 
 interface TriggerProps {
+	id?: string;
 	onClick?: (event: MouseEvent) => void;
+	onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
 	'aria-haspopup'?: 'menu';
 	'aria-expanded'?: boolean;
+	'aria-controls'?: string;
 }
 
 export interface MenuProps {
@@ -55,20 +61,27 @@ export interface MenuProps {
 
 /**
  * A dropdown anchored to `trigger` (e.g. a kebab `IconButton`): click to
- * open, click again/click outside/Escape to close. `children` is made of
- * `MenuItem`s, optionally wrapped in `MenuGroup`s and split by
- * `MenuSeparator`s.
+ * open, click again/click outside/Escape to close, or ArrowDown/ArrowUp on
+ * the closed trigger to open focused on the first/last item respectively.
+ * `children` is made of `MenuItem`s, optionally wrapped in `MenuGroup`s and
+ * split by `MenuSeparator`s.
  *
  * For "right-click anywhere on this area" instead of a specific trigger
  * button, use `ContextMenu`.
  *
- * Opening a `Modal` from a `MenuItem`'s `onClick` is safe: the menu returns
- * focus to `trigger` synchronously during the click, then the modal mounts a
- * render later and takes focus from there. That ordering is what makes the
- * modal record `trigger` as its restore target, so focus lands back on the
- * trigger when the modal closes. The menu panel outlives the click by one
- * exit animation, but the modal sits above it and owns Escape (a document
- * listener), so the fading panel is inert. See `menu_with_modal.test.tsx`.
+ * Safe to nest inside a `Modal`: Escape on the open menu calls
+ * `event.preventDefault()` before closing it (see `MenuSurface`), so the
+ * modal's own Escape handler — which ignores an already-`defaultPrevented`
+ * event — leaves the dialog open and only the menu closes.
+ *
+ * Opening a `Modal` from a `MenuItem`'s `onClick` is also safe: the menu
+ * returns focus to `trigger` synchronously during the click, then the modal
+ * mounts a render later and takes focus from there. That ordering is what
+ * makes the modal record `trigger` as its restore target, so focus lands
+ * back on the trigger when the modal closes. The menu panel outlives the
+ * click by one exit animation, but the modal sits above it and owns Escape
+ * (a document listener), so the fading panel is inert. See
+ * `menu_with_modal.test.tsx`.
  */
 export function Menu({
 	trigger,
@@ -80,6 +93,7 @@ export function Menu({
 	ref,
 }: Readonly<MenuProps>) {
 	const wrapperRef = useRef<HTMLSpanElement>(null);
+	const [initialFocus, setInitialFocus] = useState<'first' | 'last'>('first');
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 
 	const { refs, floatingStyles, isPositioned } = useFloating({
@@ -94,6 +108,12 @@ export function Menu({
 	});
 
 	useEnterOnPositioned(isMounted, isPositioned, setIsVisible);
+
+	const generatedTriggerId = useId();
+	const triggerId =
+		(isValidElement<TriggerProps>(trigger) ? trigger.props.id : undefined) ??
+		generatedTriggerId;
+	const menuId = `${triggerId}-menu`;
 
 	const closeAndReturnFocus = useCallback(() => {
 		close();
@@ -119,6 +139,7 @@ export function Menu({
 		if (isVisible) {
 			close();
 		} else {
+			setInitialFocus('first');
 			open(isPositioned);
 		}
 		if (isValidElement<TriggerProps>(trigger)) {
@@ -126,10 +147,28 @@ export function Menu({
 		}
 	};
 
+	const handleTriggerKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+		if (!isVisible && event.key === 'ArrowDown') {
+			event.preventDefault();
+			setInitialFocus('first');
+			open(isPositioned);
+		} else if (!isVisible && event.key === 'ArrowUp') {
+			event.preventDefault();
+			setInitialFocus('last');
+			open(isPositioned);
+		}
+		if (isValidElement<TriggerProps>(trigger)) {
+			trigger.props.onKeyDown?.(event);
+		}
+	};
+
 	const triggerProps: TriggerProps = {
+		id: triggerId,
 		onClick: handleTriggerClick,
+		onKeyDown: handleTriggerKeyDown,
 		'aria-haspopup': 'menu',
 		'aria-expanded': isMounted,
+		'aria-controls': isMounted ? menuId : undefined,
 	};
 
 	const clonedTrigger = isValidElement<TriggerProps>(trigger)
@@ -141,12 +180,15 @@ export function Menu({
 			{clonedTrigger}
 			{isMounted && (
 				<MenuSurface
+					id={menuId}
+					labelledBy={triggerId}
 					setFloating={refs.setFloating}
 					floatingStyles={floatingStyles}
 					isVisible={isVisible}
 					isPositioned={isPositioned}
 					radius={radius}
 					onClose={closeAndReturnFocus}
+					initialFocus={initialFocus}
 				>
 					{children}
 				</MenuSurface>
