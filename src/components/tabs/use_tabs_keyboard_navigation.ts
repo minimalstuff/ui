@@ -18,6 +18,21 @@ function getEnabledIndexes(items: readonly TabItem[]): number[] {
 	return items.flatMap((item, index) => (item.disabled ? [] : [index]));
 }
 
+/**
+ * Resolves the roving tab stop: `activeIndex` itself when that tab is
+ * enabled, otherwise the first enabled tab. Returns `-1` when no tab is
+ * enabled, so the tablist has no tab stop at all.
+ */
+export function getTabStopIndex(
+	items: readonly TabItem[],
+	activeIndex: number
+): number {
+	const activeItem = items[activeIndex];
+	if (activeItem && !activeItem.disabled) return activeIndex;
+
+	return getEnabledIndexes(items)[0] ?? -1;
+}
+
 type UseTabsKeyboardNavigationParams = {
 	items: readonly TabItem[];
 	activeIndex: number;

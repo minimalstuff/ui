@@ -14,6 +14,7 @@ import {
 type TabButtonProps = {
 	item: TabItem;
 	isActive: boolean;
+	isTabStop: boolean;
 	isFullWidth: boolean;
 	variant: TabsVariant;
 	size: ControlSize;
@@ -31,6 +32,7 @@ type TabButtonProps = {
 export function TabButton({
 	item,
 	isActive,
+	isTabStop,
 	isFullWidth,
 	variant,
 	size,
@@ -53,8 +55,8 @@ export function TabButton({
 			type="button"
 			aria-selected={isActive}
 			aria-disabled={item.disabled}
-			aria-controls={panelId}
-			tabIndex={isActive ? 0 : -1}
+			aria-controls={isActive ? panelId : undefined}
+			tabIndex={isTabStop ? 0 : -1}
 			disabled={item.disabled}
 			onClick={onSelect}
 			onKeyDown={onKeyDown}
@@ -77,6 +79,7 @@ export function TabButton({
 			)}
 			{item.icon && (
 				<span
+					aria-hidden="true"
 					className={clsx(
 						'relative shrink-0',
 						TAB_ICON_SIZE_CLASSES[size],

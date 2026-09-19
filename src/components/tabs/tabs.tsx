@@ -14,7 +14,10 @@ import {
 	type TabsVariant,
 } from '#components/tabs/tabs_styles';
 import { useTabIndicatorTransition } from '#components/tabs/use_tab_indicator_transition';
-import { useTabsKeyboardNavigation } from '#components/tabs/use_tabs_keyboard_navigation';
+import {
+	getTabStopIndex,
+	useTabsKeyboardNavigation,
+} from '#components/tabs/use_tabs_keyboard_navigation';
 
 export interface TabItem {
 	title: string;
@@ -74,9 +77,11 @@ export function Tabs({
 		activateTab(index);
 	};
 
+	const tabStopIndex = getTabStopIndex(items, activeIndex);
+
 	const handleKeyDown = useTabsKeyboardNavigation({
 		items,
-		activeIndex,
+		activeIndex: tabStopIndex,
 		onNavigate: navigateToTab,
 	});
 
@@ -109,6 +114,7 @@ export function Tabs({
 						indicatorRef={indicatorRef}
 						item={item}
 						isActive={activeIndex === index}
+						isTabStop={tabStopIndex === index}
 						isFullWidth={fullWidth}
 						variant={variant}
 						size={size}
