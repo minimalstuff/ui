@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
 import {
+	createContext,
 	type ReactNode,
 	type RefObject,
 	useEffect,
@@ -18,6 +19,9 @@ import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 type ModalRole = 'dialog' | 'alertdialog';
+
+/** @internal the shell's footer slot element, portaled into by `<ModalFooter>` — not part of the public API. */
+export const ModalFooterSlotContext = createContext<HTMLElement | null>(null);
 
 interface ModalShellProps {
 	isEnded: boolean;
@@ -62,6 +66,7 @@ export function ModalShell({
 }: Readonly<ModalShellProps>) {
 	const [isOpening, setIsOpening] = useState(false);
 	const [modalToken] = useState(() => Symbol('modal'));
+	const [footerSlot, setFooterSlot] = useState<HTMLDivElement | null>(null);
 	const dialogRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
@@ -77,12 +82,6 @@ export function ModalShell({
 		document.body.style.overflow = 'hidden';
 		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
 
-		const dialog = dialogRef.current;
-		const firstFocusable =
-			(contentRef.current && getTabbableElements(contentRef.current)[0]) ??
-			(dialog && getTabbableElements(dialog)[0]);
-		(initialFocusRef?.current ?? firstFocusable ?? dialog)?.focus();
-
 		const frameId = requestAnimationFrame(() => {
 			requestAnimationFrame(() => setIsOpening(true));
 		});
@@ -91,8 +90,18 @@ export function ModalShell({
 			cancelAnimationFrame(frameId);
 			document.body.style.overflow = '';
 		};
-		// oxlint-disable-next-line react-hooks/exhaustive-deps -- initial focus is only computed once, on mount; a later change to initialFocusRef shouldn't re-run it
 	}, []);
+
+	useEffect(() => {
+		if (!footerSlot) return;
+
+		const dialog = dialogRef.current;
+		const firstFocusable =
+			(contentRef.current && getTabbableElements(contentRef.current)[0]) ??
+			(dialog && getTabbableElements(dialog)[0]);
+		(initialFocusRef?.current ?? firstFocusable ?? dialog)?.focus();
+		// oxlint-disable-next-line react-hooks/exhaustive-deps -- initial focus is only computed once, when the footer slot mounts (so portaled footer content exists); a later change to initialFocusRef shouldn't re-run it
+	}, [footerSlot]);
 
 	useEffect(() => {
 		if (isEnded) previouslyFocusedRef.current?.focus();
@@ -231,18 +240,19 @@ export function ModalShell({
 						className
 					)}
 				>
-					{children}
+					<ModalFooterSlotContext.Provider value={footerSlot}>
+						{children}
+					</ModalFooterSlotContext.Provider>
 				</div>
-				{footer && (
-					<div
-						className={clsx(
-							'flex items-center justify-end gap-3 px-6 py-4 border-t flex-shrink-0',
-							OVERLAY_BORDER
-						)}
-					>
-						{footer}
-					</div>
-				)}
+				<div
+					ref={setFooterSlot}
+					className={clsx(
+						'flex items-center justify-end gap-3 px-6 py-4 border-t flex-shrink-0 empty:hidden',
+						OVERLAY_BORDER
+					)}
+				>
+					{footer}
+				</div>
 			</div>
 		</div>,
 		document.body
