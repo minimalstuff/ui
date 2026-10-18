@@ -5,9 +5,10 @@ import { useCallback, useRef } from 'react';
 import { type Theme } from '#types/theme';
 import { isWebKitGtk } from '#lib/is_webkit_gtk';
 import { type Radius } from '#components/shared/radius';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { useThemeStore } from '#stores/theme_store/theme_store';
-import { IconButton } from '#components/icon_button/icon_button';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
+import { IconButton } from '#components/icon_button/icon_button';
 import { getNextTheme, switchTheme } from '#lib/theme_transition';
 import { type ButtonVariant } from '#components/shared/button_styles';
 
@@ -18,10 +19,6 @@ const THEME_ICON_CLASSES: Record<Theme, string> = {
 };
 
 const FALLBACK_ICON_CLASS = 'i-tabler-device-desktop text-gray-400';
-
-function defaultAriaLabel(theme: Theme): string {
-	return `Current theme: ${theme}`;
-}
 
 export interface ThemeToggleProps {
 	/**
@@ -46,10 +43,11 @@ export function ThemeToggle({
 	size = 'md',
 	radius,
 	variant,
-	getAriaLabel = defaultAriaLabel,
+	getAriaLabel,
 }: Readonly<ThemeToggleProps>) {
 	const theme = useThemeStore((state) => state.theme);
 	const setTheme = useThemeStore((state) => state.setTheme);
+	const labels = useLabels();
 	const isClient = useIsClient();
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -85,7 +83,7 @@ export function ThemeToggle({
 		<IconButton
 			ref={buttonRef}
 			icon={iconClass}
-			aria-label={getAriaLabel(theme)}
+			aria-label={(getAriaLabel ?? labels.currentTheme)(theme)}
 			size={size}
 			radius={radius}
 			variant={variant}

@@ -10,6 +10,7 @@ import {
 	useState,
 } from 'react';
 
+import { useLabels } from '#components/ui_provider/use_labels';
 import { IconButton } from '#components/icon_button/icon_button';
 import { getTabbableElements } from '#components/shared/tabbable';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
@@ -59,11 +60,12 @@ export function ModalShell({
 	radius = 'xl',
 	className,
 	dismissible = true,
-	closeLabel = 'Close',
+	closeLabel,
 	role = 'dialog',
 	initialFocusRef,
 	'aria-label': ariaLabel,
 }: Readonly<ModalShellProps>) {
+	const labels = useLabels();
 	const [isOpening, setIsOpening] = useState(false);
 	const [modalToken] = useState(() => Symbol('modal'));
 	const [footerSlot, setFooterSlot] = useState<HTMLDivElement | null>(null);
@@ -222,7 +224,7 @@ export function ModalShell({
 							<IconButton
 								icon="i-mdi-close"
 								onClick={onDismiss}
-								aria-label={closeLabel}
+								aria-label={closeLabel ?? labels.close}
 								variant="subtle"
 								size="sm"
 								radius="full"

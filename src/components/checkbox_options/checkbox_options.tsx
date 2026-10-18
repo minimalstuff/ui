@@ -4,6 +4,7 @@ import { type ComponentPropsWithRef } from 'react';
 import { joinIds } from '#components/shared/join_ids';
 import { type Radius } from '#components/shared/radius';
 import { FieldError } from '#components/shared/field_error';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { type ChoiceOption } from '#components/shared/option_card_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
@@ -65,7 +66,7 @@ export function CheckboxOptions({
 	label,
 	error,
 	required,
-	requiredLabel = 'required',
+	requiredLabel,
 	disabled,
 	radius = 'lg',
 	unstyled = false,
@@ -75,6 +76,7 @@ export function CheckboxOptions({
 	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<CheckboxOptionsProps>) {
+	const labels = useLabels();
 	const { fieldId: groupId, errorId } = useFieldIds(id);
 	const name = nameProp ?? groupId;
 
@@ -112,7 +114,7 @@ export function CheckboxOptions({
 							<span className={FIELD_REQUIRED_MARK} aria-hidden="true">
 								*
 							</span>
-							<span className="sr-only">{` (${requiredLabel})`}</span>
+							<span className="sr-only">{` (${requiredLabel ?? labels.required})`}</span>
 						</>
 					)}
 				</legend>
