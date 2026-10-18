@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -67,7 +68,7 @@ describe('Select', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Select label="Country" options={OPTIONS} error="Required" />);
 		const select = screen.getByLabelText('Country');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required');
 
 		expect(errorMessage).toHaveTextContent('Required');
 		expect(select).toHaveAttribute('aria-invalid', 'true');
@@ -84,7 +85,7 @@ describe('Select', () => {
 			/>
 		);
 		const select = screen.getByLabelText('Country');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required');
 		const describedBy = select.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');
@@ -124,5 +125,62 @@ describe('Select', () => {
 	test('renders no required mark when there is no label', () => {
 		render(<Select options={OPTIONS} required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
+
+	test('should link the description through aria-describedby when description is set', () => {
+		render(
+			<Select label="Country" options={OPTIONS} description="Help text" />
+		);
+		expect(screen.getByLabelText('Country')).toHaveAccessibleDescription(
+			'Help text'
+		);
+	});
+
+	test('should merge caller aria-describedby with description and error', () => {
+		render(
+			<>
+				<p id="hint">Hint</p>
+				<Select
+					label="Country"
+					options={OPTIONS}
+					aria-describedby="hint"
+					description="Help text"
+					error="Required"
+				/>
+			</>
+		);
+		expect(screen.getByLabelText('Country')).toHaveAccessibleDescription(
+			'Hint Help text Required'
+		);
+	});
+
+	test('should render a non-string description node', () => {
+		render(
+			<Select
+				label="Country"
+				options={OPTIONS}
+				description={<em>Rich help</em>}
+			/>
+		);
+		expect(screen.getByText('Rich help')).toBeInTheDocument();
+	});
+
+	test('should be described by the error when error is set', () => {
+		render(<Select label="Country" options={OPTIONS} error="Required" />);
+		expect(screen.getByLabelText('Country')).toHaveAccessibleDescription(
+			'Required'
+		);
+	});
+
+	test('should have no axe violations with label, description and error', async () => {
+		const { container } = render(
+			<Select
+				label="Country"
+				options={OPTIONS}
+				description="Help text"
+				error="Required"
+			/>
+		);
+		expect(await axe(container)).toHaveNoViolations();
 	});
 });

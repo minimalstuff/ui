@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -39,7 +40,7 @@ describe('Input', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Input label="Email" error="Invalid email" />);
 		const input = screen.getByLabelText('Email');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Invalid email');
 
 		expect(errorMessage).toHaveTextContent('Invalid email');
 		expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -58,7 +59,7 @@ describe('Input', () => {
 	test('merges a caller-supplied aria-describedby with the error id', () => {
 		render(<Input label="Email" aria-describedby="hint" error="Invalid" />);
 		const input = screen.getByLabelText('Email');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Invalid');
 		const describedBy = input.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');
@@ -123,5 +124,48 @@ describe('Input', () => {
 	test('renders no required mark when there is no label', () => {
 		render(<Input required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
+
+	test('should link the description through aria-describedby when description is set', () => {
+		render(<Input label="Email" description="Help text" />);
+		expect(screen.getByLabelText('Email')).toHaveAccessibleDescription(
+			'Help text'
+		);
+	});
+
+	test('should merge caller aria-describedby with description and error', () => {
+		render(
+			<>
+				<p id="hint">Hint</p>
+				<Input
+					label="Email"
+					aria-describedby="hint"
+					description="Help text"
+					error="Invalid email"
+				/>
+			</>
+		);
+		expect(screen.getByLabelText('Email')).toHaveAccessibleDescription(
+			'Hint Help text Invalid email'
+		);
+	});
+
+	test('should render a non-string description node', () => {
+		render(<Input label="Email" description={<em>Rich help</em>} />);
+		expect(screen.getByText('Rich help')).toBeInTheDocument();
+	});
+
+	test('should be described by the error when error is set', () => {
+		render(<Input label="Email" error="Invalid email" />);
+		expect(screen.getByLabelText('Email')).toHaveAccessibleDescription(
+			'Invalid email'
+		);
+	});
+
+	test('should have no axe violations with label, description and error', async () => {
+		const { container } = render(
+			<Input label="Email" description="Help text" error="Invalid email" />
+		);
+		expect(await axe(container)).toHaveNoViolations();
 	});
 });

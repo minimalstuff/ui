@@ -22,6 +22,7 @@ export interface SelectProps extends Omit<
 > {
 	options: SelectOption[];
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	error?: string;
 	placeholder?: string;
 	radius?: Radius;
@@ -33,6 +34,7 @@ export interface SelectProps extends Omit<
 export function Select({
 	options,
 	label,
+	description,
 	error,
 	placeholder,
 	radius = 'md',
@@ -46,13 +48,15 @@ export function Select({
 	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<SelectProps>) {
-	const { fieldId, errorId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId } = useFieldIds(id);
 
 	return (
 		<Field
 			fieldId={fieldId}
 			errorId={errorId}
+			descriptionId={descriptionId}
 			label={label}
+			description={description}
 			error={error}
 			required={props.required}
 			wrapperClassName={wrapperClassName}
@@ -75,7 +79,11 @@ export function Select({
 				{...(value === undefined ? { defaultValue } : { value })}
 				onChange={onChange}
 				aria-invalid={!!error}
-				aria-describedby={joinIds(callerDescribedBy, error && errorId)}
+				aria-describedby={joinIds(
+					callerDescribedBy,
+					Boolean(description) && descriptionId,
+					error && errorId
+				)}
 				{...props}
 			>
 				{placeholder !== undefined && <option value="">{placeholder}</option>}

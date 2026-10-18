@@ -15,6 +15,7 @@ import {
 
 export interface InputProps extends ComponentPropsWithRef<'input'> {
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;
 	minLength?: number;
@@ -27,6 +28,7 @@ export interface InputProps extends ComponentPropsWithRef<'input'> {
 
 export function Input({
 	label,
+	description,
 	error,
 	showCharCount = false,
 	minLength,
@@ -42,7 +44,7 @@ export function Input({
 	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<InputProps>) {
-	const { fieldId, errorId, characterCountId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId, characterCountId } = useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 
 	const hasCharCount =
@@ -57,7 +59,9 @@ export function Input({
 		<Field
 			fieldId={fieldId}
 			errorId={errorId}
+			descriptionId={descriptionId}
 			label={label}
+			description={description}
 			error={error}
 			required={props.required}
 			wrapperClassName={wrapperClassName}
@@ -83,6 +87,7 @@ export function Input({
 				aria-invalid={!!error}
 				aria-describedby={joinIds(
 					callerDescribedBy,
+					Boolean(description) && descriptionId,
 					error && errorId,
 					hasCharCount && characterCountId
 				)}

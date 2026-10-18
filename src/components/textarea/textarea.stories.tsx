@@ -14,6 +14,10 @@ const meta = {
 			control: 'text',
 			description: 'Label above the textarea',
 		},
+		description: {
+			control: 'text',
+			description: 'Help text below the field',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the textarea',
@@ -71,6 +75,23 @@ export const WithLabel: Story = {
 	args: {
 		label: 'Description',
 		placeholder: 'Enter your message...',
+	},
+};
+
+export const WithDescription: Story = {
+	args: {
+		label: 'Description',
+		placeholder: 'Enter your message...',
+		description: 'Tell us what happened.',
+	},
+};
+
+export const WithDescriptionAndError: Story = {
+	args: {
+		label: 'Description',
+		placeholder: 'Enter your message...',
+		description: 'Tell us what happened.',
+		error: 'This field is required',
 	},
 };
 

@@ -20,6 +20,10 @@ const meta = {
 			control: 'text',
 			description: 'Label above the select',
 		},
+		description: {
+			control: 'text',
+			description: 'Help text below the field',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the select',
@@ -67,6 +71,21 @@ export const Default: Story = {
 export const WithLabel: Story = {
 	args: {
 		label: 'Fruit',
+	},
+};
+
+export const WithDescription: Story = {
+	args: {
+		label: 'Fruit',
+		description: 'Pick your favorite.',
+	},
+};
+
+export const WithDescriptionAndError: Story = {
+	args: {
+		label: 'Fruit',
+		description: 'Pick your favorite.',
+		error: 'Please select a fruit',
 	},
 };
 
