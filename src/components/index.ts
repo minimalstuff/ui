@@ -98,6 +98,7 @@ export {
 	ThemeToggle,
 	type ThemeToggleProps,
 } from './theme_toggle/theme_toggle';
+export { Toolbar, type ToolbarProps } from './toolbar/toolbar';
 export {
 	Tooltip,
 	type TooltipPosition,
