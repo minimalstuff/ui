@@ -1,11 +1,19 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { IconButton } from './icon_button';
 
 describe('IconButton', () => {
+	test('should have no axe violations when rendered with an aria-label', async () => {
+		const { container } = render(
+			<IconButton icon="i-mdi-close" aria-label="Close" />
+		);
+		expect(await axe(container)).toHaveNoViolations();
+	});
+
 	test('exposes the aria-label as the accessible name', () => {
 		render(<IconButton icon="i-mdi-close" aria-label="Close" />);
 		expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
