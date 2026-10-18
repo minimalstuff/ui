@@ -1,8 +1,13 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
+import { Tooltip } from '#components/tooltip/tooltip';
 import { type ControlSize } from '#components/shared/sizes';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	type IconButtonTooltip,
+	type IconButtonTooltipOptions,
+} from '#components/icon_button/icon_button_tooltip';
 import {
 	BUTTON_COLOR_TOKENS,
 	BUTTON_INTERACTIVE_CLASSES,
@@ -34,11 +39,14 @@ type IconButtonStyle =
 			radius?: Radius;
 	  };
 
+export type { IconButtonTooltip } from '#components/icon_button/icon_button_tooltip';
+
 export type IconButtonProps = ComponentPropsWithRef<'button'> & {
 	icon: string;
 	'aria-label': string;
 	size?: ControlSize;
 	children?: ReactNode;
+	tooltip?: IconButtonTooltip;
 } & IconButtonStyle;
 
 // See Button's `FlatButtonStyle` for why this cast is here: it only widens
@@ -49,6 +57,15 @@ type FlatIconButtonStyle = {
 	color?: ButtonColor;
 	radius?: Radius;
 };
+
+function resolveTooltipOptions(
+	tooltip: IconButtonTooltip | undefined
+): IconButtonTooltipOptions | undefined {
+	if (!tooltip) return undefined;
+	if (tooltip === true) return {};
+	if (typeof tooltip === 'string') return { position: tooltip };
+	return tooltip;
+}
 
 export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 	const {
@@ -61,12 +78,14 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 		radius = 'md',
 		className,
 		children,
+		tooltip,
 		ref,
 		...props
 	} = iconButtonProps as IconButtonProps & FlatIconButtonStyle;
 	const tokens = BUTTON_COLOR_TOKENS[color];
+	const tooltipOptions = resolveTooltipOptions(tooltip);
 
-	return (
+	const button = (
 		<button
 			ref={ref}
 			type="button"
@@ -90,5 +109,18 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 			/>
 			{children}
 		</button>
+	);
+
+	if (!tooltipOptions) return button;
+
+	const hasCustomContent = tooltipOptions.content !== undefined;
+	return (
+		<Tooltip
+			content={hasCustomContent ? tooltipOptions.content : ariaLabel}
+			position={tooltipOptions.position}
+			describeChild={hasCustomContent ? undefined : false}
+		>
+			{button}
+		</Tooltip>
 	);
 }
