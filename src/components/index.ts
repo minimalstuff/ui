@@ -47,7 +47,11 @@ export {
 	type HighlightSegment,
 	splitIntoHighlightSegments,
 } from '#lib/split_into_highlight_segments';
-export { IconButton, type IconButtonProps } from './icon_button/icon_button';
+export {
+	IconButton,
+	type IconButtonProps,
+	type IconButtonTooltip,
+} from './icon_button/icon_button';
 export { Input, type InputProps } from './input/input';
 export { BASE_INPUT_STYLES } from './shared/field_styles';
 export { Kbd, type KbdProps, type KbdSize } from './kbd/kbd';

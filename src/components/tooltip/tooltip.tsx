@@ -26,6 +26,7 @@ import { mergeRefs } from '#lib/merge_refs';
 import { joinIds } from '#components/shared/join_ids';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type TooltipPosition } from '#components/tooltip/tooltip_position';
 import { findLandmarkPortalTarget } from '#components/shared/portal_target';
 import {
 	getAccessibleName,
@@ -36,7 +37,7 @@ import {
 	useOverlayState,
 } from '#components/shared/use_overlay_state';
 
-export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
+export type { TooltipPosition } from '#components/tooltip/tooltip_position';
 
 const OFFSET_FROM_TRIGGER = 8;
 const ARROW_SIZE_PX = 8;

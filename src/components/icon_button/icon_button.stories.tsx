@@ -1,9 +1,12 @@
-import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { IconButton } from '#components/icon_button/icon_button';
-import { expectFocusOn } from '../../../.storybook/play_helpers';
+import {
+	expectFocusOn,
+	getPortalScope,
+} from '../../../.storybook/play_helpers';
 
 const meta = {
 	title: 'Example/IconButton',
@@ -49,6 +52,11 @@ const meta = {
 		disabled: {
 			control: 'boolean',
 			description: 'Disable the button',
+		},
+		tooltip: {
+			control: false,
+			description:
+				'Wraps the button in a Tooltip: true (aria-label), a position, or { position, content }',
 		},
 	},
 	args: {
@@ -119,6 +127,44 @@ export const WithChildren: Story = {
 		icon: 'i-mdi-heart',
 		'aria-label': 'Like',
 		children: ' Like',
+	},
+};
+
+export const WithTooltip: Story = {
+	render: () => (
+		<div className="flex flex-wrap items-center gap-3">
+			<IconButton icon="i-mdi-close" aria-label="Close" tooltip />
+			<IconButton icon="i-mdi-cog" aria-label="Settings" tooltip="bottom" />
+			<IconButton
+				icon="i-mdi-delete"
+				aria-label="Delete"
+				color="danger"
+				tooltip={{ position: 'right', content: 'Removes the item permanently' }}
+			/>
+			<IconButton
+				icon="i-mdi-heart"
+				aria-label="Like"
+				unstyled
+				className="p-2 text-fuchsia-600"
+				tooltip
+			/>
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.tab();
+		const close = canvas.getByRole('button', { name: 'Close' });
+		await expectFocusOn(close);
+		const tooltip = await body.findByRole('tooltip');
+		await expect(tooltip).toHaveTextContent('Close');
+		await expect(close).not.toHaveAttribute('aria-describedby');
+
+		await userEvent.keyboard('{Escape}');
+		await waitFor(async () => {
+			await expect(body.queryByRole('tooltip')).not.toBeInTheDocument();
+		});
 	},
 };
 
