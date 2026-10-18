@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { Field } from '#components/shared/field';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
@@ -56,8 +57,8 @@ export function Combobox({
 	'aria-label': ariaLabel,
 	error,
 	placeholder,
-	noResultsText = 'No results found',
-	clearLabel = 'Clear selection',
+	noResultsText,
+	clearLabel,
 	radius = 'md',
 	unstyled = false,
 	disabled = false,
@@ -69,6 +70,7 @@ export function Combobox({
 	onChange,
 	id,
 }: Readonly<ComboboxProps>) {
+	const labels = useLabels();
 	const { fieldId: comboboxId, errorId } = useFieldIds(id);
 	const listboxId = `${comboboxId}-listbox`;
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -255,7 +257,7 @@ export function Combobox({
 				{!unstyled && selectedOption && !disabled && (
 					<button
 						type="button"
-						aria-label={clearLabel}
+						aria-label={clearLabel ?? labels.clearSelection}
 						onMouseDown={handleClearMouseDown}
 						onClick={clearSelection}
 						className={clsx(
@@ -315,7 +317,9 @@ export function Combobox({
 									: undefined
 							}
 						>
-							{filteredOptions.length === 0 ? noResultsText : ''}
+							{filteredOptions.length === 0
+								? (noResultsText ?? labels.noResults)
+								: ''}
 						</div>
 					</div>
 				)}

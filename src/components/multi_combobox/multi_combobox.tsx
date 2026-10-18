@@ -14,6 +14,7 @@ import {
 } from 'react';
 
 import { Field } from '#components/shared/field';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
@@ -152,16 +153,16 @@ export function MultiCombobox({
 	'aria-label': ariaLabel,
 	error,
 	placeholder,
-	searchPlaceholder = 'Search',
-	noResultsText = 'No results found',
-	clearLabel = 'Clear selection',
-	clearText = 'Clear',
+	searchPlaceholder,
+	noResultsText,
+	clearLabel,
+	clearText,
 	maxSelectedValues,
 	isOptionDisabled,
 	maxDisplayedValues = DEFAULT_MAX_DISPLAYED_VALUES,
-	formatOverflowCount = (hiddenCount) => `+${hiddenCount} more`,
-	formatSelectedCount = (selectedCount) => `${selectedCount} selected`,
-	formatMaxSelectedHint = (max) => `You can select up to ${max} items`,
+	formatOverflowCount,
+	formatSelectedCount,
+	formatMaxSelectedHint,
 	radius = 'sm',
 	unstyled = false,
 	disabled = false,
@@ -174,6 +175,7 @@ export function MultiCombobox({
 	onDropdownClose,
 	id,
 }: Readonly<MultiComboboxProps>): ReactElement {
+	const labels = useLabels();
 	const { fieldId, errorId, labelId } = useFieldIds(id);
 	const listboxId = `${fieldId}-listbox`;
 	const maxHintId = `${fieldId}-max-hint`;
@@ -405,7 +407,7 @@ export function MultiCombobox({
 							))}
 							{hiddenCount > 0 && (
 								<span className={clsx(!unstyled && PILL_CLASSES)}>
-									{formatOverflowCount(hiddenCount)}
+									{(formatOverflowCount ?? labels.overflowCount)(hiddenCount)}
 								</span>
 							)}
 						</>
@@ -414,7 +416,7 @@ export function MultiCombobox({
 				{!unstyled && selectedValues.length > 0 && !disabled && (
 					<button
 						type="button"
-						aria-label={clearLabel}
+						aria-label={clearLabel ?? labels.clearSelection}
 						onMouseDown={(event) => event.preventDefault()}
 						onClick={handleTriggerClearClick}
 						className={clsx(
@@ -447,8 +449,8 @@ export function MultiCombobox({
 							value={query}
 							onChange={handleSearchChange}
 							onKeyDown={handleKeyDown}
-							placeholder={searchPlaceholder}
-							aria-label={searchPlaceholder}
+							placeholder={searchPlaceholder ?? labels.search}
+							aria-label={searchPlaceholder ?? labels.search}
 							aria-controls={listboxId}
 							aria-activedescendant={activeOptionId}
 							aria-describedby={
@@ -472,7 +474,9 @@ export function MultiCombobox({
 									!unstyled && 'text-gray-500 dark:text-gray-400'
 								)}
 							>
-								{formatMaxSelectedHint(maxSelectedValues)}
+								{(formatMaxSelectedHint ?? labels.maxSelectedHint)(
+									maxSelectedValues
+								)}
 							</div>
 						)}
 						<ul
@@ -554,7 +558,9 @@ export function MultiCombobox({
 									: undefined
 							}
 						>
-							{filteredOptions.length === 0 ? noResultsText : ''}
+							{filteredOptions.length === 0
+								? (noResultsText ?? labels.noResults)
+								: ''}
 						</div>
 						{maxSelectedValues !== undefined && (
 							<div
@@ -564,7 +570,9 @@ export function MultiCombobox({
 								)}
 							>
 								<span className="text-xs text-gray-500 dark:text-gray-400">
-									{formatSelectedCount(selectedValues.length)}
+									{(formatSelectedCount ?? labels.selectedCount)(
+										selectedValues.length
+									)}
 								</span>
 								<button
 									type="button"
@@ -572,7 +580,7 @@ export function MultiCombobox({
 									onClick={handleFooterClearClick}
 									className="text-xs font-medium text-blue-600 hover:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:text-blue-400 dark:hover:text-blue-300"
 								>
-									{clearText}
+									{clearText ?? labels.clear}
 								</button>
 							</div>
 						)}

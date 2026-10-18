@@ -5,6 +5,7 @@ import { type ReactNode, useRef, useState } from 'react';
 import { surfaceError } from '#lib/surface_error';
 import { type Radius } from '#components/shared/radius';
 import { ModalShell } from '#components/modal/modal_shell';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { Button, type ButtonColor } from '#components/button/button';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
@@ -103,9 +104,10 @@ export const ConfirmModal = createCallable<
 			}
 		};
 
+		const labels = useLabels();
 		const isDisabled = isConfirming;
-		const resolvedConfirmLabel = confirmLabel ?? 'Confirm';
-		const resolvedCancelLabel = cancelLabel ?? 'Cancel';
+		const resolvedConfirmLabel = confirmLabel ?? labels.confirm;
+		const resolvedCancelLabel = cancelLabel ?? labels.cancel;
 		const resolvedConfirmColor = confirmColor ?? 'primary';
 
 		return (

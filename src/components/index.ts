@@ -109,6 +109,11 @@ export {
 } from './theme_toggle/theme_toggle';
 export { Toolbar, type ToolbarProps } from './toolbar/toolbar';
 export {
+	UIProvider,
+	type UILabels,
+	type UIProviderProps,
+} from './ui_provider/ui_provider';
+export {
 	Tooltip,
 	type TooltipPosition,
 	type TooltipProps,
