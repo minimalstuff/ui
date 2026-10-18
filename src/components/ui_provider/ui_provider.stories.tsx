@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Input } from '#components/input/input';
 import { Button } from '#components/button/button';
 import { Combobox } from '#components/combobox/combobox';
 import { UIProvider, type UILabels } from './ui_provider';
@@ -69,3 +70,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const French: Story = {};
+
+export const WithoutFieldErrorAnnouncements: Story = {
+	args: {
+		announceFieldErrors: false,
+	},
+	render: (args) => (
+		<UIProvider {...args}>
+			<div className="w-80">
+				<Input label="Email" error="Ce champ est obligatoire" />
+			</div>
+		</UIProvider>
+	),
+};
