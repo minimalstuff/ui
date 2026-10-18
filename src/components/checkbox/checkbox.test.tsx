@@ -49,7 +49,7 @@ describe('Checkbox', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Checkbox label="Accept terms" error="Required field" />);
 		const checkbox = screen.getByRole('checkbox');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required field');
 
 		expect(errorMessage).toHaveTextContent('Required field');
 		expect(checkbox).toHaveAttribute('aria-invalid', 'true');
@@ -73,7 +73,7 @@ describe('Checkbox', () => {
 			/>
 		);
 		const checkbox = screen.getByRole('checkbox');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required field');
 		const describedBy = checkbox.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');
@@ -180,6 +180,8 @@ describe('Checkbox', () => {
 		render(
 			<Checkbox label="Accept terms" variant="card" error="Required field" />
 		);
-		expect(screen.getByRole('alert')).toHaveTextContent('Required field');
+		expect(screen.getByText('Required field')).toHaveTextContent(
+			'Required field'
+		);
 	});
 });

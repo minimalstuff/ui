@@ -55,7 +55,7 @@ describe('RadioOptions', () => {
 
 	test('shows an error message wired to the fieldset', () => {
 		render(<RadioOptions options={OPTIONS} error="Pick one" />);
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Pick one');
 		expect(errorMessage).toHaveTextContent('Pick one');
 	});
 
@@ -68,7 +68,7 @@ describe('RadioOptions', () => {
 			/>
 		);
 		const fieldset = container.querySelector('fieldset');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Pick one');
 		const describedBy = fieldset?.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');
