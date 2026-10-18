@@ -1,7 +1,9 @@
 import clsx from 'clsx';
-import { type ComponentPropsWithRef } from 'react';
+import { useEffect, useMemo, useRef, type ComponentPropsWithRef } from 'react';
 
+import { mergeRefs } from '#lib/merge_refs';
 import { joinIds } from '#components/shared/join_ids';
+import { DashIcon } from '#components/shared/dash_icon';
 import { FieldError } from '#components/shared/field_error';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { CheckmarkIcon } from '#components/shared/checkmark_icon';
@@ -61,6 +63,8 @@ export interface CheckboxProps extends Omit<
 	'type' | 'className'
 > {
 	label?: string | React.ReactNode;
+	/** Shows a dash instead of the checkmark and exposes the mixed state to assistive technology. */
+	indeterminate?: boolean;
 	description?: string | React.ReactNode;
 	error?: string;
 	radius?: Radius;
@@ -73,6 +77,7 @@ export interface CheckboxProps extends Omit<
 
 export function Checkbox({
 	label,
+	indeterminate = false,
 	description,
 	error,
 	radius = 'sm',
@@ -86,25 +91,36 @@ export function Checkbox({
 	onChange,
 	id,
 	'aria-describedby': callerDescribedBy,
+	ref,
 	...props
 }: Readonly<CheckboxProps>) {
 	const { fieldId: checkboxId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const isCardVariant = variant === 'card';
+	const isFilled = isChecked || indeterminate;
 	const describedBy = joinIds(
 		callerDescribedBy,
 		Boolean(description) && descriptionId,
 		error && errorId
 	);
 
+	const mergedInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
+
+	useEffect(() => {
+		if (!inputRef.current) return;
+		inputRef.current.indeterminate = indeterminate;
+	});
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.target.indeterminate = indeterminate;
 		setIsChecked(event.target.checked);
 		onChange?.(event);
 	};
 
 	const labelClassName = isCardVariant
 		? optionCardClasses({
-				isSelected: isChecked,
+				isSelected: isFilled,
 				isError: Boolean(error),
 				isDisabled: props.disabled === true,
 				radius,
@@ -118,7 +134,7 @@ export function Checkbox({
 	const labelTextClassName = isCardVariant
 		? clsx(
 				'select-none text-sm font-medium',
-				isChecked
+				isFilled
 					? error
 						? 'text-red-700 dark:text-red-300'
 						: 'text-blue-700 dark:text-blue-300'
@@ -147,6 +163,7 @@ export function Checkbox({
 				<span className={checkboxWrapperClassName}>
 					<input
 						type="checkbox"
+						ref={mergedInputRef}
 						id={checkboxId}
 						className="sr-only"
 						checked={isChecked}
@@ -161,7 +178,7 @@ export function Checkbox({
 							!unstyled && [
 								RADIUS_CLASSES[radius],
 								'border-2',
-								isChecked
+								isFilled
 									? clsx('border-blue-600 dark:border-blue-500', SELECTED_FILL)
 									: clsx(CONTROL_BORDER, CONTROL_BG),
 								error && FIELD_ERROR_BORDER,
@@ -170,7 +187,7 @@ export function Checkbox({
 						)}
 						aria-hidden
 					>
-						{isChecked && <CheckmarkIcon />}
+						{indeterminate ? <DashIcon /> : isChecked && <CheckmarkIcon />}
 					</span>
 				</span>
 				{isCardVariant ? (
