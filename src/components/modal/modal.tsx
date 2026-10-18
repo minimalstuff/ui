@@ -3,10 +3,14 @@ import { createCallable } from 'react-call';
 
 import { type Radius } from '#components/shared/radius';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
-import { ModalShell, type ModalSize } from '#components/modal/modal_shell';
+import {
+	ModalShell,
+	type ModalRole,
+	type ModalSize,
+} from '#components/modal/modal_shell';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
-export type { ModalSize } from '#components/modal/modal_shell';
+export type { ModalRole, ModalSize } from '#components/modal/modal_shell';
 
 type ModalRenderProp = ReactNode | ((close: () => void) => ReactNode);
 
@@ -18,6 +22,8 @@ export interface ModalProps {
 	className?: string;
 	dismissible?: boolean;
 	closeLabel?: string;
+	/** `alertdialog` for urgent messages that need a response (describes the dialog by its content); pair with `dismissible={false}` when it must not be dismissed. */
+	role?: ModalRole;
 	/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
 	'aria-label'?: string;
 }
@@ -39,6 +45,7 @@ export const Modal = createCallable<ModalProps, void>(
 		className,
 		dismissible,
 		closeLabel,
+		role,
 		'aria-label': ariaLabel,
 	}) => {
 		useDisableHotkeysWhileMounted();
@@ -55,6 +62,7 @@ export const Modal = createCallable<ModalProps, void>(
 				className={className}
 				dismissible={dismissible}
 				closeLabel={closeLabel}
+				role={role}
 				aria-label={ariaLabel}
 			>
 				{resolveRenderProp(children, handleDismiss)}

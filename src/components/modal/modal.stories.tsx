@@ -203,6 +203,40 @@ export const NonDismissible: Story = {
 	},
 };
 
+export const AlertDialog: Story = {
+	args: {
+		title: 'Connection lost',
+		role: 'alertdialog',
+		dismissible: false,
+		children: (close) => (
+			<>
+				The tunnel dropped and could not be restored. Reconnect to continue.
+				<ModalFooter>
+					<Button size="sm" onClick={close}>
+						Reconnect
+					</Button>
+				</ModalFooter>
+			</>
+		),
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await step('opens as an alertdialog that ignores Escape', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+			await body.findByRole('alertdialog', { name: 'Connection lost' });
+			await userEvent.keyboard('{Escape}');
+			await expect(body.getByRole('alertdialog')).toBeInTheDocument();
+		});
+
+		await step('the action button closes it', async () => {
+			await userEvent.click(body.getByRole('button', { name: 'Reconnect' }));
+			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+		});
+	},
+};
+
 export const WithFooter: Story = {
 	args: {
 		title: 'Modal with footer',
