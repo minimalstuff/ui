@@ -1,5 +1,5 @@
+import { type ReactNode } from 'react';
 import { createCallable } from 'react-call';
-import { createContext, type ReactNode, useState } from 'react';
 
 import { type Radius } from '#components/shared/radius';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
@@ -29,11 +29,6 @@ function resolveRenderProp(
 	return typeof prop === 'function' ? prop(close) : prop;
 }
 
-/** @internal set by `<ModalFooter>`, read by `Modal` — not part of the public API. */
-export const ModalFooterSetterContext = createContext<
-	((footer: ReactNode) => void) | null
->(null);
-
 export const Modal = createCallable<ModalProps, void>(
 	({
 		call,
@@ -47,7 +42,6 @@ export const Modal = createCallable<ModalProps, void>(
 		'aria-label': ariaLabel,
 	}) => {
 		useDisableHotkeysWhileMounted();
-		const [footer, setFooter] = useState<ReactNode>(null);
 
 		const handleDismiss = () => call.end();
 
@@ -56,7 +50,6 @@ export const Modal = createCallable<ModalProps, void>(
 				isEnded={call.ended}
 				onDismiss={handleDismiss}
 				title={title}
-				footer={footer}
 				size={size}
 				radius={radius}
 				className={className}
@@ -64,9 +57,7 @@ export const Modal = createCallable<ModalProps, void>(
 				closeLabel={closeLabel}
 				aria-label={ariaLabel}
 			>
-				<ModalFooterSetterContext.Provider value={setFooter}>
-					{resolveRenderProp(children, handleDismiss)}
-				</ModalFooterSetterContext.Provider>
+				{resolveRenderProp(children, handleDismiss)}
 			</ModalShell>
 		);
 	},

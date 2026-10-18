@@ -6,6 +6,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Modal } from './modal';
 import { ModalFooter } from './modal_footer';
 
+const MAX_RENDERS_BEFORE_LOOP_DETECTED = 50;
+
 describe('Modal', () => {
 	test('renders nothing when no call is active', () => {
 		render(<Modal />);
@@ -227,6 +229,67 @@ describe('Modal', () => {
 		expect(await screen.findByText('Body text')).toBeInTheDocument();
 		const footer = screen.getByText('Footer text');
 		expect(footer.closest('.overflow-y-auto')).not.toBeInTheDocument();
+	});
+
+	test('should not loop when a render-prop child declares a ModalFooter with fresh children', async () => {
+		let renderCount = 0;
+
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: () => {
+					renderCount += 1;
+					if (renderCount > MAX_RENDERS_BEFORE_LOOP_DETECTED) {
+						throw new Error('Modal render prop re-invoked in a loop');
+					}
+					return (
+						<>
+							Body text
+							<ModalFooter>
+								<button type="button">Save {renderCount}</button>
+							</ModalFooter>
+						</>
+					);
+				},
+			});
+		});
+
+		expect(await screen.findByText('Body text')).toBeInTheDocument();
+		expect(renderCount).toBeLessThan(MAX_RENDERS_BEFORE_LOOP_DETECTED);
+	});
+
+	test('should render footer content declared via ModalFooter inside the dialog', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: (
+					<>
+						Body text
+						<ModalFooter>Footer text</ModalFooter>
+					</>
+				),
+			});
+		});
+
+		const footer = await screen.findByText('Footer text');
+		expect(screen.getByRole('dialog')).toContainElement(footer);
+	});
+
+	test('should not render an empty footer bar when no ModalFooter is declared', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({ title: 'Hello', children: 'Body text' });
+		});
+		const body = await screen.findByText('Body text');
+
+		const footerSlot = body.nextElementSibling as HTMLElement;
+		expect(footerSlot).toBeEmptyDOMElement();
+		expect(footerSlot).toHaveClass('empty:hidden');
 	});
 
 	test('throws when calling without a mounted Modal root', () => {
