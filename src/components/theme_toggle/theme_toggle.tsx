@@ -3,6 +3,7 @@ import './theme_toggle.css';
 import { useCallback, useRef } from 'react';
 
 import { type Theme } from '#types/theme';
+import { isWebKitGtk } from '#lib/is_webkit_gtk';
 import { type Radius } from '#components/shared/radius';
 import { useThemeStore } from '#stores/theme_store/theme_store';
 import { IconButton } from '#components/icon_button/icon_button';
@@ -23,6 +24,12 @@ function defaultAriaLabel(theme: Theme): string {
 }
 
 export interface ThemeToggleProps {
+	/**
+	 * Animate the theme change with the View Transition API.
+	 * Defaults to automatic: enabled, except on WebKitGTK where
+	 * `startViewTransition` crashes the web process (2.54).
+	 * `prefers-reduced-motion` is always respected.
+	 */
 	isTransitionEnabled?: boolean;
 	transitionDuration?: number;
 	transitionEasing?: string;
@@ -33,7 +40,7 @@ export interface ThemeToggleProps {
 }
 
 export function ThemeToggle({
-	isTransitionEnabled = true,
+	isTransitionEnabled,
 	transitionDuration,
 	transitionEasing,
 	size = 'md',
@@ -50,7 +57,10 @@ export function ThemeToggle({
 		const newTheme = getNextTheme(theme);
 		const element = buttonRef.current;
 
-		if (element && isTransitionEnabled) {
+		const isTransitionActive =
+			isTransitionEnabled ?? !isWebKitGtk(navigator.userAgent);
+
+		if (element && isTransitionActive) {
 			await switchTheme({
 				theme: newTheme,
 				element,

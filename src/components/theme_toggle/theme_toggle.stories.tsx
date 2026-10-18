@@ -9,6 +9,11 @@ const meta = {
 		layout: 'centered',
 	},
 	argTypes: {
+		isTransitionEnabled: {
+			control: 'boolean',
+			description:
+				'Animate the theme change with a view transition. Defaults to auto: enabled, except on WebKitGTK where it crashes the web process.',
+		},
 		size: {
 			control: 'select',
 			options: ['sm', 'md', 'lg'],
