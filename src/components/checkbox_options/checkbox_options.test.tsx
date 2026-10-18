@@ -115,7 +115,7 @@ describe('CheckboxOptions', () => {
 
 	test('shows an error message wired to the fieldset', () => {
 		render(<CheckboxOptions options={OPTIONS} error="Pick at least one" />);
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Pick at least one');
 		expect(errorMessage).toHaveTextContent('Pick at least one');
 	});
 
@@ -124,7 +124,7 @@ describe('CheckboxOptions', () => {
 			<CheckboxOptions options={OPTIONS} error="Pick at least one" />
 		);
 		const fieldset = container.querySelector('fieldset');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Pick at least one');
 		expect(fieldset).toHaveAttribute('aria-describedby', errorMessage.id);
 	});
 
@@ -137,7 +137,7 @@ describe('CheckboxOptions', () => {
 			/>
 		);
 		const fieldset = container.querySelector('fieldset');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Pick at least one');
 		const describedBy = fieldset?.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');

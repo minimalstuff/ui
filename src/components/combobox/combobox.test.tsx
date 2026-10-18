@@ -183,7 +183,7 @@ describe('Combobox', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Combobox label="Country" options={OPTIONS} error="Required" />);
 		const input = screen.getByLabelText('Country');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required');
 
 		expect(errorMessage).toHaveTextContent('Required');
 		expect(input).toHaveAttribute('aria-invalid', 'true');

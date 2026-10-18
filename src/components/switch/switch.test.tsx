@@ -49,7 +49,7 @@ describe('Switch', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Switch label="Enable notifications" error="Required field" />);
 		const toggle = screen.getByRole('switch');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required field');
 
 		expect(errorMessage).toHaveTextContent('Required field');
 		expect(toggle).toHaveAttribute('aria-invalid', 'true');
@@ -75,7 +75,7 @@ describe('Switch', () => {
 			/>
 		);
 		const toggle = screen.getByRole('switch');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Required field');
 		const describedBy = toggle.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');

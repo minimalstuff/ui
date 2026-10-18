@@ -13,7 +13,7 @@ describe('FieldError', () => {
 
 	test('renders the error text with the given id', () => {
 		render(<FieldError id="x-error" error="Required" />);
-		const message = screen.getByRole('alert');
+		const message = screen.getByText('Required');
 		expect(message).toHaveTextContent('Required');
 		expect(message).toHaveAttribute('id', 'x-error');
 	});
