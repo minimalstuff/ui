@@ -1,9 +1,11 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { UIProvider } from './ui_provider';
+import { Input } from '#components/input/input';
 import { Modal } from '#components/modal/modal';
 import { Combobox } from '#components/combobox/combobox';
 import { ConfirmModal } from '#components/modal/confirm_modal';
@@ -229,6 +231,74 @@ describe('UIProvider', () => {
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
 			expect(screen.getByRole('status')).toHaveTextContent('Aucun résultat');
+		});
+	});
+
+	describe('announceFieldErrors', () => {
+		test('should render the error as an alert by default', () => {
+			render(<Input label="Email" error="Required" />);
+
+			expect(screen.getByRole('alert')).toHaveTextContent('Required');
+		});
+
+		test('should render a non-live error when announceFieldErrors is false', () => {
+			render(
+				<UIProvider announceFieldErrors={false}>
+					<Input label="Email" error="Required" />
+				</UIProvider>
+			);
+
+			expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+		});
+
+		test('should keep announcing errors when announceFieldErrors is true', () => {
+			render(
+				<UIProvider announceFieldErrors>
+					<Input label="Email" error="Required" />
+				</UIProvider>
+			);
+
+			expect(screen.getByRole('alert')).toBeInTheDocument();
+		});
+
+		test('should inherit false in a nested provider that does not set it', () => {
+			render(
+				<UIProvider announceFieldErrors={false}>
+					<UIProvider labels={{ search: 'Rechercher' }}>
+						<Input label="Email" error="Required" />
+					</UIProvider>
+				</UIProvider>
+			);
+
+			expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+		});
+
+		test('should describe the input by the error text when announceFieldErrors is false', () => {
+			render(
+				<UIProvider announceFieldErrors={false}>
+					<Input label="Email" error="Required" />
+				</UIProvider>
+			);
+
+			expect(screen.getByLabelText('Email')).toHaveAccessibleDescription(
+				'Required'
+			);
+		});
+
+		test('should have no axe violations when errors are announced', async () => {
+			const { container } = render(<Input label="Email" error="Required" />);
+
+			expect(await axe(container)).toHaveNoViolations();
+		});
+
+		test('should have no axe violations when errors are not announced', async () => {
+			const { container } = render(
+				<UIProvider announceFieldErrors={false}>
+					<Input label="Email" error="Required" />
+				</UIProvider>
+			);
+
+			expect(await axe(container)).toHaveNoViolations();
 		});
 	});
 });
