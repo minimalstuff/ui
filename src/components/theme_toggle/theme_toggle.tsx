@@ -11,6 +11,7 @@ import { useIsClient } from '#hooks/use_is_client/use_is_client';
 import { IconButton } from '#components/icon_button/icon_button';
 import { getNextTheme, switchTheme } from '#lib/theme_transition';
 import { type ButtonVariant } from '#components/shared/button_styles';
+import { type IconButtonTooltip } from '#components/icon_button/icon_button_tooltip';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
 	light: 'i-tabler-sun text-yellow-500',
@@ -34,6 +35,7 @@ export interface ThemeToggleProps {
 	radius?: Radius;
 	variant?: ButtonVariant;
 	getAriaLabel?: (theme: Theme) => string;
+	tooltip?: IconButtonTooltip;
 }
 
 export function ThemeToggle({
@@ -44,6 +46,7 @@ export function ThemeToggle({
 	radius,
 	variant,
 	getAriaLabel,
+	tooltip,
 }: Readonly<ThemeToggleProps>) {
 	const theme = useThemeStore((state) => state.theme);
 	const setTheme = useThemeStore((state) => state.setTheme);
@@ -87,6 +90,7 @@ export function ThemeToggle({
 			size={size}
 			radius={radius}
 			variant={variant}
+			tooltip={tooltip}
 			onClick={() => {
 				void toggleTheme();
 			}}

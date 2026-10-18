@@ -1,7 +1,13 @@
 import '@testing-library/jest-dom/vitest';
 
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+	act,
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from '@testing-library/react';
 
 import { ThemeToggle } from './theme_toggle';
 import { useThemeStore } from '#stores/theme_store/theme_store';
@@ -42,6 +48,18 @@ describe('ThemeToggle', () => {
 		render(<ThemeToggle />);
 		expect(screen.getByRole('button')).toHaveAttribute(
 			'aria-label',
+			'Current theme: system'
+		);
+	});
+
+	test('should show the aria-label in a tooltip on hover when tooltip is true', () => {
+		render(<ThemeToggle tooltip />);
+		const button = screen.getByRole('button');
+		act(() => {
+			fireEvent.mouseEnter(button.parentElement as HTMLElement);
+		});
+
+		expect(screen.getByRole('tooltip')).toHaveTextContent(
 			'Current theme: system'
 		);
 	});
