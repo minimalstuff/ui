@@ -26,6 +26,7 @@ import { mergeRefs } from '#lib/merge_refs';
 import { joinIds } from '#components/shared/join_ids';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { findLandmarkPortalTarget } from '#components/shared/portal_target';
 import {
 	getAccessibleName,
 	normalizeText,
@@ -80,6 +81,13 @@ export interface TooltipProps {
 	 * screen readers would otherwise announce twice.
 	 */
 	describeChild?: boolean;
+	/**
+	 * Where the tooltip is rendered. Defaults to the trigger's closest
+	 * landmark or dialog (so it stays inside a landmark and inside an open
+	 * modal), falling back to `document.body`. Transformed ancestors (such as the modal
+	 * panel) can clip it; pass `portalContainer` to escape.
+	 */
+	portalContainer?: HTMLElement | null;
 	/** Attaches to the wrapper `<span>` around `children`, alongside `Tooltip`'s own internal ref. */
 	ref?: Ref<HTMLSpanElement>;
 }
@@ -102,6 +110,7 @@ export function Tooltip({
 	onTemporaryShow,
 	className,
 	describeChild,
+	portalContainer,
 	ref,
 }: Readonly<TooltipProps>) {
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
@@ -122,6 +131,7 @@ export function Tooltip({
 	const { refs, floatingStyles, placement, middlewareData, isPositioned } =
 		useFloating({
 			placement: position,
+			strategy: 'fixed',
 			open: isMounted,
 			whileElementsMounted: autoUpdate,
 			middleware: [
@@ -246,6 +256,9 @@ export function Tooltip({
 			cloneElement(children, triggerProps)
 		: children;
 
+	const portalTarget =
+		portalContainer ?? findLandmarkPortalTarget(triggerElement);
+
 	const arrowX = middlewareData.arrow?.x;
 	const arrowY = middlewareData.arrow?.y;
 	const arrowStaticSide = ARROW_STATIC_SIDE[resolvedSide];
@@ -308,7 +321,7 @@ export function Tooltip({
 							/>
 						</div>
 					</div>,
-					document.body
+					portalTarget
 				)}
 		</>
 	);
