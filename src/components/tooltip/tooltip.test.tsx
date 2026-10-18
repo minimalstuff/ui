@@ -361,4 +361,111 @@ describe('Tooltip', () => {
 
 		expect(screen.queryByRole('status')).not.toBeInTheDocument();
 	});
+
+	describe('describeChild', () => {
+		function showTooltip(label: string) {
+			const trigger = screen.getByRole('button', { name: label });
+			act(() => {
+				fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
+			});
+			return trigger;
+		}
+
+		test('should not describe the trigger when auto and the text equals its aria-label', () => {
+			render(
+				<Tooltip content="Delete">
+					<button aria-label="Delete" />
+				</Tooltip>
+			);
+			expect(showTooltip('Delete')).not.toHaveAttribute('aria-describedby');
+		});
+
+		test('should ignore whitespace differences when comparing with the name', () => {
+			render(
+				<Tooltip content="  Delete  item ">
+					<button aria-label="Delete item" />
+				</Tooltip>
+			);
+			expect(showTooltip('Delete item')).not.toHaveAttribute(
+				'aria-describedby'
+			);
+		});
+
+		test('should not describe the trigger when auto and the text equals its text content', () => {
+			render(
+				<Tooltip content="Save">
+					<button>Save</button>
+				</Tooltip>
+			);
+			expect(showTooltip('Save')).not.toHaveAttribute('aria-describedby');
+		});
+
+		test('should describe the trigger when auto and the text differs from its name', () => {
+			render(
+				<Tooltip content="Removes the item">
+					<button aria-label="Delete" />
+				</Tooltip>
+			);
+			const trigger = showTooltip('Delete');
+			expect(trigger).toHaveAttribute(
+				'aria-describedby',
+				screen.getByRole('tooltip').id
+			);
+		});
+
+		test('should describe the trigger when true even if the text equals its name', () => {
+			render(
+				<Tooltip content="Delete" describeChild>
+					<button aria-label="Delete" />
+				</Tooltip>
+			);
+			const trigger = showTooltip('Delete');
+			expect(trigger).toHaveAttribute(
+				'aria-describedby',
+				screen.getByRole('tooltip').id
+			);
+		});
+
+		test('should not describe the trigger when false even if the text differs from its name', () => {
+			render(
+				<Tooltip content="Removes the item" describeChild={false}>
+					<button aria-label="Delete" />
+				</Tooltip>
+			);
+			expect(showTooltip('Delete')).not.toHaveAttribute('aria-describedby');
+		});
+
+		test.each([
+			['auto', undefined],
+			['true', true],
+			['false', false],
+		])(
+			"should keep the caller's aria-describedby when describeChild is %s",
+			(_label, describeChild) => {
+				render(
+					<Tooltip content="Delete" describeChild={describeChild}>
+						<button aria-label="Delete" aria-describedby="hint-id" />
+					</Tooltip>
+				);
+				expect(
+					showTooltip('Delete').getAttribute('aria-describedby')
+				).toContain('hint-id');
+			}
+		);
+
+		test('should compare ReactNode content by its text', () => {
+			render(
+				<Tooltip
+					content={
+						<span>
+							Del<b>ete</b>
+						</span>
+					}
+				>
+					<button aria-label="Delete" />
+				</Tooltip>
+			);
+			expect(showTooltip('Delete')).not.toHaveAttribute('aria-describedby');
+		});
+	});
 });

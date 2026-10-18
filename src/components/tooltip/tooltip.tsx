@@ -14,6 +14,7 @@ import {
 	useCallback,
 	useEffect,
 	useId,
+	useLayoutEffect,
 	useRef,
 	useState,
 	type MouseEvent,
@@ -25,6 +26,10 @@ import { mergeRefs } from '#lib/merge_refs';
 import { joinIds } from '#components/shared/join_ids';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	getAccessibleName,
+	normalizeText,
+} from '#components/shared/accessible_name';
 import {
 	useEnterOnPositioned,
 	useOverlayState,
@@ -68,6 +73,13 @@ export interface TooltipProps {
 	radius?: Radius;
 	onTemporaryShow?: () => void;
 	className?: string;
+	/**
+	 * Whether the trigger is described by the tooltip (`aria-describedby`).
+	 * `true` always describes, `false` never does. By default the trigger is
+	 * described unless the tooltip text repeats its accessible name, which
+	 * screen readers would otherwise announce twice.
+	 */
+	describeChild?: boolean;
 	/** Attaches to the wrapper `<span>` around `children`, alongside `Tooltip`'s own internal ref. */
 	ref?: Ref<HTMLSpanElement>;
 }
@@ -89,12 +101,22 @@ export function Tooltip({
 	radius = 'lg',
 	onTemporaryShow,
 	className,
+	describeChild,
 	ref,
 }: Readonly<TooltipProps>) {
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 	const [showTemporary, setShowTemporary] = useState(false);
 	const tooltipId = useId();
 	const arrowRef = useRef<HTMLDivElement>(null);
+	const [triggerElement, setTriggerElement] = useState<HTMLSpanElement | null>(
+		null
+	);
+	const [tooltipElement, setTooltipElement] = useState<HTMLDivElement | null>(
+		null
+	);
+	const [repeatsTriggerName, setRepeatsTriggerName] = useState<boolean | null>(
+		null
+	);
 	const temporaryTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
 	const { refs, floatingStyles, placement, middlewareData, isPositioned } =
@@ -119,9 +141,39 @@ export function Tooltip({
 	// every re-render, which would needlessly reset floating-ui's reference.
 	const setTriggerRef = useCallback(
 		(node: HTMLSpanElement | null) =>
-			mergeRefs<HTMLSpanElement>(refs.setReference, ref)(node),
+			mergeRefs<HTMLSpanElement>(
+				refs.setReference,
+				setTriggerElement,
+				ref
+			)(node),
 		[refs, ref]
 	);
+
+	const setTooltipRef = useCallback(
+		(node: HTMLDivElement | null) =>
+			mergeRefs<HTMLDivElement>(refs.setFloating, setTooltipElement)(node),
+		[refs]
+	);
+
+	// Measured after commit because the tooltip node (and so its text, which
+	// may be any ReactNode) only exists while shown.
+	useLayoutEffect(() => {
+		const triggerChild = triggerElement?.firstElementChild;
+		const isMeasurable = tooltipElement && triggerChild;
+		// oxlint-disable-next-line react/set-state-in-effect -- reads the rendered tooltip text from the DOM, which only exists after commit
+		setRepeatsTriggerName(
+			isMeasurable
+				? normalizeText(tooltipElement.textContent) ===
+						getAccessibleName(triggerChild)
+				: null
+		);
+	}, [
+		triggerElement,
+		tooltipElement,
+		content,
+		temporaryContent,
+		showTemporary,
+	]);
 
 	const closeTooltip = useCallback(() => {
 		setShowTemporary(false);
@@ -177,9 +229,16 @@ export function Tooltip({
 		? children.props['aria-describedby']
 		: undefined;
 
+	const isDescribingChild =
+		isTooltipShown &&
+		(describeChild ?? (repeatsTriggerName !== null && !repeatsTriggerName));
+
 	const triggerProps: TriggerProps = {
 		onClick: handleTriggerClick,
-		'aria-describedby': joinIds(childDescribedBy, isTooltipShown && tooltipId),
+		'aria-describedby': joinIds(
+			childDescribedBy,
+			isDescribingChild && tooltipId
+		),
 	};
 
 	const trigger = isValidElement<TriggerProps>(children)
@@ -217,7 +276,7 @@ export function Tooltip({
 					// lives on the inner node instead, which has its own independent
 					// transform.
 					<div
-						ref={refs.setFloating}
+						ref={setTooltipRef}
 						style={floatingStyles}
 						className="z-50 inline-block pointer-events-none"
 					>
