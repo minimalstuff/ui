@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
@@ -290,6 +291,44 @@ describe('Modal', () => {
 		const footerSlot = body.nextElementSibling as HTMLElement;
 		expect(footerSlot).toBeEmptyDOMElement();
 		expect(footerSlot).toHaveClass('empty:hidden');
+	});
+
+	test('should expose role alertdialog when role is alertdialog', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body text',
+				role: 'alertdialog',
+			});
+		});
+		await screen.findByText('Body text');
+
+		expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+	});
+
+	test('should have no axe violations when an alertdialog modal is open', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Delete everything?',
+				children: (
+					<>
+						This cannot be undone.
+						<ModalFooter>
+							<button type="button">Delete</button>
+						</ModalFooter>
+					</>
+				),
+				role: 'alertdialog',
+				dismissible: false,
+			});
+		});
+		await screen.findByText('This cannot be undone.');
+
+		expect(await axe(document.body)).toHaveNoViolations();
 	});
 
 	test('throws when calling without a mounted Modal root', () => {
