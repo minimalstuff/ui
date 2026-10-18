@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
 import { axe } from 'vitest-axe';
+import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
@@ -329,6 +330,77 @@ describe('Modal', () => {
 		await screen.findByText('This cannot be undone.');
 
 		expect(await axe(document.body)).toHaveNoViolations();
+	});
+
+	test('should focus initialFocusRef on open when it is in the content', async () => {
+		const rejectRef = createRef<HTMLButtonElement>();
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Unknown host',
+				initialFocusRef: rejectRef,
+				children: (
+					<>
+						<button type="button">Copy</button>
+						<button type="button" ref={rejectRef}>
+							Reject
+						</button>
+					</>
+				),
+			});
+		});
+		await screen.findByText('Unknown host');
+
+		expect(screen.getByRole('button', { name: 'Reject' })).toHaveFocus();
+	});
+
+	test('should focus initialFocusRef on open when it is in a ModalFooter', async () => {
+		const rejectRef = createRef<HTMLButtonElement>();
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Unknown host',
+				initialFocusRef: rejectRef,
+				children: (
+					<>
+						<button type="button">Copy</button>
+						<ModalFooter>
+							<button type="button" ref={rejectRef}>
+								Reject
+							</button>
+							<button type="button">Accept</button>
+						</ModalFooter>
+					</>
+				),
+			});
+		});
+		await screen.findByText('Unknown host');
+
+		expect(screen.getByRole('button', { name: 'Reject' })).toHaveFocus();
+	});
+
+	test('should focus the first tabbable footer button when the content has none', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				children: (
+					<>
+						Body text
+						<ModalFooter>
+							<button type="button">Accept</button>
+						</ModalFooter>
+					</>
+				),
+				'aria-label': 'Notice',
+				dismissible: false,
+			});
+		});
+		await screen.findByText('Body text');
+
+		expect(screen.getByRole('button', { name: 'Accept' })).toHaveFocus();
 	});
 
 	test('throws when calling without a mounted Modal root', () => {

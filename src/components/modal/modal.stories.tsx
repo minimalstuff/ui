@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	expect,
@@ -233,6 +234,52 @@ export const AlertDialog: Story = {
 		await step('the action button closes it', async () => {
 			await userEvent.click(body.getByRole('button', { name: 'Reconnect' }));
 			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+		});
+	},
+};
+
+const unknownHostRejectRef = createRef<HTMLButtonElement>();
+
+export const InitialFocus: Story = {
+	args: {
+		title: 'Unknown host',
+		initialFocusRef: unknownHostRejectRef,
+		children: (close) => (
+			<>
+				The host key for 203.0.113.7 is not known. Verify its fingerprint before
+				trusting it; focus starts on Reject rather than the first button.
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Copy fingerprint
+					</Button>
+					<Button
+						ref={unknownHostRejectRef}
+						color="danger"
+						size="sm"
+						onClick={close}
+					>
+						Reject
+					</Button>
+					<Button size="sm" onClick={close}>
+						Accept
+					</Button>
+				</ModalFooter>
+			</>
+		),
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await step('focus lands on Reject, not Copy fingerprint', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+			const reject = await body.findByRole('button', { name: 'Reject' });
+			await expectFocusOn(reject);
+		});
+
+		await step('close it', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
 		});
 	},
 };

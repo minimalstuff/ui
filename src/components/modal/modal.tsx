@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
 import { createCallable } from 'react-call';
+import { type ReactNode, type RefObject } from 'react';
 
 import { type Radius } from '#components/shared/radius';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
@@ -24,6 +24,8 @@ export interface ModalProps {
 	closeLabel?: string;
 	/** `alertdialog` for urgent messages that need a response (describes the dialog by its content); pair with `dismissible={false}` when it must not be dismissed. */
 	role?: ModalRole;
+	/** Wins over the first-tabbable rule for where focus lands on open; may point at an element in the content or in a `ModalFooter`. */
+	initialFocusRef?: RefObject<HTMLElement | null>;
 	/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
 	'aria-label'?: string;
 }
@@ -46,6 +48,7 @@ export const Modal = createCallable<ModalProps, void>(
 		dismissible,
 		closeLabel,
 		role,
+		initialFocusRef,
 		'aria-label': ariaLabel,
 	}) => {
 		useDisableHotkeysWhileMounted();
@@ -63,6 +66,7 @@ export const Modal = createCallable<ModalProps, void>(
 				dismissible={dismissible}
 				closeLabel={closeLabel}
 				role={role}
+				initialFocusRef={initialFocusRef}
 				aria-label={ariaLabel}
 			>
 				{resolveRenderProp(children, handleDismiss)}
