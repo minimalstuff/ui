@@ -18,6 +18,11 @@ const meta = {
 			control: 'select',
 			options: ['sm', 'md', 'lg'],
 		},
+		tooltip: {
+			control: 'boolean',
+			description:
+				'Show the aria-label in a tooltip. Also accepts a position or { position, content }.',
+		},
 		variant: {
 			control: 'select',
 			options: ['solid', 'outline', 'ghost', 'subtle', 'unstyled'],
@@ -35,6 +40,12 @@ export const Default: Story = {};
 export const ChangeSize: Story = {
 	args: {
 		size: 'lg',
+	},
+};
+
+export const WithTooltip: Story = {
+	args: {
+		tooltip: true,
 	},
 };
 
