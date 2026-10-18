@@ -15,6 +15,7 @@ import {
 
 export interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	error?: string;
 	showCharCount?: boolean;
 	minLength?: number;
@@ -27,6 +28,7 @@ export interface TextareaProps extends ComponentPropsWithRef<'textarea'> {
 
 export function Textarea({
 	label,
+	description,
 	error,
 	showCharCount = false,
 	minLength,
@@ -42,7 +44,7 @@ export function Textarea({
 	'aria-describedby': callerDescribedBy,
 	...props
 }: Readonly<TextareaProps>) {
-	const { fieldId, errorId, characterCountId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId, characterCountId } = useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 
 	const hasCharCount =
@@ -57,7 +59,9 @@ export function Textarea({
 		<Field
 			fieldId={fieldId}
 			errorId={errorId}
+			descriptionId={descriptionId}
 			label={label}
+			description={description}
 			error={error}
 			required={props.required}
 			wrapperClassName={wrapperClassName}
@@ -83,6 +87,7 @@ export function Textarea({
 				aria-invalid={!!error}
 				aria-describedby={joinIds(
 					callerDescribedBy,
+					Boolean(description) && descriptionId,
 					error && errorId,
 					hasCharCount && characterCountId
 				)}

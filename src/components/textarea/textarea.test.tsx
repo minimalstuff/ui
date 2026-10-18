@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -39,7 +40,7 @@ describe('Textarea', () => {
 	test('shows an error message wired to aria-describedby', () => {
 		render(<Textarea label="Bio" error="Too long" />);
 		const textarea = screen.getByLabelText('Bio');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Too long');
 
 		expect(errorMessage).toHaveTextContent('Too long');
 		expect(textarea).toHaveAttribute('aria-invalid', 'true');
@@ -58,7 +59,7 @@ describe('Textarea', () => {
 	test('merges a caller-supplied aria-describedby with the error id', () => {
 		render(<Textarea label="Bio" aria-describedby="hint" error="Too long" />);
 		const textarea = screen.getByLabelText('Bio');
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Too long');
 		const describedBy = textarea.getAttribute('aria-describedby');
 
 		expect(describedBy).toContain('hint');
@@ -112,5 +113,48 @@ describe('Textarea', () => {
 	test('renders no required mark when there is no label', () => {
 		render(<Textarea required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
+	});
+
+	test('should link the description through aria-describedby when description is set', () => {
+		render(<Textarea label="Bio" description="Help text" />);
+		expect(screen.getByLabelText('Bio')).toHaveAccessibleDescription(
+			'Help text'
+		);
+	});
+
+	test('should merge caller aria-describedby with description and error', () => {
+		render(
+			<>
+				<p id="hint">Hint</p>
+				<Textarea
+					label="Bio"
+					aria-describedby="hint"
+					description="Help text"
+					error="Too long"
+				/>
+			</>
+		);
+		expect(screen.getByLabelText('Bio')).toHaveAccessibleDescription(
+			'Hint Help text Too long'
+		);
+	});
+
+	test('should render a non-string description node', () => {
+		render(<Textarea label="Bio" description={<em>Rich help</em>} />);
+		expect(screen.getByText('Rich help')).toBeInTheDocument();
+	});
+
+	test('should be described by the error when error is set', () => {
+		render(<Textarea label="Bio" error="Too long" />);
+		expect(screen.getByLabelText('Bio')).toHaveAccessibleDescription(
+			'Too long'
+		);
+	});
+
+	test('should have no axe violations with label, description and error', async () => {
+		const { container } = render(
+			<Textarea label="Bio" description="Help text" error="Too long" />
+		);
+		expect(await axe(container)).toHaveNoViolations();
 	});
 });

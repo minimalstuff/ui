@@ -62,8 +62,25 @@ describe('Field', () => {
 				<input id="email" />
 			</Field>
 		);
-		const errorMessage = screen.getByRole('alert');
+		const errorMessage = screen.getByText('Invalid email');
 		expect(errorMessage).toHaveTextContent('Invalid email');
 		expect(errorMessage).toHaveAttribute('id', 'email-error');
+	});
+
+	test('should render the description wired to the given descriptionId', () => {
+		render(
+			<Field
+				fieldId="email"
+				errorId="email-error"
+				descriptionId="email-description"
+				description="We never share it"
+			>
+				<input id="email" />
+			</Field>
+		);
+		expect(screen.getByText('We never share it')).toHaveAttribute(
+			'id',
+			'email-description'
+		);
 	});
 });

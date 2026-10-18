@@ -15,6 +15,10 @@ const meta = {
 			control: 'text',
 			description: 'Label above the input',
 		},
+		description: {
+			control: 'text',
+			description: 'Help text below the field',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the input',
@@ -75,6 +79,23 @@ export const WithLabel: Story = {
 	},
 };
 
+export const WithDescription: Story = {
+	args: {
+		label: 'Email',
+		placeholder: 'you@example.com',
+		description: 'We will only use this to send receipts.',
+	},
+};
+
+export const WithDescriptionAndError: Story = {
+	args: {
+		label: 'Email',
+		placeholder: 'you@example.com',
+		description: 'We will only use this to send receipts.',
+		error: 'Please enter a valid email address',
+	},
+};
+
 export const WithError: Story = {
 	args: {
 		label: 'Email',
@@ -132,7 +153,7 @@ export const WithExternalDescription: Story = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByLabelText('Email');
-		const errorMessage = canvas.getByRole('alert');
+		const errorMessage = canvas.getByText('Invalid email');
 		const describedBy = input.getAttribute('aria-describedby')?.split(' ');
 
 		await expect(describedBy).toContain('email-hint');

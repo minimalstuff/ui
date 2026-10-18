@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 import { FieldError } from '#components/shared/field_error';
+import { FieldDescription } from '#components/shared/field_description';
 import {
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
@@ -10,7 +11,9 @@ import {
 interface FieldProps {
 	fieldId: string;
 	errorId: string;
+	descriptionId?: string;
 	label?: ReactNode;
+	description?: ReactNode;
 	error?: string;
 	required?: boolean;
 	wrapperClassName?: string;
@@ -18,7 +21,7 @@ interface FieldProps {
 }
 
 /**
- * Wrapper, label and error message shared by the text-entry fields (Input,
+ * Wrapper, label, description and error message shared by the text-entry fields (Input,
  * Textarea, Select, Combobox). A string `label` becomes a real `<label>` bound
  * to `fieldId`; any other node is rendered untouched so callers can supply
  * their own markup, with the required mark appended either way.
@@ -26,7 +29,9 @@ interface FieldProps {
 export const Field = ({
 	fieldId,
 	errorId,
+	descriptionId,
 	label,
+	description,
 	error,
 	required = false,
 	wrapperClassName,
@@ -58,6 +63,13 @@ export const Field = ({
 				</>
 			))}
 		{children}
+		{descriptionId && (
+			<FieldDescription
+				id={descriptionId}
+				description={description}
+				className="mt-1"
+			/>
+		)}
 		<FieldError id={errorId} error={error} className="mt-1" />
 	</div>
 );
