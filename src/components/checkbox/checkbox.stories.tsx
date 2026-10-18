@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -160,6 +161,74 @@ export const CardChecked: Story = {
 		description: 'Receive updates about your account activity',
 		variant: 'card',
 		defaultChecked: true,
+	},
+};
+
+export const Indeterminate: Story = {
+	args: {
+		label: 'Select all',
+		indeterminate: true,
+	},
+};
+
+const SELECT_ALL_ITEMS = ['Email', 'SMS', 'Push'] as const;
+
+function SelectAllExample() {
+	const [selectedItems, setSelectedItems] = useState<readonly string[]>([
+		SELECT_ALL_ITEMS[0],
+	]);
+	const isAllSelected = selectedItems.length === SELECT_ALL_ITEMS.length;
+	const isSomeSelected = selectedItems.length > 0 && !isAllSelected;
+
+	const toggleAll = () => {
+		setSelectedItems(isAllSelected ? [] : SELECT_ALL_ITEMS);
+	};
+
+	const toggleItem = (item: string) => {
+		setSelectedItems((previous) =>
+			previous.includes(item)
+				? previous.filter((selected) => selected !== item)
+				: [...previous, item]
+		);
+	};
+
+	return (
+		<div className="flex flex-col gap-2">
+			<Checkbox
+				label="Select all"
+				checked={isAllSelected}
+				indeterminate={isSomeSelected}
+				onChange={toggleAll}
+			/>
+			<div className="ml-6 flex flex-col gap-2">
+				{SELECT_ALL_ITEMS.map((item) => (
+					<Checkbox
+						key={item}
+						label={item}
+						checked={selectedItems.includes(item)}
+						onChange={() => toggleItem(item)}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+export const SelectAll: Story = {
+	render: () => <SelectAllExample />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const parent = canvas.getByRole<HTMLInputElement>('checkbox', {
+			name: 'Select all',
+		});
+
+		await expect(parent.indeterminate).toBe(true);
+
+		await userEvent.click(parent);
+		await expect(parent).toBeChecked();
+
+		await userEvent.click(parent);
+		await expect(parent).not.toBeChecked();
 	},
 };
 

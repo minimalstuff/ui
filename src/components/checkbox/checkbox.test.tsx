@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
+import { createRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -96,7 +98,7 @@ describe('Checkbox', () => {
 	test('unstyled variant drops the default box styling', () => {
 		render(<Checkbox label="Accept terms" unstyled />);
 		const box = screen.getByRole('checkbox').nextElementSibling;
-		expect(box).not.toHaveClass('border-gray-300');
+		expect(box).not.toHaveClass('border-2');
 	});
 
 	test('shrinks to content width by default', () => {
@@ -183,5 +185,73 @@ describe('Checkbox', () => {
 		expect(screen.getByText('Required field')).toHaveTextContent(
 			'Required field'
 		);
+	});
+
+	test('should set the input indeterminate property when indeterminate is true', () => {
+		render(<Checkbox label="Select all" indeterminate />);
+		expect(screen.getByRole<HTMLInputElement>('checkbox').indeterminate).toBe(
+			true
+		);
+	});
+
+	test('should expose the mixed state when indeterminate is true', () => {
+		render(<Checkbox label="Select all" indeterminate />);
+		expect(screen.getByRole('checkbox')).toBePartiallyChecked();
+	});
+
+	test('should clear the indeterminate property when indeterminate turns false', () => {
+		const { rerender } = render(<Checkbox label="Select all" indeterminate />);
+
+		rerender(<Checkbox label="Select all" indeterminate={false} />);
+
+		expect(screen.getByRole<HTMLInputElement>('checkbox').indeterminate).toBe(
+			false
+		);
+	});
+
+	test('should keep the indeterminate property after a click when the prop stays true', () => {
+		render(
+			<Checkbox
+				label="Select all"
+				indeterminate
+				checked={false}
+				onChange={vi.fn()}
+			/>
+		);
+		const checkbox = screen.getByRole<HTMLInputElement>('checkbox');
+
+		fireEvent.click(checkbox);
+
+		expect(checkbox.indeterminate).toBe(true);
+	});
+
+	test('should render the dash when indeterminate is true', () => {
+		const { container } = render(<Checkbox label="Select all" indeterminate />);
+		expect(container.querySelector('line')).toBeInTheDocument();
+	});
+
+	test('should render the dash instead of the checkmark when indeterminate and checked', () => {
+		const { container } = render(
+			<Checkbox label="Select all" indeterminate defaultChecked />
+		);
+		expect(container.querySelector('polyline')).not.toBeInTheDocument();
+	});
+
+	test('should render the dash when indeterminate in the card variant', () => {
+		const { container } = render(
+			<Checkbox label="Select all" indeterminate variant="card" />
+		);
+		expect(container.querySelector('line')).toBeInTheDocument();
+	});
+
+	test('should keep the caller ref working when indeterminate is true', () => {
+		const ref = createRef<HTMLInputElement>();
+		render(<Checkbox label="Select all" indeterminate ref={ref} />);
+		expect(ref.current).toBe(screen.getByRole('checkbox'));
+	});
+
+	test('should have no axe violations when indeterminate', async () => {
+		const { container } = render(<Checkbox label="Select all" indeterminate />);
+		expect(await axe(container)).toHaveNoViolations();
 	});
 });
