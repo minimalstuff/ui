@@ -42,6 +42,11 @@ const meta = {
 			description:
 				'Describe the trigger with the tooltip. Unset: only when the text differs from the trigger name',
 		},
+		portalContainer: {
+			control: false,
+			description:
+				"Element the tooltip is rendered into. Defaults to the trigger's closest landmark or dialog, then document.body",
+		},
 		radius: {
 			control: 'select',
 			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
@@ -177,6 +182,26 @@ export const DescribeChild: Story = {
 				tooltip.id
 			);
 		});
+	},
+};
+
+export const InsideLandmark: Story = {
+	render: () => (
+		<main aria-label="Content" className="p-12">
+			<Tooltip content="Removes the item permanently">
+				<IconButton icon="i-mdi-delete" aria-label="Delete" color="danger" />
+			</Tooltip>
+		</main>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.tab();
+		await expectFocusOn(canvas.getByRole('button', { name: 'Delete' }));
+
+		const tooltip = await body.findByRole('tooltip');
+		await expect(canvas.getByRole('main')).toContainElement(tooltip);
 	},
 };
 

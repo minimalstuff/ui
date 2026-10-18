@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
+import { axe } from 'vitest-axe';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
 	act,
@@ -466,6 +467,71 @@ describe('Tooltip', () => {
 				</Tooltip>
 			);
 			expect(showTooltip('Delete')).not.toHaveAttribute('aria-describedby');
+		});
+	});
+
+	describe('portal target', () => {
+		function hoverTrigger(label: string) {
+			const trigger = screen.getByRole('button', { name: label });
+			act(() => {
+				fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
+			});
+		}
+
+		test('should render the tooltip inside the trigger landmark when there is one', () => {
+			render(
+				<main data-testid="landmark">
+					<Tooltip content="Help">
+						<button>Hover me</button>
+					</Tooltip>
+				</main>
+			);
+			hoverTrigger('Hover me');
+			expect(screen.getByTestId('landmark')).toContainElement(
+				screen.getByRole('tooltip')
+			);
+		});
+
+		test('should render the tooltip in the portalContainer when given', () => {
+			const portalContainer = document.createElement('div');
+			document.body.append(portalContainer);
+			render(
+				<main>
+					<Tooltip content="Help" portalContainer={portalContainer}>
+						<button>Hover me</button>
+					</Tooltip>
+				</main>
+			);
+			hoverTrigger('Hover me');
+			expect(portalContainer).toContainElement(screen.getByRole('tooltip'));
+			portalContainer.remove();
+		});
+
+		test('should render the tooltip in the body when there is no landmark', () => {
+			render(
+				<div data-testid="plain">
+					<Tooltip content="Help">
+						<button>Hover me</button>
+					</Tooltip>
+				</div>
+			);
+			hoverTrigger('Hover me');
+			expect(screen.getByRole('tooltip').closest('[data-testid]')).toBeNull();
+		});
+
+		test('should have no axe region violations while shown inside a landmark', async () => {
+			vi.useRealTimers();
+			render(
+				<main>
+					<Tooltip content="Help">
+						<button>Hover me</button>
+					</Tooltip>
+				</main>
+			);
+			hoverTrigger('Hover me');
+			expect(
+				await axe(document.body, { runOnly: ['region'] })
+			).toHaveNoViolations();
 		});
 	});
 });
