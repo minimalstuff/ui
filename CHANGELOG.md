@@ -1,5 +1,26 @@
 # Changelog
 
+## [4.1.0](https://github.com/minimalstuff/ui/compare/4.0.0...4.1.0) (2026-10-19)
+
+### Features
+
+* **checkbox:** add a visible indeterminate state ([8a9d930](https://github.com/minimalstuff/ui/commit/8a9d930495470aee5954b2de0cb145e1b7d061ea))
+* **icon-button:** add a tooltip prop ([b3c34da](https://github.com/minimalstuff/ui/commit/b3c34daa8a2e56e0ba2ebbb8318cebf241935bd8))
+* **input, textarea, select:** add a description linked by aria-describedby ([13aa3df](https://github.com/minimalstuff/ui/commit/13aa3dfbcbf4557fecf3e9a0eaa0c8497b96c1de))
+* **modal:** accept initialFocusRef ([0c3bb17](https://github.com/minimalstuff/ui/commit/0c3bb17711eee2d9166820160920d8094094d2ed))
+* **modal:** accept role to render an alertdialog ([13b45b6](https://github.com/minimalstuff/ui/commit/13b45b631d7717cbcb5f351a76d8d89930fb611d))
+* **theme-toggle:** accept a tooltip ([42371a9](https://github.com/minimalstuff/ui/commit/42371a9afa010f28433f16794970970732e484fc))
+* **toolbar:** add an accessible toolbar with roving focus ([857b824](https://github.com/minimalstuff/ui/commit/857b824e4231a0bd72627178edde849089d33a57))
+* **ui-provider:** let apps opt out of live field error announcements ([35a1569](https://github.com/minimalstuff/ui/commit/35a1569e1c3bd5feb82f26e26e11128ac7c0ecae))
+* **ui-provider:** provide default labels globally ([1b1fa1c](https://github.com/minimalstuff/ui/commit/1b1fa1cd09de4bae1c5881f636413e31854aef15))
+
+### Bug Fixes
+
+* **modal:** stop looping when ModalFooter children change on every render ([7ea4dc7](https://github.com/minimalstuff/ui/commit/7ea4dc7ddaaa86a31b693a3abca6a63dbf5c3a02))
+* **theme-toggle:** disable the view transition on WebKitGTK by default ([ae440e8](https://github.com/minimalstuff/ui/commit/ae440e86bae99cbe179fbaea2ad865becb492899))
+* **tooltip:** portal into the trigger's landmark ([235c8c9](https://github.com/minimalstuff/ui/commit/235c8c9e24c6f355114fa81bd5d8ea7210825bd0))
+* **tooltip:** skip the description when it repeats the trigger's name ([a5ae506](https://github.com/minimalstuff/ui/commit/a5ae50619bd64bfeba2ecbba8eb172fd2cc33eb7))
+
 ## [4.0.0](https://github.com/minimalstuff/ui/compare/3.2.0...4.0.0) (2026-09-19)
 
 ### ⚠ BREAKING CHANGES
