@@ -43,11 +43,7 @@ CI (lint, test, build) and npm publish run together when a GitHub Release is pub
 
 ### Prerequisites
 
-1. **NPM token**
-   Create an automation token at [npmjs.com/access-tokens](https://www.npmjs.com/access-tokens) (scope: package publish for `@minimalstuff/ui`).
-
-2. **Repository secret**
-   In the repo: **Settings → Secrets and variables → Actions**. Add a secret named `NPM_TOKEN` with the token value.
+Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC), no token needed. On npmjs.com, `@minimalstuff/ui` > **Settings > Trusted publishing** must list GitHub Actions with organization `minimalstuff`, repository `ui` and workflow `publish.yml`.
 
 ### Procedure
 
