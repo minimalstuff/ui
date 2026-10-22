@@ -8,6 +8,7 @@ import {
 	TAB_ICON_SIZE_CLASSES,
 	tabClasses,
 	tabIndicatorClasses,
+	type TabsOrientation,
 	type TabsVariant,
 } from '#components/tabs/tabs_styles';
 
@@ -17,6 +18,7 @@ type TabButtonProps = {
 	isTabStop: boolean;
 	isFullWidth: boolean;
 	variant: TabsVariant;
+	orientation: TabsOrientation;
 	size: ControlSize;
 	radius: Radius;
 	unstyled: boolean;
@@ -35,6 +37,7 @@ export function TabButton({
 	isTabStop,
 	isFullWidth,
 	variant,
+	orientation,
 	size,
 	radius,
 	unstyled,
@@ -62,6 +65,7 @@ export function TabButton({
 			onKeyDown={onKeyDown}
 			className={tabClasses({
 				variant,
+				orientation,
 				size,
 				radius,
 				unstyled,
@@ -74,7 +78,7 @@ export function TabButton({
 				<span
 					ref={indicatorRef}
 					aria-hidden="true"
-					className={tabIndicatorClasses({ variant, radius })}
+					className={tabIndicatorClasses({ variant, orientation, radius })}
 				/>
 			)}
 			{item.icon && (

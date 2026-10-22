@@ -6,18 +6,19 @@ import { type ReactNode, useId, useRef } from 'react';
 import type { Radius } from '#components/shared/radius';
 import { TabButton } from '#components/tabs/tab_button';
 import type { ControlSize } from '#components/shared/sizes';
-import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
-import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { useControlledState } from '#components/shared/use_controlled_state';
-import {
-	tabsListClasses,
-	type TabsVariant,
-} from '#components/tabs/tabs_styles';
 import { useTabIndicatorTransition } from '#components/tabs/use_tab_indicator_transition';
 import {
 	getTabStopIndex,
 	useTabsKeyboardNavigation,
 } from '#components/tabs/use_tabs_keyboard_navigation';
+import {
+	tabsListClasses,
+	tabsPanelClasses,
+	tabsRootClasses,
+	type TabsOrientation,
+	type TabsVariant,
+} from '#components/tabs/tabs_styles';
 
 export interface TabItem {
 	title: string;
@@ -31,12 +32,21 @@ export interface TabsProps {
 	value?: number;
 	defaultIndex?: number;
 	variant?: TabsVariant;
+	/**
+	 * Direction the tabs are laid out in. `vertical` stacks the tablist beside
+	 * the panel and navigates with ArrowDown/ArrowUp instead of
+	 * ArrowRight/ArrowLeft. Give the root a height (e.g. `className="min-h-0
+	 * flex-1"` in a fixed-height parent) and the tablist and panel scroll
+	 * independently. Defaults to `horizontal`.
+	 */
+	orientation?: TabsOrientation;
 	size?: ControlSize;
 	/**
 	 * Only visibly rounds the `segmented` variant's track and tabs. The `line`
 	 * variant has no filled surface to round, so radius is a no-op there.
 	 */
 	radius?: Radius;
+	/** Stretches the tabs across the tablist. A no-op when `orientation` is `vertical`. */
 	fullWidth?: boolean;
 	unstyled?: boolean;
 	animated?: boolean;
@@ -51,6 +61,7 @@ export function Tabs({
 	value,
 	defaultIndex = 0,
 	variant = 'line',
+	orientation = 'horizontal',
 	size = 'md',
 	radius = 'md',
 	fullWidth = false,
@@ -82,6 +93,7 @@ export function Tabs({
 	const handleKeyDown = useTabsKeyboardNavigation({
 		items,
 		activeIndex: tabStopIndex,
+		orientation,
 		onNavigate: navigateToTab,
 	});
 
@@ -91,14 +103,17 @@ export function Tabs({
 		activeIndex,
 		indicatorRef,
 		isAnimated: animated,
+		orientation,
 	});
 
 	return (
-		<div className={clsx('w-full', className)}>
+		<div className={tabsRootClasses(orientation, className)}>
 			<div
 				role="tablist"
+				aria-orientation={orientation}
 				className={tabsListClasses({
 					variant,
+					orientation,
 					radius,
 					unstyled,
 					isFullWidth: fullWidth,
@@ -117,6 +132,7 @@ export function Tabs({
 						isTabStop={tabStopIndex === index}
 						isFullWidth={fullWidth}
 						variant={variant}
+						orientation={orientation}
 						size={size}
 						radius={radius}
 						unstyled={unstyled}
@@ -132,14 +148,11 @@ export function Tabs({
 				id={`${id}-panel-${activeIndex}`}
 				aria-labelledby={`${id}-tab-${activeIndex}`}
 				tabIndex={0}
-				className={clsx(
-					!unstyled && [
-						'mt-4',
-						BUTTON_FOCUS_OUTLINE,
-						BUTTON_COLOR_TOKENS.primary.focusOutline,
-					],
-					panelClassName
-				)}
+				className={tabsPanelClasses({
+					orientation,
+					unstyled,
+					className: panelClassName,
+				})}
 			>
 				<div
 					key={activeIndex}
