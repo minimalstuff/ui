@@ -1,21 +1,12 @@
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
-import {
-	createContext,
-	type ReactNode,
-	type RefObject,
-	useEffect,
-	useId,
-	useRef,
-	useState,
-} from 'react';
+import { createContext, type ReactNode, type RefObject, useId } from 'react';
 
-import { useLabels } from '#components/ui_provider/use_labels';
-import { IconButton } from '#components/icon_button/icon_button';
-import { getTabbableElements } from '#components/shared/tabbable';
+import { ModalHeader } from '#components/modal/modal_header';
+import { OVERLAY_BG } from '#components/shared/surface_tokens';
+import { useModalDialog } from '#components/modal/use_modal_dialog';
+import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
-import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -80,111 +71,18 @@ export function ModalShell({
 	initialFocusRef,
 	'aria-label': ariaLabel,
 }: Readonly<ModalShellProps>) {
-	const labels = useLabels();
-	const [isOpening, setIsOpening] = useState(false);
-	const [modalToken] = useState(() => Symbol('modal'));
-	const [footerSlot, setFooterSlot] = useState<HTMLDivElement | null>(null);
-	const dialogRef = useRef<HTMLDivElement>(null);
-	const contentRef = useRef<HTMLDivElement>(null);
-	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 	const titleId = useId();
 	const contentId = useId();
-
-	useEffect(() => {
-		if (isEnded) return;
-		return registerModal(modalToken);
-	}, [isEnded, modalToken]);
-
-	useEffect(() => {
-		document.body.style.overflow = 'hidden';
-		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
-
-		const frameId = requestAnimationFrame(() => {
-			requestAnimationFrame(() => setIsOpening(true));
-		});
-
-		return () => {
-			cancelAnimationFrame(frameId);
-			document.body.style.overflow = '';
-		};
-	}, []);
-
-	useEffect(() => {
-		if (!footerSlot) return;
-
-		const dialog = dialogRef.current;
-		const firstFocusable =
-			(contentRef.current && getTabbableElements(contentRef.current)[0]) ??
-			(dialog && getTabbableElements(dialog)[0]);
-		(initialFocusRef?.current ?? firstFocusable ?? dialog)?.focus();
-		// oxlint-disable-next-line react-hooks/exhaustive-deps -- initial focus is only computed once, when the footer slot mounts (so portaled footer content exists); a later change to initialFocusRef shouldn't re-run it
-	}, [footerSlot]);
-
-	useEffect(() => {
-		if (isEnded) previouslyFocusedRef.current?.focus();
-	}, [isEnded]);
-
-	useEffect(() => {
-		if (isEnded) return;
-
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (!isTopmostModal(modalToken)) return;
-
-			if (event.key === 'Escape') {
-				if (event.defaultPrevented) return;
-				event.preventDefault();
-				if (dismissible) onDismiss();
-				return;
-			}
-			if (event.key !== 'Tab') return;
-
-			const dialog = dialogRef.current;
-			if (!dialog) return;
-
-			const tabbable = getTabbableElements(dialog);
-			if (tabbable.length === 0) {
-				event.preventDefault();
-				dialog.focus();
-				return;
-			}
-
-			const first = tabbable[0];
-			const last = tabbable[tabbable.length - 1];
-			const activeElement = document.activeElement;
-			const activeIndex =
-				activeElement instanceof HTMLElement
-					? tabbable.indexOf(activeElement)
-					: -1;
-
-			// Not (any longer) one of the dialog's tabbable elements — e.g. focus
-			// is outside the dialog, or it sat on a control that just became
-			// disabled. Either way, put it back inside the trap.
-			if (activeIndex === -1) {
-				event.preventDefault();
-				(event.shiftKey ? last : first).focus();
-				return;
-			}
-
-			if (event.shiftKey && activeElement === first) {
-				event.preventDefault();
-				last.focus();
-			} else if (!event.shiftKey && activeElement === last) {
-				event.preventDefault();
-				first.focus();
-			}
-		};
-
-		document.addEventListener('keydown', handleKeyDown);
-		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isEnded, onDismiss, dismissible, modalToken]);
-
-	const handleBackdropClick = () => {
-		if (!isEnded && dismissible) onDismiss();
-	};
+	const {
+		dialogRef,
+		contentRef,
+		footerSlot,
+		setFooterSlot,
+		isVisible,
+		handleBackdropClick,
+	} = useModalDialog({ isEnded, onDismiss, dismissible, initialFocusRef });
 
 	const hasDescribedByContent = role === 'alertdialog' && Boolean(children);
-
-	const isVisible = isOpening && !isEnded;
 
 	return createPortal(
 		<div
@@ -229,25 +127,13 @@ export function ModalShell({
 				onClick={(e) => e.stopPropagation()}
 			>
 				{title && (
-					<div className="flex items-center justify-between gap-4 px-6 pt-5 pb-4 flex-shrink-0">
-						<h2
-							id={titleId}
-							className="text-base font-medium tracking-tight text-gray-900 dark:text-gray-100"
-						>
-							{title}
-						</h2>
-						{dismissible && (
-							<IconButton
-								icon="i-mdi-close"
-								onClick={onDismiss}
-								aria-label={closeLabel ?? labels.close}
-								variant="subtle"
-								size="sm"
-								radius="full"
-								className="-mr-1"
-							/>
-						)}
-					</div>
+					<ModalHeader
+						titleId={titleId}
+						title={title}
+						onDismiss={onDismiss}
+						dismissible={dismissible}
+						closeLabel={closeLabel}
+					/>
 				)}
 				<div
 					ref={contentRef}
@@ -263,15 +149,7 @@ export function ModalShell({
 						{children}
 					</ModalFooterSlotContext.Provider>
 				</div>
-				<div
-					ref={setFooterSlot}
-					className={clsx(
-						'flex items-center justify-end gap-3 px-6 py-4 border-t flex-shrink-0 empty:hidden',
-						OVERLAY_BORDER
-					)}
-				>
-					{footer}
-				</div>
+				<ModalFooterSlot onSlotChange={setFooterSlot}>{footer}</ModalFooterSlot>
 			</div>
 		</div>,
 		document.body

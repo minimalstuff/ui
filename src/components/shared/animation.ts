@@ -7,5 +7,8 @@
 /** Matches `duration-200` on the modal backdrop and dialog. */
 export const MODAL_EXIT_DURATION_MS = 200;
 
+/** Matches `duration-200` on the drawer backdrop and panel. */
+export const DRAWER_EXIT_DURATION_MS = 200;
+
 /** Matches `duration-150` on the menu and tooltip panels. */
 export const OVERLAY_EXIT_DURATION_MS = 150;
