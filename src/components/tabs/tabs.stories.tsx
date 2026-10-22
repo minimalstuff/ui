@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -38,6 +38,12 @@ const meta = {
 			control: 'select',
 			options: ['line', 'segmented'],
 			description: 'Visual style of the tab list',
+		},
+		orientation: {
+			control: 'select',
+			options: ['horizontal', 'vertical'],
+			description:
+				'Layout direction of the tabs; vertical navigates with ArrowDown/ArrowUp',
 		},
 		size: {
 			control: 'select',
@@ -334,4 +340,80 @@ export const NoAnimation: Story = {
 	args: {
 		animated: false,
 	},
+};
+
+const VERTICAL_VIEWPORT_HEIGHT_PX = 240;
+const VERTICAL_ITEM_COUNT = 12;
+const VERTICAL_PANEL_PARAGRAPH_COUNT = 10;
+
+const VERTICAL_ITEMS = Array.from(
+	{ length: VERTICAL_ITEM_COUNT },
+	(_, index) => ({
+		title: `Section ${index + 1}`,
+		content: (
+			<div className="space-y-2">
+				{Array.from({ length: VERTICAL_PANEL_PARAGRAPH_COUNT }, (_, line) => (
+					<Fragment key={line}>
+						{panelText(`Section ${index + 1}, paragraph ${line + 1}.`)}
+					</Fragment>
+				))}
+			</div>
+		),
+	})
+);
+
+const fixedHeightDecorator: NonNullable<Story['decorators']> = [
+	(Story) => (
+		<div
+			className="flex flex-col"
+			style={{ width: 480, height: VERTICAL_VIEWPORT_HEIGHT_PX }}
+		>
+			<Story />
+		</div>
+	),
+];
+
+export const Vertical: Story = {
+	args: {
+		orientation: 'vertical',
+		items: VERTICAL_ITEMS,
+		className: 'flex-1 min-h-0',
+	},
+	decorators: fixedHeightDecorator,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step(
+			'ArrowDown moves focus and selection to the next tab',
+			async () => {
+				await userEvent.tab();
+				await userEvent.keyboard('{ArrowDown}');
+				const secondTab = canvas.getByRole('tab', { name: 'Section 2' });
+				await expectFocusOn(secondTab);
+				await expect(secondTab).toHaveAttribute('aria-selected', 'true');
+			}
+		);
+
+		await step('ArrowUp moves focus and selection back', async () => {
+			await userEvent.keyboard('{ArrowUp}');
+			const firstTab = canvas.getByRole('tab', { name: 'Section 1' });
+			await expectFocusOn(firstTab);
+			await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+		});
+
+		await step('ArrowRight does nothing', async () => {
+			await userEvent.keyboard('{ArrowRight}');
+			await expectFocusOn(canvas.getByRole('tab', { name: 'Section 1' }));
+		});
+	},
+};
+
+export const VerticalSegmented: Story = {
+	args: {
+		orientation: 'vertical',
+		variant: 'segmented',
+		items: VERTICAL_ITEMS,
+		className: 'flex-1 min-h-0',
+	},
+	decorators: fixedHeightDecorator,
 };
