@@ -1,8 +1,8 @@
 import './tabs.css';
 
-import clsx from 'clsx';
 import { type ReactNode, useId, useRef } from 'react';
 
+import { TabPanel } from '#components/tabs/tab_panel';
 import type { Radius } from '#components/shared/radius';
 import { TabButton } from '#components/tabs/tab_button';
 import type { ControlSize } from '#components/shared/sizes';
@@ -50,6 +50,16 @@ export interface TabsProps {
 	fullWidth?: boolean;
 	unstyled?: boolean;
 	animated?: boolean;
+	/**
+	 * Keeps every panel in the DOM and only hides the inactive ones, so React
+	 * state (typed input, scroll position) inside a panel survives tab
+	 * switches. Every tab then carries `aria-controls` pointing at its own
+	 * panel. When `false`, only the active panel is rendered, so only the
+	 * active tab carries `aria-controls` (it must reference an existing
+	 * element; a dangling id fails `aria-valid-attr-value`). Defaults to
+	 * `false`.
+	 */
+	keepMounted?: boolean;
 	className?: string;
 	tabListClassName?: string;
 	panelClassName?: string;
@@ -67,6 +77,7 @@ export function Tabs({
 	fullWidth = false,
 	unstyled = false,
 	animated = true,
+	keepMounted = false,
 	className,
 	tabListClassName,
 	panelClassName,
@@ -97,7 +108,39 @@ export function Tabs({
 		onNavigate: navigateToTab,
 	});
 
-	const activeItem = items[activeIndex];
+	const panelClasses = tabsPanelClasses({
+		orientation,
+		unstyled,
+		className: panelClassName,
+	});
+	const isContentAnimated = animated && !unstyled;
+
+	const renderActivePanel = () => (
+		<TabPanel
+			panelId={`${id}-panel-${activeIndex}`}
+			tabId={`${id}-tab-${activeIndex}`}
+			isHidden={false}
+			isAnimated={isContentAnimated}
+			className={panelClasses}
+			contentKey={activeIndex}
+		>
+			{items[activeIndex]?.content}
+		</TabPanel>
+	);
+
+	const renderAllPanels = () =>
+		items.map((item, index) => (
+			<TabPanel
+				key={item.title}
+				panelId={`${id}-panel-${index}`}
+				tabId={`${id}-tab-${index}`}
+				isHidden={index !== activeIndex}
+				isAnimated={isContentAnimated}
+				className={panelClasses}
+			>
+				{item.content}
+			</TabPanel>
+		));
 
 	useTabIndicatorTransition({
 		activeIndex,
@@ -129,6 +172,7 @@ export function Tabs({
 						indicatorRef={indicatorRef}
 						item={item}
 						isActive={activeIndex === index}
+						hasMountedPanel={keepMounted || activeIndex === index}
 						isTabStop={tabStopIndex === index}
 						isFullWidth={fullWidth}
 						variant={variant}
@@ -143,24 +187,7 @@ export function Tabs({
 					/>
 				))}
 			</div>
-			<div
-				role="tabpanel"
-				id={`${id}-panel-${activeIndex}`}
-				aria-labelledby={`${id}-tab-${activeIndex}`}
-				tabIndex={0}
-				className={tabsPanelClasses({
-					orientation,
-					unstyled,
-					className: panelClassName,
-				})}
-			>
-				<div
-					key={activeIndex}
-					className={clsx(animated && !unstyled && 'tabs-panel-inner')}
-				>
-					{activeItem?.content}
-				</div>
-			</div>
+			{keepMounted ? renderAllPanels() : renderActivePanel()}
 		</div>
 	);
 }

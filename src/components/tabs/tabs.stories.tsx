@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Tabs } from '#components/tabs/tabs';
+import { Input } from '#components/input/input';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const panelText = (text: string) => (
@@ -67,6 +68,11 @@ const meta = {
 		animated: {
 			control: 'boolean',
 			description: 'Animate the sliding indicator and panel transition',
+		},
+		keepMounted: {
+			control: 'boolean',
+			description:
+				'Keep inactive panels mounted (hidden) so their state survives tab switches',
 		},
 	},
 	args: {
@@ -416,4 +422,32 @@ export const VerticalSegmented: Story = {
 		className: 'flex-1 min-h-0',
 	},
 	decorators: fixedHeightDecorator,
+};
+
+const KEEP_MOUNTED_ITEMS = [
+	{
+		title: 'Profile',
+		content: <Input label="Name" defaultValue="" />,
+	},
+	{
+		title: 'Network',
+		content: <Input label="Host" defaultValue="" />,
+	},
+];
+
+export const KeepMounted: Story = {
+	args: {
+		keepMounted: true,
+		items: KEEP_MOUNTED_ITEMS,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('Typed values survive switching tabs', async () => {
+			await userEvent.type(canvas.getByLabelText('Name'), 'Ada');
+			await userEvent.click(canvas.getByRole('tab', { name: 'Network' }));
+			await userEvent.click(canvas.getByRole('tab', { name: 'Profile' }));
+			await expect(canvas.getByLabelText('Name')).toHaveValue('Ada');
+		});
+	},
 };
