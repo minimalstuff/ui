@@ -80,6 +80,7 @@ export {
 } from './modal/confirm_modal';
 export {
 	Modal,
+	type ModalHeight,
 	type ModalProps,
 	type ModalRole,
 	type ModalSize,

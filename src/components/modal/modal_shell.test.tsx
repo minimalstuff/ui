@@ -1,10 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 
 import { useRef } from 'react';
+import { axe } from 'vitest-axe';
 import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { ModalShell } from './modal_shell';
+import { ModalFooter } from './modal_footer';
 
 function ModalShellWithInitialFocus() {
 	const cancelRef = useRef<HTMLButtonElement>(null);
@@ -373,5 +375,90 @@ describe('ModalShell', () => {
 
 		expect(handleDismissFirst).toHaveBeenCalledTimes(1);
 		expect(handleDismissSecond).not.toHaveBeenCalled();
+	});
+
+	test('should give the dialog a fixed height when height is fixed', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				height="fixed"
+			>
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog')).toHaveClass(
+			'h-[calc(100vh-4rem)]',
+			'sm:h-[min(40rem,calc(100vh-10rem))]'
+		);
+	});
+
+	test('should leave scrolling to the content when height is fixed', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				height="fixed"
+			>
+				Body
+			</ModalShell>
+		);
+		const content = screen.getByText('Body');
+		expect(content).toHaveClass(
+			'overflow-hidden',
+			'flex',
+			'flex-col',
+			'min-h-0'
+		);
+		expect(content).not.toHaveClass('overflow-y-auto');
+	});
+
+	test('should keep header and footer outside the content when height is fixed', () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				height="fixed"
+				footer={<button>Save</button>}
+			>
+				Body
+			</ModalShell>
+		);
+		const content = screen.getByText('Body');
+		expect(content).not.toContainElement(screen.getByText('Title'));
+		expect(content).not.toContainElement(screen.getByText('Save'));
+	});
+
+	test('should scroll the content without a fixed height by default', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByText('Body')).toHaveClass('overflow-y-auto');
+		expect(screen.getByRole('dialog')).not.toHaveClass(
+			'h-[calc(100vh-4rem)]',
+			'sm:h-[min(40rem,calc(100vh-10rem))]'
+		);
+	});
+
+	test('should have no axe violations when height is fixed with a footer', async () => {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn()}
+				title="Title"
+				height="fixed"
+			>
+				Body
+				<ModalFooter>
+					<button type="button">Save</button>
+				</ModalFooter>
+			</ModalShell>
+		);
+		expect(await axe(document.body)).toHaveNoViolations();
 	});
 });
