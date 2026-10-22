@@ -628,3 +628,98 @@ describe('Tabs vertical orientation', () => {
 		expect(await axe(container)).toHaveNoViolations();
 	});
 });
+
+describe('Tabs keepMounted', () => {
+	const FORM_ITEMS = [
+		{
+			title: 'First',
+			content: <input aria-label="First field" defaultValue="" />,
+		},
+		{
+			title: 'Second',
+			content: <input aria-label="Second field" defaultValue="" />,
+		},
+	];
+
+	test('should keep a typed value when switching away and back', () => {
+		render(<Tabs items={FORM_ITEMS} keepMounted />);
+		fireEvent.change(screen.getByLabelText('First field'), {
+			target: { value: 'typed' },
+		});
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+		fireEvent.click(screen.getByRole('tab', { name: 'First' }));
+
+		expect(screen.getByLabelText('First field')).toHaveValue('typed');
+	});
+
+	test('should lose a typed value when switching away and back by default', () => {
+		render(<Tabs items={FORM_ITEMS} />);
+		fireEvent.change(screen.getByLabelText('First field'), {
+			target: { value: 'typed' },
+		});
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+		fireEvent.click(screen.getByRole('tab', { name: 'First' }));
+
+		expect(screen.getByLabelText('First field')).toHaveValue('');
+	});
+
+	test('should render one panel per item and hide the inactive ones', () => {
+		render(<Tabs items={FORM_ITEMS} keepMounted />);
+		const panels = screen.getAllByRole('tabpanel', { hidden: true });
+
+		expect(panels).toHaveLength(FORM_ITEMS.length);
+		expect(panels[0]).not.toHaveAttribute('hidden');
+		expect(panels[1]).toHaveAttribute('hidden');
+	});
+
+	test('should label each panel with its own tab', () => {
+		render(<Tabs items={FORM_ITEMS} keepMounted />);
+		const panels = screen.getAllByRole('tabpanel', { hidden: true });
+
+		expect(panels[1]).toHaveAttribute(
+			'aria-labelledby',
+			screen.getByRole('tab', { name: 'Second' }).id
+		);
+	});
+
+	test('should reveal the panel of the newly active tab', () => {
+		render(<Tabs items={FORM_ITEMS} keepMounted />);
+
+		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
+
+		const panels = screen.getAllByRole('tabpanel', { hidden: true });
+		expect(panels[0]).toHaveAttribute('hidden');
+		expect(panels[1]).not.toHaveAttribute('hidden');
+	});
+
+	test('should point every tab aria-controls at an existing panel when keepMounted', () => {
+		render(<Tabs items={ITEMS} keepMounted />);
+
+		for (const tab of screen.getAllByRole('tab')) {
+			const panelId = tab.getAttribute('aria-controls');
+			expect(panelId).not.toBeNull();
+			expect(document.getElementById(panelId as string)).toBeInTheDocument();
+		}
+	});
+
+	test('should only point the active tab aria-controls at an existing panel by default', () => {
+		render(<Tabs items={ITEMS} />);
+		const controlledTabs = screen
+			.getAllByRole('tab')
+			.filter((tab) => tab.hasAttribute('aria-controls'));
+
+		expect(controlledTabs).toHaveLength(1);
+		expect(
+			document.getElementById(
+				controlledTabs[0].getAttribute('aria-controls') as string
+			)
+		).toBeInTheDocument();
+	});
+
+	test('should have no axe violations when keepMounted', async () => {
+		const { container } = render(<Tabs items={FORM_ITEMS} keepMounted />);
+		expect(await axe(container)).toHaveNoViolations();
+	});
+});

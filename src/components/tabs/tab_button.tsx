@@ -15,6 +15,7 @@ import {
 type TabButtonProps = {
 	item: TabItem;
 	isActive: boolean;
+	hasMountedPanel: boolean;
 	isTabStop: boolean;
 	isFullWidth: boolean;
 	variant: TabsVariant;
@@ -34,6 +35,7 @@ type TabButtonProps = {
 export function TabButton({
 	item,
 	isActive,
+	hasMountedPanel,
 	isTabStop,
 	isFullWidth,
 	variant,
@@ -58,7 +60,7 @@ export function TabButton({
 			type="button"
 			aria-selected={isActive}
 			aria-disabled={item.disabled}
-			aria-controls={isActive ? panelId : undefined}
+			aria-controls={hasMountedPanel ? panelId : undefined}
 			tabIndex={isTabStop ? 0 : -1}
 			disabled={item.disabled}
 			onClick={onSelect}
