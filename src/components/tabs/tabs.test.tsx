@@ -723,3 +723,27 @@ describe('Tabs keepMounted', () => {
 		expect(await axe(container)).toHaveNoViolations();
 	});
 });
+
+describe('Tabs badge', () => {
+	const BADGE_ITEMS = [
+		{ title: 'Network', content: 'Network content', badge: '1 error' },
+		{ title: 'Profile', content: 'Profile content' },
+	];
+
+	test('should include the badge in the tab accessible name', () => {
+		render(<Tabs items={BADGE_ITEMS} />);
+		expect(
+			screen.getByRole('tab', { name: 'Network 1 error' })
+		).toBeInTheDocument();
+	});
+
+	test('should leave the accessible name unchanged without a badge', () => {
+		render(<Tabs items={BADGE_ITEMS} />);
+		expect(screen.getByRole('tab', { name: 'Profile' })).toBeInTheDocument();
+	});
+
+	test('should have no axe violations with a badge', async () => {
+		const { container } = render(<Tabs items={BADGE_ITEMS} />);
+		expect(await axe(container)).toHaveNoViolations();
+	});
+});

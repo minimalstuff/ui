@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Tabs } from '#components/tabs/tabs';
+import { Badge } from '#components/badge/badge';
 import { Input } from '#components/input/input';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 
@@ -449,5 +450,28 @@ export const KeepMounted: Story = {
 			await userEvent.click(canvas.getByRole('tab', { name: 'Profile' }));
 			await expect(canvas.getByLabelText('Name')).toHaveValue('Ada');
 		});
+	},
+};
+
+const BADGE_ITEMS = [
+	{
+		title: 'Network',
+		content: panelText('Network settings.'),
+		badge: <Badge color="danger">1 erreur</Badge>,
+	},
+	{ title: 'Profile', content: panelText('Profile settings.') },
+	{ title: 'Security', content: panelText('Security settings.') },
+];
+
+export const WithBadge: Story = {
+	args: {
+		items: BADGE_ITEMS,
+	},
+};
+
+export const WithBadgeVertical: Story = {
+	args: {
+		orientation: 'vertical',
+		items: BADGE_ITEMS,
 	},
 };

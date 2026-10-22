@@ -94,6 +94,7 @@ export function TabButton({
 				/>
 			)}
 			<span className="relative">{item.title}</span>
+			{item.badge ? <> {item.badge}</> : null}
 		</button>
 	);
 }
