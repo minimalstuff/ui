@@ -48,6 +48,12 @@ export {
 	splitIntoHighlightSegments,
 } from '#lib/split_into_highlight_segments';
 export {
+	Drawer,
+	type DrawerProps,
+	type DrawerSide,
+	type DrawerSize,
+} from './drawer/drawer';
+export {
 	IconButton,
 	type IconButtonProps,
 	type IconButtonTooltip,
