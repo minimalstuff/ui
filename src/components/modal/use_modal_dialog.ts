@@ -79,12 +79,28 @@ function trapTabKey(event: KeyboardEvent, dialog: HTMLElement): void {
 	}
 }
 
+let bodyScrollLockCount = 0;
+let overflowBeforeLock = '';
+
+function lockBodyScroll(): void {
+	if (bodyScrollLockCount === 0) {
+		overflowBeforeLock = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+	}
+	bodyScrollLockCount += 1;
+}
+
+function unlockBodyScroll(): void {
+	bodyScrollLockCount -= 1;
+	if (bodyScrollLockCount === 0) {
+		document.body.style.overflow = overflowBeforeLock;
+	}
+}
+
 function useBodyScrollLock(): void {
 	useEffect(() => {
-		document.body.style.overflow = 'hidden';
-		return () => {
-			document.body.style.overflow = '';
-		};
+		lockBodyScroll();
+		return unlockBodyScroll;
 	}, []);
 }
 
