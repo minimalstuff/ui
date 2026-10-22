@@ -5,8 +5,10 @@ import { themes } from 'storybook/theming';
 import type { Preview } from '@storybook/react-vite';
 import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 
+import { DEFAULT_MOTION_MODE } from './motion';
 import { modalRootDecorator } from './modal_root_decorator';
 import { getResolvedTheme, getThemePreference } from './theme';
+import { motionDecorator, motionGlobalTypes } from './motion/toolbar';
 import {
 	themeClassDecorator,
 	themeGlobalTypes,
@@ -14,11 +16,17 @@ import {
 } from './theme/toolbar';
 
 const preview: Preview = {
-	globalTypes: themeGlobalTypes,
+	globalTypes: { ...themeGlobalTypes, ...motionGlobalTypes },
 	initialGlobals: {
 		theme: getThemePreference(),
+		motion: DEFAULT_MOTION_MODE,
 	},
-	decorators: [themeClassDecorator, themeSyncDecorator, modalRootDecorator],
+	decorators: [
+		themeClassDecorator,
+		themeSyncDecorator,
+		motionDecorator,
+		modalRootDecorator,
+	],
 	parameters: {
 		controls: {
 			matchers: {
