@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 
 import { getTabbableElements } from '#components/shared/tabbable';
+import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
 import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
 
 /** Where initial focus looks for a tabbable element once the content has none: anywhere in the `dialog` (header and footer included), or nowhere (`content`), which leaves focus on the dialog itself. */
@@ -77,31 +78,6 @@ function trapTabKey(event: KeyboardEvent, dialog: HTMLElement): void {
 		event.preventDefault();
 		first.focus();
 	}
-}
-
-let bodyScrollLockCount = 0;
-let overflowBeforeLock = '';
-
-function lockBodyScroll(): void {
-	if (bodyScrollLockCount === 0) {
-		overflowBeforeLock = document.body.style.overflow;
-		document.body.style.overflow = 'hidden';
-	}
-	bodyScrollLockCount += 1;
-}
-
-function unlockBodyScroll(): void {
-	bodyScrollLockCount -= 1;
-	if (bodyScrollLockCount === 0) {
-		document.body.style.overflow = overflowBeforeLock;
-	}
-}
-
-function useBodyScrollLock(): void {
-	useEffect(() => {
-		lockBodyScroll();
-		return unlockBodyScroll;
-	}, []);
 }
 
 function useOpeningFlag(): boolean {
