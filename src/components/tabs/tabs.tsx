@@ -25,6 +25,13 @@ export interface TabItem {
 	content: ReactNode;
 	disabled?: boolean;
 	icon?: string;
+	/**
+	 * Rendered after the title inside the tab button and part of the tab's
+	 * accessible name. Meant for short text such as an error count ("1 error"),
+	 * never a coloured dot alone. Separate from `title`, which is the React key
+	 * and must stay stable.
+	 */
+	badge?: ReactNode;
 }
 
 export interface TabsProps {
