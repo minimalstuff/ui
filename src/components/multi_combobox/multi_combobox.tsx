@@ -40,6 +40,7 @@ import {
 	OVERLAY_BG,
 	OVERLAY_BORDER,
 	SELECTED_FILL,
+	THIN_SCROLLBAR,
 } from '#components/shared/surface_tokens';
 
 const DEFAULT_MAX_DISPLAYED_VALUES = 2;
@@ -483,7 +484,7 @@ export function MultiCombobox({
 							id={listboxId}
 							role="listbox"
 							aria-multiselectable
-							className="max-h-60 overflow-auto py-1"
+							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>
 							{filteredOptions.map((option, index) => {
 								const isSelected = selectedValues.includes(option.value);

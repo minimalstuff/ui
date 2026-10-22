@@ -15,11 +15,15 @@ import { useActiveOption } from '#components/shared/use_active_option';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { useControlledState } from '#components/shared/use_controlled_state';
-import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
+import {
+	OVERLAY_BG,
+	OVERLAY_BORDER,
+	THIN_SCROLLBAR,
+} from '#components/shared/surface_tokens';
 import {
 	ACTIVE_OPTION_OUTLINE,
 	BUTTON_FOCUS_OUTLINE,
@@ -284,7 +288,7 @@ export function Combobox({
 						<ul
 							id={listboxId}
 							role="listbox"
-							className="max-h-60 overflow-auto py-1"
+							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>
 							{filteredOptions.map((opt, index) => (
 								<li

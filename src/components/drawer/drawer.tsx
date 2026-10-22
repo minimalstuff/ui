@@ -10,11 +10,14 @@ import {
 
 import { type Radius } from '#components/shared/radius';
 import { ModalHeader } from '#components/modal/modal_header';
-import { OVERLAY_BG } from '#components/shared/surface_tokens';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
 import { ModalFooterSlotContext } from '#components/modal/modal_shell';
+import {
+	OVERLAY_BG,
+	THIN_SCROLLBAR_SCOPE,
+} from '#components/shared/surface_tokens';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 import {
 	INNER_EDGE_RADIUS_CLASSES,
@@ -119,6 +122,7 @@ function DrawerDialog({
 					SIDE_CLASSES[side],
 					SIZE_CLASSES[size],
 					OVERLAY_BG,
+					THIN_SCROLLBAR_SCOPE,
 					'shadow-2xl',
 					INNER_EDGE_RADIUS_CLASSES[side][radius],
 					'transition-transform duration-200 ease-out motion-reduce:transition-none',
