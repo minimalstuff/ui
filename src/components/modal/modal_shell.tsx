@@ -3,10 +3,13 @@ import { createPortal } from 'react-dom';
 import { createContext, type ReactNode, type RefObject, useId } from 'react';
 
 import { ModalHeader } from '#components/modal/modal_header';
-import { OVERLAY_BG } from '#components/shared/surface_tokens';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	OVERLAY_BG,
+	THIN_SCROLLBAR_SCOPE,
+} from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -115,6 +118,7 @@ export function ModalShell({
 					SIZE_CLASSES[size],
 					HEIGHT_CLASSES[height],
 					OVERLAY_BG,
+					THIN_SCROLLBAR_SCOPE,
 					'shadow-2xl',
 					RADIUS_CLASSES[radius],
 					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',

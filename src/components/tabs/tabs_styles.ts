@@ -4,7 +4,11 @@ import type { ControlSize } from '#components/shared/sizes';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { CONTROL_BG, SURFACE_BORDER } from '#components/shared/surface_tokens';
+import {
+	CONTROL_BG,
+	SURFACE_BORDER,
+	THIN_SCROLLBAR,
+} from '#components/shared/surface_tokens';
 
 export type TabsVariant = 'line' | 'segmented';
 
@@ -90,13 +94,18 @@ const FOCUS_OUTLINE_BY_ORIENTATION: Record<TabsOrientation, string> = {
 };
 
 const HORIZONTAL_LIST_LAYOUT = 'items-center';
-const VERTICAL_LIST_LAYOUT =
-	'flex-col items-stretch min-h-0 overflow-y-auto overflow-x-hidden';
+const VERTICAL_LIST_LAYOUT = clsx(
+	'flex-col items-stretch min-h-0 overflow-y-auto overflow-x-hidden',
+	THIN_SCROLLBAR
+);
 const VERTICAL_LIST_WIDTH = 'w-48 shrink-0';
 const VERTICAL_TAB_LAYOUT = 'justify-start text-left whitespace-normal';
 const HORIZONTAL_TAB_LAYOUT = 'whitespace-nowrap';
 const VERTICAL_ROOT_LAYOUT = 'flex min-h-0';
-const VERTICAL_PANEL_LAYOUT = 'flex-1 min-w-0 min-h-0 overflow-y-auto';
+const VERTICAL_PANEL_LAYOUT = clsx(
+	'flex-1 min-w-0 min-h-0 overflow-y-auto',
+	THIN_SCROLLBAR
+);
 const VERTICAL_PANEL_GAP = 'ml-6';
 const HORIZONTAL_PANEL_GAP = 'mt-4';
 
