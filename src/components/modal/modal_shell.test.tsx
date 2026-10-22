@@ -461,4 +461,42 @@ describe('ModalShell', () => {
 		);
 		expect(await axe(document.body)).toHaveNoViolations();
 	});
+
+	test('should keep the body scroll locked when the top of two stacked modals unmounts', () => {
+		const first = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="First">
+				Body
+			</ModalShell>
+		);
+		const second = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Second">
+				Body
+			</ModalShell>
+		);
+
+		second.unmount();
+
+		expect(document.body.style.overflow).toBe('hidden');
+		first.unmount();
+	});
+
+	test('should restore the previous body overflow once every stacked modal has unmounted', () => {
+		document.body.style.overflow = 'scroll';
+		const first = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="First">
+				Body
+			</ModalShell>
+		);
+		const second = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Second">
+				Body
+			</ModalShell>
+		);
+
+		second.unmount();
+		first.unmount();
+
+		expect(document.body.style.overflow).toBe('scroll');
+		document.body.style.overflow = '';
+	});
 });
