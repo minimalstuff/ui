@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef, useState, type FormEvent } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	expect,
@@ -8,8 +8,11 @@ import {
 	within,
 } from 'storybook/test';
 
+import { Tabs } from '#components/tabs/tabs';
 import { Menu } from '#components/menu/menu';
+import { Badge } from '#components/badge/badge';
 import { Input } from '#components/input/input';
+import { Switch } from '#components/switch/switch';
 import { Button } from '#components/button/button';
 import { Select } from '#components/select/select';
 import { Textarea } from '#components/textarea/textarea';
@@ -49,6 +52,11 @@ const meta = {
 			control: 'select',
 			options: ['sm', 'md', 'lg', 'xl'],
 			description: 'Modal width',
+		},
+		height: {
+			control: 'select',
+			options: ['auto', 'fixed'],
+			description: 'Modal height',
 		},
 		radius: {
 			control: 'select',
@@ -326,6 +334,192 @@ export const LongContentWithFooter: Story = {
 				</ModalFooter>
 			</>
 		),
+	},
+};
+
+export const FixedHeight: Story = {
+	args: {
+		title: 'Fixed height',
+		height: 'fixed',
+		children: (
+			<>
+				<div className="flex-1 min-h-0 overflow-y-auto">
+					{Array.from({ length: 50 }, (_, i) => (
+						<p key={i} className="mb-4">
+							Paragraph {i + 1}: Lorem ipsum dolor sit amet, consectetur
+							adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+							dolore magna aliqua.
+						</p>
+					))}
+				</div>
+				<ModalFooter>
+					<Button variant="outline" color="neutral" size="sm">
+						Cancel
+					</Button>
+					<Button size="sm">Save</Button>
+				</ModalFooter>
+			</>
+		),
+	},
+};
+
+const SETTINGS_FORM_ID = 'settings-form';
+
+const LONG_PANEL_FIELD_COUNT = 24;
+
+const LOG_LEVEL_OPTIONS = [
+	{ value: 'info', label: 'Info' },
+	{ value: 'warn', label: 'Avertissement' },
+	{ value: 'error', label: 'Erreur' },
+];
+
+interface SettingsFormProps {
+	onCancel: () => void;
+}
+
+function SettingsForm({ onCancel }: Readonly<SettingsFormProps>) {
+	const [serverName, setServerName] = useState('');
+	const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+	const serverNameError =
+		hasAttemptedSubmit && !serverName ? 'Le nom est requis' : undefined;
+
+	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setHasAttemptedSubmit(true);
+		if (serverName) onCancel();
+	};
+
+	const items = [
+		{
+			title: 'Général',
+			badge: serverNameError && <Badge color="danger">1 erreur</Badge>,
+			content: (
+				<div className="space-y-4">
+					<Input
+						label="Nom du serveur"
+						required
+						value={serverName}
+						error={serverNameError}
+						onChange={(event) => setServerName(event.target.value)}
+					/>
+					<Input label="Description" />
+					<Switch label="Démarrer au lancement" />
+				</div>
+			),
+		},
+		{
+			title: 'Réseau',
+			content: (
+				<div className="space-y-4">
+					<Input label="Hôte" placeholder="localhost" />
+					<Input label="Port" type="number" />
+					<Switch label="Activer le proxy" />
+				</div>
+			),
+		},
+		{
+			title: 'Sécurité',
+			content: (
+				<div className="space-y-4">
+					{Array.from({ length: LONG_PANEL_FIELD_COUNT }, (_, index) => (
+						<Input key={index} label={`Règle d'accès ${index + 1}`} />
+					))}
+				</div>
+			),
+		},
+		{
+			title: 'Notifications',
+			content: (
+				<div className="space-y-4">
+					<Switch label="Notifications par e-mail" />
+					<Switch label="Notifications push" />
+					<Input label="Adresse e-mail" type="email" />
+				</div>
+			),
+		},
+		{
+			title: 'Avancé',
+			content: (
+				<div className="space-y-4">
+					<Select
+						label="Niveau de journalisation"
+						options={LOG_LEVEL_OPTIONS}
+					/>
+					<Input label="Délai d'attente (ms)" type="number" />
+				</div>
+			),
+		},
+	];
+
+	return (
+		<form
+			id={SETTINGS_FORM_ID}
+			noValidate
+			className="flex-1 min-h-0 flex flex-col"
+			onSubmit={handleSubmit}
+		>
+			<Tabs
+				orientation="vertical"
+				keepMounted
+				className="flex-1 min-h-0"
+				items={items}
+			/>
+			<ModalFooter>
+				<Button variant="outline" color="neutral" size="sm" onClick={onCancel}>
+					Annuler
+				</Button>
+				<Button size="sm" type="submit" form={SETTINGS_FORM_ID}>
+					Enregistrer
+				</Button>
+			</ModalFooter>
+		</form>
+	);
+}
+
+export const SettingsWithVerticalTabs: Story = {
+	args: {
+		title: 'Paramètres',
+		size: 'xl',
+		height: 'fixed',
+		children: (close) => <SettingsForm onCancel={close} />,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+		const dialog = await body.findByRole('dialog', { name: 'Paramètres' });
+		const dialogScope = within(dialog);
+
+		await step('ArrowDown moves to the next tab', async () => {
+			await userEvent.click(dialogScope.getByRole('tab', { name: 'Général' }));
+			await userEvent.keyboard('{ArrowDown}');
+			await expect(
+				dialogScope.getByRole('tab', { name: 'Réseau' })
+			).toHaveFocus();
+		});
+
+		await step('a typed value survives switching tabs', async () => {
+			await userEvent.click(dialogScope.getByRole('tab', { name: 'Général' }));
+			await userEvent.type(
+				dialogScope.getByLabelText(/Description/),
+				'Mon serveur'
+			);
+			await userEvent.click(dialogScope.getByRole('tab', { name: 'Avancé' }));
+			await userEvent.click(dialogScope.getByRole('tab', { name: 'Général' }));
+			await expect(dialogScope.getByLabelText(/Description/)).toHaveValue(
+				'Mon serveur'
+			);
+		});
+
+		await step('the save button stays visible', async () => {
+			await expect(
+				dialogScope.getByRole('button', { name: 'Enregistrer' })
+			).toBeVisible();
+		});
+
+		await userEvent.click(dialogScope.getByRole('button', { name: 'Annuler' }));
+		await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
 	},
 };
 

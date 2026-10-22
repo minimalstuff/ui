@@ -19,6 +19,8 @@ import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
+export type ModalHeight = 'auto' | 'fixed';
+
 export type ModalRole = 'dialog' | 'alertdialog';
 
 /** @internal the shell's footer slot element, portaled into by `<ModalFooter>` — not part of the public API. */
@@ -31,6 +33,8 @@ interface ModalShellProps {
 	children: ReactNode;
 	footer?: ReactNode;
 	size?: ModalSize;
+	/** `auto` sizes the dialog to its content up to the viewport; `fixed` gives it a stable height and leaves scrolling to the content, so a child with `flex-1 min-h-0 overflow-y-auto` scrolls on its own between the pinned header and footer. */
+	height?: ModalHeight;
 	radius?: Radius;
 	className?: string;
 	dismissible?: boolean;
@@ -50,6 +54,16 @@ const SIZE_CLASSES = {
 	xl: 'max-w-4xl',
 } as const;
 
+const HEIGHT_CLASSES = {
+	auto: '',
+	fixed: 'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
+} as const;
+
+const CONTENT_OVERFLOW_CLASSES = {
+	auto: 'overflow-y-auto',
+	fixed: 'overflow-hidden flex flex-col',
+} as const;
+
 export function ModalShell({
 	isEnded,
 	onDismiss,
@@ -57,6 +71,7 @@ export function ModalShell({
 	children,
 	footer,
 	size = 'md',
+	height = 'auto',
 	radius = 'xl',
 	className,
 	dismissible = true,
@@ -200,6 +215,7 @@ export function ModalShell({
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
+					HEIGHT_CLASSES[height],
 					OVERLAY_BG,
 					'shadow-2xl',
 					RADIUS_CLASSES[radius],
@@ -237,7 +253,8 @@ export function ModalShell({
 					ref={contentRef}
 					id={hasDescribedByContent ? contentId : undefined}
 					className={clsx(
-						'flex-1 overflow-y-auto px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
+						'flex-1 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
+						CONTENT_OVERFLOW_CLASSES[height],
 						!title && 'pt-6',
 						className
 					)}

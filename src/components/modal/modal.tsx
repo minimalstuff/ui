@@ -7,10 +7,15 @@ import {
 	ModalShell,
 	type ModalRole,
 	type ModalSize,
+	type ModalHeight,
 } from '#components/modal/modal_shell';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
-export type { ModalRole, ModalSize } from '#components/modal/modal_shell';
+export type {
+	ModalRole,
+	ModalSize,
+	ModalHeight,
+} from '#components/modal/modal_shell';
 
 type ModalRenderProp = ReactNode | ((close: () => void) => ReactNode);
 
@@ -18,6 +23,8 @@ export interface ModalProps {
 	title?: ReactNode;
 	children: ModalRenderProp;
 	size?: ModalSize;
+	/** `fixed` gives the dialog a stable height so it does not jump when content changes; the content area stops scrolling and a child with `flex-1 min-h-0 overflow-y-auto` scrolls on its own. */
+	height?: ModalHeight;
 	radius?: Radius;
 	className?: string;
 	dismissible?: boolean;
@@ -43,6 +50,7 @@ export const Modal = createCallable<ModalProps, void>(
 		title,
 		children,
 		size,
+		height,
 		radius,
 		className,
 		dismissible,
@@ -61,6 +69,7 @@ export const Modal = createCallable<ModalProps, void>(
 				onDismiss={handleDismiss}
 				title={title}
 				size={size}
+				height={height}
 				radius={radius}
 				className={className}
 				dismissible={dismissible}
