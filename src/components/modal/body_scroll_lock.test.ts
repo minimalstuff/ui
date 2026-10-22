@@ -10,7 +10,7 @@ function mockViewportWidth(widthWhenLocked: number, widthWhenUnlocked: number) {
 	Object.defineProperty(document.documentElement, 'clientWidth', {
 		configurable: true,
 		get: () =>
-			document.body.style.overflow === 'hidden'
+			document.documentElement.style.overflow === 'hidden'
 				? widthWhenLocked
 				: widthWhenUnlocked,
 	});
@@ -24,56 +24,94 @@ describe('useBodyScrollLock', () => {
 	afterEach(() => {
 		cleanup();
 		Reflect.deleteProperty(document.documentElement, 'clientWidth');
-		document.body.removeAttribute('style');
+		document.documentElement.removeAttribute('style');
 	});
 
-	test('should pad the body by the scrollbar width while locked and restore it on unlock', () => {
+	test('should pad the page by the scrollbar width while locked and restore it on unlock', () => {
 		const { unmount } = renderHook(() => useBodyScrollLock());
 
-		expect(document.body.style.overflow).toBe('hidden');
-		expect(document.body.style.paddingRight).toBe(`${SCROLLBAR_WIDTH}px`);
+		expect(document.documentElement.style.overflow).toBe('hidden');
+		expect(document.documentElement.style.paddingRight).toBe(
+			`${SCROLLBAR_WIDTH}px`
+		);
 
 		unmount();
 
-		expect(document.body.style.overflow).toBe('');
-		expect(document.body.style.paddingRight).toBe('');
+		expect(document.documentElement.style.overflow).toBe('');
+		expect(document.documentElement.style.paddingRight).toBe('');
 	});
 
-	test('should add the scrollbar width on top of the existing body padding and restore it on unlock', () => {
-		document.body.style.paddingRight = '8px';
+	test('should add the scrollbar width on top of the existing page padding and restore it on unlock', () => {
+		document.documentElement.style.paddingRight = '8px';
 		const { unmount } = renderHook(() => useBodyScrollLock());
 
-		expect(document.body.style.paddingRight).toBe(`${8 + SCROLLBAR_WIDTH}px`);
+		expect(document.documentElement.style.paddingRight).toBe(
+			`${8 + SCROLLBAR_WIDTH}px`
+		);
 
 		unmount();
 
-		expect(document.body.style.paddingRight).toBe('8px');
+		expect(document.documentElement.style.paddingRight).toBe('8px');
 	});
 
-	test('should not pad the body when locking does not widen the viewport', () => {
+	test('should not pad the page when locking does not widen the viewport', () => {
 		mockViewportWidth(VIEWPORT_WIDTH, VIEWPORT_WIDTH);
-		document.body.style.paddingRight = '8px';
+		document.documentElement.style.paddingRight = '8px';
 
 		renderHook(() => useBodyScrollLock());
 
-		expect(document.body.style.overflow).toBe('hidden');
-		expect(document.body.style.paddingRight).toBe('8px');
+		expect(document.documentElement.style.overflow).toBe('hidden');
+		expect(document.documentElement.style.paddingRight).toBe('8px');
 	});
 
 	test('should apply the padding once and release it only after the last nested lock', () => {
 		const first = renderHook(() => useBodyScrollLock());
 		const second = renderHook(() => useBodyScrollLock());
 
-		expect(document.body.style.paddingRight).toBe(`${SCROLLBAR_WIDTH}px`);
+		expect(document.documentElement.style.paddingRight).toBe(
+			`${SCROLLBAR_WIDTH}px`
+		);
 
 		second.unmount();
 
-		expect(document.body.style.overflow).toBe('hidden');
-		expect(document.body.style.paddingRight).toBe(`${SCROLLBAR_WIDTH}px`);
+		expect(document.documentElement.style.overflow).toBe('hidden');
+		expect(document.documentElement.style.paddingRight).toBe(
+			`${SCROLLBAR_WIDTH}px`
+		);
 
 		first.unmount();
 
-		expect(document.body.style.overflow).toBe('');
-		expect(document.body.style.paddingRight).toBe('');
+		expect(document.documentElement.style.overflow).toBe('');
+		expect(document.documentElement.style.paddingRight).toBe('');
+	});
+
+	test('should expose the scrollbar width as a CSS variable while locked and remove it on unlock', () => {
+		const { unmount } = renderHook(() => useBodyScrollLock());
+
+		expect(
+			document.documentElement.style.getPropertyValue(
+				'--scrollbar-compensation'
+			)
+		).toBe(`${SCROLLBAR_WIDTH}px`);
+
+		unmount();
+
+		expect(
+			document.documentElement.style.getPropertyValue(
+				'--scrollbar-compensation'
+			)
+		).toBe('');
+	});
+
+	test('should lock the page and restore the original overflow longhands when the root already sets an inline overflow', () => {
+		document.documentElement.style.overflowY = 'scroll';
+		const { unmount } = renderHook(() => useBodyScrollLock());
+
+		expect(document.documentElement.style.overflow).toBe('hidden');
+
+		unmount();
+
+		expect(document.documentElement.style.overflowY).toBe('scroll');
+		expect(document.documentElement.style.overflowX).toBe('');
 	});
 });
