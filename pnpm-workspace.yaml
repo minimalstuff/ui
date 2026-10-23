@@ -8,7 +8,3 @@ minimumReleaseAgeExclude:
 
 allowBuilds:
   esbuild: true
-
-onlyBuiltDependencies:
-  - '@swc/core'
-  - 'esbuild'
