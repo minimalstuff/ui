@@ -3,11 +3,26 @@ import UnoCSS from 'unocss/vite';
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { createRequire } from 'node:module';
 import { playwright } from '@vitest/browser-playwright';
 /// <reference types="vitest/config" />
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 
 const dirname = import.meta.dirname;
+
+const require = createRequire(import.meta.url);
+
+/**
+ * unplugin-dts points API Extractor at the folder of the `typescript` package,
+ * which is TypeScript 7 here and ships no `lib.*.d.ts` files. This folder is
+ * the real TypeScript 6 behind the `@typescript/typescript6` shim.
+ */
+const TYPESCRIPT_6_COMPILER_FOLDER = path.resolve(
+	createRequire(require.resolve('@typescript/typescript6')).resolve(
+		'@typescript/old'
+	),
+	'../..'
+);
 
 const isLibBuild = process.env.VITE_BUILD_LIB === '1';
 
@@ -23,7 +38,11 @@ export default defineConfig({
 			? [
 					dts({
 						tsconfigPath: './tsconfig.app.json',
-						bundleTypes: true,
+						bundleTypes: {
+							invokeOptions: {
+								typescriptCompilerFolder: TYPESCRIPT_6_COMPILER_FOLDER,
+							},
+						},
 						exclude: ['**/*.stories.tsx'],
 					}),
 				]
