@@ -8,3 +8,6 @@ minimumReleaseAgeExclude:
 
 allowBuilds:
   esbuild: true
+
+patchedDependencies:
+  unplugin-dts@1.1.2: patches/unplugin-dts@1.1.2.patch
