@@ -69,7 +69,6 @@ export const ConfirmModal = createCallable<
 		};
 
 		const labels = useLabels();
-		const isDisabled = isConfirming;
 		const resolvedConfirmLabel = confirmLabel ?? labels.confirm;
 		const resolvedCancelLabel = cancelLabel ?? labels.cancel;
 		const resolvedConfirmColor = confirmColor ?? 'primary';
@@ -91,7 +90,7 @@ export const ConfirmModal = createCallable<
 							variant="outline"
 							color="neutral"
 							onClick={handleCancel}
-							disabled={isDisabled}
+							disabled={isConfirming}
 							size="sm"
 						>
 							{resolvedCancelLabel}
@@ -101,8 +100,7 @@ export const ConfirmModal = createCallable<
 							onClick={() => {
 								void handleConfirm();
 							}}
-							loading={isDisabled}
-							disabled={isDisabled}
+							loading={isConfirming}
 							size="sm"
 						>
 							{resolvedConfirmLabel}

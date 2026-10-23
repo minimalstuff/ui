@@ -22,9 +22,6 @@ function ConfirmModalTrigger(props: ConfirmModalProps) {
 // without it, production minification mangles `ConfirmModalTrigger`.
 ConfirmModalTrigger.displayName = 'ConfirmModal';
 
-/** Long enough for the play function to check focus while confirming, even on a slow CI runner. */
-const CONFIRM_DURATION_MS = 2000;
-
 const meta = {
 	title: 'Example/ConfirmModal',
 	component: ConfirmModalTrigger,
@@ -62,7 +59,7 @@ const meta = {
 		cancelLabel: 'Cancel',
 		confirmColor: 'primary',
 		onConfirm: async () => {
-			await new Promise((r) => setTimeout(r, CONFIRM_DURATION_MS));
+			await new Promise((r) => setTimeout(r, 800));
 		},
 	},
 } satisfies Meta<typeof ConfirmModalTrigger>;
@@ -108,21 +105,18 @@ export const Default: Story = {
 			'Enter confirms; focus stays inside the alertdialog while it loads',
 			async () => {
 				await userEvent.keyboard('{Enter}');
-				await waitFor(async () => {
-					await expect(alertDialog.contains(document.activeElement)).toBe(true);
-				});
+				const confirmButton = body.getByRole('button', { name: 'Confirm' });
+				await expectFocusOn(confirmButton);
+				await expect(confirmButton).toHaveAttribute('aria-disabled', 'true');
 				await userEvent.tab();
 				await expect(alertDialog.contains(document.activeElement)).toBe(true);
 			}
 		);
 
 		await step('closes once confirmed', async () => {
-			await waitFor(
-				async () => {
-					await expect(body.queryByRole('alertdialog')).not.toBeInTheDocument();
-				},
-				{ timeout: CONFIRM_DURATION_MS * 2 }
-			);
+			await waitFor(async () => {
+				await expect(body.queryByRole('alertdialog')).not.toBeInTheDocument();
+			});
 		});
 	},
 };
