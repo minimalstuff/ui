@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.2](https://github.com/minimalstuff/ui/compare/4.2.1...4.2.2) (2026-10-23)
+
+### Bug Fixes
+
+* **tooltip:** resolve the portal target only while shown ([9fc2926](https://github.com/minimalstuff/ui/commit/9fc29263a271b36a5125829f18c543f2ce657bd7))
+
 ## [4.2.1](https://github.com/minimalstuff/ui/compare/4.2.0...4.2.1) (2026-10-23)
 
 ### Bug Fixes
