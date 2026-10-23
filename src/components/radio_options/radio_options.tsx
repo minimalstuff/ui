@@ -74,7 +74,9 @@ export function RadioOptions({
 	return (
 		<fieldset
 			className={clsx('m-0 border-0 p-0', wrapperClassName)}
+			role="radiogroup"
 			disabled={disabled}
+			aria-invalid={error ? true : undefined}
 			aria-describedby={joinIds(callerDescribedBy, error && errorId)}
 			{...props}
 		>

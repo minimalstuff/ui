@@ -59,6 +59,24 @@ describe('RadioOptions', () => {
 		expect(errorMessage).toHaveTextContent('Pick one');
 	});
 
+	test('marks the radio group invalid and not the individual radios when there is an error', () => {
+		render(<RadioOptions options={OPTIONS} error="Pick one" />);
+
+		expect(screen.getByRole('radiogroup')).toHaveAttribute(
+			'aria-invalid',
+			'true'
+		);
+		for (const radio of screen.getAllByRole('radio')) {
+			expect(radio).not.toHaveAttribute('aria-invalid');
+		}
+	});
+
+	test('does not mark the radio group invalid when there is no error', () => {
+		render(<RadioOptions options={OPTIONS} />);
+
+		expect(screen.getByRole('radiogroup')).not.toHaveAttribute('aria-invalid');
+	});
+
 	test('merges a caller-supplied aria-describedby with the error id', () => {
 		const { container } = render(
 			<RadioOptions
