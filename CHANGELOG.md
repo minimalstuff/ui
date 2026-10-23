@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.1](https://github.com/minimalstuff/ui/compare/4.2.0...4.2.1) (2026-10-23)
+
+### Bug Fixes
+
+* **button:** keep a loading button focusable ([97642cf](https://github.com/minimalstuff/ui/commit/97642cf1aefe02d7eb150effa09d19555bc735a6))
+* **confirm-modal:** keep focus on Confirm while confirming ([8805394](https://github.com/minimalstuff/ui/commit/880539491f803037f06d73ea8f27783b0879ad9e))
+
 ## [4.2.0](https://github.com/minimalstuff/ui/compare/4.1.0...4.2.0) (2026-10-23)
 
 ### Features
