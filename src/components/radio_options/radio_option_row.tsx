@@ -64,7 +64,6 @@ export function RadioOptionRow({
 					onChange={() => onSelect(option.value)}
 					disabled={isDisabled}
 					required={required && isFirstOption}
-					aria-invalid={error ? true : undefined}
 					aria-describedby={option.description ? descriptionId : undefined}
 					className="sr-only"
 				/>
