@@ -1,0 +1,28 @@
+diff --git a/dist/shared/unplugin-dts.BdKczvjp.mjs b/dist/shared/unplugin-dts.BdKczvjp.mjs
+index 118db3b5e4862a305338791000461af864ae7d6c..3941cea9e53f353aa517059670ad4889a67f8413 100644
+--- a/dist/shared/unplugin-dts.BdKczvjp.mjs
++++ b/dist/shared/unplugin-dts.BdKczvjp.mjs
+@@ -331,8 +331,7 @@ function getTsConfig(tsConfigPath, readFileSync) {
+   return tsConfig;
+ }
+ function getTsLibFolder() {
+-  const libFolder = tryGetPackageInfo("typescript")?.rootPath;
+-  return libFolder && normalizePath(libFolder);
++  return normalizePath(dirname(dirname(ts.getDefaultLibFilePath({}))));
+ }
+ const BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split("");
+ function base64Encode(number) {
+diff --git a/dist/shared/unplugin-dts.CuqlxfZ4.cjs b/dist/shared/unplugin-dts.CuqlxfZ4.cjs
+index e61235eef0021cc85374e9f29aff789f2a1bb3d7..db260708e55e729f0010cb27f5ee0c735a9eb640 100644
+--- a/dist/shared/unplugin-dts.CuqlxfZ4.cjs
++++ b/dist/shared/unplugin-dts.CuqlxfZ4.cjs
+@@ -334,8 +334,7 @@ function getTsConfig(tsConfigPath, readFileSync) {
+   return tsConfig;
+ }
+ function getTsLibFolder() {
+-  const libFolder = tryGetPackageInfo("typescript")?.rootPath;
+-  return libFolder && normalizePath(libFolder);
++  return normalizePath(node_path.dirname(node_path.dirname(ts.getDefaultLibFilePath({}))));
+ }
+ const BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split("");
+ function base64Encode(number) {

@@ -162,6 +162,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  unplugin-dts@1.1.2: a4b3d3d35df5160adfc77f2d0f3859a0b441b55776f2ae0fd138cabc83f58c93
+
 importers:
 
   .:
@@ -7994,7 +7997,7 @@ snapshots:
       - srvx
       - vite
 
-  unplugin-dts@1.1.2(@microsoft/api-extractor@7.59.4(@types/node@26.6.5))(esbuild@0.28.2)(rolldown@1.2.15)(supports-color@8.1.1)(typescript@7.0.2)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)):
+  unplugin-dts@1.1.2(patch_hash=a4b3d3d35df5160adfc77f2d0f3859a0b441b55776f2ae0fd138cabc83f58c93)(@microsoft/api-extractor@7.59.4(@types/node@26.6.5))(esbuild@0.28.2)(rolldown@1.2.15)(supports-color@8.1.1)(typescript@7.0.2)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)):
     dependencies:
       '@rollup/pluginutils': 5.5.1
       '@volar/typescript': 2.4.28(typescript@7.0.2)
@@ -8053,7 +8056,7 @@ snapshots:
 
   vite-plugin-dts@5.1.2(@microsoft/api-extractor@7.59.4(@types/node@26.6.5))(esbuild@0.28.2)(rolldown@1.2.15)(supports-color@8.1.1)(typescript@7.0.2)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)):
     dependencies:
-      unplugin-dts: 1.1.2(@microsoft/api-extractor@7.59.4(@types/node@26.6.5))(esbuild@0.28.2)(rolldown@1.2.15)(supports-color@8.1.1)(typescript@7.0.2)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
+      unplugin-dts: 1.1.2(patch_hash=a4b3d3d35df5160adfc77f2d0f3859a0b441b55776f2ae0fd138cabc83f58c93)(@microsoft/api-extractor@7.59.4(@types/node@26.6.5))(esbuild@0.28.2)(rolldown@1.2.15)(supports-color@8.1.1)(typescript@7.0.2)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
     optionalDependencies:
       '@microsoft/api-extractor': 7.59.4(@types/node@26.6.5)
       vite: 8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)
