@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import {
+	type MouseEvent,
+	useEffect,
+	useRef,
+	useState,
+	type RefObject,
+} from 'react';
 
 import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
 import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
@@ -26,6 +32,8 @@ export interface ModalDialog {
 	setFooterSlot: (element: HTMLDivElement | null) => void;
 	isVisible: boolean;
 	handleBackdropClick: () => void;
+	/** Keeps a press on the backdrop from moving focus to `<body>`, so a dialog stacked by a dismiss guard captures focus inside this one. */
+	handleBackdropMouseDown: (event: MouseEvent<HTMLElement>) => void;
 }
 
 interface FocusEntryPointParams {
@@ -185,6 +193,14 @@ export function useModalDialog({
 		if (!isEnded && dismissible) onDismiss();
 	};
 
+	const handleBackdropMouseDown = (event: MouseEvent<HTMLElement>) => {
+		const target = event.target as Node;
+		const isOnBackdrop =
+			event.currentTarget.contains(target) &&
+			!dialogRef.current?.contains(target);
+		if (isOnBackdrop) event.preventDefault();
+	};
+
 	return {
 		dialogRef,
 		contentRef,
@@ -192,5 +208,6 @@ export function useModalDialog({
 		setFooterSlot,
 		isVisible: isOpening && !isEnded,
 		handleBackdropClick,
+		handleBackdropMouseDown,
 	};
 }

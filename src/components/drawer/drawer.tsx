@@ -17,9 +17,11 @@ import {
 	type DrawerSide,
 	type DrawerSize,
 } from '#components/drawer/drawer_styles';
+import { DismissGuardContext } from '#components/modal/dismiss_guard_context';
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
+import { useGuardedDismiss } from '#components/modal/use_guarded_dismiss';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
 import { type Radius } from '#components/shared/radius';
@@ -67,7 +69,7 @@ function getMainElement(): HTMLElement | null {
 
 function DrawerDialog({
 	isEnded,
-	onDismiss,
+	onDismiss: onClose,
 	title,
 	children,
 	footer,
@@ -81,6 +83,10 @@ function DrawerDialog({
 }: Readonly<DrawerDialogProps>) {
 	useDisableHotkeysWhileMounted();
 	const titleId = useId();
+	const { dismiss, registry } = useGuardedDismiss({
+		onDismiss: onClose,
+		isEnded,
+	});
 	const {
 		dialogRef,
 		contentRef,
@@ -88,71 +94,79 @@ function DrawerDialog({
 		setFooterSlot,
 		isVisible,
 		handleBackdropClick,
+		handleBackdropMouseDown,
 	} = useModalDialog({
 		isEnded,
-		onDismiss,
+		onDismiss: dismiss,
 		dismissible,
 		initialFocusRef,
 		initialFocusFallbackScope: 'content',
 		getFocusFallback: getMainElement,
 	});
 
-	return createPortal(
-		<div
-			className={clsx(
-				'fixed inset-0 z-50',
-				'transition-opacity duration-200 ease-out',
-				isVisible ? 'opacity-100' : 'opacity-0'
-			)}
-			onClick={handleBackdropClick}
-		>
-			<div
-				className="fixed inset-0 bg-black/60 backdrop-blur-md"
-				aria-hidden="true"
-			/>
-			<div
-				ref={dialogRef}
-				role="dialog"
-				aria-modal="true"
-				aria-labelledby={titleId}
-				tabIndex={-1}
-				inert={isEnded}
-				className={clsx(
-					'fixed inset-y-0 h-full w-full flex flex-col overflow-hidden',
-					SIDE_CLASSES[side],
-					SIZE_CLASSES[size],
-					OVERLAY_BG,
-					THIN_SCROLLBAR_SCOPE,
-					'shadow-2xl',
-					INNER_EDGE_RADIUS_CLASSES[side][radius],
-					'transition-transform duration-200 ease-out motion-reduce:transition-none',
-					'focus:outline-none',
-					isVisible ? ONSCREEN_CLASSES : OFFSCREEN_CLASSES[side]
-				)}
-				onClick={(event) => event.stopPropagation()}
-			>
-				<ModalHeader
-					titleId={titleId}
-					title={title}
-					onDismiss={onDismiss}
-					dismissible={dismissible}
-					closeLabel={closeLabel}
-				/>
+	return (
+		<DismissGuardContext.Provider value={registry}>
+			{createPortal(
 				<div
-					ref={contentRef}
 					className={clsx(
-						'flex-1 overflow-y-auto min-h-0 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
-						className
+						'fixed inset-0 z-50',
+						'transition-opacity duration-200 ease-out',
+						isVisible ? 'opacity-100' : 'opacity-0'
 					)}
+					onClick={handleBackdropClick}
+					onMouseDown={handleBackdropMouseDown}
 				>
-					<ModalFooterSlotContext.Provider value={footerSlot}>
-						{children}
-					</ModalFooterSlotContext.Provider>
-				</div>
-				<ModalFooterSlot onSlotChange={setFooterSlot}>{footer}</ModalFooterSlot>
-			</div>
-		</div>,
-		document.body
+					<div
+						className="fixed inset-0 bg-black/60 backdrop-blur-md"
+						aria-hidden="true"
+					/>
+					<div
+						ref={dialogRef}
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={titleId}
+						tabIndex={-1}
+						inert={isEnded}
+						className={clsx(
+							'fixed inset-y-0 h-full w-full flex flex-col overflow-hidden',
+							SIDE_CLASSES[side],
+							SIZE_CLASSES[size],
+							OVERLAY_BG,
+							THIN_SCROLLBAR_SCOPE,
+							'shadow-2xl',
+							INNER_EDGE_RADIUS_CLASSES[side][radius],
+							'transition-transform duration-200 ease-out motion-reduce:transition-none',
+							'focus:outline-none',
+							isVisible ? ONSCREEN_CLASSES : OFFSCREEN_CLASSES[side]
+						)}
+						onClick={(event) => event.stopPropagation()}
+					>
+						<ModalHeader
+							titleId={titleId}
+							title={title}
+							onDismiss={dismiss}
+							dismissible={dismissible}
+							closeLabel={closeLabel}
+						/>
+						<div
+							ref={contentRef}
+							className={clsx(
+								'flex-1 overflow-y-auto min-h-0 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
+								className
+							)}
+						>
+							<ModalFooterSlotContext.Provider value={footerSlot}>
+								{children}
+							</ModalFooterSlotContext.Provider>
+						</div>
+						<ModalFooterSlot onSlotChange={setFooterSlot}>
+							{footer}
+						</ModalFooterSlot>
+					</div>
+				</div>,
+				document.body
+			)}
+		</DismissGuardContext.Provider>
 	);
 }
 

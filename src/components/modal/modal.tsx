@@ -1,12 +1,14 @@
 import { type ReactNode, type RefObject } from 'react';
 import { createCallable } from 'react-call';
 
+import { DismissGuardContext } from '#components/modal/dismiss_guard_context';
 import {
 	ModalShell,
 	type ModalRole,
 	type ModalSize,
 	type ModalHeight,
 } from '#components/modal/modal_shell';
+import { useGuardedDismiss } from '#components/modal/use_guarded_dismiss';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 import { type Radius } from '#components/shared/radius';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
@@ -61,25 +63,30 @@ export const Modal = createCallable<ModalProps, void>(
 	}) => {
 		useDisableHotkeysWhileMounted();
 
-		const handleDismiss = () => call.end();
+		const { dismiss, registry } = useGuardedDismiss({
+			onDismiss: () => call.end(),
+			isEnded: call.ended,
+		});
 
 		return (
-			<ModalShell
-				isEnded={call.ended}
-				onDismiss={handleDismiss}
-				title={title}
-				size={size}
-				height={height}
-				radius={radius}
-				className={className}
-				dismissible={dismissible}
-				closeLabel={closeLabel}
-				role={role}
-				initialFocusRef={initialFocusRef}
-				aria-label={ariaLabel}
-			>
-				{resolveRenderProp(children, handleDismiss)}
-			</ModalShell>
+			<DismissGuardContext.Provider value={registry}>
+				<ModalShell
+					isEnded={call.ended}
+					onDismiss={dismiss}
+					title={title}
+					size={size}
+					height={height}
+					radius={radius}
+					className={className}
+					dismissible={dismissible}
+					closeLabel={closeLabel}
+					role={role}
+					initialFocusRef={initialFocusRef}
+					aria-label={ariaLabel}
+				>
+					{resolveRenderProp(children, dismiss)}
+				</ModalShell>
+			</DismissGuardContext.Provider>
 		);
 	},
 	MODAL_EXIT_DURATION_MS
