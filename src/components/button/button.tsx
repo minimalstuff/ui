@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { ComponentPropsWithRef, ReactNode } from 'react';
+import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 
 import {
 	BUTTON_COLOR_TOKENS,
@@ -44,6 +44,11 @@ export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 	size?: ControlSize;
 	className?: string;
 	fullWidth?: boolean;
+	/**
+	 * Shows a spinner, marks the button busy and blocks activation (click, Enter,
+	 * Space, form submit). Unlike `disabled`, the button keeps focus and stays in
+	 * the tab order, exposed as `aria-disabled`.
+	 */
 	loading?: boolean;
 	startIcon?: string;
 	endIcon?: string;
@@ -74,10 +79,19 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 		startIcon,
 		endIcon,
 		disabled,
+		onClick,
 		...props
 	} = buttonProps as ButtonProps & FlatButtonStyle;
 	const tokens = BUTTON_COLOR_TOKENS[color];
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
+
+	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+		if (loading) {
+			event.preventDefault();
+			return;
+		}
+		onClick?.(event);
+	};
 
 	return (
 		<button
@@ -95,9 +109,11 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 				fullWidth && 'w-full',
 				className
 			)}
-			disabled={disabled ?? loading}
+			disabled={disabled}
+			aria-disabled={(loading && !disabled) || undefined}
 			aria-busy={loading || undefined}
 			{...props}
+			onClick={handleClick}
 		>
 			{loading && (
 				<span

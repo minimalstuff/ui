@@ -46,7 +46,8 @@ const meta = {
 		},
 		loading: {
 			control: 'boolean',
-			description: 'Show spinner and disable the button',
+			description:
+				'Show spinner and block activation while keeping focus (aria-disabled)',
 		},
 		disabled: {
 			control: 'boolean',

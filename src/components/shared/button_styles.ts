@@ -19,58 +19,58 @@ interface ButtonColorTokens {
 export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 	primary: {
 		solid:
-			'border-transparent bg-blue-600 text-white enabled:hover:bg-blue-700 enabled:active:bg-blue-800',
+			'border-transparent bg-blue-600 text-white interactive:hover:bg-blue-700 interactive:active:bg-blue-800',
 		outline:
-			'border-blue-300 bg-transparent text-blue-700 enabled:hover:bg-blue-50 enabled:active:bg-blue-100 dark:border-blue-800 dark:text-blue-400 dark:enabled:hover:bg-blue-950/40 dark:enabled:active:bg-blue-950/60',
+			'border-blue-300 bg-transparent text-blue-700 interactive:hover:bg-blue-50 interactive:active:bg-blue-100 dark:border-blue-800 dark:text-blue-400 dark:interactive:hover:bg-blue-950/40 dark:interactive:active:bg-blue-950/60',
 		ghost:
-			'border-transparent bg-transparent text-blue-700 enabled:hover:bg-blue-50 enabled:active:bg-blue-100 dark:text-blue-400 dark:enabled:hover:bg-blue-950/40 dark:enabled:active:bg-blue-950/60',
+			'border-transparent bg-transparent text-blue-700 interactive:hover:bg-blue-50 interactive:active:bg-blue-100 dark:text-blue-400 dark:interactive:hover:bg-blue-950/40 dark:interactive:active:bg-blue-950/60',
 		subtle:
-			'border-transparent bg-blue-50 text-blue-700 enabled:hover:bg-blue-100 enabled:active:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:enabled:hover:bg-blue-500/20 dark:enabled:active:bg-blue-500/30',
+			'border-transparent bg-blue-50 text-blue-700 interactive:hover:bg-blue-100 interactive:active:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:interactive:hover:bg-blue-500/20 dark:interactive:active:bg-blue-500/30',
 		focusOutline: 'focus-visible:outline-blue-500',
 	},
 	neutral: {
 		solid:
-			'border-transparent bg-gray-200 text-gray-900 enabled:hover:bg-gray-300 enabled:active:bg-gray-400 dark:bg-gray-600 dark:text-gray-100 dark:enabled:hover:bg-gray-500 dark:enabled:active:bg-gray-400',
+			'border-transparent bg-gray-200 text-gray-900 interactive:hover:bg-gray-300 interactive:active:bg-gray-400 dark:bg-gray-600 dark:text-gray-100 dark:interactive:hover:bg-gray-500 dark:interactive:active:bg-gray-400',
 		outline:
-			'border-gray-300 bg-transparent text-gray-700 enabled:hover:bg-gray-50 enabled:active:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:enabled:hover:bg-gray-800/50 dark:enabled:active:bg-gray-800/80',
+			'border-gray-300 bg-transparent text-gray-700 interactive:hover:bg-gray-50 interactive:active:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:interactive:hover:bg-gray-800/50 dark:interactive:active:bg-gray-800/80',
 		ghost:
-			'border-transparent bg-transparent text-gray-700 enabled:hover:bg-gray-100 enabled:active:bg-gray-200 dark:text-gray-300 dark:enabled:hover:bg-gray-700/50 dark:enabled:active:bg-gray-700/80',
+			'border-transparent bg-transparent text-gray-700 interactive:hover:bg-gray-100 interactive:active:bg-gray-200 dark:text-gray-300 dark:interactive:hover:bg-gray-700/50 dark:interactive:active:bg-gray-700/80',
 		subtle:
-			'border-transparent bg-gray-100 text-gray-700 enabled:hover:bg-gray-200 enabled:active:bg-gray-300 dark:bg-gray-700/50 dark:text-gray-300 dark:enabled:hover:bg-gray-600/50 dark:enabled:active:bg-gray-600/80',
+			'border-transparent bg-gray-100 text-gray-700 interactive:hover:bg-gray-200 interactive:active:bg-gray-300 dark:bg-gray-700/50 dark:text-gray-300 dark:interactive:hover:bg-gray-600/50 dark:interactive:active:bg-gray-600/80',
 		focusOutline:
 			'focus-visible:outline-gray-500 dark:focus-visible:outline-gray-400',
 	},
 	danger: {
 		solid:
-			'border-transparent bg-red-600 text-white enabled:hover:bg-red-700 enabled:active:bg-red-800',
+			'border-transparent bg-red-600 text-white interactive:hover:bg-red-700 interactive:active:bg-red-800',
 		outline:
-			'border-red-300 bg-transparent text-red-700 enabled:hover:bg-red-50 enabled:active:bg-red-100 dark:border-red-800 dark:text-red-400 dark:enabled:hover:bg-red-950/40 dark:enabled:active:bg-red-950/60',
+			'border-red-300 bg-transparent text-red-700 interactive:hover:bg-red-50 interactive:active:bg-red-100 dark:border-red-800 dark:text-red-400 dark:interactive:hover:bg-red-950/40 dark:interactive:active:bg-red-950/60',
 		ghost:
-			'border-transparent bg-transparent text-red-700 enabled:hover:bg-red-50 enabled:active:bg-red-100 dark:text-red-400 dark:enabled:hover:bg-red-950/40 dark:enabled:active:bg-red-950/60',
+			'border-transparent bg-transparent text-red-700 interactive:hover:bg-red-50 interactive:active:bg-red-100 dark:text-red-400 dark:interactive:hover:bg-red-950/40 dark:interactive:active:bg-red-950/60',
 		subtle:
-			'border-transparent bg-red-50 text-red-700 enabled:hover:bg-red-100 enabled:active:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:enabled:hover:bg-red-500/20 dark:enabled:active:bg-red-500/30',
+			'border-transparent bg-red-50 text-red-700 interactive:hover:bg-red-100 interactive:active:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:interactive:hover:bg-red-500/20 dark:interactive:active:bg-red-500/30',
 		focusOutline: 'focus-visible:outline-red-500',
 	},
 	success: {
 		solid:
-			'border-transparent bg-green-700 text-white enabled:hover:bg-green-800 enabled:active:bg-green-900',
+			'border-transparent bg-green-700 text-white interactive:hover:bg-green-800 interactive:active:bg-green-900',
 		outline:
-			'border-green-300 bg-transparent text-green-700 enabled:hover:bg-green-50 enabled:active:bg-green-100 dark:border-green-800 dark:text-green-400 dark:enabled:hover:bg-green-950/40 dark:enabled:active:bg-green-950/60',
+			'border-green-300 bg-transparent text-green-700 interactive:hover:bg-green-50 interactive:active:bg-green-100 dark:border-green-800 dark:text-green-400 dark:interactive:hover:bg-green-950/40 dark:interactive:active:bg-green-950/60',
 		ghost:
-			'border-transparent bg-transparent text-green-700 enabled:hover:bg-green-50 enabled:active:bg-green-100 dark:text-green-400 dark:enabled:hover:bg-green-950/40 dark:enabled:active:bg-green-950/60',
+			'border-transparent bg-transparent text-green-700 interactive:hover:bg-green-50 interactive:active:bg-green-100 dark:text-green-400 dark:interactive:hover:bg-green-950/40 dark:interactive:active:bg-green-950/60',
 		subtle:
-			'border-transparent bg-green-50 text-green-700 enabled:hover:bg-green-100 enabled:active:bg-green-200 dark:bg-green-500/10 dark:text-green-400 dark:enabled:hover:bg-green-500/20 dark:enabled:active:bg-green-500/30',
+			'border-transparent bg-green-50 text-green-700 interactive:hover:bg-green-100 interactive:active:bg-green-200 dark:bg-green-500/10 dark:text-green-400 dark:interactive:hover:bg-green-500/20 dark:interactive:active:bg-green-500/30',
 		focusOutline: 'focus-visible:outline-green-600',
 	},
 	warning: {
 		solid:
-			'border-transparent bg-yellow-700 text-white enabled:hover:bg-yellow-800 enabled:active:bg-yellow-900',
+			'border-transparent bg-yellow-700 text-white interactive:hover:bg-yellow-800 interactive:active:bg-yellow-900',
 		outline:
-			'border-yellow-300 bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:border-yellow-800 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
+			'border-yellow-300 bg-transparent text-yellow-700 interactive:hover:bg-yellow-50 interactive:active:bg-yellow-100 dark:border-yellow-800 dark:text-yellow-400 dark:interactive:hover:bg-yellow-950/40 dark:interactive:active:bg-yellow-950/60',
 		ghost:
-			'border-transparent bg-transparent text-yellow-700 enabled:hover:bg-yellow-50 enabled:active:bg-yellow-100 dark:text-yellow-400 dark:enabled:hover:bg-yellow-950/40 dark:enabled:active:bg-yellow-950/60',
+			'border-transparent bg-transparent text-yellow-700 interactive:hover:bg-yellow-50 interactive:active:bg-yellow-100 dark:text-yellow-400 dark:interactive:hover:bg-yellow-950/40 dark:interactive:active:bg-yellow-950/60',
 		subtle:
-			'border-transparent bg-yellow-50 text-yellow-700 enabled:hover:bg-yellow-100 enabled:active:bg-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:enabled:hover:bg-yellow-500/20 dark:enabled:active:bg-yellow-500/30',
+			'border-transparent bg-yellow-50 text-yellow-700 interactive:hover:bg-yellow-100 interactive:active:bg-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:interactive:hover:bg-yellow-500/20 dark:interactive:active:bg-yellow-500/30',
 		focusOutline:
 			'focus-visible:outline-yellow-700 dark:focus-visible:outline-yellow-500',
 	},
@@ -78,7 +78,7 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 
 /** Kept even when `unstyled`: without these, icon slots and disabled state stop working. */
 export const BUTTON_LAYOUT_CLASSES =
-	'inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed';
+	'inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:cursor-not-allowed';
 
 /** Visual chrome, dropped entirely when `unstyled`. */
-export const BUTTON_INTERACTIVE_CLASSES = `cursor-pointer transition-[color,background-color,border-color,transform] duration-200 enabled:active:duration-75 enabled:active:scale-[0.95] ${BUTTON_FOCUS_OUTLINE}`;
+export const BUTTON_INTERACTIVE_CLASSES = `cursor-pointer transition-[color,background-color,border-color,transform] duration-200 interactive:active:duration-75 interactive:active:scale-[0.95] ${BUTTON_FOCUS_OUTLINE}`;
