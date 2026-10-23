@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.2.0](https://github.com/minimalstuff/ui/compare/4.1.0...4.2.0) (2026-10-23)
+
+### Features
+
+* **drawer:** add a modal side panel ([a5de29a](https://github.com/minimalstuff/ui/commit/a5de29a005a5d7ba1b12670aaae63ba9f6772a5b))
+* **modal:** add a fixed height with inner scrolling ([1aeb769](https://github.com/minimalstuff/ui/commit/1aeb7693bf84a6cb743581055bedbf1ecd29242c))
+* **modal:** lock page scroll on the root and expose the scrollbar compensation ([0a84d25](https://github.com/minimalstuff/ui/commit/0a84d25e1f0315cd48ef362027ae848e3203240d))
+* **tabs:** add a vertical orientation ([116e245](https://github.com/minimalstuff/ui/commit/116e2459340ba00b85bd90d82dcaecef9fc45dfb))
+* **tabs:** keep inactive panels mounted ([875f037](https://github.com/minimalstuff/ui/commit/875f0370ca3ab997add8a764e244db4f9b461a30))
+* **tabs:** show a badge on a tab ([200b6ec](https://github.com/minimalstuff/ui/commit/200b6ec0deb5aac973bd6b3bca6163fe20a9f247))
+* **ui:** give scroll containers a thin themed scrollbar ([0e0d420](https://github.com/minimalstuff/ui/commit/0e0d4204d80645390e36da4f685d90f6eba58938))
+
+### Bug Fixes
+
+* **modal:** keep the body scroll locked while a stacked dialog is open ([8270a5a](https://github.com/minimalstuff/ui/commit/8270a5a8266688bdbf6e362e9d5a7f34e9b9d42c))
+* **modal:** keep the layout still when the body scroll lock engages ([e303404](https://github.com/minimalstuff/ui/commit/e303404b69f3c7b7256b289c86af160e15d97fa7))
+* **radio-options:** mark the group invalid instead of each radio ([ff99ff5](https://github.com/minimalstuff/ui/commit/ff99ff56768e7c7eca8f66ee50c47cc19c4417d6))
+
 ## [4.1.0](https://github.com/minimalstuff/ui/compare/4.0.0...4.1.0) (2026-10-19)
 
 ### Features
