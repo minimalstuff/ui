@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { ChangeEvent } from 'react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { Switch } from './switch';
 
@@ -26,7 +27,8 @@ describe('Switch', () => {
 	});
 
 	test('calls onChange with the new checked value', () => {
-		const handleChange = vi.fn();
+		const handleChange =
+			vi.fn<(event: ChangeEvent<HTMLInputElement>) => void>();
 		render(<Switch label="Enable notifications" onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('switch'));
@@ -37,7 +39,11 @@ describe('Switch', () => {
 
 	test('stays controlled by the checked prop', () => {
 		render(
-			<Switch label="Enable notifications" checked={false} onChange={vi.fn()} />
+			<Switch
+				label="Enable notifications"
+				checked={false}
+				onChange={vi.fn<() => void>()}
+			/>
 		);
 		const toggle = screen.getByRole('switch');
 

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { ConfirmModal, type ConfirmModalResponse } from './confirm_modal';
 
@@ -65,7 +65,7 @@ describe('ConfirmModal', () => {
 
 	test('awaits onConfirm before resolving and disables actions while pending', async () => {
 		let resolveConfirm: () => void = () => {};
-		const onConfirm = vi.fn(
+		const onConfirm = vi.fn<() => Promise<void>>(
 			() =>
 				new Promise<void>((resolve) => {
 					resolveConfirm = resolve;
@@ -94,7 +94,7 @@ describe('ConfirmModal', () => {
 
 	test('reports a rejected onConfirm to onError', async () => {
 		const confirmError = new Error('network down');
-		const onError = vi.fn();
+		const onError = vi.fn<() => void>();
 
 		render(<ConfirmModal />);
 
@@ -121,7 +121,7 @@ describe('ConfirmModal', () => {
 			void ConfirmModal.call({
 				title: 'Delete item?',
 				onConfirm: () => Promise.reject(new Error('network down')),
-				onError: vi.fn(),
+				onError: vi.fn<() => void>(),
 			});
 		});
 		await screen.findByText('Delete item?');

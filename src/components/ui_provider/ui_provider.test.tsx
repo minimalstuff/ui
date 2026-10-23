@@ -1,18 +1,18 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
+import { axe } from 'vitest-axe';
 
-import { UIProvider } from './ui_provider';
-import { Input } from '#components/input/input';
-import { Modal } from '#components/modal/modal';
+import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
 import { Combobox } from '#components/combobox/combobox';
+import { Input } from '#components/input/input';
 import { ConfirmModal } from '#components/modal/confirm_modal';
-import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
+import { Modal } from '#components/modal/modal';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
 import { MultiCombobox } from '#components/multi_combobox/multi_combobox';
-import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
+import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
+import { UIProvider } from './ui_provider';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

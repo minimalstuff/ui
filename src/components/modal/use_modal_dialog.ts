@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 
-import { getTabbableElements } from '#components/shared/tabbable';
 import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
 import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
+import { getTabbableElements } from '#components/shared/tabbable';
 
 /** Where initial focus looks for a tabbable element once the content has none: anywhere in the `dialog` (header and footer included), or nowhere (`content`), which leaves focus on the dialog itself. */
 type InitialFocusFallbackScope = 'dialog' | 'content';

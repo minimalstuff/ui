@@ -2,16 +2,11 @@ import './tabs.css';
 
 import { type ReactNode, useId, useRef } from 'react';
 
-import { TabPanel } from '#components/tabs/tab_panel';
 import type { Radius } from '#components/shared/radius';
-import { TabButton } from '#components/tabs/tab_button';
 import type { ControlSize } from '#components/shared/sizes';
 import { useControlledState } from '#components/shared/use_controlled_state';
-import { useTabIndicatorTransition } from '#components/tabs/use_tab_indicator_transition';
-import {
-	getTabStopIndex,
-	useTabsKeyboardNavigation,
-} from '#components/tabs/use_tabs_keyboard_navigation';
+import { TabButton } from '#components/tabs/tab_button';
+import { TabPanel } from '#components/tabs/tab_panel';
 import {
 	tabsListClasses,
 	tabsPanelClasses,
@@ -19,6 +14,11 @@ import {
 	type TabsOrientation,
 	type TabsVariant,
 } from '#components/tabs/tabs_styles';
+import { useTabIndicatorTransition } from '#components/tabs/use_tab_indicator_transition';
+import {
+	getTabStopIndex,
+	useTabsKeyboardNavigation,
+} from '#components/tabs/use_tabs_keyboard_navigation';
 
 export interface TabItem {
 	title: string;

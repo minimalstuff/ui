@@ -3,13 +3,13 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
-import {
 	ConfirmModal,
 	type ConfirmModalProps,
 } from '#components/modal/confirm_modal';
+import {
+	expectFocusOn,
+	getPortalScope,
+} from '../../../.storybook/play_helpers';
 
 function ConfirmModalTrigger(props: ConfirmModalProps) {
 	const handleOpen = () => {

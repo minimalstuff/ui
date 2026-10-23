@@ -1,17 +1,17 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { axe } from 'vitest-axe';
 
-import { Drawer, type DrawerProps } from './drawer';
-import { ModalFooter } from '#components/modal/modal_footer';
 import { ConfirmModal } from '#components/modal/confirm_modal';
+import { ModalFooter } from '#components/modal/modal_footer';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
+import { Drawer, type DrawerProps } from './drawer';
 
 function renderDrawer(props: Partial<DrawerProps> = {}) {
-	const onClose = vi.fn();
+	const onClose = vi.fn<() => void>();
 	const view = render(
 		<Drawer isOpen onClose={onClose} title="Settings" {...props}>
 			{props.children ?? 'Body'}
@@ -25,7 +25,7 @@ function rerenderDrawer(
 	props: Partial<DrawerProps>
 ) {
 	rerender(
-		<Drawer isOpen onClose={vi.fn()} title="Settings" {...props}>
+		<Drawer isOpen onClose={vi.fn<() => void>()} title="Settings" {...props}>
 			Body
 		</Drawer>
 	);
@@ -306,7 +306,7 @@ describe('Drawer', () => {
 	test('should ignore backdrop clicks during the exit transition', () => {
 		vi.useFakeTimers();
 		const { rerender } = renderDrawer();
-		const onClose = vi.fn();
+		const onClose = vi.fn<() => void>();
 		rerender(
 			<Drawer isOpen={false} onClose={onClose} title="Settings">
 				Body
@@ -344,7 +344,7 @@ describe('Drawer', () => {
 		expect(opener).toHaveFocus();
 
 		rerender(
-			<Drawer isOpen onClose={vi.fn()} title="Settings">
+			<Drawer isOpen onClose={vi.fn<() => void>()} title="Settings">
 				{children}
 			</Drawer>
 		);

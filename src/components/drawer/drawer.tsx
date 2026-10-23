@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { createPortal } from 'react-dom';
 import {
 	type ReactNode,
 	type RefObject,
@@ -7,18 +6,8 @@ import {
 	useId,
 	useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 
-import { type Radius } from '#components/shared/radius';
-import { ModalHeader } from '#components/modal/modal_header';
-import { useModalDialog } from '#components/modal/use_modal_dialog';
-import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
-import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
-import { ModalFooterSlotContext } from '#components/modal/modal_shell';
-import {
-	OVERLAY_BG,
-	THIN_SCROLLBAR_SCOPE,
-} from '#components/shared/surface_tokens';
-import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 import {
 	INNER_EDGE_RADIUS_CLASSES,
 	OFFSCREEN_CLASSES,
@@ -28,6 +17,17 @@ import {
 	type DrawerSide,
 	type DrawerSize,
 } from '#components/drawer/drawer_styles';
+import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
+import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
+import { ModalHeader } from '#components/modal/modal_header';
+import { useModalDialog } from '#components/modal/use_modal_dialog';
+import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
+import { type Radius } from '#components/shared/radius';
+import {
+	OVERLAY_BG,
+	THIN_SCROLLBAR_SCOPE,
+} from '#components/shared/surface_tokens';
+import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 
 export type { DrawerSide, DrawerSize } from '#components/drawer/drawer_styles';
 

@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { createPortal } from 'react-dom';
 import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
+import { findTypeaheadIndex } from '#components/menu/find_typeahead_index';
 import { MenuCloseContext } from '#components/menu/menu_context';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { findTypeaheadIndex } from '#components/menu/find_typeahead_index';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 const ENABLED = ':not(:disabled):not([aria-disabled="true"])';

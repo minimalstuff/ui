@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 
 import { CheckboxOptions } from './checkbox_options';
 
@@ -233,7 +233,7 @@ export const Controlled: Story = {
 			{ value: 'c', label: 'Option C' },
 		],
 	},
-	render: (args) => {
+	render: function Render(args) {
 		const [selectedValues, setSelectedValues] = useState<readonly string[]>([
 			'b',
 		]);

@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
 import { useControlledLength } from './use_controlled_length';
 

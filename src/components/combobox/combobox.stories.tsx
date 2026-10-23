@@ -1,9 +1,9 @@
-import { type FormEvent, useState } from 'react';
-import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { type SyntheticEvent, useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 
-import { Combobox, type ComboboxOption } from './combobox';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
+import { Combobox, type ComboboxOption } from './combobox';
 
 const defaultOptions: ComboboxOption[] = [
 	{ value: 'apple', label: 'Apple' },
@@ -250,7 +250,9 @@ export const NoResults: Story = {
 function InFormExample() {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (
+		event: SyntheticEvent<HTMLFormElement, SubmitEvent>
+	) => {
 		event.preventDefault();
 		setIsSubmitted(true);
 	};

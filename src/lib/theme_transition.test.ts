@@ -24,7 +24,7 @@ describe('switchTheme', () => {
 	});
 
 	test('applies the theme directly when the browser has no View Transitions support', async () => {
-		const applyThemeCallback = vi.fn();
+		const applyThemeCallback = vi.fn<() => void>();
 		const element = document.createElement('button');
 
 		await switchTheme({ theme: 'dark', element, applyThemeCallback });
@@ -33,10 +33,10 @@ describe('switchTheme', () => {
 	});
 
 	test('applies the theme directly when the user prefers reduced motion', async () => {
-		const startViewTransition = vi.fn();
+		const startViewTransition = vi.fn<() => ViewTransition>();
 		document.startViewTransition = startViewTransition;
 		vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }));
-		const applyThemeCallback = vi.fn();
+		const applyThemeCallback = vi.fn<() => void>();
 		const element = document.createElement('button');
 
 		await switchTheme({ theme: 'dark', element, applyThemeCallback });
@@ -46,10 +46,12 @@ describe('switchTheme', () => {
 	});
 
 	test('animates a clip-path circle from the trigger element when transitions are supported', async () => {
-		const applyThemeCallback = vi.fn();
-		const animate = vi.fn();
+		const applyThemeCallback = vi.fn<() => void>();
+		const animate = vi.fn<() => Animation>();
 		vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: false }));
-		document.startViewTransition = vi.fn((callback: () => void) => {
+		document.startViewTransition = vi.fn<
+			(callback: () => void) => { ready: Promise<void> }
+		>((callback) => {
 			callback();
 			return { ready: Promise.resolve() };
 		}) as unknown as typeof document.startViewTransition;

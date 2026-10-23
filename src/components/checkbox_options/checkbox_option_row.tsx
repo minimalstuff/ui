@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 
-import { OptionRow } from '#components/shared/option_row';
-import { SELECTED_FILL } from '#components/shared/surface_tokens';
-import { CheckmarkIcon } from '#components/shared/checkmark_icon';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { type CheckboxOption } from '#components/checkbox_options/checkbox_options';
+import { CheckmarkIcon } from '#components/shared/checkmark_icon';
 import { optionIndicatorBorderClasses } from '#components/shared/option_card_styles';
+import { OptionRow } from '#components/shared/option_row';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { SELECTED_FILL } from '#components/shared/surface_tokens';
 
 interface CheckboxOptionRowProps {
 	option: CheckboxOption;

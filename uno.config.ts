@@ -1,6 +1,6 @@
 import presetIcons from '@unocss/preset-icons';
-import { defineConfig, presetWind4 } from 'unocss';
 import presetWebFonts from '@unocss/preset-web-fonts';
+import { defineConfig, presetWind4 } from 'unocss';
 
 const isLibraryBuild = process.env.VITE_BUILD_LIB === '1';
 const EAGERLY_SCANNED_SOURCES = [

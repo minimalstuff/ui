@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
 import { MenuSeparator } from './menu_separator';
 

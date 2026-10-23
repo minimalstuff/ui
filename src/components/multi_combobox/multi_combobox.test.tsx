@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { MultiCombobox } from './multi_combobox';
 
@@ -57,7 +57,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('toggles a value on click and calls onChange with the new values', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<MultiCombobox label="Fruits" options={OPTIONS} onChange={handleChange} />
 		);
@@ -68,7 +68,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('deselects an already-selected value on a second click', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -130,7 +130,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('clicking a disabled option does not call onChange', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -146,7 +146,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('clear button empties the selection and calls onChange with []', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -161,7 +161,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('onDropdownClose fires with the current values on Escape', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -180,7 +180,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('onDropdownClose fires with the current values on outside click', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<div>
 				<MultiCombobox
@@ -199,7 +199,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('respects a controlled values prop', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -266,7 +266,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('should close the dropdown when focus moves outside the wrapper', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<div>
 				<MultiCombobox
@@ -287,7 +287,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('should not call onDropdownClose when the closed trigger blurs', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -303,7 +303,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('should call onDropdownClose with [] when clearing from the trigger while closed', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"
@@ -319,7 +319,7 @@ describe('MultiCombobox', () => {
 	});
 
 	test('should not call onDropdownClose when clearing from the trigger while open', () => {
-		const handleDropdownClose = vi.fn();
+		const handleDropdownClose = vi.fn<() => void>();
 		render(
 			<MultiCombobox
 				label="Fruits"

@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import type { KeyboardEvent, Ref } from 'react';
 
-import type { TabItem } from '#components/tabs/tabs';
 import type { Radius } from '#components/shared/radius';
 import type { ControlSize } from '#components/shared/sizes';
+import type { TabItem } from '#components/tabs/tabs';
 import {
 	TAB_ICON_SIZE_CLASSES,
 	tabClasses,

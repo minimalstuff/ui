@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
-import { useLabels } from '#components/ui_provider/use_labels';
 import { IconButton } from '#components/icon_button/icon_button';
+import { useLabels } from '#components/ui_provider/use_labels';
 
 interface ModalHeaderProps {
 	titleId: string;

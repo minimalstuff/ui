@@ -1,15 +1,17 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
-import { ContextMenu } from './context_menu';
 import { MenuItem } from '#components/menu_item/menu_item';
+import { ContextMenu } from './context_menu';
 
 describe('ContextMenu', () => {
 	test('is closed by default', () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -18,7 +20,9 @@ describe('ContextMenu', () => {
 
 	test('opens on right-click', async () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -33,7 +37,9 @@ describe('ContextMenu', () => {
 
 	test('closes when the backdrop is clicked', async () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -54,7 +60,9 @@ describe('ContextMenu', () => {
 
 	test('reopens at a new position on a second right-click', async () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -74,7 +82,9 @@ describe('ContextMenu', () => {
 
 	test('closes when a menu item is clicked', async () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -94,7 +104,9 @@ describe('ContextMenu', () => {
 
 	test('focuses the first menu item when opened', async () => {
 		render(
-			<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+			<ContextMenu
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+			>
 				<div>Right-click area</div>
 			</ContextMenu>
 		);
@@ -111,7 +123,9 @@ describe('ContextMenu', () => {
 		render(
 			<>
 				<button>Elsewhere</button>
-				<ContextMenu items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}>
+				<ContextMenu
+					items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+				>
 					<div>Right-click area</div>
 				</ContextMenu>
 			</>
@@ -136,7 +150,7 @@ describe('ContextMenu', () => {
 	test('forwards a custom className to the wrapper', () => {
 		render(
 			<ContextMenu
-				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
 				className="custom"
 			>
 				<div>Right-click area</div>
@@ -150,7 +164,7 @@ describe('ContextMenu', () => {
 	test('names the menu via the aria-label prop', async () => {
 		render(
 			<ContextMenu
-				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
 				aria-label="File actions"
 			>
 				<div>Right-click area</div>
@@ -173,7 +187,7 @@ describe('ContextMenu', () => {
 		const ref = { current: null as HTMLDivElement | null };
 		render(
 			<ContextMenu
-				items={<MenuItem onClick={vi.fn()}>Edit</MenuItem>}
+				items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
 				ref={ref}
 			>
 				<div>Right-click area</div>

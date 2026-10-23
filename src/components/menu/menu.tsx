@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import {
 	autoUpdate,
 	flip,
@@ -7,6 +6,7 @@ import {
 	useFloating,
 	type Placement,
 } from '@floating-ui/react-dom';
+import clsx from 'clsx';
 import {
 	cloneElement,
 	isValidElement,
@@ -21,14 +21,14 @@ import {
 	type Ref,
 } from 'react';
 
-import { mergeRefs } from '#lib/merge_refs';
-import { type Radius } from '#components/shared/radius';
 import { MenuSurface } from '#components/menu/menu_surface';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
+import { type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
 	useOverlayState,
 } from '#components/shared/use_overlay_state';
+import { mergeRefs } from '#lib/merge_refs';
 
 const OFFSET_FROM_TRIGGER = 4;
 

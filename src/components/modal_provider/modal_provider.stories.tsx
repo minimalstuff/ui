@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Modal } from '#components/modal/modal';
 import { Button } from '#components/button/button';
 import { ConfirmModal } from '#components/modal/confirm_modal';
+import { Modal } from '#components/modal/modal';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
 
 function ModalProviderDemo() {

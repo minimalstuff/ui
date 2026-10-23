@@ -1,55 +1,19 @@
-import clsx from 'clsx';
-import { createCallable } from 'react-call';
 import { type ReactNode, useRef, useState } from 'react';
+import { createCallable } from 'react-call';
 
-import { surfaceError } from '#lib/surface_error';
-import { type Radius } from '#components/shared/radius';
-import { ModalShell } from '#components/modal/modal_shell';
-import { useLabels } from '#components/ui_provider/use_labels';
 import { Button, type ButtonColor } from '#components/button/button';
+import { ConfirmModalTitle } from '#components/modal/confirm_modal_title';
+import { ModalShell } from '#components/modal/modal_shell';
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
+import { type Radius } from '#components/shared/radius';
+import { useLabels } from '#components/ui_provider/use_labels';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
+import { surfaceError } from '#lib/surface_error';
 
 export type ConfirmModalColor = Extract<
 	ButtonColor,
 	'primary' | 'danger' | 'success'
 >;
-
-const BADGE_ICON: Record<ConfirmModalColor, string> = {
-	danger: 'i-mdi-alert-circle',
-	primary: 'i-mdi-help-circle',
-	success: 'i-mdi-check-circle',
-};
-
-const BADGE_COLOR_CLASSES: Record<ConfirmModalColor, string> = {
-	danger: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-	primary: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
-	success:
-		'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
-};
-
-function ConfirmModalTitle({
-	title,
-	color,
-}: {
-	title: ReactNode;
-	color: ConfirmModalColor;
-}) {
-	return (
-		<div className="flex items-center gap-3">
-			<span
-				className={clsx(
-					'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
-					BADGE_COLOR_CLASSES[color]
-				)}
-				aria-hidden="true"
-			>
-				<span className={clsx(BADGE_ICON[color], 'h-5 w-5')} />
-			</span>
-			{title}
-		</div>
-	);
-}
 
 export interface ConfirmModalProps {
 	title: ReactNode;

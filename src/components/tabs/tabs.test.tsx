@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { axe } from 'vitest-axe';
 
 import { Tabs } from './tabs';
 
@@ -52,7 +52,7 @@ describe('Tabs', () => {
 	});
 
 	test('calls onChange with the clicked index', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<Tabs items={ITEMS} onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
@@ -61,7 +61,7 @@ describe('Tabs', () => {
 	});
 
 	test('disabled tab cannot be activated', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<Tabs items={ITEMS} onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('tab', { name: 'Third' }));
@@ -210,7 +210,7 @@ describe('Tabs', () => {
 	});
 
 	test('stays on the caller value when controlled', () => {
-		render(<Tabs items={ITEMS} value={0} onChange={vi.fn()} />);
+		render(<Tabs items={ITEMS} value={0} onChange={vi.fn<() => void>()} />);
 
 		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
 
@@ -221,7 +221,7 @@ describe('Tabs', () => {
 	});
 
 	test('still calls onChange when controlled', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<Tabs items={ITEMS} value={0} onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('tab', { name: 'Second' }));
@@ -230,7 +230,7 @@ describe('Tabs', () => {
 	});
 
 	test('renders the panel for the caller-controlled index', () => {
-		render(<Tabs items={ITEMS} value={1} onChange={vi.fn()} />);
+		render(<Tabs items={ITEMS} value={1} onChange={vi.fn<() => void>()} />);
 		expect(screen.getByText('Second content')).toBeInTheDocument();
 	});
 
@@ -264,7 +264,7 @@ describe('Tabs', () => {
 	});
 
 	test('a controlled value pointing at a disabled tab also falls the tab stop back', () => {
-		render(<Tabs items={ITEMS} value={2} onChange={vi.fn()} />);
+		render(<Tabs items={ITEMS} value={2} onChange={vi.fn<() => void>()} />);
 
 		expect(screen.getByRole('tab', { name: 'First' })).toHaveAttribute(
 			'tabindex',
@@ -585,7 +585,7 @@ describe('Tabs vertical orientation', () => {
 	});
 
 	test('should animate the indicator along the Y axis when vertical', () => {
-		const animate = vi.fn();
+		const animate = vi.fn<() => void>();
 		Object.defineProperty(Element.prototype, 'animate', {
 			value: animate,
 			configurable: true,

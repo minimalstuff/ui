@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { CheckboxOptions } from './checkbox_options';
 
@@ -70,7 +70,7 @@ describe('CheckboxOptions', () => {
 	});
 
 	test('calls onChange with the full new array in options order', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<CheckboxOptions options={OPTIONS} onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('checkbox', { name: 'Option C' }));
@@ -81,7 +81,11 @@ describe('CheckboxOptions', () => {
 
 	test('stays controlled by the values prop', () => {
 		render(
-			<CheckboxOptions options={OPTIONS} values={['a']} onChange={vi.fn()} />
+			<CheckboxOptions
+				options={OPTIONS}
+				values={['a']}
+				onChange={vi.fn<() => void>()}
+			/>
 		);
 
 		fireEvent.click(screen.getByRole('checkbox', { name: 'Option B' }));

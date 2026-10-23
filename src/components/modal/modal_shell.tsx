@@ -1,10 +1,11 @@
 import clsx from 'clsx';
+import { type ReactNode, type RefObject, useId } from 'react';
 import { createPortal } from 'react-dom';
-import { createContext, type ReactNode, type RefObject, useId } from 'react';
 
+import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
+import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
-import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	OVERLAY_BG,
@@ -16,9 +17,6 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 export type ModalHeight = 'auto' | 'fixed';
 
 export type ModalRole = 'dialog' | 'alertdialog';
-
-/** @internal the shell's footer slot element, portaled into by `<ModalFooter>` — not part of the public API. */
-export const ModalFooterSlotContext = createContext<HTMLElement | null>(null);
 
 interface ModalShellProps {
 	isEnded: boolean;

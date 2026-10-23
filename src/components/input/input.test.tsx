@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Input } from './input';
 
@@ -18,7 +18,7 @@ describe('Input', () => {
 	});
 
 	test('calls onChange while typing', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<Input label="Email" onChange={handleChange} />);
 
 		fireEvent.change(screen.getByLabelText('Email'), {
@@ -29,7 +29,9 @@ describe('Input', () => {
 	});
 
 	test('stays controlled by the value prop', () => {
-		render(<Input label="Email" value="fixed" onChange={vi.fn()} />);
+		render(
+			<Input label="Email" value="fixed" onChange={vi.fn<() => void>()} />
+		);
 		const input = screen.getByLabelText('Email');
 
 		fireEvent.change(input, { target: { value: 'changed' } });

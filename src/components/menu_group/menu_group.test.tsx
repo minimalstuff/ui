@@ -1,17 +1,17 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
-import { MenuGroup } from './menu_group';
-import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSurface } from '#components/menu/menu_surface';
+import { MenuItem } from '#components/menu_item/menu_item';
+import { MenuGroup } from './menu_group';
 
 function renderThemeGroup() {
 	return render(
 		<MenuGroup label="Theme">
-			<MenuItem onClick={vi.fn()}>Light</MenuItem>
-			<MenuItem onClick={vi.fn()}>Dark</MenuItem>
+			<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
+			<MenuItem onClick={vi.fn<() => void>()}>Dark</MenuItem>
 		</MenuGroup>
 	);
 }
@@ -47,7 +47,7 @@ describe('MenuGroup', () => {
 	test('drops its label classes when unstyled', () => {
 		render(
 			<MenuGroup label="Theme" unstyled>
-				<MenuItem onClick={vi.fn()}>Light</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
 			</MenuGroup>
 		);
 		expect(screen.getByText('Theme')).not.toHaveClass('uppercase');
@@ -56,7 +56,7 @@ describe('MenuGroup', () => {
 	test('forwards a custom className to the label', () => {
 		render(
 			<MenuGroup label="Theme" className="custom">
-				<MenuItem onClick={vi.fn()}>Light</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
 			</MenuGroup>
 		);
 		expect(screen.getByText('Theme')).toHaveClass('custom');
@@ -65,7 +65,7 @@ describe('MenuGroup', () => {
 	test('forwards a custom wrapperClassName to the group', () => {
 		render(
 			<MenuGroup label="Theme" wrapperClassName="custom">
-				<MenuItem onClick={vi.fn()}>Light</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
 			</MenuGroup>
 		);
 		expect(screen.getByRole('group')).toHaveClass('custom');
@@ -79,17 +79,17 @@ describe('MenuGroup', () => {
 	test('keeps its items reachable by the enclosing menu keyboard navigation', () => {
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
 				radius="md"
-				onClose={vi.fn()}
+				onClose={vi.fn<() => void>()}
 			>
-				<MenuItem onClick={vi.fn()}>Rename</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Rename</MenuItem>
 				<MenuGroup label="Theme">
-					<MenuItem onClick={vi.fn()}>Light</MenuItem>
-					<MenuItem onClick={vi.fn()}>Dark</MenuItem>
+					<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
+					<MenuItem onClick={vi.fn<() => void>()}>Dark</MenuItem>
 				</MenuGroup>
 			</MenuSurface>
 		);
@@ -104,10 +104,10 @@ describe('MenuGroup', () => {
 	});
 
 	test('closes the enclosing menu when one of its items is selected', () => {
-		const handleClose = vi.fn();
+		const handleClose = vi.fn<() => void>();
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
@@ -115,7 +115,7 @@ describe('MenuGroup', () => {
 				onClose={handleClose}
 			>
 				<MenuGroup label="Theme">
-					<MenuItem onClick={vi.fn()}>Light</MenuItem>
+					<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
 				</MenuGroup>
 			</MenuSurface>
 		);

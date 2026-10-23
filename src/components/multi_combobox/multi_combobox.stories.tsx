@@ -1,5 +1,5 @@
-import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 import { MultiCombobox, type MultiComboboxOption } from './multi_combobox';

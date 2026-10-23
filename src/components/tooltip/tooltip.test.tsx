@@ -1,7 +1,5 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
 	act,
 	fireEvent,
@@ -9,6 +7,8 @@ import {
 	screen,
 	waitFor,
 } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Tooltip } from './tooltip';
 
@@ -146,7 +146,7 @@ describe('Tooltip', () => {
 	});
 
 	test('calls the child element onClick alongside the temporary content trigger', () => {
-		const handleClick = vi.fn();
+		const handleClick = vi.fn<() => void>();
 		render(
 			<Tooltip content="Copy" temporaryContent="Copied!" showOnClick>
 				<button onClick={handleClick}>Copy link</button>

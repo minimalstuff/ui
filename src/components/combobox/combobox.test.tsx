@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { Combobox } from './combobox';
 
@@ -68,7 +68,7 @@ describe('Combobox', () => {
 	});
 
 	test('calls onChange with the value when an option is clicked', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<Combobox label="Country" options={OPTIONS} onChange={handleChange} />
 		);
@@ -81,7 +81,7 @@ describe('Combobox', () => {
 	});
 
 	test('selects the active option on Enter', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<Combobox label="Country" options={OPTIONS} onChange={handleChange} />
 		);
@@ -163,7 +163,7 @@ describe('Combobox', () => {
 	});
 
 	test('stays controlled by the value prop', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<Combobox
 				label="Country"
@@ -196,7 +196,7 @@ describe('Combobox', () => {
 	});
 
 	test('clears the selection when the clear button is clicked', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<Combobox
 				label="Country"

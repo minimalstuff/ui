@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { createRef } from 'react';
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { type ChangeEvent, createRef } from 'react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Checkbox } from './checkbox';
 
@@ -28,7 +28,8 @@ describe('Checkbox', () => {
 	});
 
 	test('calls onChange with the new checked value', () => {
-		const handleChange = vi.fn();
+		const handleChange =
+			vi.fn<(event: ChangeEvent<HTMLInputElement>) => void>();
 		render(<Checkbox label="Accept terms" onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('checkbox'));
@@ -39,7 +40,11 @@ describe('Checkbox', () => {
 
 	test('stays controlled by the checked prop', () => {
 		render(
-			<Checkbox label="Accept terms" checked={false} onChange={vi.fn()} />
+			<Checkbox
+				label="Accept terms"
+				checked={false}
+				onChange={vi.fn<() => void>()}
+			/>
 		);
 		const checkbox = screen.getByRole('checkbox');
 
@@ -215,7 +220,7 @@ describe('Checkbox', () => {
 				label="Select all"
 				indeterminate
 				checked={false}
-				onChange={vi.fn()}
+				onChange={vi.fn<() => void>()}
 			/>
 		);
 		const checkbox = screen.getByRole<HTMLInputElement>('checkbox');

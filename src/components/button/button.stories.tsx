@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useEffect, useState } from 'react';
 
 import { Button } from '#components/button/button';
 
@@ -75,7 +75,7 @@ export const Default: Story = {
 };
 
 export const States: Story = {
-	render: () => {
+	render: function Render() {
 		const [loading, setLoading] = useState(false);
 		useEffect(() => {
 			if (!loading) return;

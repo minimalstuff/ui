@@ -1,9 +1,9 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { RadioOptions } from './radio_options';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
+import { RadioOptions } from './radio_options';
 
 const meta = {
 	title: 'Example/RadioOptions',
@@ -279,7 +279,7 @@ export const Controlled: Story = {
 			{ value: 'c', label: 'Option C' },
 		],
 	},
-	render: (args) => {
+	render: function Render(args) {
 		const [val, setVal] = useState('b');
 		return (
 			<div className="flex flex-col gap-4">

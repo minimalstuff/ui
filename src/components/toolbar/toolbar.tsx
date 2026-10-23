@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { useRef, type ComponentPropsWithRef } from 'react';
 
-import { mergeRefs } from '#lib/merge_refs';
 import type { ToolbarOrientation } from '#components/toolbar/toolbar_navigation';
 import { useToolbarRovingFocus } from '#components/toolbar/use_toolbar_roving_focus';
+import { mergeRefs } from '#lib/merge_refs';
 
 const LAYOUT_CLASSES: Record<ToolbarOrientation, string> = {
 	horizontal: 'flex items-center gap-1',

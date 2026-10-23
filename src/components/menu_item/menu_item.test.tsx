@@ -1,20 +1,20 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
-import { MenuItem } from './menu_item';
 import { MenuCloseContext } from '#components/menu/menu_context';
+import { MenuItem } from './menu_item';
 
 describe('MenuItem', () => {
 	test('renders children', () => {
-		render(<MenuItem onClick={vi.fn()}>Move up</MenuItem>);
+		render(<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>);
 		expect(screen.getByText('Move up')).toBeInTheDocument();
 	});
 
 	test('calls onClick and stops propagation', () => {
-		const handleClick = vi.fn();
-		const handleParentClick = vi.fn();
+		const handleClick = vi.fn<() => void>();
+		const handleParentClick = vi.fn<() => void>();
 		render(
 			<div onClick={handleParentClick}>
 				<MenuItem onClick={handleClick}>Move up</MenuItem>
@@ -29,7 +29,7 @@ describe('MenuItem', () => {
 
 	test('applies danger color', () => {
 		render(
-			<MenuItem onClick={vi.fn()} danger>
+			<MenuItem onClick={vi.fn<() => void>()} danger>
 				Delete
 			</MenuItem>
 		);
@@ -38,7 +38,7 @@ describe('MenuItem', () => {
 
 	test('disables the button', () => {
 		render(
-			<MenuItem onClick={vi.fn()} disabled>
+			<MenuItem onClick={vi.fn<() => void>()} disabled>
 				Move up
 			</MenuItem>
 		);
@@ -46,10 +46,10 @@ describe('MenuItem', () => {
 	});
 
 	test('calls the enclosing menu close callback when provided', () => {
-		const closeMenu = vi.fn();
+		const closeMenu = vi.fn<() => void>();
 		render(
 			<MenuCloseContext.Provider value={closeMenu}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</MenuCloseContext.Provider>
 		);
 
@@ -59,13 +59,13 @@ describe('MenuItem', () => {
 	});
 
 	test('works standalone without a menu close callback', () => {
-		render(<MenuItem onClick={vi.fn()}>Move up</MenuItem>);
+		render(<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>);
 		expect(() => fireEvent.click(screen.getByRole('menuitem'))).not.toThrow();
 	});
 
 	test('forwards a custom className alongside its own classes', () => {
 		render(
-			<MenuItem onClick={vi.fn()} className="custom">
+			<MenuItem onClick={vi.fn<() => void>()} className="custom">
 				Move up
 			</MenuItem>
 		);
@@ -77,7 +77,7 @@ describe('MenuItem', () => {
 	test('forwards a ref to the underlying button', () => {
 		const ref = { current: null as HTMLButtonElement | null };
 		render(
-			<MenuItem onClick={vi.fn()} ref={ref}>
+			<MenuItem onClick={vi.fn<() => void>()} ref={ref}>
 				Move up
 			</MenuItem>
 		);
@@ -87,7 +87,7 @@ describe('MenuItem', () => {
 	describe('with trailing content', () => {
 		test('renders it inside the row', () => {
 			render(
-				<MenuItem onClick={vi.fn()} trailing={<span>⌘K</span>}>
+				<MenuItem onClick={vi.fn<() => void>()} trailing={<span>⌘K</span>}>
 					Shortcuts
 				</MenuItem>
 			);
@@ -96,7 +96,7 @@ describe('MenuItem', () => {
 
 		test('dims it without dropping below readable contrast', () => {
 			render(
-				<MenuItem onClick={vi.fn()} trailing="Dark">
+				<MenuItem onClick={vi.fn<() => void>()} trailing="Dark">
 					Theme
 				</MenuItem>
 			);
@@ -105,7 +105,7 @@ describe('MenuItem', () => {
 
 		test('announces itself as part of the row', () => {
 			render(
-				<MenuItem onClick={vi.fn()} trailing="Dark">
+				<MenuItem onClick={vi.fn<() => void>()} trailing="Dark">
 					Theme
 				</MenuItem>
 			);
@@ -116,14 +116,14 @@ describe('MenuItem', () => {
 
 		test('renders nothing extra when omitted', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()}>Shortcuts</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Shortcuts</MenuItem>
 			);
 			expect(container.querySelector('.ml-auto')).not.toBeInTheDocument();
 		});
 
 		test('leaves the row as the only control', () => {
 			render(
-				<MenuItem onClick={vi.fn()} trailing="Dark">
+				<MenuItem onClick={vi.fn<() => void>()} trailing="Dark">
 					Theme
 				</MenuItem>
 			);
@@ -144,7 +144,7 @@ describe('MenuItem', () => {
 
 		test('coexists with the selected check mark', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()} selected trailing="⌘D">
+				<MenuItem onClick={vi.fn<() => void>()} selected trailing="⌘D">
 					Dark
 				</MenuItem>
 			);
@@ -155,7 +155,7 @@ describe('MenuItem', () => {
 
 		test('groups with the check mark behind a single auto margin', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()} selected trailing="⌘D">
+				<MenuItem onClick={vi.fn<() => void>()} selected trailing="⌘D">
 					Dark
 				</MenuItem>
 			);
@@ -168,7 +168,7 @@ describe('MenuItem', () => {
 
 		test('pins the check mark on its own when there is no trailing content', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()} selected>
+				<MenuItem onClick={vi.fn<() => void>()} selected>
 					Dark
 				</MenuItem>
 			);
@@ -179,7 +179,7 @@ describe('MenuItem', () => {
 	describe('as one option of a choice', () => {
 		test('reports as a radio menu item when selected is given', () => {
 			render(
-				<MenuItem onClick={vi.fn()} selected={false}>
+				<MenuItem onClick={vi.fn<() => void>()} selected={false}>
 					Light
 				</MenuItem>
 			);
@@ -187,14 +187,14 @@ describe('MenuItem', () => {
 		});
 
 		test('stays a plain menu item when selected is omitted', () => {
-			render(<MenuItem onClick={vi.fn()}>Move up</MenuItem>);
+			render(<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>);
 			expect(screen.queryByRole('menuitemradio')).not.toBeInTheDocument();
 			expect(screen.getByRole('menuitem')).toBeInTheDocument();
 		});
 
 		test('reports itself as checked when selected', () => {
 			render(
-				<MenuItem onClick={vi.fn()} selected>
+				<MenuItem onClick={vi.fn<() => void>()} selected>
 					Light
 				</MenuItem>
 			);
@@ -203,7 +203,7 @@ describe('MenuItem', () => {
 
 		test('reports itself as unchecked when not selected', () => {
 			render(
-				<MenuItem onClick={vi.fn()} selected={false}>
+				<MenuItem onClick={vi.fn<() => void>()} selected={false}>
 					Light
 				</MenuItem>
 			);
@@ -212,7 +212,7 @@ describe('MenuItem', () => {
 
 		test('shows a check mark when selected', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()} selected>
+				<MenuItem onClick={vi.fn<() => void>()} selected>
 					Light
 				</MenuItem>
 			);
@@ -223,7 +223,7 @@ describe('MenuItem', () => {
 
 		test('keeps the check mark space when not selected', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()} selected={false}>
+				<MenuItem onClick={vi.fn<() => void>()} selected={false}>
 					Light
 				</MenuItem>
 			);
@@ -232,14 +232,14 @@ describe('MenuItem', () => {
 
 		test('renders no check mark for a plain action', () => {
 			const { container } = render(
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			);
 			expect(container.querySelector('.i-mdi-check')).not.toBeInTheDocument();
 		});
 
 		test('still calls onClick and closes the menu', () => {
-			const handleClick = vi.fn();
-			const closeMenu = vi.fn();
+			const handleClick = vi.fn<() => void>();
+			const closeMenu = vi.fn<() => void>();
 			render(
 				<MenuCloseContext.Provider value={closeMenu}>
 					<MenuItem onClick={handleClick} selected={false}>
@@ -286,7 +286,7 @@ describe('MenuItem', () => {
 		});
 
 		test('closes the enclosing menu when followed', () => {
-			const closeMenu = vi.fn();
+			const closeMenu = vi.fn<() => void>();
 			render(
 				<MenuCloseContext.Provider value={closeMenu}>
 					<MenuItem href="/settings">Settings</MenuItem>
@@ -299,7 +299,7 @@ describe('MenuItem', () => {
 		});
 
 		test('stops click propagation', () => {
-			const handleParentClick = vi.fn();
+			const handleParentClick = vi.fn<() => void>();
 			render(
 				<div onClick={handleParentClick}>
 					<MenuItem href="/settings">Settings</MenuItem>

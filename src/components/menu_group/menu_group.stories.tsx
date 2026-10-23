@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuGroup } from '#components/menu_group/menu_group';
+import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 
 const meta = {

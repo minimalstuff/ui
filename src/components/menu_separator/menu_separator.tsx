@@ -17,7 +17,6 @@ export const MenuSeparator = ({
 	className,
 }: Readonly<MenuSeparatorProps>) => (
 	<hr
-		role="separator"
 		aria-orientation="horizontal"
 		className={clsx(
 			'w-full',

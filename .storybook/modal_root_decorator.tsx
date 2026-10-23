@@ -1,8 +1,8 @@
 import type { Decorator } from '@storybook/react-vite';
 import { createRoot, type Root } from 'react-dom/client';
 
-import { Modal } from '#components/modal/modal';
 import { ConfirmModal } from '#components/modal/confirm_modal';
+import { Modal } from '#components/modal/modal';
 
 let globalRoot: Root | null = null;
 let globalRootContainer: HTMLElement | null = null;

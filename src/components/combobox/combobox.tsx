@@ -8,27 +8,27 @@ import {
 	useState,
 } from 'react';
 
-import { Field } from '#components/shared/field';
-import { useLabels } from '#components/ui_provider/use_labels';
-import { useFieldIds } from '#components/shared/use_field_ids';
-import { useActiveOption } from '#components/shared/use_active_option';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { useControlledState } from '#components/shared/use_controlled_state';
+import { Field } from '#components/shared/field';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
 import {
-	OVERLAY_BG,
-	OVERLAY_BORDER,
-	THIN_SCROLLBAR,
-} from '#components/shared/surface_tokens';
-import {
 	ACTIVE_OPTION_OUTLINE,
 	BUTTON_FOCUS_OUTLINE,
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	OVERLAY_BG,
+	OVERLAY_BORDER,
+	THIN_SCROLLBAR,
+} from '#components/shared/surface_tokens';
+import { useActiveOption } from '#components/shared/use_active_option';
+import { useControlledState } from '#components/shared/use_controlled_state';
+import { useFieldIds } from '#components/shared/use_field_ids';
+import { useLabels } from '#components/ui_provider/use_labels';
 
 export interface ComboboxOption {
 	value: string;
