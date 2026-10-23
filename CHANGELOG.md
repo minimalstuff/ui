@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.0](https://github.com/minimalstuff/ui/compare/4.2.2...4.3.0) (2026-10-23)
+
+### Features
+
+* **modal:** add useDismissGuard to confirm user dismissals ([07e1d1d](https://github.com/minimalstuff/ui/commit/07e1d1dfbb642a611222fb2b73c5a15053df6827))
+
 ## [4.2.2](https://github.com/minimalstuff/ui/compare/4.2.1...4.2.2) (2026-10-23)
 
 ### Bug Fixes
