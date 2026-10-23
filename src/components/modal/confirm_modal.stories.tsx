@@ -22,6 +22,9 @@ function ConfirmModalTrigger(props: ConfirmModalProps) {
 // without it, production minification mangles `ConfirmModalTrigger`.
 ConfirmModalTrigger.displayName = 'ConfirmModal';
 
+/** Long enough for the play function to check focus while confirming, even on a slow CI runner. */
+const CONFIRM_DURATION_MS = 2000;
+
 const meta = {
 	title: 'Example/ConfirmModal',
 	component: ConfirmModalTrigger,
@@ -59,7 +62,7 @@ const meta = {
 		cancelLabel: 'Cancel',
 		confirmColor: 'primary',
 		onConfirm: async () => {
-			await new Promise((r) => setTimeout(r, 800));
+			await new Promise((r) => setTimeout(r, CONFIRM_DURATION_MS));
 		},
 	},
 } satisfies Meta<typeof ConfirmModalTrigger>;
@@ -114,9 +117,12 @@ export const Default: Story = {
 		);
 
 		await step('closes once confirmed', async () => {
-			await waitFor(async () => {
-				await expect(body.queryByRole('alertdialog')).not.toBeInTheDocument();
-			});
+			await waitFor(
+				async () => {
+					await expect(body.queryByRole('alertdialog')).not.toBeInTheDocument();
+				},
+				{ timeout: CONFIRM_DURATION_MS * 2 }
+			);
 		});
 	},
 };
