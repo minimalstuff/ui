@@ -81,6 +81,7 @@ export function ModalShell({
 		setFooterSlot,
 		isVisible,
 		handleBackdropClick,
+		handleBackdropMouseDown,
 	} = useModalDialog({ isEnded, onDismiss, dismissible, initialFocusRef });
 
 	const hasDescribedByContent = role === 'alertdialog' && Boolean(children);
@@ -94,6 +95,7 @@ export function ModalShell({
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
 			onClick={handleBackdropClick}
+			onMouseDown={handleBackdropMouseDown}
 		>
 			<div
 				className={clsx(

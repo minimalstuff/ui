@@ -18,6 +18,7 @@ import { MenuItem } from '#components/menu_item/menu_item';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal, type ModalProps } from '#components/modal/modal';
 import { ModalFooter } from '#components/modal/modal_footer';
+import { useDismissGuard } from '#components/modal/use_dismiss_guard';
 import { RadioOptions } from '#components/radio_options/radio_options';
 import { Select } from '#components/select/select';
 import { Switch } from '#components/switch/switch';
@@ -558,6 +559,87 @@ export const SmallForm: Story = {
 				</ModalFooter>
 			</>
 		),
+	},
+};
+
+const INITIAL_DISPLAY_NAME = 'Ada Lovelace';
+
+function GuardedSettingsForm({ onCancel }: Readonly<{ onCancel: () => void }>) {
+	const [displayName, setDisplayName] = useState(INITIAL_DISPLAY_NAME);
+	const isDirty = displayName !== INITIAL_DISPLAY_NAME;
+
+	useDismissGuard(
+		() =>
+			ConfirmModal.call({
+				title: 'Discard your changes?',
+				confirmLabel: 'Discard',
+				confirmColor: 'danger',
+			}),
+		isDirty
+	);
+
+	return (
+		<>
+			<Input
+				label="Display name"
+				value={displayName}
+				onChange={(event) => setDisplayName(event.target.value)}
+			/>
+			<ModalFooter>
+				<Button variant="outline" color="neutral" size="sm" onClick={onCancel}>
+					Cancel
+				</Button>
+				<Button size="sm">Save</Button>
+			</ModalFooter>
+		</>
+	);
+}
+
+export const DismissGuard: Story = {
+	args: {
+		title: 'Profile',
+		children: (close) => <GuardedSettingsForm onCancel={close} />,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const trigger = canvas.getByRole('button', { name: 'Open modal' });
+
+		await step('a clean form closes on Escape without asking', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Profile' });
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		});
+
+		await step('a dirty form asks before closing', async () => {
+			await userEvent.click(trigger);
+			await body.findByRole('dialog', { name: 'Profile' });
+			await userEvent.type(body.getByLabelText('Display name'), ' King');
+			await userEvent.keyboard('{Escape}');
+			await body.findByRole('alertdialog', { name: 'Discard your changes?' });
+		});
+
+		await step(
+			'declining keeps the form open with focus on the input',
+			async () => {
+				await userEvent.keyboard('{Escape}');
+				await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+				await waitPastModalExitAnimation();
+				await expect(
+					body.getByRole('dialog', { name: 'Profile' })
+				).toBeInTheDocument();
+				await expectFocusOn(body.getByLabelText('Display name'));
+			}
+		);
+
+		await step('discarding closes the form', async () => {
+			await userEvent.keyboard('{Escape}');
+			await userEvent.click(
+				await body.findByRole('button', { name: 'Discard' })
+			);
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		});
 	},
 };
 

@@ -92,6 +92,7 @@ export {
 	type ModalSize,
 } from './modal/modal';
 export { ModalFooter, type ModalFooterProps } from './modal/modal_footer';
+export { useDismissGuard, type DismissGuard } from './modal/use_dismiss_guard';
 export { ModalProvider } from './modal_provider/modal_provider';
 export {
 	MultiCombobox,

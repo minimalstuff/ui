@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
@@ -97,6 +98,40 @@ describe('ModalShell', () => {
 		);
 		fireEvent.click(screen.getByRole('dialog').parentElement as Element);
 		expect(handleDismiss).toHaveBeenCalledTimes(1);
+	});
+
+	test('should prevent the default of a mousedown on the backdrop', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		const isNotPrevented = fireEvent.mouseDown(
+			screen.getByRole('dialog').parentElement as Element
+		);
+		expect(isNotPrevented).toBe(false);
+	});
+
+	test('should not prevent the default of a mousedown inside the dialog', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		const isNotPrevented = fireEvent.mouseDown(screen.getByText('Body'));
+		expect(isNotPrevented).toBe(true);
+	});
+
+	test('should not prevent the default of a mousedown on content portaled out of the dialog', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				{createPortal(<button type="button">Portaled</button>, document.body)}
+			</ModalShell>
+		);
+		const isNotPrevented = fireEvent.mouseDown(
+			screen.getByRole('button', { name: 'Portaled' })
+		);
+		expect(isNotPrevented).toBe(true);
 	});
 
 	test('clicking the backdrop does nothing when not dismissible', () => {

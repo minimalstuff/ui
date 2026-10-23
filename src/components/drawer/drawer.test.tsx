@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest';
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
+import { createPortal } from 'react-dom';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
@@ -196,6 +197,33 @@ describe('Drawer', () => {
 		const { onClose } = renderDrawer();
 		fireEvent.click(screen.getByRole('dialog').parentElement as Element);
 		expect(onClose).toHaveBeenCalledTimes(1);
+	});
+
+	test('should prevent the default of a mousedown on the backdrop', () => {
+		renderDrawer();
+		const isNotPrevented = fireEvent.mouseDown(
+			screen.getByRole('dialog').parentElement as Element
+		);
+		expect(isNotPrevented).toBe(false);
+	});
+
+	test('should not prevent the default of a mousedown inside the dialog', () => {
+		renderDrawer();
+		const isNotPrevented = fireEvent.mouseDown(screen.getByText('Body'));
+		expect(isNotPrevented).toBe(true);
+	});
+
+	test('should not prevent the default of a mousedown on content portaled out of the dialog', () => {
+		renderDrawer({
+			children: createPortal(
+				<button type="button">Portaled</button>,
+				document.body
+			),
+		});
+		const isNotPrevented = fireEvent.mouseDown(
+			screen.getByRole('button', { name: 'Portaled' })
+		);
+		expect(isNotPrevented).toBe(true);
 	});
 
 	test('should call onClose when the close button is clicked', () => {
