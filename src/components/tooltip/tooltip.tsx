@@ -257,9 +257,6 @@ export function Tooltip({
 			cloneElement(children, triggerProps)
 		: children;
 
-	const portalTarget =
-		portalContainer ?? findLandmarkPortalTarget(triggerElement);
-
 	const arrowX = middlewareData.arrow?.x;
 	const arrowY = middlewareData.arrow?.y;
 	const arrowStaticSide = ARROW_STATIC_SIDE[resolvedSide];
@@ -322,7 +319,7 @@ export function Tooltip({
 							/>
 						</div>
 					</div>,
-					portalTarget
+					portalContainer ?? findLandmarkPortalTarget(triggerElement)
 				)}
 		</>
 	);
