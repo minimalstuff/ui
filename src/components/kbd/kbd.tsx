@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
-import { type ControlSize } from '#components/shared/sizes';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type ControlSize } from '#components/shared/sizes';
 
 export type KbdSize = ControlSize;
 

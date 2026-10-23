@@ -1,10 +1,10 @@
 import type { MouseEvent } from 'react';
 
 import { useMenuClose } from '#components/menu/menu_context';
-import { MenuItemEnd } from '#components/menu_item/menu_item_end';
-import { menuItemClasses } from '#components/menu_item/menu_item_styles';
 import { MenuItemContent } from '#components/menu_item/menu_item_content';
+import { MenuItemEnd } from '#components/menu_item/menu_item_end';
 import type { MenuItemButtonProps } from '#components/menu_item/menu_item_props';
+import { menuItemClasses } from '#components/menu_item/menu_item_styles';
 
 const STATE_CLASSES = [
 	'hover:enabled:bg-gray-100 dark:hover:enabled:bg-gray-700',

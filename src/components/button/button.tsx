@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
-import { type ControlSize } from '#components/shared/sizes';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
 	BUTTON_INTERACTIVE_CLASSES,
@@ -10,6 +8,8 @@ import {
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type ControlSize } from '#components/shared/sizes';
 
 export type {
 	ButtonColor,

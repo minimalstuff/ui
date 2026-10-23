@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Textarea } from './textarea';
 
@@ -18,7 +18,7 @@ describe('Textarea', () => {
 	});
 
 	test('calls onChange while typing', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<Textarea label="Bio" onChange={handleChange} />);
 
 		fireEvent.change(screen.getByLabelText('Bio'), {
@@ -29,7 +29,9 @@ describe('Textarea', () => {
 	});
 
 	test('stays controlled by the value prop', () => {
-		render(<Textarea label="Bio" value="fixed" onChange={vi.fn()} />);
+		render(
+			<Textarea label="Bio" value="fixed" onChange={vi.fn<() => void>()} />
+		);
 		const textarea = screen.getByLabelText('Bio');
 
 		fireEvent.change(textarea, { target: { value: 'changed' } });

@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useState, type Ref } from 'react';
 import { describe, expect, test } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { axe } from 'vitest-axe';
 
 import { Toolbar } from './toolbar';
 

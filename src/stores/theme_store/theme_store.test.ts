@@ -8,13 +8,15 @@ import {
 	vi,
 } from 'vitest';
 
+import type * as ThemeStoreModule from './theme_store';
+
 type MediaQueryMock = {
 	matches: boolean;
 	addEventListener: ReturnType<typeof vi.fn>;
 	removeEventListener: ReturnType<typeof vi.fn>;
 };
 
-let useThemeStore: typeof import('./theme_store').useThemeStore;
+let useThemeStore: typeof ThemeStoreModule.useThemeStore;
 let mediaQueryMock: MediaQueryMock;
 let systemThemeChangeHandler: () => void;
 
@@ -23,8 +25,8 @@ beforeAll(async () => {
 
 	mediaQueryMock = {
 		matches: false,
-		addEventListener: vi.fn(),
-		removeEventListener: vi.fn(),
+		addEventListener: vi.fn<() => void>(),
+		removeEventListener: vi.fn<() => void>(),
 	};
 	vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(mediaQueryMock));
 

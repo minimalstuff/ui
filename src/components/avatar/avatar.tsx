@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 
-import { type ControlSize } from '#components/shared/sizes';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	BUTTON_COLOR_TOKENS,
 	type ButtonColor,
 } from '#components/shared/button_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type ControlSize } from '#components/shared/sizes';
 
 export type { ButtonColor as AvatarColor } from '#components/shared/button_styles';
 

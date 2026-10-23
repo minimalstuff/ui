@@ -1,5 +1,3 @@
-import clsx from 'clsx';
-import { createPortal } from 'react-dom';
 import {
 	arrow,
 	autoUpdate,
@@ -8,6 +6,7 @@ import {
 	shift,
 	useFloating,
 } from '@floating-ui/react-dom';
+import clsx from 'clsx';
 import {
 	cloneElement,
 	isValidElement,
@@ -21,21 +20,22 @@ import {
 	type ReactNode,
 	type Ref,
 } from 'react';
+import { createPortal } from 'react-dom';
 
-import { mergeRefs } from '#lib/merge_refs';
-import { joinIds } from '#components/shared/join_ids';
-import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { type TooltipPosition } from '#components/tooltip/tooltip_position';
-import { findLandmarkPortalTarget } from '#components/shared/portal_target';
 import {
 	getAccessibleName,
 	normalizeText,
 } from '#components/shared/accessible_name';
+import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
+import { joinIds } from '#components/shared/join_ids';
+import { findLandmarkPortalTarget } from '#components/shared/portal_target';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
 	useOverlayState,
 } from '#components/shared/use_overlay_state';
+import { type TooltipPosition } from '#components/tooltip/tooltip_position';
+import { mergeRefs } from '#lib/merge_refs';
 
 export type { TooltipPosition } from '#components/tooltip/tooltip_position';
 

@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
-import { Tooltip } from '#components/tooltip/tooltip';
 import { IconButton } from '#components/icon_button/icon_button';
+import { Tooltip } from '#components/tooltip/tooltip';
 import {
 	expectFocusOn,
 	getPortalScope,

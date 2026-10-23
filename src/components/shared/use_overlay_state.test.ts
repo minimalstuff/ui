@@ -1,5 +1,5 @@
-import { describe, expect, test, vi } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { useEnterOnPositioned, useOverlayState } from './use_overlay_state';
 
@@ -94,7 +94,7 @@ describe('useOverlayState', () => {
 
 describe('useEnterOnPositioned', () => {
 	test('does nothing when not mounted', async () => {
-		const setIsVisible = vi.fn();
+		const setIsVisible = vi.fn<() => void>();
 		renderHook(() => useEnterOnPositioned(false, true, setIsVisible));
 
 		await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -102,7 +102,7 @@ describe('useEnterOnPositioned', () => {
 	});
 
 	test('does nothing when mounted but not yet positioned', async () => {
-		const setIsVisible = vi.fn();
+		const setIsVisible = vi.fn<() => void>();
 		renderHook(() => useEnterOnPositioned(true, false, setIsVisible));
 
 		await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -110,7 +110,7 @@ describe('useEnterOnPositioned', () => {
 	});
 
 	test('shows once mounted and positioned', async () => {
-		const setIsVisible = vi.fn();
+		const setIsVisible = vi.fn<() => void>();
 		renderHook(() => useEnterOnPositioned(true, true, setIsVisible));
 
 		await waitFor(() => expect(setIsVisible).toHaveBeenCalledWith(true));

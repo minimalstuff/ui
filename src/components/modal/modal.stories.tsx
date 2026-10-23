@@ -1,5 +1,5 @@
-import { createRef, useState, type FormEvent } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { createRef, useState, type SyntheticEvent } from 'react';
 import {
 	expect,
 	userEvent,
@@ -8,21 +8,21 @@ import {
 	within,
 } from 'storybook/test';
 
-import { Tabs } from '#components/tabs/tabs';
-import { Menu } from '#components/menu/menu';
 import { Badge } from '#components/badge/badge';
-import { Input } from '#components/input/input';
-import { Switch } from '#components/switch/switch';
 import { Button } from '#components/button/button';
-import { Select } from '#components/select/select';
-import { Textarea } from '#components/textarea/textarea';
 import { Combobox } from '#components/combobox/combobox';
-import { MenuItem } from '#components/menu_item/menu_item';
-import { ModalFooter } from '#components/modal/modal_footer';
-import { ConfirmModal } from '#components/modal/confirm_modal';
 import { IconButton } from '#components/icon_button/icon_button';
+import { Input } from '#components/input/input';
+import { Menu } from '#components/menu/menu';
+import { MenuItem } from '#components/menu_item/menu_item';
+import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal, type ModalProps } from '#components/modal/modal';
+import { ModalFooter } from '#components/modal/modal_footer';
 import { RadioOptions } from '#components/radio_options/radio_options';
+import { Select } from '#components/select/select';
+import { Switch } from '#components/switch/switch';
+import { Tabs } from '#components/tabs/tabs';
+import { Textarea } from '#components/textarea/textarea';
 import {
 	expectFocusOn,
 	getPortalScope,
@@ -383,7 +383,9 @@ function SettingsForm({ onCancel }: Readonly<SettingsFormProps>) {
 	const serverNameError =
 		hasAttemptedSubmit && !serverName ? 'Le nom est requis' : undefined;
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (
+		event: SyntheticEvent<HTMLFormElement, SubmitEvent>
+	) => {
 		event.preventDefault();
 		setHasAttemptedSubmit(true);
 		if (serverName) onCancel();

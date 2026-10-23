@@ -1,10 +1,10 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Fragment, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Tabs } from '#components/tabs/tabs';
 import { Badge } from '#components/badge/badge';
 import { Input } from '#components/input/input';
+import { Tabs } from '#components/tabs/tabs';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const panelText = (text: string) => (

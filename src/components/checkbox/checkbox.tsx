@@ -1,32 +1,32 @@
 import clsx from 'clsx';
 import { useEffect, useMemo, useRef, type ComponentPropsWithRef } from 'react';
 
-import { mergeRefs } from '#lib/merge_refs';
-import { joinIds } from '#components/shared/join_ids';
-import { DashIcon } from '#components/shared/dash_icon';
-import { FieldError } from '#components/shared/field_error';
-import { useFieldIds } from '#components/shared/use_field_ids';
 import { CheckmarkIcon } from '#components/shared/checkmark_icon';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { DashIcon } from '#components/shared/dash_icon';
 import { FieldDescription } from '#components/shared/field_description';
-import { optionCardClasses } from '#components/shared/option_card_styles';
-import { useControlledState } from '#components/shared/use_controlled_state';
-import {
-	CONTROL_BG,
-	CONTROL_BORDER,
-	SELECTED_FILL,
-} from '#components/shared/surface_tokens';
-import {
-	CONTROL_FOCUS_RING,
-	CONTROL_FOCUS_RING_COLOR,
-	CONTROL_FOCUS_RING_ERROR_COLOR,
-} from '#components/shared/focus_styles';
+import { FieldError } from '#components/shared/field_error';
 import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_BORDER,
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
+import {
+	CONTROL_FOCUS_RING,
+	CONTROL_FOCUS_RING_COLOR,
+	CONTROL_FOCUS_RING_ERROR_COLOR,
+} from '#components/shared/focus_styles';
+import { joinIds } from '#components/shared/join_ids';
+import { optionCardClasses } from '#components/shared/option_card_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	CONTROL_BG,
+	CONTROL_BORDER,
+	SELECTED_FILL,
+} from '#components/shared/surface_tokens';
+import { useControlledState } from '#components/shared/use_controlled_state';
+import { useFieldIds } from '#components/shared/use_field_ids';
+import { mergeRefs } from '#lib/merge_refs';
 
 /**
  * Renders a `Checkbox` label's text content: a string label picks up

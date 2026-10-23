@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { axe } from 'vitest-axe';
 
 import { Modal } from './modal';
 import { ModalFooter } from './modal_footer';

@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
-import { Menu } from './menu';
-import { Modal } from '#components/modal/modal';
 import { MenuItem } from '#components/menu_item/menu_item';
+import { Modal } from '#components/modal/modal';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
+import { Menu } from './menu';
 
 function MenuOpeningAModal() {
 	const openShortcuts = () => {

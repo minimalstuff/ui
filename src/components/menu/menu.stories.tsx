@@ -6,9 +6,9 @@ import {
 	within,
 } from 'storybook/test';
 
+import { IconButton } from '#components/icon_button/icon_button';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
-import { IconButton } from '#components/icon_button/icon_button';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 import {
 	expectFocusOn,

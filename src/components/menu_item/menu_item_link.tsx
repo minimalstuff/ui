@@ -1,10 +1,10 @@
 import type { MouseEvent } from 'react';
 
 import { useMenuClose } from '#components/menu/menu_context';
-import { MenuItemEnd } from '#components/menu_item/menu_item_end';
-import { menuItemClasses } from '#components/menu_item/menu_item_styles';
 import { MenuItemContent } from '#components/menu_item/menu_item_content';
+import { MenuItemEnd } from '#components/menu_item/menu_item_end';
 import type { MenuItemLinkProps } from '#components/menu_item/menu_item_props';
+import { menuItemClasses } from '#components/menu_item/menu_item_styles';
 
 const EXTERNAL_TARGET = '_blank';
 const EXTERNAL_REL = 'noopener noreferrer';

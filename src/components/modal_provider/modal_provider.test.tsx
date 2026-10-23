@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
+import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal } from '#components/modal/modal';
 import { ModalProvider } from './modal_provider';
-import { ConfirmModal } from '#components/modal/confirm_modal';
 
 describe('ModalProvider', () => {
 	test('provides a single working root for Modal', async () => {

@@ -1,9 +1,6 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
-import { Tooltip } from '#components/tooltip/tooltip';
-import { type ControlSize } from '#components/shared/sizes';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	type IconButtonTooltip,
 	type IconButtonTooltipOptions,
@@ -15,6 +12,9 @@ import {
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type ControlSize } from '#components/shared/sizes';
+import { Tooltip } from '#components/tooltip/tooltip';
 
 const SIZE_CLASSES: Record<ControlSize, string> = {
 	xs: 'p-1',

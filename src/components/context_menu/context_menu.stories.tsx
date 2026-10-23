@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fireEvent, userEvent, within } from 'storybook/test';
 
-import { MenuItem } from '#components/menu_item/menu_item';
 import { ContextMenu } from '#components/context_menu/context_menu';
+import { MenuItem } from '#components/menu_item/menu_item';
 import {
 	expectFocusOn,
 	getPortalScope,
@@ -38,6 +38,7 @@ const meta = {
 		),
 		children: (
 			<div
+				// oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the story needs a keyboard-focusable target to exercise the context menu key
 				tabIndex={0}
 				role="region"
 				aria-label="File"

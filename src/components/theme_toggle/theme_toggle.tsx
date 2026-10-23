@@ -2,16 +2,16 @@ import './theme_toggle.css';
 
 import { useCallback, useRef } from 'react';
 
-import { type Theme } from '#types/theme';
-import { isWebKitGtk } from '#lib/is_webkit_gtk';
+import { IconButton } from '#components/icon_button/icon_button';
+import { type IconButtonTooltip } from '#components/icon_button/icon_button_tooltip';
+import { type ButtonVariant } from '#components/shared/button_styles';
 import { type Radius } from '#components/shared/radius';
 import { useLabels } from '#components/ui_provider/use_labels';
-import { useThemeStore } from '#stores/theme_store/theme_store';
 import { useIsClient } from '#hooks/use_is_client/use_is_client';
-import { IconButton } from '#components/icon_button/icon_button';
+import { isWebKitGtk } from '#lib/is_webkit_gtk';
 import { getNextTheme, switchTheme } from '#lib/theme_transition';
-import { type ButtonVariant } from '#components/shared/button_styles';
-import { type IconButtonTooltip } from '#components/icon_button/icon_button_tooltip';
+import { useThemeStore } from '#stores/theme_store/theme_store';
+import { type Theme } from '#types/theme';
 
 const THEME_ICON_CLASSES: Record<Theme, string> = {
 	light: 'i-tabler-sun text-yellow-500',

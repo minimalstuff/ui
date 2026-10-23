@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { useId, type ReactNode } from 'react';
 
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { CONTROL_BG, SURFACE_BORDER } from '#components/shared/surface_tokens';
 import {
 	CardHeader,
 	type CardHeadingLevel,
 } from '#components/card/card_header';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { CONTROL_BG, SURFACE_BORDER } from '#components/shared/surface_tokens';
 
 export type { CardHeadingLevel } from '#components/card/card_header';
 

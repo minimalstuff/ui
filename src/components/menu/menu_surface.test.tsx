@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { MenuSurface } from './menu_surface';
 
@@ -10,12 +10,12 @@ function renderSurface(
 ) {
 	return render(
 		<MenuSurface
-			setFloating={vi.fn()}
+			setFloating={vi.fn<() => void>()}
 			floatingStyles={{}}
 			isVisible={true}
 			isPositioned={true}
 			radius="md"
-			onClose={vi.fn()}
+			onClose={vi.fn<() => void>()}
 			{...overrides}
 		>
 			<button role="menuitem">First</button>
@@ -85,12 +85,12 @@ describe('MenuSurface', () => {
 	test('skips disabled menu items when navigating', () => {
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
 				radius="md"
-				onClose={vi.fn()}
+				onClose={vi.fn<() => void>()}
 			>
 				<button role="menuitem">First</button>
 				<button role="menuitem" disabled>
@@ -107,15 +107,15 @@ describe('MenuSurface', () => {
 	test('skips aria-disabled menu items when navigating', () => {
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
 				radius="md"
-				onClose={vi.fn()}
+				onClose={vi.fn<() => void>()}
 			>
 				<button role="menuitem">First</button>
-				<a role="menuitem" aria-disabled="true" tabIndex={-1}>
+				<a role="menuitem" href="/second" aria-disabled="true" tabIndex={-1}>
 					Second
 				</a>
 				<button role="menuitem">Third</button>
@@ -129,12 +129,12 @@ describe('MenuSurface', () => {
 	test('navigates onto radio menu items', () => {
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
 				radius="md"
-				onClose={vi.fn()}
+				onClose={vi.fn<() => void>()}
 			>
 				<button role="menuitem">First</button>
 				<button role="menuitemradio" aria-checked="true">
@@ -148,7 +148,7 @@ describe('MenuSurface', () => {
 	});
 
 	test('Escape calls onClose', () => {
-		const handleClose = vi.fn();
+		const handleClose = vi.fn<() => void>();
 		renderSurface({ onClose: handleClose });
 		fireEvent.keyDown(screen.getByRole('menu'), { key: 'Escape' });
 		expect(handleClose).toHaveBeenCalledTimes(1);
@@ -163,7 +163,7 @@ describe('MenuSurface', () => {
 	});
 
 	test('Tab calls onClose', () => {
-		const handleClose = vi.fn();
+		const handleClose = vi.fn<() => void>();
 		renderSurface({ onClose: handleClose });
 		fireEvent.keyDown(screen.getByRole('menu'), { key: 'Tab' });
 		expect(handleClose).toHaveBeenCalledTimes(1);
@@ -176,14 +176,14 @@ describe('MenuSurface', () => {
 	});
 
 	test('clicking the backdrop calls onClose', () => {
-		const handleClose = vi.fn();
+		const handleClose = vi.fn<() => void>();
 		renderSurface({ onClose: handleClose });
 		fireEvent.click(document.querySelector('[aria-hidden="true"]') as Element);
 		expect(handleClose).toHaveBeenCalledTimes(1);
 	});
 
 	test('clicking inside the panel does not call onClose', () => {
-		const handleClose = vi.fn();
+		const handleClose = vi.fn<() => void>();
 		renderSurface({ onClose: handleClose });
 		fireEvent.click(screen.getByRole('menu'));
 		expect(handleClose).not.toHaveBeenCalled();
@@ -204,12 +204,12 @@ describe('MenuSurface', () => {
 			<>
 				<span id="trigger-id">Options</span>
 				<MenuSurface
-					setFloating={vi.fn()}
+					setFloating={vi.fn<() => void>()}
 					floatingStyles={{}}
 					isVisible={true}
 					isPositioned={true}
 					radius="md"
-					onClose={vi.fn()}
+					onClose={vi.fn<() => void>()}
 					labelledBy="trigger-id"
 				>
 					<button role="menuitem">First</button>
@@ -232,12 +232,12 @@ describe('MenuSurface', () => {
 	test('typing a character focuses the next item whose label starts with it', () => {
 		render(
 			<MenuSurface
-				setFloating={vi.fn()}
+				setFloating={vi.fn<() => void>()}
 				floatingStyles={{}}
 				isVisible={true}
 				isPositioned={true}
 				radius="md"
-				onClose={vi.fn()}
+				onClose={vi.fn<() => void>()}
 			>
 				<button role="menuitem">Move up</button>
 				<button role="menuitem">Move down</button>

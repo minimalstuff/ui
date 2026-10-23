@@ -1,16 +1,16 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
-import { Menu } from './menu';
 import { MenuItem } from '#components/menu_item/menu_item';
+import { Menu } from './menu';
 
 describe('Menu', () => {
 	test('is closed by default', () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		expect(screen.queryByText('Move up')).not.toBeInTheDocument();
@@ -19,7 +19,7 @@ describe('Menu', () => {
 	test('opens on trigger click', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -33,7 +33,7 @@ describe('Menu', () => {
 	test('closes on a second trigger click', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -51,7 +51,7 @@ describe('Menu', () => {
 	test('closes when the backdrop is clicked', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -70,8 +70,8 @@ describe('Menu', () => {
 	});
 
 	test('calls a menu item onClick without closing the trigger click handler twice', async () => {
-		const handleItemClick = vi.fn();
-		const handleTriggerClick = vi.fn();
+		const handleItemClick = vi.fn<() => void>();
+		const handleTriggerClick = vi.fn<() => void>();
 		render(
 			<Menu trigger={<button onClick={handleTriggerClick}>Options</button>}>
 				<MenuItem onClick={handleItemClick}>Move up</MenuItem>
@@ -91,7 +91,7 @@ describe('Menu', () => {
 	test('closes when a menu item is clicked', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -110,8 +110,8 @@ describe('Menu', () => {
 	test('focuses the first menu item when opened', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
-				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move down</MenuItem>
 			</Menu>
 		);
 
@@ -123,8 +123,8 @@ describe('Menu', () => {
 	test('ArrowDown moves focus to the next menu item', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
-				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move down</MenuItem>
 			</Menu>
 		);
 
@@ -139,7 +139,7 @@ describe('Menu', () => {
 	test('closes and returns focus to the trigger on Escape', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -157,7 +157,7 @@ describe('Menu', () => {
 	test('reopens on a trigger click during the exit fade instead of re-closing', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -178,7 +178,7 @@ describe('Menu', () => {
 	test('exposes aria-haspopup and aria-expanded on the trigger', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		const trigger = screen.getByText('Options');
@@ -196,7 +196,7 @@ describe('Menu', () => {
 	test('forwards a custom className to the wrapper', () => {
 		render(
 			<Menu trigger={<button>Options</button>} className="custom">
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		expect(screen.getByText('Options').parentElement).toHaveClass('custom');
@@ -206,7 +206,7 @@ describe('Menu', () => {
 		const ref = { current: null as HTMLSpanElement | null };
 		render(
 			<Menu trigger={<button>Options</button>} ref={ref}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		expect(ref.current).toBe(screen.getByText('Options').parentElement);
@@ -216,7 +216,7 @@ describe('Menu', () => {
 		const ref = { current: null as HTMLSpanElement | null };
 		render(
 			<Menu trigger={<button>Options</button>} ref={ref}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -228,7 +228,7 @@ describe('Menu', () => {
 	test('names the menu by the trigger via aria-labelledby', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 
@@ -242,7 +242,7 @@ describe('Menu', () => {
 	test('generates a trigger id when the trigger has none', () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		expect(screen.getByText('Options')).toHaveAttribute('id');
@@ -251,7 +251,7 @@ describe('Menu', () => {
 	test('preserves the trigger own id when it already has one', () => {
 		render(
 			<Menu trigger={<button id="custom-trigger-id">Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		expect(screen.getByText('Options')).toHaveAttribute(
@@ -263,7 +263,7 @@ describe('Menu', () => {
 	test('sets aria-controls on the trigger while the menu is mounted', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 		const trigger = screen.getByText('Options');
@@ -280,8 +280,8 @@ describe('Menu', () => {
 	test('ArrowDown on the closed trigger opens the menu and focuses the first item', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
-				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move down</MenuItem>
 			</Menu>
 		);
 
@@ -293,8 +293,8 @@ describe('Menu', () => {
 	test('ArrowUp on the closed trigger opens the menu and focuses the last item', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
-				<MenuItem onClick={vi.fn()}>Move down</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move down</MenuItem>
 			</Menu>
 		);
 
@@ -304,10 +304,10 @@ describe('Menu', () => {
 	});
 
 	test('still calls the trigger own onKeyDown when ArrowDown opens the menu', () => {
-		const handleTriggerKeyDown = vi.fn();
+		const handleTriggerKeyDown = vi.fn<() => void>();
 		render(
 			<Menu trigger={<button onKeyDown={handleTriggerKeyDown}>Options</button>}>
-				<MenuItem onClick={vi.fn()}>Move up</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
 			</Menu>
 		);
 

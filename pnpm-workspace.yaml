@@ -3,6 +3,9 @@ packages:
 
 minimumReleaseAge: 1440
 
+minimumReleaseAgeExclude:
+  - '@minimalstuff/tooling'
+
 allowBuilds:
   esbuild: true
 

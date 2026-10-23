@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { type ReactNode } from 'react';
 
-import { type Radius } from '#components/shared/radius';
 import { FIELD_DESCRIPTION_TEXT } from '#components/shared/field_styles';
 import {
 	optionCardClasses,
 	type ChoiceOption,
 } from '#components/shared/option_card_styles';
+import { type Radius } from '#components/shared/radius';
 
 interface OptionRowProps {
 	item: ChoiceOption;

@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
 import { Field } from '#components/shared/field';
-import { joinIds } from '#components/shared/join_ids';
-import { useFieldIds } from '#components/shared/use_field_ids';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
+import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
+import { joinIds } from '#components/shared/join_ids';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { useFieldIds } from '#components/shared/use_field_ids';
 
 export interface SelectOption {
 	value: string;

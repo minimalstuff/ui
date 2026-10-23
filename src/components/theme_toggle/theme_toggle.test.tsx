@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/vitest';
 
-import { afterEach, describe, expect, test, vi } from 'vitest';
 import {
 	act,
 	fireEvent,
@@ -8,9 +7,10 @@ import {
 	screen,
 	waitFor,
 } from '@testing-library/react';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { ThemeToggle } from './theme_toggle';
 import { useThemeStore } from '#stores/theme_store/theme_store';
+import { ThemeToggle } from './theme_toggle';
 
 const WEBKIT_GTK_USER_AGENT =
 	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15';
@@ -18,7 +18,9 @@ const CHROME_USER_AGENT =
 	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
 
 function mockViewTransition() {
-	const startViewTransition = vi.fn((callback: () => void) => {
+	const startViewTransition = vi.fn<
+		(callback: () => void) => { ready: Promise<void> }
+	>((callback) => {
 		callback();
 		return { ready: Promise.resolve() };
 	});
@@ -31,7 +33,7 @@ function mockViewTransition() {
 		'matchMedia',
 		vi.fn(() => ({ matches: false }))
 	);
-	HTMLElement.prototype.animate = vi.fn();
+	HTMLElement.prototype.animate = vi.fn<() => Animation>();
 	return startViewTransition;
 }
 

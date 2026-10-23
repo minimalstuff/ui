@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 
-import { type Radius } from '#components/shared/radius';
-import { OptionRow } from '#components/shared/option_row';
-import { SELECTED_FILL } from '#components/shared/surface_tokens';
 import { type RadioOption } from '#components/radio_options/radio_options';
 import { optionIndicatorBorderClasses } from '#components/shared/option_card_styles';
+import { OptionRow } from '#components/shared/option_row';
+import { type Radius } from '#components/shared/radius';
+import { SELECTED_FILL } from '#components/shared/surface_tokens';
 
 interface RadioOptionRowProps {
 	option: RadioOption;

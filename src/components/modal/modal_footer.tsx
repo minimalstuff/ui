@@ -1,7 +1,7 @@
-import { createPortal } from 'react-dom';
 import { useContext, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
-import { ModalFooterSlotContext } from '#components/modal/modal_shell';
+import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 
 export interface ModalFooterProps {
 	children: ReactNode;

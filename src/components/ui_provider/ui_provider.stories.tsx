@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Input } from '#components/input/input';
 import { Button } from '#components/button/button';
 import { Combobox } from '#components/combobox/combobox';
-import { UIProvider, type UILabels } from './ui_provider';
+import { Input } from '#components/input/input';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
+import { UIProvider, type UILabels } from './ui_provider';
 
 const FRENCH_LABELS: Partial<UILabels> = {
 	close: 'Fermer',

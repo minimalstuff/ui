@@ -1,11 +1,4 @@
 import {
-	type MouseEvent,
-	type ReactNode,
-	type Ref,
-	useCallback,
-	useRef,
-} from 'react';
-import {
 	autoUpdate,
 	flip,
 	offset,
@@ -13,10 +6,17 @@ import {
 	useFloating,
 	type VirtualElement,
 } from '@floating-ui/react-dom';
+import {
+	type MouseEvent,
+	type ReactNode,
+	type Ref,
+	useCallback,
+	useRef,
+} from 'react';
 
-import { type Radius } from '#components/shared/radius';
 import { MenuSurface } from '#components/menu/menu_surface';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
+import { type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
 	useOverlayState,

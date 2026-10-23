@@ -13,17 +13,8 @@ import {
 	useState,
 } from 'react';
 
-import { Field } from '#components/shared/field';
-import { useLabels } from '#components/ui_provider/use_labels';
-import { useFieldIds } from '#components/shared/use_field_ids';
-import { useActiveOption } from '#components/shared/use_active_option';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
-import { useControlledState } from '#components/shared/use_controlled_state';
-import {
-	PANEL_RADIUS_CLASSES,
-	RADIUS_CLASSES,
-	type Radius,
-} from '#components/shared/radius';
+import { Field } from '#components/shared/field';
 import {
 	BASE_INPUT_STYLES,
 	FIELD_ERROR_BORDER,
@@ -35,6 +26,11 @@ import {
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
 import {
+	PANEL_RADIUS_CLASSES,
+	RADIUS_CLASSES,
+	type Radius,
+} from '#components/shared/radius';
+import {
 	CONTROL_BG,
 	CONTROL_BORDER,
 	OVERLAY_BG,
@@ -42,6 +38,10 @@ import {
 	SELECTED_FILL,
 	THIN_SCROLLBAR,
 } from '#components/shared/surface_tokens';
+import { useActiveOption } from '#components/shared/use_active_option';
+import { useControlledState } from '#components/shared/use_controlled_state';
+import { useFieldIds } from '#components/shared/use_field_ids';
+import { useLabels } from '#components/ui_provider/use_labels';
 
 const DEFAULT_MAX_DISPLAYED_VALUES = 2;
 

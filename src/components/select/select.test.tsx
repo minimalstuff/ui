@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Select } from './select';
 
@@ -42,7 +42,7 @@ describe('Select', () => {
 	});
 
 	test('calls onChange when selection changes', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(
 			<Select label="Country" options={OPTIONS} onChange={handleChange} />
 		);
@@ -56,7 +56,12 @@ describe('Select', () => {
 
 	test('stays controlled by the value prop', () => {
 		render(
-			<Select label="Country" options={OPTIONS} value="a" onChange={vi.fn()} />
+			<Select
+				label="Country"
+				options={OPTIONS}
+				value="a"
+				onChange={vi.fn<() => void>()}
+			/>
 		);
 		const select = screen.getByLabelText('Country');
 

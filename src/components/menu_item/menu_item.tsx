@@ -1,5 +1,5 @@
-import { MenuItemLink } from '#components/menu_item/menu_item_link';
 import { MenuItemButton } from '#components/menu_item/menu_item_button';
+import { MenuItemLink } from '#components/menu_item/menu_item_link';
 import type { MenuItemProps } from '#components/menu_item/menu_item_props';
 
 export type {

@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
 import { useControlledState } from './use_controlled_state';
 

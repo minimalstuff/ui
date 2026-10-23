@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { RadioOptions } from './radio_options';
 
@@ -37,7 +37,7 @@ describe('RadioOptions', () => {
 	});
 
 	test('calls onChange with the selected value', () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn<() => void>();
 		render(<RadioOptions options={OPTIONS} onChange={handleChange} />);
 
 		fireEvent.click(screen.getByRole('radio', { name: 'Option B' }));
@@ -46,7 +46,13 @@ describe('RadioOptions', () => {
 	});
 
 	test('stays controlled by the value prop', () => {
-		render(<RadioOptions options={OPTIONS} value="a" onChange={vi.fn()} />);
+		render(
+			<RadioOptions
+				options={OPTIONS}
+				value="a"
+				onChange={vi.fn<() => void>()}
+			/>
+		);
 
 		fireEvent.click(screen.getByRole('radio', { name: 'Option B' }));
 

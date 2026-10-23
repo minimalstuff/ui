@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
 import { Avatar } from './avatar';
 

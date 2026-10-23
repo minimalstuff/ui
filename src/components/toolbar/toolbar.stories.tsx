@@ -1,8 +1,8 @@
-import { expect, userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 
-import { Toolbar } from '#components/toolbar/toolbar';
 import { IconButton } from '#components/icon_button/icon_button';
+import { Toolbar } from '#components/toolbar/toolbar';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const meta = {

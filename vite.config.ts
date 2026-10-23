@@ -1,12 +1,12 @@
-import path from 'node:path';
-import UnoCSS from 'unocss/vite';
-import dts from 'vite-plugin-dts';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { createRequire } from 'node:module';
-import { playwright } from '@vitest/browser-playwright';
 /// <reference types="vitest/config" />
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import UnoCSS from 'unocss/vite';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 const dirname = import.meta.dirname;
 
@@ -56,7 +56,7 @@ export default defineConfig({
 			formats: ['es'],
 			fileName: 'minimalstuff-ui',
 		},
-		rollupOptions: {
+		rolldownOptions: {
 			external: ['react', 'react-dom', 'react/jsx-runtime'],
 			output: {
 				globals: {},

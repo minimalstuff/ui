@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
-import { FieldError } from '#components/shared/field_error';
 import { FieldDescription } from '#components/shared/field_description';
+import { FieldError } from '#components/shared/field_error';
 import {
 	FIELD_LABEL_TEXT,
 	FIELD_REQUIRED_MARK,

@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { axe } from 'vitest-axe';
-import { describe, expect, test, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { IconButton } from './icon_button';
 
@@ -62,7 +62,7 @@ describe('IconButton', () => {
 	});
 
 	test('calls onClick when clicked', () => {
-		const handleClick = vi.fn();
+		const handleClick = vi.fn<() => void>();
 		render(
 			<IconButton icon="i-mdi-close" aria-label="Close" onClick={handleClick} />
 		);

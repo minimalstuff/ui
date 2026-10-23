@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 
-import type { ControlSize } from '#components/shared/sizes';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { BUTTON_FOCUS_OUTLINE } from '#components/shared/focus_styles';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import type { ControlSize } from '#components/shared/sizes';
 import {
 	CONTROL_BG,
 	SURFACE_BORDER,

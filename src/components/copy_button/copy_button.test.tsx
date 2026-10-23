@@ -33,7 +33,9 @@ describe('CopyButton', () => {
 	});
 
 	test('writes the value to the clipboard and flips to copied', async () => {
-		const writeText = vi.fn().mockResolvedValue(undefined);
+		const writeText = vi
+			.fn<(text: string) => Promise<void>>()
+			.mockResolvedValue(undefined);
 		stubClipboard(writeText);
 
 		render(
@@ -77,7 +79,7 @@ describe('CopyButton', () => {
 	});
 
 	test('stays uncopied when the clipboard write fails', async () => {
-		const onError = vi.fn();
+		const onError = vi.fn<() => void>();
 		stubClipboard(vi.fn().mockRejectedValue(new Error('denied')));
 
 		render(
@@ -98,7 +100,7 @@ describe('CopyButton', () => {
 	});
 
 	test('reports the failure to onError instead of swallowing it', async () => {
-		const onError = vi.fn();
+		const onError = vi.fn<() => void>();
 		const clipboardError = new Error('denied');
 		stubClipboard(vi.fn().mockRejectedValue(clipboardError));
 

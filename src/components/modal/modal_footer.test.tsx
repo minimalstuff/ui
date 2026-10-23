@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, test } from 'vitest';
 import { render } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
 import { ModalFooter } from './modal_footer';
 

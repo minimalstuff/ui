@@ -1,16 +1,16 @@
 import clsx from 'clsx';
 
 import { FIELD_ERROR_BORDER } from '#components/shared/field_styles';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
-import {
-	CONTROL_BORDER,
-	SURFACE_BORDER,
-} from '#components/shared/surface_tokens';
 import {
 	CONTROL_FOCUS_RING,
 	CONTROL_FOCUS_RING_COLOR,
 	CONTROL_FOCUS_RING_ERROR_COLOR,
 } from '#components/shared/focus_styles';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import {
+	CONTROL_BORDER,
+	SURFACE_BORDER,
+} from '#components/shared/surface_tokens';
 
 /** One choice in a `RadioOptions` or `CheckboxOptions` list. */
 export interface ChoiceOption {

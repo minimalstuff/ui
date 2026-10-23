@@ -1,18 +1,22 @@
 import '@testing-library/jest-dom/vitest';
 
-import { useRef } from 'react';
-import { axe } from 'vitest-axe';
-import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useRef } from 'react';
+import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
-import { ModalShell } from './modal_shell';
 import { ModalFooter } from './modal_footer';
+import { ModalShell } from './modal_shell';
 
 function ModalShellWithInitialFocus() {
 	const cancelRef = useRef<HTMLButtonElement>(null);
 
 	return (
-		<ModalShell isEnded={false} onDismiss={vi.fn()} initialFocusRef={cancelRef}>
+		<ModalShell
+			isEnded={false}
+			onDismiss={vi.fn<() => void>()}
+			initialFocusRef={cancelRef}
+		>
 			<button>First</button>
 			<button ref={cancelRef}>Cancel</button>
 		</ModalShell>
@@ -22,7 +26,11 @@ function ModalShellWithInitialFocus() {
 describe('ModalShell', () => {
 	test('renders the title and children', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Delete item?">
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				title="Delete item?"
+			>
 				Are you sure?
 			</ModalShell>
 		);
@@ -32,7 +40,7 @@ describe('ModalShell', () => {
 
 	test('shows a close button by default', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
@@ -43,7 +51,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				dismissible={false}
 			>
@@ -59,7 +67,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				closeLabel="Fermer"
 			>
@@ -70,7 +78,7 @@ describe('ModalShell', () => {
 	});
 
 	test('clicking the close button calls onDismiss', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell isEnded={false} onDismiss={handleDismiss} title="Title">
 				Body
@@ -81,7 +89,7 @@ describe('ModalShell', () => {
 	});
 
 	test('clicking the backdrop calls onDismiss when dismissible', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell isEnded={false} onDismiss={handleDismiss} title="Title">
 				Body
@@ -92,7 +100,7 @@ describe('ModalShell', () => {
 	});
 
 	test('clicking the backdrop does nothing when not dismissible', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell
 				isEnded={false}
@@ -108,7 +116,7 @@ describe('ModalShell', () => {
 	});
 
 	test('Escape calls onDismiss when dismissible', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell isEnded={false} onDismiss={handleDismiss} title="Title">
 				Body
@@ -119,7 +127,7 @@ describe('ModalShell', () => {
 	});
 
 	test('Escape does nothing when not dismissible', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell
 				isEnded={false}
@@ -136,7 +144,7 @@ describe('ModalShell', () => {
 
 	test('focuses the first focusable element on mount', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				<button>First</button>
 				<button>Second</button>
 			</ModalShell>
@@ -146,7 +154,11 @@ describe('ModalShell', () => {
 
 	test('Tab from the last focusable element wraps to the first', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} dismissible={false}>
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				dismissible={false}
+			>
 				<button>First</button>
 				<button>Second</button>
 			</ModalShell>
@@ -158,7 +170,11 @@ describe('ModalShell', () => {
 
 	test('Shift+Tab from the first focusable element wraps to the last', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} dismissible={false}>
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				dismissible={false}
+			>
 				<button>First</button>
 				<button>Second</button>
 			</ModalShell>
@@ -175,13 +191,13 @@ describe('ModalShell', () => {
 		trigger.focus();
 
 		const { rerender } = render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
 
 		rerender(
-			<ModalShell isEnded={true} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={true} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
@@ -194,7 +210,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				footer={<button>Confirm</button>}
 			>
@@ -206,7 +222,7 @@ describe('ModalShell', () => {
 
 	test('uses role="dialog" by default', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
@@ -217,7 +233,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				role="alertdialog"
 			>
@@ -231,7 +247,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				role="alertdialog"
 			>
@@ -248,7 +264,7 @@ describe('ModalShell', () => {
 
 	test('does not add aria-describedby for a plain dialog', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
@@ -257,7 +273,11 @@ describe('ModalShell', () => {
 
 	test('names the dialog with aria-label when there is no title', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} aria-label="Notice">
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				aria-label="Notice"
+			>
 				Body
 			</ModalShell>
 		);
@@ -268,7 +288,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				aria-label="Notice"
 			>
@@ -284,7 +304,7 @@ describe('ModalShell', () => {
 	});
 
 	test('Escape does nothing when the event was already handled', () => {
-		const handleDismiss = vi.fn();
+		const handleDismiss = vi.fn<() => void>();
 		render(
 			<ModalShell isEnded={false} onDismiss={handleDismiss} title="Title">
 				Body
@@ -303,8 +323,8 @@ describe('ModalShell', () => {
 	});
 
 	test('only the topmost modal responds to Escape when modals are stacked', () => {
-		const handleDismissFirst = vi.fn();
-		const handleDismissSecond = vi.fn();
+		const handleDismissFirst = vi.fn<() => void>();
+		const handleDismissSecond = vi.fn<() => void>();
 		render(
 			<>
 				<ModalShell
@@ -331,8 +351,8 @@ describe('ModalShell', () => {
 	});
 
 	test('the modal beneath regains Escape handling once the topmost one ends', () => {
-		const handleDismissFirst = vi.fn();
-		const handleDismissSecond = vi.fn();
+		const handleDismissFirst = vi.fn<() => void>();
+		const handleDismissSecond = vi.fn<() => void>();
 		const { rerender } = render(
 			<>
 				<ModalShell
@@ -381,7 +401,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				height="fixed"
 			>
@@ -398,7 +418,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				height="fixed"
 			>
@@ -419,7 +439,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				height="fixed"
 				footer={<button>Save</button>}
@@ -434,7 +454,7 @@ describe('ModalShell', () => {
 
 	test('should scroll the content without a fixed height by default', () => {
 		render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Title">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
 				Body
 			</ModalShell>
 		);
@@ -449,7 +469,7 @@ describe('ModalShell', () => {
 		render(
 			<ModalShell
 				isEnded={false}
-				onDismiss={vi.fn()}
+				onDismiss={vi.fn<() => void>()}
 				title="Title"
 				height="fixed"
 			>
@@ -464,12 +484,16 @@ describe('ModalShell', () => {
 
 	test('should keep the page scroll locked when the top of two stacked modals unmounts', () => {
 		const first = render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="First">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="First">
 				Body
 			</ModalShell>
 		);
 		const second = render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Second">
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				title="Second"
+			>
 				Body
 			</ModalShell>
 		);
@@ -483,12 +507,16 @@ describe('ModalShell', () => {
 	test('should restore the previous page overflow once every stacked modal has unmounted', () => {
 		document.documentElement.style.overflow = 'scroll';
 		const first = render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="First">
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="First">
 				Body
 			</ModalShell>
 		);
 		const second = render(
-			<ModalShell isEnded={false} onDismiss={vi.fn()} title="Second">
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				title="Second"
+			>
 				Body
 			</ModalShell>
 		);
