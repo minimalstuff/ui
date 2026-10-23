@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 
-import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import type { SyntheticEvent } from 'react';
+import { describe, expect, test, vi } from 'vitest';
 
 import { Button } from './button';
 
@@ -36,6 +37,69 @@ describe('Button', () => {
 
 	test('forwards disabled', () => {
 		render(<Button disabled>Disabled</Button>);
+		expect(screen.getByRole('button')).toBeDisabled();
+	});
+
+	test('keeps a loading button natively enabled and marks it aria-disabled', () => {
+		render(<Button loading>Submit</Button>);
+		const button = screen.getByRole('button');
+		expect(button).not.toBeDisabled();
+		expect(button).toHaveAttribute('aria-disabled', 'true');
+	});
+
+	test('lets a loading button receive focus', () => {
+		render(<Button loading>Submit</Button>);
+		const button = screen.getByRole('button');
+		button.focus();
+		expect(button).toHaveFocus();
+	});
+
+	test('does not mark an idle button aria-disabled', () => {
+		render(<Button>Submit</Button>);
+		expect(screen.getByRole('button')).not.toHaveAttribute('aria-disabled');
+	});
+
+	test('calls onClick when idle', () => {
+		const onClick = vi.fn<() => void>();
+		render(<Button onClick={onClick}>Submit</Button>);
+		fireEvent.click(screen.getByRole('button'));
+		expect(onClick).toHaveBeenCalledTimes(1);
+	});
+
+	test('does not call onClick when a loading button is clicked', () => {
+		const onClick = vi.fn<() => void>();
+		render(
+			<Button loading onClick={onClick}>
+				Submit
+			</Button>
+		);
+		fireEvent.click(screen.getByRole('button'));
+		expect(onClick).not.toHaveBeenCalled();
+	});
+
+	test('does not submit the form when a loading submit button is clicked', () => {
+		const onSubmit = vi.fn<
+			(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void
+		>((event) => {
+			event.preventDefault();
+		});
+		render(
+			<form onSubmit={onSubmit}>
+				<Button type="submit" loading>
+					Submit
+				</Button>
+			</form>
+		);
+		fireEvent.click(screen.getByRole('button'));
+		expect(onSubmit).not.toHaveBeenCalled();
+	});
+
+	test('keeps an explicitly disabled button natively disabled while loading', () => {
+		render(
+			<Button disabled loading>
+				Submit
+			</Button>
+		);
 		expect(screen.getByRole('button')).toBeDisabled();
 	});
 
