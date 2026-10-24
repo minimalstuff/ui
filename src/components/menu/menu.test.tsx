@@ -202,6 +202,17 @@ describe('Menu', () => {
 		expect(screen.getByText('Options').parentElement).toHaveClass('custom');
 	});
 
+	test('should wrap the trigger in an inline-flex box so it adds no height under the baseline', () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+			</Menu>
+		);
+		const wrapper = screen.getByText('Options').parentElement;
+		expect(wrapper).toHaveClass('inline-flex');
+		expect(wrapper).not.toHaveClass('inline-block');
+	});
+
 	test('forwards a ref to the wrapper alongside its own', () => {
 		const ref = { current: null as HTMLSpanElement | null };
 		render(
