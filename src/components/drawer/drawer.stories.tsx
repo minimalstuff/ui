@@ -12,6 +12,7 @@ import { Drawer, type DrawerProps } from '#components/drawer/drawer';
 import { Input } from '#components/input/input';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { ModalFooter } from '#components/modal/modal_footer';
+import { consumerUtilitiesDecorator } from '../../../.storybook/consumer_utilities_decorator';
 import {
 	expectFocusOn,
 	getPortalScope,
@@ -144,6 +145,49 @@ export const Sizes: Story = {
 
 		await body.findByRole('dialog', { name: 'Size lg' });
 	},
+};
+
+const DESKTOP_WIDTH_BY_SIZE = {
+	sm: '360px',
+	md: '420px',
+	lg: '520px',
+} as const;
+
+async function expectDesktopWidthAfterOpening(
+	canvasElement: HTMLElement,
+	size: keyof typeof DESKTOP_WIDTH_BY_SIZE
+): Promise<void> {
+	const canvas = within(canvasElement);
+	const body = getPortalScope(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }));
+	const panel = await body.findByRole('dialog', { name: 'Settings' });
+
+	await expect(getComputedStyle(panel).width).toBe(DESKTOP_WIDTH_BY_SIZE[size]);
+}
+
+export const SmallWidthWithConsumerUtilities: Story = {
+	args: { size: 'sm', children: 'The width is set by the size prop.' },
+	decorators: [consumerUtilitiesDecorator],
+	globals: { viewport: { value: 'desktop', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectDesktopWidthAfterOpening(canvasElement, 'sm'),
+};
+
+export const MediumWidthWithConsumerUtilities: Story = {
+	args: { size: 'md', children: 'The width is set by the size prop.' },
+	decorators: [consumerUtilitiesDecorator],
+	globals: { viewport: { value: 'desktop', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectDesktopWidthAfterOpening(canvasElement, 'md'),
+};
+
+export const LargeWidthWithConsumerUtilities: Story = {
+	args: { size: 'lg', children: 'The width is set by the size prop.' },
+	decorators: [consumerUtilitiesDecorator],
+	globals: { viewport: { value: 'desktop', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectDesktopWidthAfterOpening(canvasElement, 'lg'),
 };
 
 export const NonDismissible: Story = {

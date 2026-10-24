@@ -22,7 +22,28 @@ const interactiveVariant: Variant = (matcher) => {
 	};
 };
 
+/**
+ * Library-namespaced `ms-*` shortcuts hold every base + media-variant
+ * combination. A consumer stylesheet loaded after `style.css` never generates
+ * `ms-*` classes, so it cannot override the media rule at equal specificity.
+ */
+const LIBRARY_SHORTCUTS: Record<string, string> = {
+	'ms-drawer-width-sm': 'w-full sm:w-[22.5rem]',
+	'ms-drawer-width-md': 'w-full sm:w-[26.25rem]',
+	'ms-drawer-width-lg': 'w-full sm:w-[32.5rem]',
+	'ms-drawer-offscreen-right': 'translate-x-full motion-reduce:translate-x-0',
+	'ms-drawer-offscreen-left': '-translate-x-full motion-reduce:translate-x-0',
+	'ms-drawer-transition':
+		'transition-transform duration-200 ease-out motion-reduce:transition-none',
+	'ms-modal-backdrop-padding': 'p-2 sm:py-[3rem] lg:py-[5rem]',
+	'ms-modal-height-fixed':
+		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
+	'ms-modal-max-height':
+		'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)]',
+};
+
 export default defineConfig({
+	shortcuts: LIBRARY_SHORTCUTS,
 	variants: [interactiveVariant],
 	presets: [
 		presetWind4({

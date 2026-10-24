@@ -24,6 +24,7 @@ import { Select } from '#components/select/select';
 import { Switch } from '#components/switch/switch';
 import { Tabs } from '#components/tabs/tabs';
 import { Textarea } from '#components/textarea/textarea';
+import { consumerUtilitiesDecorator } from '../../../.storybook/consumer_utilities_decorator';
 import {
 	expectFocusOn,
 	getPortalScope,
@@ -113,6 +114,34 @@ export const Default: Story = {
 			}
 		);
 	},
+};
+
+async function expectBackdropPaddingTopAfterOpening(
+	canvasElement: HTMLElement,
+	expectedPaddingTop: string
+): Promise<void> {
+	const canvas = within(canvasElement);
+	const body = getPortalScope(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+	const dialog = await body.findByRole('dialog', { name: 'Modal title' });
+	const backdrop = dialog.parentElement as HTMLElement;
+
+	await expect(getComputedStyle(backdrop).paddingTop).toBe(expectedPaddingTop);
+}
+
+export const DesktopBackdropPaddingWithConsumerUtilities: Story = {
+	decorators: [consumerUtilitiesDecorator],
+	globals: { viewport: { value: 'desktop', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectBackdropPaddingTopAfterOpening(canvasElement, '80px'),
+};
+
+export const TabletBackdropPaddingWithConsumerUtilities: Story = {
+	decorators: [consumerUtilitiesDecorator],
+	globals: { viewport: { value: 'tablet', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectBackdropPaddingTopAfterOpening(canvasElement, '48px'),
 };
 
 export const WithoutTitle: Story = {

@@ -5,9 +5,9 @@ export type DrawerSize = 'sm' | 'md' | 'lg';
 export type DrawerSide = 'right' | 'left';
 
 export const SIZE_CLASSES: Record<DrawerSize, string> = {
-	sm: 'sm:w-[22.5rem]',
-	md: 'sm:w-[26.25rem]',
-	lg: 'sm:w-[32.5rem]',
+	sm: 'ms-drawer-width-sm',
+	md: 'ms-drawer-width-md',
+	lg: 'ms-drawer-width-lg',
 };
 
 export const SIDE_CLASSES: Record<DrawerSide, string> = {
@@ -17,8 +17,8 @@ export const SIDE_CLASSES: Record<DrawerSide, string> = {
 
 /** Reduced motion keeps the panel in place so it only fades with its wrapper. */
 export const OFFSCREEN_CLASSES: Record<DrawerSide, string> = {
-	right: 'translate-x-full motion-reduce:translate-x-0',
-	left: '-translate-x-full motion-reduce:translate-x-0',
+	right: 'ms-drawer-offscreen-right',
+	left: 'ms-drawer-offscreen-left',
 };
 
 export const ONSCREEN_CLASSES = 'translate-x-0';

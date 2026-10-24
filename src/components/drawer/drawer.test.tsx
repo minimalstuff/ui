@@ -383,21 +383,46 @@ describe('Drawer', () => {
 		opener.remove();
 	});
 
-	test('should slide in from the left when side is left', () => {
+	test('should anchor to the left edge when side is left', () => {
 		renderDrawer({ side: 'left' });
-		expect(screen.getByRole('dialog')).toHaveClass(
-			'left-0',
-			'-translate-x-full'
-		);
+		expect(screen.getByRole('dialog')).toHaveClass('left-0');
 	});
+
+	test.each([
+		{ side: 'right', offscreenClass: 'ms-drawer-offscreen-right' },
+		{ side: 'left', offscreenClass: 'ms-drawer-offscreen-left' },
+	] as const)(
+		'should use the $offscreenClass shortcut before entering when side is $side',
+		({ side, offscreenClass }) => {
+			renderDrawer({ side });
+			expect(screen.getByRole('dialog')).toHaveClass(offscreenClass);
+		}
+	);
 
 	test('should round only the inner edge corners', () => {
 		renderDrawer({ radius: 'lg' });
 		expect(screen.getByRole('dialog')).toHaveClass('rounded-l-lg');
 	});
 
-	test('should apply the size width from the sm breakpoint', () => {
-		renderDrawer({ size: 'lg' });
-		expect(screen.getByRole('dialog')).toHaveClass('w-full', 'sm:w-[32.5rem]');
+	test.each([
+		{ size: 'sm', widthClass: 'ms-drawer-width-sm' },
+		{ size: 'md', widthClass: 'ms-drawer-width-md' },
+		{ size: 'lg', widthClass: 'ms-drawer-width-lg' },
+	] as const)(
+		'should use the $widthClass shortcut when size is $size',
+		({ size, widthClass }) => {
+			renderDrawer({ size });
+			expect(screen.getByRole('dialog')).toHaveClass(widthClass);
+		}
+	);
+
+	test('should keep the width out of plain utilities a consumer stylesheet could override', () => {
+		renderDrawer();
+		expect(screen.getByRole('dialog')).not.toHaveClass('w-full');
+	});
+
+	test('should use the transition shortcut', () => {
+		renderDrawer();
+		expect(screen.getByRole('dialog')).toHaveClass('ms-drawer-transition');
 	});
 });

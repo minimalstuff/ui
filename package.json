@@ -47,7 +47,7 @@
 		"format:check": "oxfmt . --check",
 		"typecheck": "tsc --build --force",
 		"knip": "knip",
-		"check": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run knip"
+		"check": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run knip && node scripts/verify_media_variants.ts"
 	},
 	"dependencies": {
 		"@floating-ui/react-dom": "^2.1.9",
