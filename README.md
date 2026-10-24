@@ -23,6 +23,8 @@ export function App() {
 
 The `@minimalstuff/ui/style.css` import is required for styles and icons to render.
 
+The stylesheet can be loaded before your app's own utilities (UnoCSS or Tailwind): component sizing does not depend on load order.
+
 ### Modals and drawers lock page scroll
 
 While a `Modal` or `Drawer` is open, page scroll is locked on `<html>`. The scrollbar width this frees is compensated with right padding on `<html>`, so the page does not shift. That padding does not move `position: fixed` elements: anchor right-aligned ones with `right: var(--scrollbar-compensation, 0px)`. Paint the page background on `<html>` or `<body>` rather than only on a wrapper element, or the padding shows the root's background as a strip on the right.

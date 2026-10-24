@@ -443,10 +443,7 @@ describe('ModalShell', () => {
 				Body
 			</ModalShell>
 		);
-		expect(screen.getByRole('dialog')).toHaveClass(
-			'h-[calc(100vh-4rem)]',
-			'sm:h-[min(40rem,calc(100vh-10rem))]'
-		);
+		expect(screen.getByRole('dialog')).toHaveClass('ms-modal-height-fixed');
 	});
 
 	test('should leave scrolling to the content when height is fixed', () => {
@@ -494,10 +491,26 @@ describe('ModalShell', () => {
 			</ModalShell>
 		);
 		expect(screen.getByText('Body')).toHaveClass('overflow-y-auto');
-		expect(screen.getByRole('dialog')).not.toHaveClass(
-			'h-[calc(100vh-4rem)]',
-			'sm:h-[min(40rem,calc(100vh-10rem))]'
+		expect(screen.getByRole('dialog')).not.toHaveClass('ms-modal-height-fixed');
+	});
+
+	test('should pad the backdrop with the library shortcut', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
 		);
+		const backdrop = screen.getByRole('dialog').parentElement;
+		expect(backdrop).toHaveClass('ms-modal-backdrop-padding');
+	});
+
+	test('should cap the dialog height with the library shortcut', () => {
+		render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog')).toHaveClass('ms-modal-max-height');
 	});
 
 	test('should have no axe violations when height is fixed with a footer', async () => {

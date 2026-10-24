@@ -48,7 +48,7 @@ const SIZE_CLASSES = {
 
 const HEIGHT_CLASSES = {
 	auto: '',
-	fixed: 'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
+	fixed: 'ms-modal-height-fixed',
 } as const;
 
 const CONTENT_OVERFLOW_CLASSES = {
@@ -90,7 +90,7 @@ export function ModalShell({
 		<div
 			className={clsx(
 				'fixed inset-0 z-50 flex items-start justify-center',
-				'p-2 sm:py-[3rem] lg:py-[5rem]',
+				'ms-modal-backdrop-padding',
 				'transition-opacity duration-200 ease-out',
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
@@ -121,7 +121,7 @@ export function ModalShell({
 					THIN_SCROLLBAR_SCOPE,
 					'shadow-2xl',
 					RADIUS_CLASSES[radius],
-					'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)] overflow-hidden flex flex-col',
+					'ms-modal-max-height overflow-hidden flex flex-col',
 					'transition-all duration-200 ease-out',
 					'focus:outline-none',
 					isVisible

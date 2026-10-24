@@ -128,14 +128,14 @@ function DrawerDialog({
 						tabIndex={-1}
 						inert={isEnded}
 						className={clsx(
-							'fixed inset-y-0 h-full w-full flex flex-col overflow-hidden',
+							'fixed inset-y-0 h-full flex flex-col overflow-hidden',
 							SIDE_CLASSES[side],
 							SIZE_CLASSES[size],
 							OVERLAY_BG,
 							THIN_SCROLLBAR_SCOPE,
 							'shadow-2xl',
 							INNER_EDGE_RADIUS_CLASSES[side][radius],
-							'transition-transform duration-200 ease-out motion-reduce:transition-none',
+							'ms-drawer-transition',
 							'focus:outline-none',
 							isVisible ? ONSCREEN_CLASSES : OFFSCREEN_CLASSES[side]
 						)}
