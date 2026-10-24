@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.2](https://github.com/minimalstuff/ui/compare/4.3.1...4.3.2) (2026-10-24)
+
+### Bug Fixes
+
+* **menu,tooltip:** wrap triggers in inline-flex to avoid extra baseline height ([8a96c19](https://github.com/minimalstuff/ui/commit/8a96c1925771e9a4f046c530d0020f6aa436a44c))
+* **tooltip:** open on keyboard focus only and ignore touch hover ([58e9719](https://github.com/minimalstuff/ui/commit/58e9719d192ce39aabf9a4175e0d2a0af45a7ece))
+
 ## [4.3.1](https://github.com/minimalstuff/ui/compare/4.3.0...4.3.1) (2026-10-24)
 
 ### Bug Fixes
