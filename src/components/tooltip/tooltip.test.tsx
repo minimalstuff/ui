@@ -41,12 +41,12 @@ describe('Tooltip', () => {
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 		expect(screen.getByRole('tooltip')).toHaveTextContent('Helpful text');
 
 		act(() => {
-			fireEvent.mouseLeave(wrapper);
+			fireEvent.pointerLeave(wrapper);
 		});
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
@@ -62,18 +62,89 @@ describe('Tooltip', () => {
 				<button>Focus me</button>
 			</Tooltip>
 		);
-		const wrapper = screen.getByText('Focus me').parentElement as HTMLElement;
+		const trigger = screen.getByRole('button');
 
 		act(() => {
-			fireEvent.focus(wrapper);
+			trigger.focus();
 		});
 		expect(screen.getByRole('tooltip')).toHaveTextContent('Helpful text');
 
 		act(() => {
-			fireEvent.blur(wrapper);
+			trigger.blur();
 			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
 		});
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('should not show on focus when the focus is not keyboard-visible', () => {
+		// oxlint-disable-next-line typescript/unbound-method -- invoked through Reflect.apply with the right `this`
+		const originalMatches = Element.prototype.matches;
+		const matchesSpy = vi
+			.spyOn(Element.prototype, 'matches')
+			.mockImplementation(function (this: Element, selector: string) {
+				if (selector === ':focus-visible') return false;
+				return Reflect.apply(originalMatches, this, [selector]);
+			});
+		render(
+			<Tooltip content="Helpful text">
+				<button>Focus me</button>
+			</Tooltip>
+		);
+
+		act(() => {
+			screen.getByRole('button').focus();
+		});
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+		matchesSpy.mockRestore();
+	});
+
+	test('should not show on touch hover', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+
+		act(() => {
+			fireEvent.pointerEnter(wrapper, { pointerType: 'touch' });
+		});
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('should show on pen pointer hover', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+
+		act(() => {
+			fireEvent.pointerEnter(wrapper, { pointerType: 'pen' });
+		});
+
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+	});
+
+	test('should show temporary content on tap after a touch pointer enter', () => {
+		render(
+			<Tooltip content="Copy" temporaryContent="Copied!" showOnClick>
+				<button>Copy link</button>
+			</Tooltip>
+		);
+		const trigger = screen.getByRole('button');
+
+		act(() => {
+			fireEvent.pointerEnter(trigger.parentElement as HTMLElement, {
+				pointerType: 'touch',
+			});
+			fireEvent.click(trigger);
+		});
+
+		expect(screen.getByRole('tooltip')).toHaveTextContent('Copied!');
 	});
 
 	test('links the trigger to the tooltip via aria-describedby', () => {
@@ -86,7 +157,7 @@ describe('Tooltip', () => {
 		const wrapper = trigger.parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 
 		const tooltip = screen.getByRole('tooltip');
@@ -102,7 +173,7 @@ describe('Tooltip', () => {
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -169,13 +240,13 @@ describe('Tooltip', () => {
 		);
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
-		fireEvent.mouseEnter(wrapper);
+		fireEvent.pointerEnter(wrapper);
 		await waitFor(() =>
 			expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'open')
 		);
 
-		fireEvent.mouseLeave(wrapper);
-		fireEvent.mouseEnter(wrapper);
+		fireEvent.pointerLeave(wrapper);
+		fireEvent.pointerEnter(wrapper);
 
 		// Wait past the exit-animation duration: if the unmount hadn't been
 		// cancelled, or `isVisible` were stuck false, this would fail either by
@@ -197,7 +268,7 @@ describe('Tooltip', () => {
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 
 		expect(screen.getByRole('tooltip')).toHaveClass(
@@ -244,7 +315,7 @@ describe('Tooltip', () => {
 		);
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
-		fireEvent.mouseEnter(wrapper);
+		fireEvent.pointerEnter(wrapper);
 
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 	});
@@ -255,10 +326,10 @@ describe('Tooltip', () => {
 				<button>Focus me</button>
 			</Tooltip>
 		);
-		const wrapper = screen.getByText('Focus me').parentElement as HTMLElement;
+		const trigger = screen.getByRole('button');
 
 		act(() => {
-			fireEvent.focus(wrapper);
+			trigger.focus();
 		});
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
@@ -280,7 +351,7 @@ describe('Tooltip', () => {
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
@@ -302,7 +373,7 @@ describe('Tooltip', () => {
 		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 
 		const escapeEvent = new KeyboardEvent('keydown', {
@@ -339,7 +410,7 @@ describe('Tooltip', () => {
 		const wrapper = trigger.parentElement as HTMLElement;
 
 		act(() => {
-			fireEvent.mouseEnter(wrapper);
+			fireEvent.pointerEnter(wrapper);
 		});
 
 		const tooltip = screen.getByRole('tooltip');
@@ -378,7 +449,7 @@ describe('Tooltip', () => {
 		function showTooltip(label: string) {
 			const trigger = screen.getByRole('button', { name: label });
 			act(() => {
-				fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
+				fireEvent.pointerEnter(trigger.parentElement as HTMLElement);
 			});
 			return trigger;
 		}
@@ -485,7 +556,7 @@ describe('Tooltip', () => {
 		function hoverTrigger(label: string) {
 			const trigger = screen.getByRole('button', { name: label });
 			act(() => {
-				fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
+				fireEvent.pointerEnter(trigger.parentElement as HTMLElement);
 			});
 		}
 

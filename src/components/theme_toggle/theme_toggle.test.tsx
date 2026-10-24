@@ -58,7 +58,7 @@ describe('ThemeToggle', () => {
 		render(<ThemeToggle tooltip />);
 		const button = screen.getByRole('button');
 		act(() => {
-			fireEvent.mouseEnter(button.parentElement as HTMLElement);
+			fireEvent.pointerEnter(button.parentElement as HTMLElement);
 		});
 
 		expect(screen.getByRole('tooltip')).toHaveTextContent(

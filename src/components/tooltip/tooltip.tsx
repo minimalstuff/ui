@@ -16,7 +16,9 @@ import {
 	useLayoutEffect,
 	useRef,
 	useState,
+	type FocusEvent,
 	type MouseEvent,
+	type PointerEvent,
 	type ReactNode,
 	type Ref,
 } from 'react';
@@ -95,7 +97,8 @@ export interface TooltipProps {
 
 /**
  * The trigger (`children`) must be focusable, otherwise the tooltip is
- * unreachable by keyboard. Shows on hover and focus; Escape dismisses it.
+ * unreachable by keyboard. Shows on hover (never on touch) and on keyboard
+ * (focus-visible) focus; Escape dismisses it.
  * `temporaryContent` is announced to screen readers through a polite status
  * region.
  */
@@ -210,6 +213,21 @@ export function Tooltip({
 		closeTooltip();
 	}, [closeTooltip]);
 
+	const handleFocus = (event: FocusEvent) => {
+		if (!event.target.matches(':focus-visible')) return;
+		handleShow();
+	};
+
+	const handlePointerEnter = (event: PointerEvent) => {
+		if (event.pointerType === 'touch') return;
+		handleShow();
+	};
+
+	const handlePointerLeave = (event: PointerEvent) => {
+		if (event.pointerType === 'touch') return;
+		handleHide();
+	};
+
 	useEffect(() => () => clearTimeout(temporaryTimeoutRef.current), []);
 
 	useEffect(() => {
@@ -266,9 +284,9 @@ export function Tooltip({
 			<span
 				ref={setTriggerRef}
 				className={clsx('inline-flex', className)}
-				onMouseEnter={handleShow}
-				onMouseLeave={handleHide}
-				onFocus={handleShow}
+				onPointerEnter={handlePointerEnter}
+				onPointerLeave={handlePointerLeave}
+				onFocus={handleFocus}
 				onBlur={handleHide}
 			>
 				{trigger}

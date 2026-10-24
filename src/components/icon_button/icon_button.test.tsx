@@ -81,7 +81,7 @@ describe('IconButton', () => {
 		function hoverButton() {
 			const button = screen.getByRole('button');
 			act(() => {
-				fireEvent.mouseEnter(button.parentElement as HTMLElement);
+				fireEvent.pointerEnter(button.parentElement as HTMLElement);
 			});
 			return button;
 		}
@@ -102,9 +102,7 @@ describe('IconButton', () => {
 		test('should show the tooltip on focus when tooltip is true', () => {
 			render(<IconButton icon="i-mdi-close" aria-label="Close" tooltip />);
 			act(() => {
-				fireEvent.focus(
-					screen.getByRole('button').parentElement as HTMLElement
-				);
+				screen.getByRole('button').focus();
 			});
 			expect(screen.getByRole('tooltip')).toBeInTheDocument();
 		});
