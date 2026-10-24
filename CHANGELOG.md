@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.1](https://github.com/minimalstuff/ui/compare/4.3.0...4.3.1) (2026-10-24)
+
+### Bug Fixes
+
+* **drawer,modal:** keep responsive sizing when consumer utilities load later ([01e51de](https://github.com/minimalstuff/ui/commit/01e51de4765e1d39ef6bd4c93ff5b228f6af7b66))
+
 ## [4.3.0](https://github.com/minimalstuff/ui/compare/4.2.2...4.3.0) (2026-10-23)
 
 ### Features
