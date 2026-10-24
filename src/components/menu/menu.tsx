@@ -176,7 +176,7 @@ export function Menu({
 		: trigger;
 
 	return (
-		<span ref={setWrapperRef} className={clsx('inline-block', className)}>
+		<span ref={setWrapperRef} className={clsx('inline-flex', className)}>
 			{clonedTrigger}
 			{isMounted && (
 				<MenuSurface

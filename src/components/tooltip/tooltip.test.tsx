@@ -214,6 +214,17 @@ describe('Tooltip', () => {
 		expect(screen.getByText('Hover me').parentElement).toHaveClass('custom');
 	});
 
+	test('should wrap the trigger in an inline-flex box so it adds no height under the baseline', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement;
+		expect(wrapper).toHaveClass('inline-flex');
+		expect(wrapper).not.toHaveClass('inline-block');
+	});
+
 	test('forwards a ref to the wrapper alongside its own', () => {
 		const ref = { current: null as HTMLSpanElement | null };
 		render(

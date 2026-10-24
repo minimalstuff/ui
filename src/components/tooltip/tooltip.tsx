@@ -265,7 +265,7 @@ export function Tooltip({
 		<>
 			<span
 				ref={setTriggerRef}
-				className={clsx('inline-block', className)}
+				className={clsx('inline-flex', className)}
 				onMouseEnter={handleShow}
 				onMouseLeave={handleHide}
 				onFocus={handleShow}
