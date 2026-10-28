@@ -6,6 +6,8 @@ A release is cut locally with release-it, then published to npm by GitHub Action
 
 Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC), so no npm token is stored anywhere. On npmjs.com, `@minimalstuff/ui` > **Settings > Trusted publishing** must list GitHub Actions with organization `minimalstuff`, repository `ui` and workflow `publish.yml`.
 
+The release also rebuilds the stable Storybook, from a workflow run on the release tag. In the repository's **Settings > Environments > github-pages**, the deployment rules must allow the `main` branch and the tag pattern `*.*.*`; otherwise GitHub rejects that deployment.
+
 ## Cut the release
 
 1. Start from an up-to-date `main` with a clean working tree.
