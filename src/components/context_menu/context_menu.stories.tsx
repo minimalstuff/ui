@@ -9,7 +9,7 @@ import {
 } from '../../../.storybook/play_helpers';
 
 const meta = {
-	title: 'Example/ContextMenu',
+	title: 'Components/ContextMenu',
 	component: ContextMenu,
 	parameters: {
 		layout: 'centered',

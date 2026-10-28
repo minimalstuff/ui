@@ -12,7 +12,7 @@ const panelText = (text: string) => (
 );
 
 const meta = {
-	title: 'Example/Tabs',
+	title: 'Components/Tabs',
 	component: Tabs,
 	parameters: {
 		layout: 'centered',

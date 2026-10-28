@@ -6,7 +6,7 @@ import { Toolbar } from '#components/toolbar/toolbar';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 
 const meta = {
-	title: 'Example/Toolbar',
+	title: 'Components/Toolbar',
 	component: Toolbar,
 	parameters: {
 		layout: 'centered',

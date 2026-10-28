@@ -43,7 +43,7 @@ function ModalTrigger(props: ModalProps) {
 ModalTrigger.displayName = 'Modal';
 
 const meta = {
-	title: 'Example/Modal',
+	title: 'Components/Modal',
 	component: ModalTrigger,
 	parameters: {
 		layout: 'centered',

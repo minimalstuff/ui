@@ -4,7 +4,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Input } from './input';
 
 const meta = {
-	title: 'Example/Input',
+	title: 'Components/Input',
 	component: Input,
 	parameters: {
 		layout: 'centered',

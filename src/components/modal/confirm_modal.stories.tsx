@@ -23,7 +23,7 @@ function ConfirmModalTrigger(props: ConfirmModalProps) {
 ConfirmModalTrigger.displayName = 'ConfirmModal';
 
 const meta = {
-	title: 'Example/ConfirmModal',
+	title: 'Components/ConfirmModal',
 	component: ConfirmModalTrigger,
 	parameters: {
 		layout: 'centered',

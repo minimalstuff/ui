@@ -6,7 +6,7 @@ import { expectFocusOn } from '../../../.storybook/play_helpers';
 import { Checkbox } from './checkbox';
 
 const meta = {
-	title: 'Example/Checkbox',
+	title: 'Components/Checkbox',
 	component: Checkbox,
 	parameters: {
 		layout: 'centered',

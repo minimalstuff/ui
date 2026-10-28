@@ -53,7 +53,7 @@ function ModalProviderDemo() {
 }
 
 const meta = {
-	title: 'Example/ModalProvider',
+	title: 'Components/ModalProvider',
 	component: ModalProvider,
 	parameters: {
 		layout: 'centered',

@@ -12,7 +12,7 @@ import { expectFocusOn } from '../../../.storybook/play_helpers';
 import { RadioOptions } from './radio_options';
 
 const meta = {
-	title: 'Example/RadioOptions',
+	title: 'Components/RadioOptions',
 	component: RadioOptions,
 	parameters: {
 		layout: 'centered',

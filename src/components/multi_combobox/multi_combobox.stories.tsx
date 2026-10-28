@@ -35,7 +35,7 @@ function isSortOptionDisabled(
 }
 
 const meta = {
-	title: 'Example/MultiCombobox',
+	title: 'Components/MultiCombobox',
 	component: MultiCombobox,
 	parameters: {
 		layout: 'centered',

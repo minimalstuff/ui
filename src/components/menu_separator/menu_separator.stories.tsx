@@ -4,7 +4,7 @@ import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 
 const meta = {
-	title: 'Example/MenuSeparator',
+	title: 'Components/MenuSeparator',
 	component: MenuSeparator,
 	parameters: {
 		layout: 'centered',

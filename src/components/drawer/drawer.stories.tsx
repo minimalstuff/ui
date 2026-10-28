@@ -57,7 +57,7 @@ const CancelAndSave = (
 );
 
 const meta = {
-	title: 'Example/Drawer',
+	title: 'Components/Drawer',
 	component: DrawerTrigger,
 	parameters: {
 		layout: 'centered',

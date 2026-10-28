@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ClientOnly } from '#components/client_only/client_only';
 
 const meta = {
-	title: 'Example/ClientOnly',
+	title: 'Components/ClientOnly',
 	component: ClientOnly,
 	parameters: {
 		layout: 'centered',

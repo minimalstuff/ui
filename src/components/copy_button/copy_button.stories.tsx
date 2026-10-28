@@ -4,7 +4,7 @@ import { Button } from '#components/button/button';
 import { CopyButton } from '#components/copy_button/copy_button';
 
 const meta = {
-	title: 'Example/CopyButton',
+	title: 'Components/CopyButton',
 	component: CopyButton,
 	parameters: {
 		layout: 'centered',
