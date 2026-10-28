@@ -2,7 +2,7 @@
 
 A small, unambitious React component library, styled with UnoCSS and focused on accessibility.
 
-Browse every component in the [Storybook](https://minimalstuff.github.io/ui/).
+Browse every component in the [Storybook](https://minimalstuff.github.io/ui/) (latest release), or the [`next` Storybook](https://minimalstuff.github.io/ui/next/) built from `main`.
 
 ## Install
 

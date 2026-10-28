@@ -1,13 +1,12 @@
-# Source : https://storybook.js.org/docs/sharing/publish-storybook#github-pages
-
-# Workflow name
 name: Build and Publish Storybook to GitHub Pages
 
 on:
-  # Event for the workflow to run on
   push:
     branches:
-      - 'main' # Replace with the branch you want to deploy from
+      - 'main'
+  release:
+    types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,15 +19,28 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v7
         with:
+          ref: main
           fetch-depth: 0
+
+      - name: Resolve latest stable release tag
+        id: stable_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "tag=$(gh release view --json tagName --jq .tagName)" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout latest stable release
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.stable_release.outputs.tag }}
+          path: stable
 
       - uses: pnpm/action-setup@v6
 
@@ -38,17 +50,29 @@ jobs:
           node-version-file: .node-version
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: Install dependencies (stable)
+        working-directory: stable
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm run build-storybook
-      # Upload pages artifact
+      - name: Build stable Storybook
+        working-directory: stable
+        env:
+          STORYBOOK_CHANNEL: stable
+        run: pnpm run build-storybook -o ../site
+
+      - name: Install dependencies (next)
+        run: pnpm install --frozen-lockfile
+
+      - name: Build next Storybook
+        env:
+          STORYBOOK_CHANNEL: next
+        run: pnpm run build-storybook -o site/next
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: 'storybook-static'
-      # Deploy to Github Pages
+          path: 'site'
+
       - id: deploy
         name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v5
