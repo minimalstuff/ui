@@ -37,7 +37,7 @@ export function optionCardClasses(options: {
 	const { isSelected, isError, isDisabled, radius, unstyled } = options;
 
 	return clsx(
-		'flex cursor-pointer items-start gap-3 transition-colors duration-150',
+		'relative flex cursor-pointer items-start gap-3 transition-colors duration-150',
 		CONTROL_FOCUS_RING,
 		isError ? CONTROL_FOCUS_RING_ERROR_COLOR : CONTROL_FOCUS_RING_COLOR,
 		!unstyled && [

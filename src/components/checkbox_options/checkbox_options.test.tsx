@@ -12,6 +12,13 @@ const OPTIONS = [
 ];
 
 describe('CheckboxOptions', () => {
+	test('positions the hidden input inside its card so focusing it never scrolls an outer container', () => {
+		render(<CheckboxOptions options={OPTIONS} />);
+		const input = screen.getByRole('checkbox', { name: 'Option A' });
+		expect(input).toHaveClass('sr-only');
+		expect(input.closest('label')).toHaveClass('relative');
+	});
+
 	test('renders an option per entry', () => {
 		render(<CheckboxOptions options={OPTIONS} />);
 		expect(
