@@ -40,7 +40,7 @@ export function MenuGroup({
 				role="presentation"
 				className={clsx(
 					!unstyled &&
-						'px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400',
+						'px-3 pt-2 pb-1 text-xs font-medium text-gray-500 dark:text-gray-400',
 					className
 				)}
 			>

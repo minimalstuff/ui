@@ -4,12 +4,17 @@ import { useMenuClose } from '#components/menu/menu_context';
 import { MenuItemContent } from '#components/menu_item/menu_item_content';
 import { MenuItemEnd } from '#components/menu_item/menu_item_end';
 import type { MenuItemButtonProps } from '#components/menu_item/menu_item_props';
-import { menuItemClasses } from '#components/menu_item/menu_item_styles';
+import {
+	menuItemClasses,
+	type MenuItemHoverClasses,
+} from '#components/menu_item/menu_item_styles';
 
-const STATE_CLASSES = [
-	'hover:enabled:bg-gray-100 dark:hover:enabled:bg-gray-700',
-	'disabled:cursor-not-allowed disabled:opacity-50',
-];
+const HOVER_CLASSES: MenuItemHoverClasses = {
+	default: 'hover:enabled:bg-gray-50 dark:hover:enabled:bg-gray-800/60',
+	danger: 'hover:enabled:bg-red-50 dark:hover:enabled:bg-red-950/40',
+};
+
+const STATE_CLASSES = ['disabled:cursor-not-allowed disabled:opacity-50'];
 
 /**
  * The `<button>` half of `MenuItem`, for rows that run an action rather than
@@ -44,9 +49,16 @@ export function MenuItemButton({
 			tabIndex={-1}
 			onClick={handleClick}
 			disabled={disabled}
-			className={menuItemClasses(STATE_CLASSES, danger, className)}
+			className={menuItemClasses(
+				HOVER_CLASSES,
+				STATE_CLASSES,
+				danger,
+				className
+			)}
 		>
-			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemContent icon={icon} danger={danger}>
+				{children}
+			</MenuItemContent>
 			<MenuItemEnd trailing={trailing} selected={selected} />
 		</button>
 	);

@@ -41,7 +41,7 @@ describe('MenuGroup', () => {
 
 	test('applies its own label classes by default', () => {
 		renderThemeGroup();
-		expect(screen.getByText('Theme')).toHaveClass('uppercase');
+		expect(screen.getByText('Theme')).toHaveClass('font-medium');
 	});
 
 	test('drops its label classes when unstyled', () => {
@@ -50,7 +50,7 @@ describe('MenuGroup', () => {
 				<MenuItem onClick={vi.fn<() => void>()}>Light</MenuItem>
 			</MenuGroup>
 		);
-		expect(screen.getByText('Theme')).not.toHaveClass('uppercase');
+		expect(screen.getByText('Theme')).not.toHaveClass('font-medium');
 	});
 
 	test('forwards a custom className to the label', () => {

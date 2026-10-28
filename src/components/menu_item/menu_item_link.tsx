@@ -4,15 +4,23 @@ import { useMenuClose } from '#components/menu/menu_context';
 import { MenuItemContent } from '#components/menu_item/menu_item_content';
 import { MenuItemEnd } from '#components/menu_item/menu_item_end';
 import type { MenuItemLinkProps } from '#components/menu_item/menu_item_props';
-import { menuItemClasses } from '#components/menu_item/menu_item_styles';
+import {
+	menuItemClasses,
+	type MenuItemHoverClasses,
+} from '#components/menu_item/menu_item_styles';
 
 const EXTERNAL_TARGET = '_blank';
 const EXTERNAL_REL = 'noopener noreferrer';
 
+const HOVER_CLASSES: MenuItemHoverClasses = {
+	default: 'hover:bg-gray-50 dark:hover:bg-gray-800/60',
+	danger: 'hover:bg-red-50 dark:hover:bg-red-950/40',
+};
+
 // `:enabled` only ever matches form controls, so this branch guards its hover
 // state with `aria-disabled` + `pointer-events-none` instead.
 const STATE_CLASSES = [
-	'no-underline hover:bg-gray-100 dark:hover:bg-gray-700',
+	'no-underline',
 	'aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
 ];
 
@@ -51,9 +59,16 @@ export function MenuItemLink({
 			rel={rel ?? (isExternal ? EXTERNAL_REL : undefined)}
 			aria-disabled={disabled || undefined}
 			onClick={handleClick}
-			className={menuItemClasses(STATE_CLASSES, danger, className)}
+			className={menuItemClasses(
+				HOVER_CLASSES,
+				STATE_CLASSES,
+				danger,
+				className
+			)}
 		>
-			<MenuItemContent icon={icon}>{children}</MenuItemContent>
+			<MenuItemContent icon={icon} danger={danger}>
+				{children}
+			</MenuItemContent>
 			<MenuItemEnd trailing={trailing} />
 		</a>
 	);

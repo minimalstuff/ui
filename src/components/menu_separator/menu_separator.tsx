@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { SURFACE_BORDER } from '#components/shared/surface_tokens';
+import { OVERLAY_BORDER } from '#components/shared/surface_tokens';
 
 export interface MenuSeparatorProps {
 	unstyled?: boolean;
@@ -20,7 +20,7 @@ export const MenuSeparator = ({
 		aria-orientation="horizontal"
 		className={clsx(
 			'w-full',
-			!unstyled && ['my-1 border-0 border-t', SURFACE_BORDER],
+			!unstyled && ['my-1 border-0 border-t', OVERLAY_BORDER],
 			className
 		)}
 	/>
