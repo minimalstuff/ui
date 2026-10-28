@@ -36,6 +36,7 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-drawer-transition':
 		'transition-transform duration-200 ease-out motion-reduce:transition-none',
 	'ms-modal-backdrop-padding': 'p-2 sm:py-[3rem] lg:py-[5rem]',
+	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
 		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
 	'ms-modal-max-height':

@@ -28,6 +28,11 @@ const preview: Preview = {
 		modalRootDecorator,
 	],
 	parameters: {
+		options: {
+			storySort: {
+				order: ['Overview', '*'],
+			},
+		},
 		controls: {
 			matchers: {
 				color: /(background|color)$/i,
