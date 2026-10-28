@@ -154,6 +154,23 @@ describe('Menu', () => {
 		expect(screen.getByText('Options')).toHaveFocus();
 	});
 
+	test('returns focus to the trigger without scrolling the page', async () => {
+		render(
+			<Menu trigger={<button>Options</button>}>
+				<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+			</Menu>
+		);
+		fireEvent.click(screen.getByText('Options'));
+		await waitFor(() => expect(screen.getByText('Move up')).toHaveFocus());
+		const focusSpy = vi.spyOn(screen.getByText('Options'), 'focus');
+
+		fireEvent.keyDown(screen.getByText('Move up'), { key: 'Escape' });
+
+		await waitFor(() =>
+			expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true })
+		);
+	});
+
 	test('reopens on a trigger click during the exit fade instead of re-closing', async () => {
 		render(
 			<Menu trigger={<button>Options</button>}>

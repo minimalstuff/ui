@@ -147,6 +147,33 @@ describe('ContextMenu', () => {
 		expect(elsewhere).toHaveFocus();
 	});
 
+	test('returns focus without scrolling the page', async () => {
+		render(
+			<>
+				<button>Elsewhere</button>
+				<ContextMenu
+					items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+				>
+					<div>Right-click area</div>
+				</ContextMenu>
+			</>
+		);
+		const elsewhere = screen.getByText('Elsewhere');
+		elsewhere.focus();
+		fireEvent.contextMenu(screen.getByText('Right-click area'), {
+			clientX: 100,
+			clientY: 200,
+		});
+		await waitFor(() => expect(screen.getByText('Edit')).toHaveFocus());
+		const focusSpy = vi.spyOn(elsewhere, 'focus');
+
+		fireEvent.keyDown(screen.getByText('Edit'), { key: 'Escape' });
+
+		await waitFor(() =>
+			expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true })
+		);
+	});
+
 	test('forwards a custom className to the wrapper', () => {
 		render(
 			<ContextMenu

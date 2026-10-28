@@ -106,7 +106,7 @@ export function ContextMenu({
 
 	const closeAndReturnFocus = useCallback(() => {
 		close();
-		previouslyFocusedRef.current?.focus();
+		previouslyFocusedRef.current?.focus({ preventScroll: true });
 	}, [close]);
 
 	const handleContextMenu = (event: MouseEvent) => {
