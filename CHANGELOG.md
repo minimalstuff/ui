@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [4.3.3] - 2026-10-29
+
 ### Changed
 
 - `Menu` and `ContextMenu` items match the `Combobox` list: tighter padding, a blue background on the keyboard-active item (red for `danger` items), darker item text, and `MenuGroup` headings shown as written instead of in uppercase.
@@ -452,7 +454,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/4.3.2...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/4.3.3...HEAD
+[4.3.3]: https://github.com/minimalstuff/ui/compare/4.3.2...4.3.3
 [4.3.2]: https://github.com/minimalstuff/ui/compare/4.3.1...4.3.2
 [4.3.1]: https://github.com/minimalstuff/ui/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/minimalstuff/ui/compare/4.2.2...4.3.0
