@@ -17,7 +17,7 @@ const CHANNEL_LINKS: Record<StorybookChannel, ChannelLink> = {
 const LINK_STYLE: React.CSSProperties = {
 	padding: '4px 8px',
 	fontSize: 12,
-	color: 'var(--sb-manager-text-color, #333)',
+	color: 'inherit',
 	textDecoration: 'underline',
 };
 
