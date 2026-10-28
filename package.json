@@ -60,7 +60,7 @@
 		"@chromatic-com/storybook": "^5.6.0",
 		"@microsoft/api-extractor": "^7.60.0",
 		"@minimalstuff/tooling": "^0.7.0",
-		"@release-it/conventional-changelog": "^12.0.2",
+		"@release-it/keep-a-changelog": "^8.0.1",
 		"@storybook/addon-a11y": "^10.6.5",
 		"@storybook/addon-docs": "^10.6.5",
 		"@storybook/addon-onboarding": "^10.6.5",

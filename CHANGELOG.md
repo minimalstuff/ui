@@ -1,406 +1,475 @@
 # Changelog
 
-## [4.3.2](https://github.com/minimalstuff/ui/compare/4.3.1...4.3.2) (2026-10-24)
+All notable changes to @minimalstuff/ui are written here for the people who use it. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
-### Bug Fixes
+## [Unreleased]
 
-* **menu,tooltip:** wrap triggers in inline-flex to avoid extra baseline height ([8a96c19](https://github.com/minimalstuff/ui/commit/8a96c1925771e9a4f046c530d0020f6aa436a44c))
-* **tooltip:** open on keyboard focus only and ignore touch hover ([58e9719](https://github.com/minimalstuff/ui/commit/58e9719d192ce39aabf9a4175e0d2a0af45a7ece))
-
-## [4.3.1](https://github.com/minimalstuff/ui/compare/4.3.0...4.3.1) (2026-10-24)
-
-### Bug Fixes
-
-* **drawer,modal:** keep responsive sizing when consumer utilities load later ([01e51de](https://github.com/minimalstuff/ui/commit/01e51de4765e1d39ef6bd4c93ff5b228f6af7b66))
-
-## [4.3.0](https://github.com/minimalstuff/ui/compare/4.2.2...4.3.0) (2026-10-23)
-
-### Features
-
-* **modal:** add useDismissGuard to confirm user dismissals ([07e1d1d](https://github.com/minimalstuff/ui/commit/07e1d1dfbb642a611222fb2b73c5a15053df6827))
-
-## [4.2.2](https://github.com/minimalstuff/ui/compare/4.2.1...4.2.2) (2026-10-23)
-
-### Bug Fixes
-
-* **tooltip:** resolve the portal target only while shown ([9fc2926](https://github.com/minimalstuff/ui/commit/9fc29263a271b36a5125829f18c543f2ce657bd7))
-
-## [4.2.1](https://github.com/minimalstuff/ui/compare/4.2.0...4.2.1) (2026-10-23)
-
-### Bug Fixes
-
-* **button:** keep a loading button focusable ([97642cf](https://github.com/minimalstuff/ui/commit/97642cf1aefe02d7eb150effa09d19555bc735a6))
-* **confirm-modal:** keep focus on Confirm while confirming ([8805394](https://github.com/minimalstuff/ui/commit/880539491f803037f06d73ea8f27783b0879ad9e))
-
-## [4.2.0](https://github.com/minimalstuff/ui/compare/4.1.0...4.2.0) (2026-10-23)
-
-### Features
-
-* **drawer:** add a modal side panel ([a5de29a](https://github.com/minimalstuff/ui/commit/a5de29a005a5d7ba1b12670aaae63ba9f6772a5b))
-* **modal:** add a fixed height with inner scrolling ([1aeb769](https://github.com/minimalstuff/ui/commit/1aeb7693bf84a6cb743581055bedbf1ecd29242c))
-* **modal:** lock page scroll on the root and expose the scrollbar compensation ([0a84d25](https://github.com/minimalstuff/ui/commit/0a84d25e1f0315cd48ef362027ae848e3203240d))
-* **tabs:** add a vertical orientation ([116e245](https://github.com/minimalstuff/ui/commit/116e2459340ba00b85bd90d82dcaecef9fc45dfb))
-* **tabs:** keep inactive panels mounted ([875f037](https://github.com/minimalstuff/ui/commit/875f0370ca3ab997add8a764e244db4f9b461a30))
-* **tabs:** show a badge on a tab ([200b6ec](https://github.com/minimalstuff/ui/commit/200b6ec0deb5aac973bd6b3bca6163fe20a9f247))
-* **ui:** give scroll containers a thin themed scrollbar ([0e0d420](https://github.com/minimalstuff/ui/commit/0e0d4204d80645390e36da4f685d90f6eba58938))
-
-### Bug Fixes
-
-* **modal:** keep the body scroll locked while a stacked dialog is open ([8270a5a](https://github.com/minimalstuff/ui/commit/8270a5a8266688bdbf6e362e9d5a7f34e9b9d42c))
-* **modal:** keep the layout still when the body scroll lock engages ([e303404](https://github.com/minimalstuff/ui/commit/e303404b69f3c7b7256b289c86af160e15d97fa7))
-* **radio-options:** mark the group invalid instead of each radio ([ff99ff5](https://github.com/minimalstuff/ui/commit/ff99ff56768e7c7eca8f66ee50c47cc19c4417d6))
-
-## [4.1.0](https://github.com/minimalstuff/ui/compare/4.0.0...4.1.0) (2026-10-19)
-
-### Features
-
-* **checkbox:** add a visible indeterminate state ([8a9d930](https://github.com/minimalstuff/ui/commit/8a9d930495470aee5954b2de0cb145e1b7d061ea))
-* **icon-button:** add a tooltip prop ([b3c34da](https://github.com/minimalstuff/ui/commit/b3c34daa8a2e56e0ba2ebbb8318cebf241935bd8))
-* **input, textarea, select:** add a description linked by aria-describedby ([13aa3df](https://github.com/minimalstuff/ui/commit/13aa3dfbcbf4557fecf3e9a0eaa0c8497b96c1de))
-* **modal:** accept initialFocusRef ([0c3bb17](https://github.com/minimalstuff/ui/commit/0c3bb17711eee2d9166820160920d8094094d2ed))
-* **modal:** accept role to render an alertdialog ([13b45b6](https://github.com/minimalstuff/ui/commit/13b45b631d7717cbcb5f351a76d8d89930fb611d))
-* **theme-toggle:** accept a tooltip ([42371a9](https://github.com/minimalstuff/ui/commit/42371a9afa010f28433f16794970970732e484fc))
-* **toolbar:** add an accessible toolbar with roving focus ([857b824](https://github.com/minimalstuff/ui/commit/857b824e4231a0bd72627178edde849089d33a57))
-* **ui-provider:** let apps opt out of live field error announcements ([35a1569](https://github.com/minimalstuff/ui/commit/35a1569e1c3bd5feb82f26e26e11128ac7c0ecae))
-* **ui-provider:** provide default labels globally ([1b1fa1c](https://github.com/minimalstuff/ui/commit/1b1fa1cd09de4bae1c5881f636413e31854aef15))
-
-### Bug Fixes
-
-* **modal:** stop looping when ModalFooter children change on every render ([7ea4dc7](https://github.com/minimalstuff/ui/commit/7ea4dc7ddaaa86a31b693a3abca6a63dbf5c3a02))
-* **theme-toggle:** disable the view transition on WebKitGTK by default ([ae440e8](https://github.com/minimalstuff/ui/commit/ae440e86bae99cbe179fbaea2ad865becb492899))
-* **tooltip:** portal into the trigger's landmark ([235c8c9](https://github.com/minimalstuff/ui/commit/235c8c9e24c6f355114fa81bd5d8ea7210825bd0))
-* **tooltip:** skip the description when it repeats the trigger's name ([a5ae506](https://github.com/minimalstuff/ui/commit/a5ae50619bd64bfeba2ecbba8eb172fd2cc33eb7))
-
-## [4.0.0](https://github.com/minimalstuff/ui/compare/3.2.0...4.0.0) (2026-09-19)
-
-### ⚠ BREAKING CHANGES
-
-* **checkbox,switch:** the wrapper no longer stretches by default. Both
-  components shrink to their content unless `fullWidth` is set, so
-  layouts that relied on the implicit full width must pass it explicitly.
-* **combobox:** the dropdown no longer opens when the input receives focus.
-  It opens on typing, on `ArrowDown`/`ArrowUp` and on click, as the ARIA
-  authoring practices describe. Tabbing through a form no longer opens every
-  combobox on the way. No API change.
-* **focus:** keyboard focus indicators changed on purpose. The active menu
-  item and the active listbox option now carry a 2px inner outline on top of
-  their background, the tab panel and the combobox clear buttons gained an
-  outline, and the focus ring of option cards, Checkbox and Switch now shows
-  on keyboard focus only instead of on mouse click too. Several focus outline
-  and text colors were darkened to meet WCAG contrast. Visual change only; no
-  API change.
-
-### Features
-
-* **checkbox-options:** add a card-style multi-select group ([be14abe](https://github.com/minimalstuff/ui/commit/be14abef9102a195165e7db963ab36abcf1398de))
-* **checkbox,switch:** make the wrapper width opt-in ([ba4ae6a](https://github.com/minimalstuff/ui/commit/ba4ae6a7de6fc05b911a216d9bcf3bcff1c90995))
-* **checkbox:** add a card variant ([9befe98](https://github.com/minimalstuff/ui/commit/9befe9831cf72370b7e71e66433e58478b178c1b))
-* **combobox:** accept aria-label to name the input without a visible label ([4de1cd3](https://github.com/minimalstuff/ui/commit/4de1cd35abd8bb49146976074dda5b974d9fe9df))
-* **components:** export ChoiceOption shared by RadioOption and CheckboxOption ([6d58e7f](https://github.com/minimalstuff/ui/commit/6d58e7f859c4623d297d6edab2cd055e788a2db8))
-* **context-menu:** add aria-label and document keyboard access ([496b90b](https://github.com/minimalstuff/ui/commit/496b90beb418243efcf7cb55a719f8521b3f14f7))
-* **modal:** add aria-label for modals without a title ([733c8c8](https://github.com/minimalstuff/ui/commit/733c8c848f713c9fad11fd0d9c2f9b4f8a73d4e4))
-* **multi-combobox:** accept aria-label to name the trigger without a visible label ([ec2d0d0](https://github.com/minimalstuff/ui/commit/ec2d0d045bb4d40f7da7e17d528211fa25cb13c1))
-* **multi-combobox:** add searchable multi-select combobox ([abc30fb](https://github.com/minimalstuff/ui/commit/abc30fb84c25e99f88fe0a8f9af4822ee61ad7df))
-* **multi-combobox:** default radius to sm ([25ccb37](https://github.com/minimalstuff/ui/commit/25ccb374f24d6996c2d258466af1abc9e879621b))
-* **tabs:** redesign with line and segmented variants ([0f6d98c](https://github.com/minimalstuff/ui/commit/0f6d98c7cbe7d7d329ede7ad0c5a07d7a9354c99))
-
-### Bug Fixes
-
-* **a11y:** meet contrast for solid buttons in dark mode and warning, and dark kbd text ([30e723c](https://github.com/minimalstuff/ui/commit/30e723c5086606345d70912f396688f848951544))
-* **a11y:** raise light-mode contrast of low-contrast color tokens ([ee16ce3](https://github.com/minimalstuff/ui/commit/ee16ce3c6bdb0f520c8072a82acaf1de47c6583f))
-* **button:** raise focus outline contrast for neutral, success and warning ([b644254](https://github.com/minimalstuff/ui/commit/b6442540655bd92682345d3f23a909da3844001b))
-* **checkbox-options:** announce required groups to screen readers ([ef47cdb](https://github.com/minimalstuff/ui/commit/ef47cdb4582d926d91b439a60468590f409cd1dc))
-* **combobox:** stop opening on focus and fix keyboard and screen reader support ([8823a1a](https://github.com/minimalstuff/ui/commit/8823a1a3156e4550ae1e070e185ef52ecc2f8e1f))
-* **confirm-modal:** announce as an alertdialog and focus Cancel first ([5d256c0](https://github.com/minimalstuff/ui/commit/5d256c00a7130fb33016f8232e936c783c4ee2b0))
-* **field:** hide the required mark from the accessible name ([9af741d](https://github.com/minimalstuff/ui/commit/9af741d1ca9abc682a4a82c35aaf6c9ee41c559a))
-* **fields:** merge the caller's aria-describedby with the error and description ids ([ed7c15e](https://github.com/minimalstuff/ui/commit/ed7c15ef4d668ed350742255cd97e55d86fe006e))
-* **focus:** outline the active menu item, listbox option and clear buttons ([c637299](https://github.com/minimalstuff/ui/commit/c637299fe1e1033fb44b9dd3c255badfaa15b0ea))
-* **focus:** show the control focus ring on keyboard focus only ([5dae512](https://github.com/minimalstuff/ui/commit/5dae5129d069ee0500428afcfdff2c5c0298230b))
-* **input, textarea:** merge the caller's aria-describedby and link the character count ([c4bde91](https://github.com/minimalstuff/ui/commit/c4bde91823bde7b01dbc969253b89e8e7f88353f))
-* **menu-item:** meet text contrast for danger items ([a3b0b03](https://github.com/minimalstuff/ui/commit/a3b0b032cdf2fd2fcb34bef0550e5d32cd557a22))
-* **menu:** name the menu and add arrow-key opening, typeahead and nested Escape handling ([844486b](https://github.com/minimalstuff/ui/commit/844486b5c77eb904e39f43835420f4f3c300d038))
-* **modal:** scope Escape and the focus trap to the topmost modal ([6841eaa](https://github.com/minimalstuff/ui/commit/6841eaaf2e8a4f678eea582cfd7e4e13be17899e))
-* **multi-combobox:** fire onDropdownClose when clearing from the closed trigger ([8d3acc3](https://github.com/minimalstuff/ui/commit/8d3acc36715a424f8180d0c4506e8b57cd0a2430))
-* **multi-combobox:** fix keyboard focus and screen reader support ([63a436c](https://github.com/minimalstuff/ui/commit/63a436ca9466d682add7d8e7ddeec4e3fced4315))
-* **radio-options,checkbox-options:** drop invalid aria-required from fieldset ([b851832](https://github.com/minimalstuff/ui/commit/b851832375e77cf509e1beff7649c0ba0e6042c7))
-* **storybook:** stop the theme decorator reloading the page during render ([327a85d](https://github.com/minimalstuff/ui/commit/327a85d74ed52e0e7d5e5bb709a15a1c69fbb59d))
-* **tabs:** keep the tablist reachable when the active tab is disabled and drop dangling aria-controls ([5135b2b](https://github.com/minimalstuff/ui/commit/5135b2bbbcf1303d194da07589b62646e35aec3f))
-* **tabs:** show a focus outline on the tab panel ([e33d05e](https://github.com/minimalstuff/ui/commit/e33d05ea857dd6e71e85aa7a7d5988046f4a4116))
-* **tooltip:** dismiss on Escape, keep the trigger's description and announce temporary content ([90ec3a4](https://github.com/minimalstuff/ui/commit/90ec3a401acc073c29665547442ee97963037892))
-* **types:** export TabsVariant and Theme through their alias path to avoid duplicate declarations ([5249401](https://github.com/minimalstuff/ui/commit/5249401a4f2c92b010de7540c8aec768b59fc694))
-
-## [3.2.0](https://github.com/minimalstuff/ui/compare/3.1.0...3.2.0) (2026-08-14)
-
-### Features
-
-* **avatar:** add initial and picture avatar ([c2ce8d6](https://github.com/minimalstuff/ui/commit/c2ce8d63f0f3d071759419a53ed142d40a356f3a))
-* **card:** add section container with optional header ([3daa050](https://github.com/minimalstuff/ui/commit/3daa0505cbc4bad758dc37d583833551cabf22ab))
-* **card:** allow heading level and expose titled card as region ([e9fcc9e](https://github.com/minimalstuff/ui/commit/e9fcc9e0927e5e5a535dd6516ec3ac97efe9224f))
-* **menu-group:** add labelled group of menu items ([77991be](https://github.com/minimalstuff/ui/commit/77991be8f86358074a1ab52b942aa91ea7982d58))
-* **menu-group:** expose the group element through wrapperClassName ([ccee37e](https://github.com/minimalstuff/ui/commit/ccee37eb8e31d01427ca1ee51556ecf42d20a467))
-* **menu-item:** add selected state for option rows ([f31d602](https://github.com/minimalstuff/ui/commit/f31d602e772cd9a8b410fc7aa60b7b5f189687b8))
-* **menu-item:** add trailing slot for shortcuts and values ([77b1e9c](https://github.com/minimalstuff/ui/commit/77b1e9c3610f72efc4e79d20498a3eb9d7daa2de))
-* **menu-separator:** add divider between menu item groups ([247c67d](https://github.com/minimalstuff/ui/commit/247c67d9fde76a41be57d768c32a1117e743ba22))
-
-### Bug Fixes
-
-* **avatar:** derive the initial by grapheme instead of code unit ([01bb405](https://github.com/minimalstuff/ui/commit/01bb405a7ccdd0e6f172a5fb3b798a0869630f45))
-* **avatar:** hide avatar from assistive tech when unnamed ([ab67576](https://github.com/minimalstuff/ui/commit/ab6757672148bc489cbe88dc022fc4bd5ce4de3d))
-* **menu-item:** group trailing content and check mark behind one auto margin ([e83a237](https://github.com/minimalstuff/ui/commit/e83a23709403e3fdc9ecf163f0eb9c75f7bf6ac5))
-
-## [3.1.0](https://github.com/minimalstuff/ui/compare/3.0.1...3.1.0) (2026-08-14)
-
-### Features
-
-* **menu-item:** render as native link when href is passed ([6eb82ee](https://github.com/minimalstuff/ui/commit/6eb82eecccb50426d8d7c62ae8ab70fef8eb8975))
-
-## [3.0.1](https://github.com/minimalstuff/ui/compare/3.0.0...3.0.1) (2026-08-14)
-
-### ⚠ BREAKING CHANGES
-
-* **modal:** `Modal`'s `footer` prop and the `ModalBody` component are
-  removed. Declare pinned footer content with `<ModalFooter>` anywhere in
-  `children` instead.
-
-### Bug Fixes
-
-* **modal:** register ModalFooter through context instead of structural detection ([7857297](https://github.com/minimalstuff/ui/commit/78572977d2b7098b29e6786b7aadd119b249e845))
-
-## [3.0.0](https://github.com/minimalstuff/ui/compare/2.1.1...3.0.0) (2026-08-14)
-
-### ⚠ BREAKING CHANGES
-
-* **radio-options:** forward className to each option row instead of the legend
-* **button:** model unstyled as a discriminated union instead of a variant string
-* **confirm-modal:** use semantic ButtonColor names instead of red/blue/green
-
-### Features
-
-* add unstyled escape hatch to Switch, Kbd, Tabs, CharacterCount, ThemeToggle ([27f31b3](https://github.com/minimalstuff/ui/commit/27f31b35fbaee9ab6600faa86d7ae9bf38ba03a9))
-* **badge:** add Badge component ([0d42762](https://github.com/minimalstuff/ui/commit/0d42762f68bb879ec9d23515f68ebea690b1d30f))
-* **button:** model unstyled as a discriminated union instead of a variant string ([17152f1](https://github.com/minimalstuff/ui/commit/17152f1e2f12967df5e3222d8a07a0696078a99e))
-* **confirm-modal:** report onConfirm rejections through onError ([2e6082e](https://github.com/minimalstuff/ui/commit/2e6082eb52a475dcdbc8e07802cd3cd8c69b36d9))
-* **confirm-modal:** use semantic ButtonColor names instead of red/blue/green ([aa6cb49](https://github.com/minimalstuff/ui/commit/aa6cb49bd814e0c8c5081fb4ae00077685938fd8))
-* **copy-button:** add CopyButton component ([0226670](https://github.com/minimalstuff/ui/commit/0226670440668b8d77b881a54161988ae08a690d))
-* **copy-button:** report clipboard failures through onError ([898cba9](https://github.com/minimalstuff/ui/commit/898cba9970bd1589eadbf4395adff19e985cac14))
-* export every component's props type ([a5b214a](https://github.com/minimalstuff/ui/commit/a5b214a563230943a8354d28e9761e7bf7d87cfc))
-* forward className and ref on Badge, MenuItem, ContextMenu, Menu, and Tooltip ([09f7f44](https://github.com/minimalstuff/ui/commit/09f7f44c752bafa05fad2de86d640cf6f7e9a19a))
-* **highlight:** add Highlight component ([e94be2f](https://github.com/minimalstuff/ui/commit/e94be2f7d712b2b8a66f9ed481cd78e0de042239))
-* **kbd:** accept a radius prop ([e6c12ad](https://github.com/minimalstuff/ui/commit/e6c12ad434be3174fd61d425fd0d4586777610a0))
-* **kbd:** add Kbd component ([af74d4d](https://github.com/minimalstuff/ui/commit/af74d4d743c4401a548a088424076f53a0f64f6c))
-* make hardcoded UI strings overridable and drop the French default ([7184cd0](https://github.com/minimalstuff/ui/commit/7184cd0fa1279d8ecfad758bdbfd97e41936f690))
-* **menu:** add Menu, ContextMenu, and MenuItem components ([2020375](https://github.com/minimalstuff/ui/commit/20203756ce9009b04d706eb9c463d2f2afce2a39))
-* **modal:** add ModalBody/ModalFooter for pinned-footer layouts ([6158f04](https://github.com/minimalstuff/ui/commit/6158f04699eae114ed6b780156e15bc333c7ef01))
-* **tabs:** support controlled mode via the value prop ([63e2fe9](https://github.com/minimalstuff/ui/commit/63e2fe9246b605e5b4b0b0ee336262702e6bfd08))
-* **tooltip:** add Tooltip component with floating-ui collision handling ([03be1a5](https://github.com/minimalstuff/ui/commit/03be1a5922e5fd787bc2d2efff9f894b608971f3))
-
-### Bug Fixes
-
-* **button:** drop every style class for the unstyled variant ([8a6e443](https://github.com/minimalstuff/ui/commit/8a6e443cb9af778579f638454bcb0720d1efb216))
-* **checkbox:** apply the radius to the focus ring wrapper ([120814c](https://github.com/minimalstuff/ui/commit/120814c770b662a2ed54205280eed23c59a09b27))
-* **checkbox:** render no required mark when there is no label ([b153497](https://github.com/minimalstuff/ui/commit/b153497a7b900e8b392de08306616dea1319783b))
-* **context-menu:** anchor keyboard-invoked menus to the focused element ([cc81ccb](https://github.com/minimalstuff/ui/commit/cc81ccb4c7ba7f0ef07ebb76368f6b89ddae3ec1))
-* **fields:** render the required mark for node labels ([6694097](https://github.com/minimalstuff/ui/commit/66940979303dd48023b7347f3eddead85c6179cf))
-* **fields:** use the caller-supplied id verbatim ([c760b4a](https://github.com/minimalstuff/ui/commit/c760b4a0754bc2dd63a0a29586944e98d168eb5a))
-* **icon-button:** match Button height at every size ([1726951](https://github.com/minimalstuff/ui/commit/17269517638d37b33e4762939698d67fe7971740))
-* **radio-options:** forward className to each option row instead of the legend ([1acc49b](https://github.com/minimalstuff/ui/commit/1acc49b16c90661b5d5da231d62f4d0d3325dfde))
-* **radio-options:** keep option-level disabled when the group is enabled ([230238b](https://github.com/minimalstuff/ui/commit/230238bd555bc0d4c96124b0de8d8a4fe6064d08))
-* replace array-index keys with stable keys in Highlight and Tabs ([209ecb8](https://github.com/minimalstuff/ui/commit/209ecb8fcac25eebf224bf46702d657f7c172bea))
-* **stories:** pin trigger displayName to survive prod minification ([086a0d5](https://github.com/minimalstuff/ui/commit/086a0d5b66fc56887368ca127f68038a80360914))
-* **switch:** match the focus ring offsets of the other controls ([983f152](https://github.com/minimalstuff/ui/commit/983f152312a939858ff5f96c61bfa87fec7f55a8))
-* **switch:** remove the inert disabled class from the track ([7c52205](https://github.com/minimalstuff/ui/commit/7c52205c45cbeffc5cf9a611111c788cce9f47da))
-* **theme-store:** apply the stored theme at module load instead of on ThemeToggle mount ([67644ba](https://github.com/minimalstuff/ui/commit/67644ba9b94f6ef1b64464e7ff762e29b3644e04))
-* **tooltip:** derive the arrow size from a single constant ([070e30a](https://github.com/minimalstuff/ui/commit/070e30a5c35364d2acc81d135921a5642b955180))
-* **typecheck:** run tsc in build mode so the script actually checks the project ([a06d481](https://github.com/minimalstuff/ui/commit/a06d481fe727a1ea13f76e064bafba627a7d062c))
-
-## [2.1.1](https://github.com/minimalstuff/ui/compare/2.1.0...2.1.1) (2026-08-01)
-
-### Bug Fixes
-
-* **modal:** focus first focusable field on open instead of dialog ([ed1a2ca](https://github.com/minimalstuff/ui/commit/ed1a2ca2088fa6b70fb1c2cf7f18941004e6d0a2))
-* **storybook:** unmount global modal root on story opt-out ([a03ed6a](https://github.com/minimalstuff/ui/commit/a03ed6a2f225fa9a4fd5a8606c981827639dd8ce))
-
-## [2.1.0](https://github.com/minimalstuff/ui/compare/2.0.0...2.1.0) (2026-07-21)
-
-### Features
-
-* **combobox:** add searchable select with filtering ([29a3301](https://github.com/minimalstuff/ui/commit/29a3301799e879c8eb2d639dec09901e514416b6))
-* **modal:** add dismissible prop to block Escape/backdrop/close-button ([435c6eb](https://github.com/minimalstuff/ui/commit/435c6eb63d2cc90ae8e3ae3c05e232b0c95630e6))
-
-## [2.0.0](https://github.com/minimalstuff/ui/compare/1.4.0...2.0.0) (2026-07-16)
-
-### ⚠ BREAKING CHANGES
-
-* **icon-button:** IconButton no longer accepts variant="default"/"danger"
-(danger was a shape+color pair). Use variant="ghost" (default) with
-color="danger" etc. instead.
-* **button:** Button no longer accepts variant="primary"/"secondary"/
-"danger". Use variant="solid" (default) with color="primary"/"neutral"/
-"danger" instead.
-* **modal:** useModalStore, ModalConfig and related exports from
-
-### Features
-
-* add configurable border-radius and unstyled variants across components ([1e93b51](https://github.com/minimalstuff/ui/commit/1e93b51f9a848fed43862f649e15911e6bb451df))
-* **button:** split variant (shape) from color (intent) ([be3998f](https://github.com/minimalstuff/ui/commit/be3998fe91b4166de2c7755e6d3278b5a828ccfa))
-* **icon-button:** split variant (shape) from color (intent), match Button ([24e11a7](https://github.com/minimalstuff/ui/commit/24e11a7f624fc87dd11233e957a9d2b9ced878d5))
-* **modal:** switch Modal/ConfirmModal to react-call ([bbdb892](https://github.com/minimalstuff/ui/commit/bbdb892ecd98d1dec416a2840c93e514e3fad629)), closes [#stores](https://github.com/minimalstuff/ui/issues/stores)
-
-### Bug Fixes
-
-* **button:** announce loading state via aria-busy ([629298b](https://github.com/minimalstuff/ui/commit/629298b8acfca763bc474a9a7e3ee53dec17ec98))
-* **button:** keep hover/active styles and press feedback out of disabled state ([46c06b6](https://github.com/minimalstuff/ui/commit/46c06b6d6264dcc90175b282bf8568faa5347390))
-* **client-only:** use JSX fragment instead of createElement ([a9f257b](https://github.com/minimalstuff/ui/commit/a9f257b1391914f9b1a9841e5e34550415e47d74))
-* **input,textarea:** wire error state to aria-invalid/aria-describedby ([19a5d54](https://github.com/minimalstuff/ui/commit/19a5d5442ee0096a16278bf6ee906c0e3e35fa7c))
-* **modal:** add dialog semantics and focus management ([326001a](https://github.com/minimalstuff/ui/commit/326001a53626192eefb894886048cca0d01b4bd1))
-* **preview:** serve built storybook static output on correct port ([554d286](https://github.com/minimalstuff/ui/commit/554d2866285c1a6f8dcd81b20289ba6f174db950))
-* **tabs:** implement WAI-ARIA tabs keyboard pattern and id linkage ([ef94311](https://github.com/minimalstuff/ui/commit/ef9431148c84bc45de5345ffd28808d58f08bfa0))
-* **uno:** scan plain .ts files so Button color-variant classes aren't dropped ([fd0bb82](https://github.com/minimalstuff/ui/commit/fd0bb8246e2833e6bbe7ffad46012db48debc34d))
-
-## [1.4.0](https://github.com/minimalstuff/ui/compare/1.3.0...1.4.0) (2026-05-01)
-
-### Features
-
-* **radio_options:** add RadioOptions component ([4e8338e](https://github.com/minimalstuff/ui/commit/4e8338ee29231317e359b555355618ab171dd677))
-* **theme_toggle:** add size prop and update icon button implementation ([84025c5](https://github.com/minimalstuff/ui/commit/84025c5942dfd55f45a967e35b3149b4c7f1a32a))
-
-## [1.3.0](https://github.com/minimalstuff/ui/compare/1.2.3...1.3.0) (2026-04-20)
-
-### Features
-
-* **theme:** enhance theme management and state handling ([78ea30f](https://github.com/minimalstuff/ui/commit/78ea30f1d21bd9d1fd2b084b9202b6e58ec4d11e))
-
-## [1.2.3](https://github.com/minimalstuff/ui/compare/1.2.2...1.2.3) (2026-04-10)
-
-### Bug Fixes
-
-* pnpm missing packages field ([e8bd7e6](https://github.com/minimalstuff/ui/commit/e8bd7e64f3ec0f92936932c251ea548f3955b40c))
-
-## [1.2.2](https://github.com/minimalstuff/ui/compare/1.2.1...1.2.2) (2026-04-10)
-
-## [1.2.1](https://github.com/minimalstuff/ui/compare/1.2.0...1.2.1) (2026-02-28)
-
-### Bug Fixes
-
-- **theme_toggle:** move theme initialization to useEffect for fixing "localStorage is not defined" ([a01017b](https://github.com/minimalstuff/ui/commit/a01017b07c1c66be810a48ce8066e9fb96fbf8a0))
-
-## [1.2.0](https://github.com/minimalstuff/ui/compare/1.1.6...1.2.0) (2026-02-27)
-
-### Features
-
-- **theme_toggle:** add optional fullscreen transition ([a870309](https://github.com/minimalstuff/ui/commit/a870309660caaa26b4a33baa2a4e4f1609013c6c))
-
-## [1.1.6](https://github.com/minimalstuff/ui/compare/1.1.5...1.1.6) (2026-02-08)
-
-## [1.1.5](https://github.com/minimalstuff/ui/compare/1.1.4...1.1.5) (2026-02-08)
-
-### Bug Fixes
-
-- **modal:** adjust padding and height for improved responsiveness ([274af77](https://github.com/minimalstuff/ui/commit/274af77d98b4ea55fcea09086de0ec617e76083d))
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.1.4] - 2026-02-03
-
-### Added
-
-- **Modal, ConfirmModal** – `footer` prop for custom footer content.
+## [4.3.2] - 2026-10-24
 
 ### Fixed
 
-- **Modal** – Fixed modal height calculation.
+- A `Menu` or `Tooltip` around an inline trigger no longer makes the line taller than the trigger itself.
+- `Tooltip` no longer opens when its trigger is clicked or tapped: it shows on hover and on keyboard focus, and ignores touch.
 
----
+## [4.3.1] - 2026-10-24
+
+### Fixed
+
+- `Modal` and `Drawer` keep their responsive widths when the app's own CSS utilities load after the library's stylesheet.
+
+## [4.3.0] - 2026-10-23
+
+### Added
+
+- `useDismissGuard(guard, isEnabled)`, called from anywhere inside a `Modal` or `Drawer`, runs `guard` before Escape, a backdrop click or the close button closes the dialog; returning `false` keeps it open, for example to confirm before losing unsaved changes. Closing from code (`Modal.end`, `Drawer` through `isOpen`) skips the guard, and a `ConfirmModal` stacked on top keeps its own Cancel.
+
+### Fixed
+
+- Clicking the backdrop of a `Modal` or `Drawer` no longer moves focus to the page body, so a confirmation opened by the guard hands focus back inside the dialog.
+
+## [4.2.2] - 2026-10-23
+
+### Fixed
+
+- Rendering a closed `Tooltip`, or an `IconButton` or `ThemeToggle` with a `tooltip`, on the server no longer throws because of a `document` access.
+
+## [4.2.1] - 2026-10-23
+
+### Fixed
+
+- A `Button` with `loading` stays focusable: keyboard users no longer lose their place while it loads, and clicks are ignored until it finishes. It looks the same as before.
+- `ConfirmModal` keeps focus on Confirm while `onConfirm` runs.
+
+## [4.2.0] - 2026-10-23
+
+### Added
+
+- `Drawer`, a modal side panel controlled with `isOpen` and `onClose`, with `title`, `footer`, `side` (`right` or `left`), `size` (`sm`, `md`, `lg`), `dismissible`, `initialFocusRef` and `closeLabel`. The `DrawerSide` and `DrawerSize` types are exported.
+- `Modal` accepts `height="fixed"` for a fixed height with its content scrolling inside (`ModalHeight` type).
+- `Tabs` accept `orientation="vertical"` (`TabsOrientation` type).
+- `Tabs` accept `keepMounted` to keep inactive panels in the DOM instead of unmounting them.
+- A tab item accepts a `badge`, shown next to its title.
+- While a `Modal` or `Drawer` locks the page scroll, the width freed by the hidden scrollbar is exposed as the `--scrollbar-compensation` CSS variable, so you can offset your own fixed, right-anchored elements.
+
+### Changed
+
+- Scroll containers (the `Drawer` body, auto-height `Modal` content, vertical `Tabs`, and the `Combobox` and `MultiCombobox` listboxes) use a thin scrollbar that follows the theme instead of the browser's default one.
+
+### Fixed
+
+- An open `Modal` or `Drawer` stops the page from scrolling behind it even when the app sets `overflow-y: scroll` on `html`.
+- The page no longer shifts sideways when a `Modal` or `Drawer` opens or closes: the scroll lock pads the page by the width the scrollbar actually freed, and adds nothing on pages without a scrollbar or with a reserved gutter.
+- The page scroll stays locked while a stacked dialog is open.
+- `RadioOptions` with an `error` marks the group as invalid instead of each radio.
+
+## [4.1.0] - 2026-10-19
+
+### Added
+
+- `Toolbar`, an accessible toolbar where arrow keys move focus between its controls.
+- `UIProvider` sets default labels for everything below it with `labels` (`UILabels` type). Nested providers merge over their parent, and an explicit prop still wins. `ModalProvider` must sit inside `UIProvider` for modals to receive the labels.
+- `UIProvider` accepts `announceFieldErrors={false}` for apps that announce errors themselves (an error summary, focus on the first invalid field): field errors are then no longer read as alerts, and stay linked to their field.
+- `Checkbox` shows an `indeterminate` state.
+- `IconButton` accepts a `tooltip`: `true` shows its `aria-label`, a position places that tooltip, and `{ position, content }` sets custom content (`IconButtonTooltip` type). A tooltip that repeats the `aria-label` does not describe the button, so screen readers do not read the name twice.
+- `ThemeToggle` accepts a `tooltip`, like `IconButton`.
+- `Input`, `Textarea` and `Select` accept a `description`, shown under the field and linked with `aria-describedby`.
+- `Modal` accepts `initialFocusRef` to choose the element focused on open.
+- `Modal` accepts `role="alertdialog"` for an alert that must be acknowledged; combine it with `dismissible={false}` (`ModalRole` type).
+- `Tooltip` accepts `portalContainer` to choose where it renders, and `describeChild` to always (`true`) or never (`false`) describe its trigger.
+
+### Changed
+
+- `Tooltip` renders inside its trigger's closest landmark or dialog instead of `document.body`, so it stays inside a modal and passes axe's region rule.
+- By default, `Tooltip` only describes its trigger when its text differs from the trigger's accessible name.
+
+### Fixed
+
+- `ThemeToggle` no longer crashes the WebKitGTK web process on Linux: its view transition is off there by default. Pass `isTransitionEnabled` to force it on or off.
+- A `Modal` whose `ModalFooter` children change on every render, such as a render prop, no longer re-renders forever.
+
+## [4.0.0] - 2026-09-19
+
+### Breaking
+
+- `Checkbox` and `Switch` no longer stretch to the full width of their container: they shrink to their content. Pass `fullWidth` where your layout relied on the full width.
+
+  ```tsx
+  // Before
+  <Switch label="Notifications" />
+  // After
+  <Switch label="Notifications" fullWidth />
+  ```
+
+- `Combobox` no longer opens its list when the input receives focus, so tabbing through a form no longer opens every combobox on the way. It opens on typing, on ArrowDown or ArrowUp, and on click. There is no API change; update tests or flows that relied on focus to open it.
+- `Tabs` default to an underlined look (`variant="line"`). Pass `variant="segmented"` to keep the previous pill-on-a-track look.
+
+  ```tsx
+  <Tabs items={items} variant="segmented" />
+  ```
+
+- Keyboard focus indicators changed: the active menu item and the active listbox option carry a 2px inner outline on top of their background, the tab panel and the `Combobox` clear buttons have an outline, and the focus ring of option cards, `Checkbox` and `Switch` shows on keyboard focus only, not on mouse click. Visual change only; update visual snapshots if you have them.
+
+### Added
+
+- `CheckboxOptions`, a card-style multi-select group, the counterpart of `RadioOptions` (`CheckboxOption` type).
+- `Checkbox` accepts `variant="card"` to render a standalone checkbox as a selectable card, with its description inside the card.
+- `MultiCombobox`, a searchable multi-select combobox. Cap the selection with `maxSelectedValues` and disable options with `isOptionDisabled` (`MultiComboboxOption` type).
+- `Combobox` and `MultiCombobox` accept `aria-label` to name the field without a visible label.
+- `ContextMenu` accepts `aria-label`.
+- `Modal` accepts `aria-label` for modals without a title.
+- `Tabs` animate the active marker between tabs, controlled with `animated` and turned off under `prefers-reduced-motion`.
+- The `ChoiceOption` type, shared by `RadioOption` and `CheckboxOption`, and the `TabsVariant` type are exported.
+
+### Changed
+
+- Several colors are darker to meet WCAG contrast: low-contrast light-mode tokens, solid buttons in dark mode, the `warning` color, `Kbd` text in dark mode, danger `MenuItem` text, and the focus outline of neutral, success and warning buttons.
+
+### Fixed
+
+- `Combobox` supports the full keyboard pattern: ArrowDown and ArrowUp open the list on the first or last option, Alt+ArrowDown opens it without picking an option, Alt+ArrowUp closes it, Enter is not swallowed when nothing is active, and the clear button returns focus to the input. "No results" is announced from a status region, and `required` is exposed to assistive tech.
+- `Menu` has an accessible name, opens with the arrow keys, supports typeahead, and Escape in a nested menu closes only that menu.
+- With stacked modals, Escape and the focus trap apply to the topmost `Modal` only.
+- `ConfirmModal` is announced as an alert dialog and focuses Cancel first.
+- `Tooltip` closes on Escape, keeps the trigger's own `aria-describedby`, and announces temporary content.
+- The `Tabs` list stays reachable with the keyboard when the active tab is disabled, and no longer points `aria-controls` at panels that are not rendered.
+- The tab panel shows a focus outline.
+- The required mark is no longer read as part of a field's label.
+- Fields merge the `aria-describedby` you pass with their own error and description ids instead of replacing it, and `Input` and `Textarea` link their character count.
+- `RadioOptions` no longer sets an invalid `aria-required` on its fieldset.
+- The `Theme` and `TabsVariant` types are declared once in the bundled types, which avoids duplicate declaration errors.
+
+## [3.2.0] - 2026-08-14
+
+### Added
+
+- `Avatar` shows a person's initial, or their picture with `src`, with `name`, `size`, `color`, `radius` and `unstyled`. The initial handles emoji and accented letters, and an avatar without a name is hidden from assistive tech.
+- `Card`, a section container with an optional header (`title`, `description`, `actions`), `padding` and `headingLevel`. A card with a title is exposed as a region.
+- `MenuGroup` groups menu items under a `label`; `wrapperClassName` styles the group element.
+- `MenuItem` accepts `selected` to show a check mark on option rows, and `trailing` for content at the end of the row, such as a shortcut or a value.
+- `MenuSeparator` draws a divider between groups of menu items.
+
+## [3.1.0] - 2026-08-14
+
+### Added
+
+- `MenuItem` renders as a native link when you pass `href`.
+
+## [3.0.1] - 2026-08-14
+
+### Breaking
+
+- `Modal`'s `footer` prop and the `ModalBody` component are removed, and `ModalFooter` no longer accepts `className`. Put a `<ModalFooter>` anywhere inside the modal's `children`, at any depth: it is pinned below the scrolling content, even when it is rendered by your own content component.
+
+  ```tsx
+  // Before
+  Modal.call({
+    title: 'Edit',
+    footer: <Button onClick={save}>Save</Button>,
+    children: <EditForm />,
+  });
+
+  // After: EditForm renders <ModalFooter><Button onClick={save}>Save</Button></ModalFooter>
+  Modal.call({ title: 'Edit', children: <EditForm /> });
+  ```
+
+### Fixed
+
+- A `ModalFooter` rendered inside a separate content component is pinned outside the scrolling body instead of scrolling with it.
+
+## [3.0.0] - 2026-08-14
+
+### Breaking
+
+- `Button` and `IconButton` take an `unstyled` boolean instead of `variant="unstyled"`, and `ButtonVariant` no longer includes `'unstyled'`. An unstyled button cannot also receive `variant`, `color` or `radius`.
+
+  ```tsx
+  // Before
+  <Button variant="unstyled">Open</Button>
+  // After
+  <Button unstyled>Open</Button>
+  ```
+
+- `ConfirmModal`'s `confirmColor` uses the `ButtonColor` names: `red` becomes `danger`, `blue` becomes `primary` (the default), `green` becomes `success`. `ConfirmModalColor` becomes `'primary' | 'danger' | 'success'`.
+
+  ```tsx
+  // Before
+  ConfirmModal.call({ title: 'Delete?', confirmColor: 'red' });
+  // After
+  ConfirmModal.call({ title: 'Delete?', confirmColor: 'danger' });
+  ```
+
+- `RadioOptions` applies `className` to each option row instead of the legend.
+- The `useClientOnly` hook is removed: use `useIsClient`, which returns the same value. The `useRunAfterAnimation` hook is removed with no replacement. `withClientOnly` is still exported.
+
+  ```tsx
+  // Before
+  const isMounted = useClientOnly();
+  // After
+  const isMounted = useIsClient();
+  ```
+
+### Added
+
+- `Badge` (`BadgeColor`, `BadgeSize`, `BadgeVariant` types).
+- `CopyButton` copies a `value` and gives its render-prop children `copy` and `copied`; clipboard failures go to `onError`.
+- `Highlight` highlights matching parts of a text; `splitIntoHighlightSegments` and the `HighlightSegment` type are exported for custom rendering.
+- `Kbd` shows a keyboard key, with `size` and `radius`.
+- `Menu`, `ContextMenu` and `MenuItem`. A context menu opened from the keyboard is anchored to the focused element.
+- `Tooltip`, positioned with collision handling (`TooltipPosition` type).
+- `ModalFooter` for content pinned below the scrolling body of a `Modal`. `ModalBody` was added with it and removed in 3.0.1.
+- `Tabs` can be controlled with `value` and `onChange`.
+- `ConfirmModal` reports a rejected `onConfirm` through `onError`.
+- `Switch`, `Kbd`, `Tabs`, `CharacterCount` and `ThemeToggle` accept `unstyled`.
+- The `warning` color for `Button` and `IconButton`.
+- Hardcoded strings can be overridden: `closeLabel` on `Modal` and `ConfirmModal`, `clearLabel` on `Combobox`, and `getAriaLabel` on `ThemeToggle`.
+- Every component's props type is exported (`ButtonProps`, `ModalProps`, `TabsProps`…).
+
+### Changed
+
+- `ThemeToggle`'s accessible name defaults to English ("Current theme: dark") instead of French ("Thème actuel: dark"). Pass `getAriaLabel` to localize it.
+
+### Fixed
+
+- The stored theme is applied as soon as the library loads, instead of when a `ThemeToggle` mounts, so pages without a toggle also get it.
+- An unstyled `Button` no longer keeps any of the library's style classes.
+- `Checkbox` applies its `radius` to the focus ring, and shows no required mark when it has no label.
+- Fields show the required mark when their `label` is a React node.
+- Fields use the `id` you pass as is.
+- `IconButton` has the same height as `Button` at every size.
+- A disabled option in `RadioOptions` stays disabled when the group is enabled.
+- `Switch` has the same focus ring offset as the other controls.
+
+## [2.1.1] - 2026-08-01
+
+### Fixed
+
+- `Modal` focuses its first focusable field on open instead of the dialog itself.
+
+## [2.1.0] - 2026-07-21
+
+### Added
+
+- `Combobox`, a select with a search field that filters its options (`ComboboxOption` type).
+- `Modal` accepts `dismissible={false}` to block closing with Escape, the backdrop or the close button.
+
+## [2.0.0] - 2026-07-16
+
+### Breaking
+
+- `Button`'s `variant` describes the shape only (`solid`, `outline`, `ghost`, `subtle`), and the intent moves to a new `color` prop (`primary`, `neutral`, `danger`, `success`). `variant="primary"` becomes the default, `variant="secondary"` becomes `color="neutral"` and `variant="danger"` becomes `color="danger"`.
+
+  ```tsx
+  // Before
+  <Button variant="secondary">Cancel</Button>
+  <Button variant="danger">Delete</Button>
+  // After
+  <Button color="neutral">Cancel</Button>
+  <Button color="danger">Delete</Button>
+  ```
+
+- `IconButton` uses the same `variant` and `color` props as `Button`. Its default is `variant="outline"` with `color="neutral"`, so an `IconButton` without `variant` gains a border: pass `variant="ghost"` to keep it borderless. `variant="default"` and `variant="danger"` are gone.
+
+  ```tsx
+  // Before
+  <IconButton icon="i-tabler-trash" aria-label="Delete" variant="danger" />
+  // After
+  <IconButton icon="i-tabler-trash" aria-label="Delete" variant="ghost" color="danger" />
+  ```
+
+- Modals are opened with `Modal.call()` and `ConfirmModal.call()` instead of `useModalStore`. `useModalStore` and the `ModalConfig`, `BaseModalConfig`, `StandardModalConfig` and `ConfirmModalConfig` types are removed; `ModalSize` and `ConfirmModalColor` are exported from the components. Keep `<ModalProvider />` mounted once: it renders the modals. `ConfirmModal.call()` resolves to `true` when confirmed and `false` when cancelled, and rendering `<Modal isOpen onClose>` yourself is no longer supported.
+
+  ```tsx
+  // Before
+  const { open, openConfirm } = useModalStore();
+  open({ title: 'Details', children: <Details /> });
+  openConfirm({ title: 'Delete?', confirmColor: 'red', onConfirm: remove });
+
+  // After
+  Modal.call({ title: 'Details', children: <Details /> });
+  const isConfirmed = await ConfirmModal.call({ title: 'Delete?', confirmColor: 'red', onConfirm: remove });
+  ```
+
+- The theme helpers `applyTheme`, `getCurrentTheme`, `setCurrentTheme` and `followThemeState` are removed. Use `useThemeStore`, which holds `theme` and `setTheme`.
+
+  ```tsx
+  // Before
+  setCurrentTheme('dark');
+  const unsubscribe = followThemeState((theme) => render(theme));
+  // After
+  const { theme, setTheme } = useThemeStore();
+  useThemeStore.getState().setTheme('dark');
+  ```
+
+### Added
+
+- Every component accepts a `radius` (`none`, `sm`, `md`, `lg`, `xl`, `full`), and components with a clear styling layer accept an unstyled option to bring your own styles.
+- `Button` and `IconButton` combine any shape with any color, such as an outlined danger button (`ButtonColor` and `ButtonVariant` types).
+- `useDisableHotkeysWhileMounted` turns off global hotkeys while a component is mounted.
+- The `ModalProps`, `ConfirmModalProps` and `ConfirmModalResponse` types are exported.
+
+### Changed
+
+- `Modal` has a new look: larger radius and shadow, a stronger backdrop blur, tighter header and footer spacing, and medium-weight titles.
+- `ConfirmModal` shows an icon matching its `confirmColor`, and its Cancel button is outlined.
+- `IconButton` has the same hover, press and disabled feedback as `Button`.
+
+### Fixed
+
+- `ConfirmModal` with `confirmColor="green"` renders a green Confirm button instead of a blue one.
+- `Modal` is announced as a dialog labelled by its title, traps focus while open and gives focus back on close.
+- `Tabs` follow the WAI-ARIA tabs pattern: arrow keys, Home and End move between tabs, only the active tab is in the Tab order, and tabs and panels are linked.
+- `Input` and `Textarea` link their error to the field with `aria-invalid` and `aria-describedby`, like the other fields.
+- A loading `Button` is announced as busy.
+- A disabled `Button` no longer changes color or presses in on hover and click.
+
+## [1.4.0] - 2026-05-01
+
+### Added
+
+- `RadioOptions`, a group of radio options.
+- `ThemeToggle` accepts a `size` (`sm`, `md`, `lg`).
+
+## [1.3.0] - 2026-04-20
+
+### Added
+
+- The theme helpers `getCurrentTheme`, `setCurrentTheme` and `followThemeState` read, change and follow the theme outside `ThemeToggle`.
+
+### Changed
+
+- `ThemeToggle` follows theme changes made elsewhere: from another toggle, another tab, or the system preference while on `system`.
+
+## [1.2.3] - 2026-04-10
+
+No user-visible changes.
+
+## [1.2.2] - 2026-04-10
+
+### Changed
+
+- The props of `Button`, `IconButton`, `Input`, `Textarea`, `Select`, `Checkbox` and `Switch` include `ref`, so TypeScript accepts a ref on them.
+
+## [1.2.1] - 2026-02-28
+
+### Fixed
+
+- `ThemeToggle` no longer fails with "localStorage is not defined" during server rendering.
+
+## [1.2.0] - 2026-02-27
+
+### Added
+
+- `ThemeToggle` can play a fullscreen transition when the theme changes, with `isTransitionEnabled`, `transitionDuration` and `transitionEasing`.
+
+## [1.1.6] - 2026-02-08
+
+No user-visible changes.
+
+## [1.1.5] - 2026-02-08
+
+### Fixed
+
+- `Modal` padding and height adapt better to small screens.
+
+## [1.1.4] - 2026-02-08
+
+### Added
+
+- `Modal` and `ConfirmModal` accept a `footer` for custom footer content.
+
+### Fixed
+
+- `Modal` computes its height correctly.
 
 ## [1.1.3] - 2026-02-02
 
 ### Added
 
-- **Checkbox** – `description` prop for helper text below the label.
-- **Switch** – `description` prop for helper text below the label.
+- `Checkbox` and `Switch` accept a `description`, shown under the label.
 
 ### Changed
 
-- **Input, Textarea, Select, Switch, Checkbox** – `label` and (where applicable) `description` now accept `string | ReactNode` for richer labels and descriptions.
-
----
+- The `label` of `Input`, `Textarea`, `Select`, `Switch` and `Checkbox`, and their `description` where they have one, accept a React node as well as a string.
 
 ## [1.1.2] - 2026-02-02
 
 ### Fixed
 
-- **Exports** – All public APIs (components, hooks, stores, types, utils) are now re-exported from the main entry.
-
----
+- Every public component, hook, store, type and utility is exported from the main entry.
 
 ## [1.1.1] - 2026-02-02
 
-### Reverted
+### Changed
 
-- **UnoCSS on demand** (from 1.1.0): the library again ships the full prebuilt UnoCSS CSS. Import `@minimalstuff/ui/style.css` for component styles and icons (required).
-- **Removed** `@minimalstuff/ui/uno-config` export.
-- **Removed** `unocss` peer dependency.
+- The library ships its full prebuilt UnoCSS stylesheet again, reverting the on-demand styles of 1.1.0. Import `@minimalstuff/ui/style.css` for component styles and icons; it is required.
 
----
+### Removed
+
+- The `@minimalstuff/ui/uno-config` export.
+- The `unocss` peer dependency.
 
 ## [1.1.0] - 2026-02-02
 
+### Breaking
+
+- `unocss` (^66.0.0) is a required peer dependency. Install it and configure UnoCSS to scan `node_modules/@minimalstuff/ui/dist/**/*.js`, or build on the library's `uno-config`.
+- `import '@minimalstuff/ui/style.css'` no longer brings the component styles: without UnoCSS in your app scanning the library, components have no styles.
+
 ### Added
 
-- **`@minimalstuff/ui/uno-config`** – Export of the lib's UnoCSS config (presetWind4, presetIcons, presetWebFonts, `dark: 'class'`). Use it as the base of your `uno.config.ts` so presets and tokens match the lib.
-- **Checkbox** – Checkbox input with label and optional error message.
-- **Switch** – Toggle switch with label and optional error message.
-- **Select** – Select dropdown (with `SelectOption` type).
-- **ModalProvider** – Context provider for modal state and rendering.
-- **ConfirmModal** – Confirmation dialog built on Modal.
-- **modal_store** – Zustand store for opening/closing modals by id.
-- **global_hotkeys_store** – Zustand store for registering global keyboard shortcuts.
+- `@minimalstuff/ui/uno-config` exports the library's UnoCSS config (presetWind4, presetIcons, presetWebFonts, `dark: 'class'`), to use as the base of your `uno.config.ts` so presets and tokens match.
+- `Checkbox`, with a label and an optional error message.
+- `Switch`, a toggle with a label and an optional error message.
+- `Select`, a select dropdown (`SelectOption` type).
+- `ModalProvider`, which renders the modals.
+- `ConfirmModal`, a confirmation dialog built on `Modal`.
+- `useModalStore` opens and closes modals by id.
+- `useGlobalHotkeysStore` registers global keyboard shortcuts.
+- `Button` accepts `loading`, which shows a loading state and disables the button.
+- `IconButton` accepts `variant="subtle"`.
+- `Input` and `Textarea` show a required mark (`*`) when `required` is set.
 
 ### Changed
 
-- **UnoCSS on demand**: the library no longer ships prebuilt UnoCSS CSS (~30–50 kB). Styles are generated by the consuming app's UnoCSS build. Add `unocss` as a peer dependency and include the lib in your Uno config's content (see README).
-- **`@minimalstuff/ui/style.css`** is now optional: it only contains the Tabs panel animation (~0.2 kB). Import it only if you use the `Tabs` component and want the animation.
-- **Button** – Added `loading` prop (shows loading state and disables the button).
-- **IconButton** – Added `subtle` variant.
-- **Input** – Displays required indicator (`*`) when `required` is true.
-- **Textarea** – Displays required indicator (`*`) when `required` is true.
-- Dependencies updated.
-
-### Breaking
-
-- **Peer dependency**: `unocss` (^66.0.0) is now required. Install it in your app and configure UnoCSS to scan `node_modules/@minimalstuff/ui/dist/**/*.js` (or use the lib's `uno-config`).
-- If you previously relied on `import '@minimalstuff/ui/style.css'` for all component styles, you must now use UnoCSS in your app and include the lib in content; otherwise components will have no styles.
-
----
+- The library no longer ships prebuilt UnoCSS styles (about 30 to 50 kB): your app's UnoCSS build generates them. Include the library in your UnoCSS content (see the README).
+- `@minimalstuff/ui/style.css` is optional and only holds the `Tabs` panel animation (about 0.2 kB). Import it if you use `Tabs` and want the animation.
 
 ## [1.0.0] - 2026-01-31
 
 ### Added
 
-First release of **@minimalstuff/ui**, a minimal React UI component library.
+- First release of @minimalstuff/ui, a minimal React component library.
+- Components: `Button`, `CharacterCount` (character count for text fields), `ClientOnly` (renders its children on the client only, safe for server rendering), `IconButton`, `Input` (with `BASE_INPUT_STYLES` for consistent styling), `Modal`, `Tabs` (`TabItem` type), `Textarea` and `ThemeToggle` (light and dark theme switcher).
+- Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
+- Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-#### Components
-
-- **Button** – Primary action button
-- **CharacterCount** – Displays character count for text inputs
-- **ClientOnly** – Renders children only on the client (SSR-safe)
-- **IconButton** – Button with icon support
-- **Input** – Text input with optional `BASE_INPUT_STYLES` for consistent styling
-- **Modal** – Dialog/modal overlay
-- **Tabs** – Tabbed navigation (with `TabItem` type)
-- **Textarea** – Multi-line text input
-- **ThemeToggle** – Light/dark theme switcher
-
-#### Hooks
-
-- **useClientOnly** – Conditionally run logic only on the client (with `withClientOnly` HOC)
-- **useIsClient** – Returns whether the component is mounted on the client
-- **useRunAfterAnimation** – Runs a callback after CSS animation completes
-
-#### Utilities & types
-
-- **Theme** – Theme type
-- **applyTheme** – Apply light/dark theme to the document
+[Unreleased]: https://github.com/minimalstuff/ui/compare/4.3.2...HEAD
+[4.3.2]: https://github.com/minimalstuff/ui/compare/4.3.1...4.3.2
+[4.3.1]: https://github.com/minimalstuff/ui/compare/4.3.0...4.3.1
+[4.3.0]: https://github.com/minimalstuff/ui/compare/4.2.2...4.3.0
+[4.2.2]: https://github.com/minimalstuff/ui/compare/4.2.1...4.2.2
+[4.2.1]: https://github.com/minimalstuff/ui/compare/4.2.0...4.2.1
+[4.2.0]: https://github.com/minimalstuff/ui/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/minimalstuff/ui/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/minimalstuff/ui/compare/3.2.0...4.0.0
+[3.2.0]: https://github.com/minimalstuff/ui/compare/3.1.0...3.2.0
+[3.1.0]: https://github.com/minimalstuff/ui/compare/3.0.1...3.1.0
+[3.0.1]: https://github.com/minimalstuff/ui/compare/3.0.0...3.0.1
+[3.0.0]: https://github.com/minimalstuff/ui/compare/2.1.1...3.0.0
+[2.1.1]: https://github.com/minimalstuff/ui/compare/2.1.0...2.1.1
+[2.1.0]: https://github.com/minimalstuff/ui/compare/2.0.0...2.1.0
+[2.0.0]: https://github.com/minimalstuff/ui/compare/1.4.0...2.0.0
+[1.4.0]: https://github.com/minimalstuff/ui/compare/1.3.0...1.4.0
+[1.3.0]: https://github.com/minimalstuff/ui/compare/1.2.3...1.3.0
+[1.2.3]: https://github.com/minimalstuff/ui/compare/1.2.2...1.2.3
+[1.2.2]: https://github.com/minimalstuff/ui/compare/1.2.1...1.2.2
+[1.2.1]: https://github.com/minimalstuff/ui/compare/1.2.0...1.2.1
+[1.2.0]: https://github.com/minimalstuff/ui/compare/1.1.6...1.2.0
+[1.1.6]: https://github.com/minimalstuff/ui/compare/1.1.5...1.1.6
+[1.1.5]: https://github.com/minimalstuff/ui/compare/1.1.4...1.1.5
+[1.1.4]: https://github.com/minimalstuff/ui/compare/1.1.3...1.1.4
+[1.1.3]: https://github.com/minimalstuff/ui/compare/1.1.2...1.1.3
+[1.1.2]: https://github.com/minimalstuff/ui/compare/1.1.1...1.1.2
+[1.1.1]: https://github.com/minimalstuff/ui/compare/1.1.0...1.1.1
+[1.1.0]: https://github.com/minimalstuff/ui/compare/1.0.0...1.1.0
+[1.0.0]: https://github.com/minimalstuff/ui/releases/tag/1.0.0
