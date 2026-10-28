@@ -4,6 +4,15 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Changed
+
+- `Menu` and `ContextMenu` items match the `Combobox` list: tighter padding, a blue background on the keyboard-active item (red for `danger` items), darker item text, and `MenuGroup` headings shown as written instead of in uppercase.
+
+### Fixed
+
+- Closing a `Menu`, `ContextMenu`, `Modal` or `Drawer` returns focus to the element that opened it without scrolling the page.
+- Focusing an option of `RadioOptions` or `CheckboxOptions` no longer scrolls an outer scrolling container.
+
 ## [4.3.2] - 2026-10-24
 
 ### Fixed
