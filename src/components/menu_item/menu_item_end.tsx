@@ -32,7 +32,10 @@ export function MenuItemEnd({
 				// Rendered either way so picking another option doesn't reflow the
 				// row it left behind.
 				<span
-					className={clsx('i-mdi-check h-4 w-4', !selected && 'invisible')}
+					className={clsx(
+						'i-mdi-check h-4 w-4 text-blue-600 dark:text-blue-400',
+						!selected && 'invisible'
+					)}
 					aria-hidden="true"
 				/>
 			)}

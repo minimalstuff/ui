@@ -36,6 +36,26 @@ describe('MenuItem', () => {
 		expect(screen.getByText('Delete')).toHaveClass('text-red-700');
 	});
 
+	test('mutes the icon of a regular row', () => {
+		const { container } = render(
+			<MenuItem onClick={vi.fn<() => void>()} icon="i-mdi-cog">
+				Settings
+			</MenuItem>
+		);
+		expect(container.querySelector('.i-mdi-cog')).toHaveClass('text-gray-500');
+	});
+
+	test('lets the icon of a danger row inherit the red text', () => {
+		const { container } = render(
+			<MenuItem onClick={vi.fn<() => void>()} icon="i-mdi-delete" danger>
+				Delete
+			</MenuItem>
+		);
+		expect(container.querySelector('.i-mdi-delete')).not.toHaveClass(
+			'text-gray-500'
+		);
+	});
+
 	test('disables the button', () => {
 		render(
 			<MenuItem onClick={vi.fn<() => void>()} disabled>
