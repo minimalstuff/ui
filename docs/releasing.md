@@ -26,6 +26,8 @@ Publishing uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishe
 
 Publishing the GitHub Release triggers the **CI & Publish** workflow ([`publish.yml`](../.github/workflows/publish.yml)): it reruns CI, builds and runs `npm publish`. No manual step.
 
+Publishing the release also runs the **Build and Publish Storybook to GitHub Pages** workflow ([`github_pages_publish.yml`](../.github/workflows/github_pages_publish.yml)): it rebuilds the stable Storybook at `/ui/` from the release tag, while `/ui/next/` follows `main`.
+
 ## Publish a prerelease
 
 ```bash

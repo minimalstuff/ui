@@ -1,0 +1,11 @@
+import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+
+import changelog from '../CHANGELOG.md?raw';
+import { removeEmptyUnreleasedSection } from './changelog';
+import { inlineReferenceLinks } from './inline_reference_links';
+
+<Meta title="Changelog" />
+
+<Markdown>
+	{inlineReferenceLinks(removeEmptyUnreleasedSection(changelog))}
+</Markdown>
