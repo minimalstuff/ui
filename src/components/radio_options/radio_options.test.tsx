@@ -11,6 +11,13 @@ const OPTIONS = [
 ];
 
 describe('RadioOptions', () => {
+	test('positions the hidden input inside its card so focusing it never scrolls an outer container', () => {
+		render(<RadioOptions options={OPTIONS} />);
+		const input = screen.getByRole('radio', { name: 'Option A' });
+		expect(input).toHaveClass('sr-only');
+		expect(input.closest('label')).toHaveClass('relative');
+	});
+
 	test('renders an option per entry', () => {
 		render(<RadioOptions options={OPTIONS} />);
 		expect(screen.getByRole('radio', { name: 'Option A' })).toBeInTheDocument();
