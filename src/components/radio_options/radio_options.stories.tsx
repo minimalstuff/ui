@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { Button } from '#components/button/button';
+import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
+import { Menu } from '#components/menu/menu';
+import { MenuItem } from '#components/menu_item/menu_item';
+import { Switch } from '#components/switch/switch';
+import { Tooltip } from '#components/tooltip/tooltip';
 import { expectFocusOn } from '../../../.storybook/play_helpers';
 import { RadioOptions } from './radio_options';
 
@@ -293,6 +299,81 @@ export const Controlled: Story = {
 					Selected: {val}
 				</p>
 			</div>
+		);
+	},
+};
+
+const SCROLL_PANEL_HEIGHT_PX = 240;
+const SCROLL_PANEL_TOP_OFFSET_PX = 40;
+const SCROLL_PANEL_LEADING_CONTENT_PX = 600;
+
+/** Form and overlay components inside a fixed-height scrolling panel: focusing or interacting with them must never scroll anything but the panel itself. */
+export const InsideScrollingPanel: Story = {
+	args: { options: [] },
+	render: () => (
+		<div
+			data-testid="outer-scroller"
+			style={{
+				position: 'relative',
+				width: 360,
+				height: 480,
+				overflowY: 'auto',
+			}}
+		>
+			<div style={{ height: SCROLL_PANEL_TOP_OFFSET_PX }} />
+			<div
+				data-testid="panel"
+				style={{
+					height: SCROLL_PANEL_HEIGHT_PX,
+					overflowY: 'auto',
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 16,
+				}}
+			>
+				<div
+					style={{ height: SCROLL_PANEL_LEADING_CONTENT_PX, flexShrink: 0 }}
+				/>
+				<RadioOptions label="Plan" options={['Free', 'Pro', 'Team']} />
+				<CheckboxOptions label="Extras" options={['Backups', 'Alerts']} />
+				<Switch label="Notifications" />
+				<div style={{ display: 'flex', gap: 8 }}>
+					<Tooltip content="Helpful hint">
+						<Button>Hint</Button>
+					</Tooltip>
+					<Menu trigger={<Button>Actions</Button>}>
+						<MenuItem onClick={() => undefined}>Rename</MenuItem>
+					</Menu>
+				</div>
+			</div>
+			<div style={{ height: 400 }} />
+		</div>
+	),
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const outerScroller = canvas.getByTestId('outer-scroller');
+		const panel = canvas.getByTestId('panel');
+
+		await step(
+			'clicking options keeps the outer container where it is',
+			async () => {
+				panel.scrollTop = SCROLL_PANEL_LEADING_CONTENT_PX;
+				await userEvent.click(canvas.getByRole('radio', { name: 'Pro' }));
+				await userEvent.click(canvas.getByRole('checkbox', { name: 'Alerts' }));
+				await expect(outerScroller.scrollTop).toBe(0);
+			}
+		);
+
+		await step(
+			'the trigger wrappers add no space under the button',
+			async () => {
+				const button = canvas.getByRole('button', { name: 'Actions' });
+				const wrapper = button.parentElement;
+				if (!wrapper) throw new Error('expected a trigger wrapper');
+				await expect(wrapper.getBoundingClientRect().height).toBe(
+					button.getBoundingClientRect().height
+				);
+			}
 		);
 	},
 };
