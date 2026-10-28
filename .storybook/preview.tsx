@@ -30,7 +30,7 @@ const preview: Preview = {
 	parameters: {
 		options: {
 			storySort: {
-				order: ['Overview', 'Changelog', '*'],
+				order: ['Overview', 'Changelog', 'Next docs', 'Stable docs', '*'],
 			},
 		},
 		controls: {
