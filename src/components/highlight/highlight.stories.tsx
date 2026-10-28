@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Highlight } from '#components/highlight/highlight';
 
 const meta = {
-	title: 'Example/Highlight',
+	title: 'Components/Highlight',
 	component: Highlight,
 	parameters: {
 		layout: 'centered',

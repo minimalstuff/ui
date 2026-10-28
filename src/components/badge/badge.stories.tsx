@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Badge } from '#components/badge/badge';
 
 const meta = {
-	title: 'Example/Badge',
+	title: 'Components/Badge',
 	component: Badge,
 	parameters: {
 		layout: 'centered',

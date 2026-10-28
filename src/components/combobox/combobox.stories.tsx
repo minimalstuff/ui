@@ -12,7 +12,7 @@ const defaultOptions: ComboboxOption[] = [
 ];
 
 const meta = {
-	title: 'Example/Combobox',
+	title: 'Components/Combobox',
 	component: Combobox,
 	parameters: {
 		layout: 'centered',

@@ -16,7 +16,7 @@ import {
 } from '../../../.storybook/play_helpers';
 
 const meta = {
-	title: 'Example/Menu',
+	title: 'Components/Menu',
 	component: Menu,
 	parameters: {
 		layout: 'centered',

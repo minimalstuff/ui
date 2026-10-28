@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '#components/button/button';
 
 const meta = {
-	title: 'Example/Button',
+	title: 'Components/Button',
 	component: Button,
 	parameters: {
 		layout: 'centered',

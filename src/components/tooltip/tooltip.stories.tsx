@@ -10,7 +10,7 @@ import {
 } from '../../../.storybook/play_helpers';
 
 const meta = {
-	title: 'Example/Tooltip',
+	title: 'Components/Tooltip',
 	component: Tooltip,
 	parameters: {
 		layout: 'centered',

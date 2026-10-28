@@ -8,7 +8,7 @@ import {
 } from '#components/menu_item/menu_item';
 
 const meta = {
-	title: 'Example/MenuItem',
+	title: 'Components/MenuItem',
 	component: MenuItem,
 	parameters: {
 		layout: 'centered',

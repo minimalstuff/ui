@@ -9,7 +9,7 @@ import {
 } from '../../../.storybook/play_helpers';
 
 const meta = {
-	title: 'Example/IconButton',
+	title: 'Components/IconButton',
 	component: IconButton,
 	parameters: {
 		layout: 'centered',

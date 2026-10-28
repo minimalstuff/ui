@@ -5,7 +5,7 @@ import { Avatar } from '#components/avatar/avatar';
 const GITHUB_AVATAR = 'https://github.com/Sonny93.png';
 
 const meta = {
-	title: 'Example/Avatar',
+	title: 'Components/Avatar',
 	component: Avatar,
 	parameters: {
 		layout: 'centered',

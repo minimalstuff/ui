@@ -46,7 +46,7 @@ function UIProviderDemo() {
 }
 
 const meta = {
-	title: 'Example/UIProvider',
+	title: 'Components/UIProvider',
 	component: UIProvider,
 	parameters: {
 		layout: 'centered',

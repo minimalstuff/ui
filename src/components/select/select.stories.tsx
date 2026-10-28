@@ -9,7 +9,7 @@ const defaultOptions: SelectOption[] = [
 ];
 
 const meta = {
-	title: 'Example/Select',
+	title: 'Components/Select',
 	component: Select,
 	parameters: {
 		layout: 'centered',
