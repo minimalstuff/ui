@@ -184,7 +184,7 @@ export function useModalDialog({
 		const target = previouslyFocused?.isConnected
 			? previouslyFocused
 			: getFocusFallback?.();
-		target?.focus();
+		target?.focus({ preventScroll: true });
 	}, [isEnded, getFocusFallback]);
 
 	useDialogKeyboard(dialogRef, { isEnded, onDismiss, dismissible, modalToken });

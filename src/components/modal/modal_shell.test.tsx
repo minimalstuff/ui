@@ -241,6 +241,27 @@ describe('ModalShell', () => {
 		trigger.remove();
 	});
 
+	test('restores focus without scrolling the page behind the modal', () => {
+		const trigger = document.createElement('button');
+		document.body.appendChild(trigger);
+		trigger.focus();
+		const focusSpy = vi.spyOn(trigger, 'focus');
+
+		const { rerender } = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		rerender(
+			<ModalShell isEnded={true} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+
+		expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+		trigger.remove();
+	});
+
 	test('renders the footer prop in a ModalFooter by default', () => {
 		render(
 			<ModalShell

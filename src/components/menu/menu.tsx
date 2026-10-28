@@ -119,7 +119,7 @@ export function Menu({
 		close();
 		wrapperRef.current
 			?.querySelector<HTMLElement>('button, [href], [tabindex]')
-			?.focus();
+			?.focus({ preventScroll: true });
 	}, [close]);
 
 	// Memoized so React doesn't call it with `null` then the node again on
