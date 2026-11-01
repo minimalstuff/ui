@@ -26,7 +26,9 @@ The release also rebuilds the stable Storybook, from a workflow run on the relea
 
 ## Publish to npm
 
-Publishing the GitHub Release triggers the **CI & Publish** workflow ([`publish.yml`](../.github/workflows/publish.yml)): it reruns CI, builds and runs `npm publish`. No manual step.
+Publishing the GitHub Release triggers the **CI & Publish** workflow ([`publish.yml`](../.github/workflows/publish.yml)): it reruns CI, builds and packs the tarball in a job without publishing rights, then a separate job publishes that tarball with `npm publish`. No manual step.
+
+The publish job runs in the `npm` GitHub environment. Protection rules (a required reviewer or a tag rule) are set in **Settings > Environments > npm** on GitHub, and the npm trusted publisher entry can be bound to that environment on npmjs.com; until then the environment changes nothing.
 
 Publishing the release also runs the **Build and Publish Storybook to GitHub Pages** workflow ([`github_pages_publish.yml`](../.github/workflows/github_pages_publish.yml)): it rebuilds the stable Storybook at `/ui/` from the release tag, while `/ui/next/` follows `main`.
 
