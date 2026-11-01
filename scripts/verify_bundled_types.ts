@@ -56,10 +56,10 @@ export function findUnexportedDuplicates(
 function reportUnexportedDuplicate(duplicateName: string): void {
 	console.error(
 		`${duplicateName}: bundled as a duplicate declaration that is never exported. ` +
-			'This usually happens when the barrel re-exports it via a relative import path ' +
-			"while another module imports it via the '#...' alias path, so vite-plugin-dts " +
-			'treats them as two separate modules. Re-export it from the barrel using the ' +
-			'alias path instead.'
+			'The type is declared in a component module imported through both relative and ' +
+			"'#...' paths. Move it to a types-only module (like tooltip/tooltip_position.ts), " +
+			"import it via '#components/...' everywhere, and re-export it from its component " +
+			'or with `export type` from the barrel.'
 	);
 }
 

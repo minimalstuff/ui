@@ -18,9 +18,9 @@ The release also rebuilds the stable Storybook, from a workflow run on the relea
    pnpm release <increment>
    ```
 
-   release-it runs the checks, tests and build, turns `Unreleased` into the new version's section, commits `chore: release v<version>`, tags `<version>` and pushes. Hooks and options live in [`.release-it.json`](../.release-it.json).
+   release-it runs `pnpm verify` (checks, tests and build), turns `Unreleased` into the new version's section, commits `chore: release v<version>`, tags `<version>` and pushes. Hooks and options live in [`.release-it.json`](../.release-it.json).
 
-   To preview without touching anything, run `pnpm release <increment> --dry-run`.
+   To preview the version and changelog without changing anything, run `pnpm release <increment> --dry-run`. A dry run skips the hooks, so it does not run `pnpm verify`.
 
 4. release-it opens the GitHub Release form in the browser, prefilled with the new version's changelog section. Publish it.
 
@@ -28,9 +28,9 @@ The release also rebuilds the stable Storybook, from a workflow run on the relea
 
 Publishing the GitHub Release triggers the **CI & Publish** workflow ([`publish.yml`](../.github/workflows/publish.yml)): it reruns CI, builds and packs the tarball in a job without publishing rights, then a separate job publishes that tarball with `npm publish`. No manual step.
 
-The publish job runs in the `npm` GitHub environment. Protection rules (a required reviewer or a tag rule) are set in **Settings > Environments > npm** on GitHub, and the npm trusted publisher entry can be bound to that environment on npmjs.com; until then the environment changes nothing.
+The publish job runs in the `npm` GitHub environment. Binding the npm trusted publisher entry to that environment on npmjs.com makes npm reject a token from any other job. A required reviewer in **Settings > Environments > npm** adds little with a single maintainer: whoever can publish a GitHub Release can also approve the deployment.
 
-Publishing the release also runs the **Build and Publish Storybook to GitHub Pages** workflow ([`github_pages_publish.yml`](../.github/workflows/github_pages_publish.yml)): it rebuilds the stable Storybook at `/ui/` from the release tag, while `/ui/next/` follows `main`.
+Publishing the release also runs the **Build and Publish Storybook to GitHub Pages** workflow ([`github_pages_publish.yml`](../.github/workflows/github_pages_publish.yml)): it rebuilds the stable Storybook at `/ui/` from the latest stable GitHub Release (a prerelease leaves it as it is), while `/ui/next/` follows `main`.
 
 ## Publish a prerelease
 

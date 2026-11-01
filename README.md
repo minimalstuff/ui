@@ -62,7 +62,7 @@ pnpm dev
 Before pushing, run what CI runs (see [`ci.yml`](.github/workflows/ci.yml)):
 
 ```bash
-pnpm check && pnpm test && pnpm test:stories && pnpm build
+pnpm verify
 ```
 
 `pnpm test:stories` runs the stories in a real browser and needs Playwright's Chromium once: `pnpm exec playwright install chromium`.
