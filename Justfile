@@ -1,8 +1,11 @@
 dev:
 	@pnpm run dev
 
-ci:
-	@pnpm run ci
+storybook-ci:
+	@pnpm run storybook:ci
+
+verify:
+	@pnpm run verify
 
 storybook:
 	@pnpm run storybook
