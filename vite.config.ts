@@ -2,6 +2,7 @@
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
@@ -10,6 +11,25 @@ import dts from 'vite-plugin-dts';
 const dirname = import.meta.dirname;
 
 const isLibBuild = process.env.VITE_BUILD_LIB === '1';
+
+const packageManifest = JSON.parse(
+	readFileSync(path.resolve(dirname, 'package.json'), 'utf8')
+) as {
+	dependencies?: Record<string, string>;
+	peerDependencies?: Record<string, string>;
+};
+
+const EXTERNAL_PACKAGE_NAMES = [
+	...Object.keys(packageManifest.dependencies ?? {}),
+	...Object.keys(packageManifest.peerDependencies ?? {}),
+];
+
+function isExternalModule(moduleId: string) {
+	return EXTERNAL_PACKAGE_NAMES.some(
+		(packageName) =>
+			moduleId === packageName || moduleId.startsWith(`${packageName}/`)
+	);
+}
 
 const STORYBOOK_BROWSER_LAUNCH_OPTIONS = {
 	args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
@@ -38,7 +58,7 @@ export default defineConfig({
 			fileName: 'minimalstuff-ui',
 		},
 		rolldownOptions: {
-			external: ['react', 'react-dom', 'react/jsx-runtime'],
+			external: isExternalModule,
 			output: {
 				globals: {},
 			},
