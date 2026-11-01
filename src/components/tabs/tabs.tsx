@@ -1,4 +1,4 @@
-import './tabs.css';
+import '#components/tabs/tabs.css';
 
 import { type ReactNode, useId, useRef } from 'react';
 

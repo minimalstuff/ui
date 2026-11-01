@@ -12,12 +12,12 @@ import { Drawer, type DrawerProps } from '#components/drawer/drawer';
 import { Input } from '#components/input/input';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { ModalFooter } from '#components/modal/modal_footer';
-import { consumerUtilitiesDecorator } from '../../../.storybook/consumer_utilities_decorator';
+import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
 import {
 	expectFocusOn,
 	getPortalScope,
 	waitPastModalExitAnimation,
-} from '../../../.storybook/play_helpers';
+} from '#storybook/play_helpers';
 
 type DrawerTriggerProps = Omit<DrawerProps, 'isOpen' | 'onClose'>;
 

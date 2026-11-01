@@ -7,7 +7,7 @@ import { axe } from 'vitest-axe';
 
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
-import { Toolbar } from './toolbar';
+import { Toolbar } from '#components/toolbar/toolbar';
 
 type RenderToolbarOptions = {
 	orientation?: 'horizontal' | 'vertical';

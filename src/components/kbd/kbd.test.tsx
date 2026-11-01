@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Kbd } from './kbd';
+import { Kbd } from '#components/kbd/kbd';
 
 describe('Kbd', () => {
 	test('renders children inside a kbd element', () => {

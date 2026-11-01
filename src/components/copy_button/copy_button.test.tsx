@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { act, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { CopyButton } from './copy_button';
+import { CopyButton } from '#components/copy_button/copy_button';
 
 function stubClipboard(writeText: (text: string) => Promise<void>) {
 	Object.defineProperty(navigator, 'clipboard', {

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { CheckboxOptions } from './checkbox_options';
+import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

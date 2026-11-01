@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { useControlledLength } from './use_controlled_length';
+import { useControlledLength } from '#components/shared/use_controlled_length';
 
 describe('useControlledLength', () => {
 	test('starts at the default value length when uncontrolled', () => {

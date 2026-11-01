@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Badge } from './badge';
+import { Badge } from '#components/badge/badge';
 
 describe('Badge', () => {
 	test('renders children', () => {

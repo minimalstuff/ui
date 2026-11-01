@@ -3,8 +3,8 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
+import { ContextMenu } from '#components/context_menu/context_menu';
 import { MenuItem } from '#components/menu_item/menu_item';
-import { ContextMenu } from './context_menu';
 
 describe('ContextMenu', () => {
 	test('is closed by default', () => {

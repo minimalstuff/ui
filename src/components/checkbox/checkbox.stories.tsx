@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { expectFocusOn } from '../../../.storybook/play_helpers';
-import { Checkbox } from './checkbox';
+import { Checkbox } from '#components/checkbox/checkbox';
+import { expectFocusOn } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/Checkbox',

@@ -4,7 +4,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { IconButton } from './icon_button';
+import { IconButton } from '#components/icon_button/icon_button';
 
 describe('IconButton', () => {
 	test('should have no axe violations when rendered with an aria-label', async () => {

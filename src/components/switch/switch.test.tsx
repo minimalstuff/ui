@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import type { ChangeEvent } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { Switch } from './switch';
+import { Switch } from '#components/switch/switch';
 
 describe('Switch', () => {
 	test('renders label', () => {

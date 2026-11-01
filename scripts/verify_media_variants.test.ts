@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { findMediaVariantTokens } from './verify_media_variants.ts';
+import { findMediaVariantTokens } from '#scripts/verify_media_variants';
 
 test('should flag a breakpoint variant', () => {
 	expect(findMediaVariantTokens("'p-2 sm:w-[1rem]'")).toEqual(['sm:w-[1rem]']);

@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Tabs } from './tabs';
+import { Tabs } from '#components/tabs/tabs';
 
 const ITEMS = [
 	{ title: 'First', content: 'First content' },

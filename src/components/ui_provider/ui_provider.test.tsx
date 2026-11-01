@@ -12,7 +12,7 @@ import { Modal } from '#components/modal/modal';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
 import { MultiCombobox } from '#components/multi_combobox/multi_combobox';
 import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
-import { UIProvider } from './ui_provider';
+import { UIProvider } from '#components/ui_provider/ui_provider';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { useGlobalHotkeysStore } from './global_hotkeys_store';
+import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
 
 describe('useGlobalHotkeysStore', () => {
 	test('starts with hotkeys enabled', () => {

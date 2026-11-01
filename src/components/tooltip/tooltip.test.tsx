@@ -10,7 +10,7 @@ import {
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Tooltip } from './tooltip';
+import { Tooltip } from '#components/tooltip/tooltip';
 
 const EXIT_ANIMATION_DURATION_MS = 150;
 const POINTER_LEAVE_GRACE_MS = 100;

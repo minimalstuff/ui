@@ -28,13 +28,13 @@ describe('useThemeStore with blocked storage', () => {
 			throw new DOMException('blocked', 'SecurityError');
 		});
 
-		const { useThemeStore } = await import('./theme_store');
+		const { useThemeStore } = await import('#stores/theme_store/theme_store');
 
 		expect(useThemeStore.getState().theme).toBe('system');
 	});
 
 	test('should apply and set the theme when localStorage write throws', async () => {
-		const { useThemeStore } = await import('./theme_store');
+		const { useThemeStore } = await import('#stores/theme_store/theme_store');
 		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
 			throw new DOMException('quota', 'QuotaExceededError');
 		});

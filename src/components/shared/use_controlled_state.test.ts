@@ -2,7 +2,7 @@ import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { useControlledState } from './use_controlled_state';
+import { useControlledState } from '#components/shared/use_controlled_state';
 
 describe('useControlledState', () => {
 	test('starts at the default value when uncontrolled', () => {

@@ -1,6 +1,9 @@
 import { describe, expect, test } from 'vitest';
 
-import { getAccessibleName, normalizeText } from './accessible_name';
+import {
+	getAccessibleName,
+	normalizeText,
+} from '#components/shared/accessible_name';
 
 function createElement(markup: string): Element {
 	document.body.innerHTML = markup;

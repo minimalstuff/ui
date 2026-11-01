@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Input } from './input';
+import { Input } from '#components/input/input';
 
 describe('Input', () => {
 	test('renders label', () => {

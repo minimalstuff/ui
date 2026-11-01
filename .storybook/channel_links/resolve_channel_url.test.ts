@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveChannelUrl } from './resolve_channel_url';
+import { resolveChannelUrl } from '#storybook/channel_links/resolve_channel_url';
 
 const STABLE_TO_NEXT_HREF = './next/';
 const NEXT_TO_STABLE_HREF = '../';

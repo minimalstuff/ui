@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Avatar } from './avatar';
+import { Avatar } from '#components/avatar/avatar';
 
 describe('Avatar', () => {
 	test('renders the first letter of the name', () => {

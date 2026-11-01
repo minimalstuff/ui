@@ -11,7 +11,7 @@ import { createRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { MenuItem } from '#components/menu_item/menu_item';
-import { SplitButton } from './split_button';
+import { SplitButton } from '#components/split_button/split_button';
 
 function renderSplitButton(
 	props: Partial<React.ComponentProps<typeof SplitButton>> = {}

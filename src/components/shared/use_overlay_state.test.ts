@@ -1,7 +1,10 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { useEnterOnPositioned, useOverlayState } from './use_overlay_state';
+import {
+	useEnterOnPositioned,
+	useOverlayState,
+} from '#components/shared/use_overlay_state';
 
 describe('useOverlayState', () => {
 	test('starts unmounted and hidden', () => {

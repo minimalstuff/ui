@@ -1,6 +1,6 @@
 import { beforeEach } from 'vitest';
 
-import { resetGlobalModalRoot } from './modal_root_decorator';
+import { resetGlobalModalRoot } from '#storybook/modal_root_decorator';
 
 const DISABLE_TRANSITIONS_AND_ANIMATIONS_CSS = `
 *, *::before, *::after {

@@ -4,8 +4,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { MenuSurface } from '#components/menu/menu_surface';
+import { MenuGroup } from '#components/menu_group/menu_group';
 import { MenuItem } from '#components/menu_item/menu_item';
-import { MenuGroup } from './menu_group';
 
 function renderThemeGroup() {
 	return render(

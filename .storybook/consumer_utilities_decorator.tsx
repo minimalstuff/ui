@@ -1,6 +1,6 @@
 import type { Decorator } from '@storybook/react-vite';
 
-import { ConsumerUtilities } from './consumer_utilities';
+import { ConsumerUtilities } from '#storybook/consumer_utilities';
 
 /**
  * Simulates a consumer app whose own utility stylesheet is loaded after

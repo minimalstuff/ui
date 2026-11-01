@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import { CONTROL_BG, SURFACE_BORDER } from '#components/shared/surface_tokens';
-import type { OverviewEntry } from './overview_entry.js';
+import type { OverviewEntry } from '#overview/overview_entry';
 
 const DOCS_STORY_SUFFIX = 'docs';
 

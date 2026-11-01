@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { findUnexportedDuplicates } from './verify_bundled_types.ts';
+import { findUnexportedDuplicates } from '#scripts/verify_bundled_types';
 
 test('should report a duplicate declaration that is not re-exported', () => {
 	const declarations = `

@@ -6,8 +6,8 @@ import { createPortal } from 'react-dom';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { ModalFooter } from './modal_footer';
-import { ModalShell } from './modal_shell';
+import { ModalFooter } from '#components/modal/modal_footer';
+import { ModalShell } from '#components/modal/modal_shell';
 
 function ModalShellWithInitialFocus() {
 	const cancelRef = useRef<HTMLButtonElement>(null);

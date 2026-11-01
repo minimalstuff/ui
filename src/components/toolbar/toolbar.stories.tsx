@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 
 import { IconButton } from '#components/icon_button/icon_button';
 import { Toolbar } from '#components/toolbar/toolbar';
-import { expectFocusOn } from '../../../.storybook/play_helpers';
+import { expectFocusOn } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/Toolbar',

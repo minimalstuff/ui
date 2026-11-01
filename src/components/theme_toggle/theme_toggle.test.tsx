@@ -9,8 +9,8 @@ import {
 } from '@testing-library/react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
+import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
 import { useThemeStore } from '#stores/theme_store/theme_store';
-import { ThemeToggle } from './theme_toggle';
 
 const WEBKIT_GTK_USER_AGENT =
 	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15';

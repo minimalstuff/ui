@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { Combobox } from './combobox';
+import { Combobox } from '#components/combobox/combobox';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

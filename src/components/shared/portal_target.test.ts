@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { findLandmarkPortalTarget } from './portal_target';
+import { findLandmarkPortalTarget } from '#components/shared/portal_target';
 
 describe('findLandmarkPortalTarget', () => {
 	test('should return the closest landmark when the element is inside one', () => {

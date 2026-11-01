@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { getTabbableElements } from './tabbable';
+import { getTabbableElements } from '#components/shared/tabbable';
 
 function renderContainer(html: string): HTMLElement {
 	const container = document.createElement('div');

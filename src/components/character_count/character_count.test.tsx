@@ -3,8 +3,8 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
+import { CharacterCount } from '#components/character_count/character_count';
 import { Input } from '#components/input/input';
-import { CharacterCount } from './character_count';
 
 describe('CharacterCount', () => {
 	test('shows a plain current/max count when showMin/showMax are unset', () => {

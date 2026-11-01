@@ -3,10 +3,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { IconButton } from '#components/icon_button/icon_button';
-import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
+import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/IconButton',

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { isTopmostModal, registerModal } from './modal_stack';
+import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
 
 describe('modal stack', () => {
 	test('a single registered modal is topmost', () => {

@@ -2,18 +2,18 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, test } from 'vitest';
 
-import { Combobox } from './combobox/combobox';
-import { ContextMenu } from './context_menu/context_menu';
-import { Drawer } from './drawer/drawer';
-import { IconButton } from './icon_button/icon_button';
-import { Menu } from './menu/menu';
-import { MenuItem } from './menu_item/menu_item';
-import { ModalProvider } from './modal_provider/modal_provider';
-import { Tabs } from './tabs/tabs';
-import { ThemeToggle } from './theme_toggle/theme_toggle';
-import { Toolbar } from './toolbar/toolbar';
-import { Tooltip } from './tooltip/tooltip';
-import { UIProvider } from './ui_provider/ui_provider';
+import { Combobox } from '#components/combobox/combobox';
+import { ContextMenu } from '#components/context_menu/context_menu';
+import { Drawer } from '#components/drawer/drawer';
+import { IconButton } from '#components/icon_button/icon_button';
+import { Menu } from '#components/menu/menu';
+import { MenuItem } from '#components/menu_item/menu_item';
+import { ModalProvider } from '#components/modal_provider/modal_provider';
+import { Tabs } from '#components/tabs/tabs';
+import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
+import { Toolbar } from '#components/toolbar/toolbar';
+import { Tooltip } from '#components/tooltip/tooltip';
+import { UIProvider } from '#components/ui_provider/ui_provider';
 
 describe('server-side rendering', () => {
 	test('has no document, so a render-time document access would throw', () => {

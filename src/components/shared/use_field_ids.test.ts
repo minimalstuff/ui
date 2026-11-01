@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { useFieldIds } from './use_field_ids';
+import { useFieldIds } from '#components/shared/use_field_ids';
 
 describe('useFieldIds', () => {
 	test('uses the caller-supplied id verbatim', () => {

@@ -1,19 +1,19 @@
 import 'virtual:uno.css';
-import './dark_canvas.css';
+import '#storybook/dark_canvas.css';
 
 import type { Preview } from '@storybook/react-vite';
 import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 
-import { modalRootDecorator } from './modal_root_decorator';
-import { DEFAULT_MOTION_MODE } from './motion';
-import { motionDecorator, motionGlobalTypes } from './motion/toolbar';
-import { getThemePreference } from './theme';
-import { getDocsTheme } from './theme/docs_theme';
+import { modalRootDecorator } from '#storybook/modal_root_decorator';
+import { DEFAULT_MOTION_MODE } from '#storybook/motion/index';
+import { motionDecorator, motionGlobalTypes } from '#storybook/motion/toolbar';
+import { getDocsTheme } from '#storybook/theme/docs_theme';
+import { getThemePreference } from '#storybook/theme/index';
 import {
 	themeClassDecorator,
 	themeGlobalTypes,
 	themeSyncDecorator,
-} from './theme/toolbar';
+} from '#storybook/theme/toolbar';
 
 const preview: Preview = {
 	globalTypes: { ...themeGlobalTypes, ...motionGlobalTypes },

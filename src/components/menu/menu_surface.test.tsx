@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { MenuSurface } from './menu_surface';
+import { MenuSurface } from '#components/menu/menu_surface';
 
 function renderSurface(
 	overrides: Partial<React.ComponentProps<typeof MenuSurface>> = {}

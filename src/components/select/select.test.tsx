@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Select } from './select';
+import { Select } from '#components/select/select';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

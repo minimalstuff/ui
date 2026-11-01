@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { type SyntheticEvent, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { expectFocusOn } from '../../../.storybook/play_helpers';
-import { Combobox, type ComboboxOption } from './combobox';
+import { Combobox, type ComboboxOption } from '#components/combobox/combobox';
+import { expectFocusOn } from '#storybook/play_helpers';
 
 const defaultOptions: ComboboxOption[] = [
 	{ value: 'apple', label: 'Apple' },
@@ -203,9 +203,9 @@ export const LongList: Story = {
 			'open the list and move well past the visible options',
 			async () => {
 				await userEvent.click(combobox);
-				for (let index = 0; index < LONG_LIST_ARROW_DOWN_PRESSES; index += 1) {
-					await userEvent.keyboard('{ArrowDown}');
-				}
+				await userEvent.keyboard(
+					`{ArrowDown>${LONG_LIST_ARROW_DOWN_PRESSES}/}`
+				);
 			}
 		);
 

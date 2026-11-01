@@ -21,7 +21,7 @@ function ModalProviderDemo() {
 			confirmLabel: 'Yes',
 			cancelLabel: 'No',
 			onConfirm: async () => {
-				await new Promise((r) => setTimeout(r, 500));
+				await new Promise((resolve) => setTimeout(resolve, 500));
 			},
 		});
 	};
@@ -34,7 +34,7 @@ function ModalProviderDemo() {
 			cancelLabel: 'Cancel',
 			confirmColor: 'danger',
 			onConfirm: async () => {
-				await new Promise((r) => setTimeout(r, 500));
+				await new Promise((resolve) => setTimeout(resolve, 500));
 			},
 		});
 	};

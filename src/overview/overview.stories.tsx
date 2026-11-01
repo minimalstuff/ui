@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { OVERVIEW_GROUPS } from './overview_groups.js';
-import { OverviewSection } from './overview_section.js';
+import { OVERVIEW_GROUPS } from '#overview/overview_groups';
+import { OverviewSection } from '#overview/overview_section';
 
 function OverviewPage() {
 	return (

@@ -8,7 +8,7 @@ import {
 	vi,
 } from 'vitest';
 
-import type * as ThemeStoreModule from './theme_store';
+import type * as ThemeStoreModule from '#stores/theme_store/theme_store';
 
 type MediaQueryMock = {
 	matches: boolean;
@@ -30,7 +30,7 @@ beforeAll(async () => {
 	};
 	vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(mediaQueryMock));
 
-	({ useThemeStore } = await import('./theme_store'));
+	({ useThemeStore } = await import('#stores/theme_store/theme_store'));
 
 	systemThemeChangeHandler = mediaQueryMock.addEventListener.mock
 		.calls[0][1] as () => void;
@@ -53,7 +53,7 @@ describe('useThemeStore', () => {
 		localStorage.setItem('theme', 'dark');
 		vi.resetModules();
 
-		await import('./theme_store');
+		await import('#stores/theme_store/theme_store');
 
 		expect(document.documentElement.classList.contains('dark')).toBe(true);
 	});
