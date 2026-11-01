@@ -27,6 +27,12 @@ const TEXT_ENTRY_SELECTOR = [
 	`input:not(${NON_TEXT_INPUT_TYPES.map((type) => `[type="${type}"]`).join(', ')})`,
 ].join(', ');
 
+const ARROW_KEY_CONTROL_SELECTOR = [
+	'select',
+	'input[type="range"]',
+	'input[type="radio"]',
+].join(', ');
+
 function isDisabledItem(element: HTMLElement): boolean {
 	return element.matches(':disabled, [aria-disabled="true"]');
 }
@@ -39,6 +45,9 @@ export function getEnabledItems(toolbar: HTMLElement): HTMLElement[] {
 	return getAllItems(toolbar).filter((element) => !isDisabledItem(element));
 }
 
-export function isTextEntry(element: EventTarget | null): boolean {
-	return element instanceof HTMLElement && element.matches(TEXT_ENTRY_SELECTOR);
+export function ownsArrowKeys(element: EventTarget | null): boolean {
+	return (
+		element instanceof HTMLElement &&
+		element.matches(`${TEXT_ENTRY_SELECTOR}, ${ARROW_KEY_CONTROL_SELECTOR}`)
+	);
 }
