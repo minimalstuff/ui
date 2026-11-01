@@ -10,6 +10,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
 - `Tabs` takes optional `aria-label` and `aria-labelledby` props that name its tab list, to tell several tab sets apart on one page.
 - `Modal` logs a warning in development when it has neither a `title` nor an `aria-label`, since screen readers would announce an unnamed dialog.
+- `Checkbox` and `Switch` log a warning in development when they have no `label`, `aria-label` or `aria-labelledby`.
 - `UIProvider` labels `copied`, `loading` and `charactersRemaining`, used by the new screen-reader announcements below; translate them like the other labels.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 
@@ -37,6 +38,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - A `label` passed as a React node instead of a string now names its control in `Input`, `Textarea`, `Select`, `Combobox` and `MultiCombobox`, and names the `Combobox` and `MultiCombobox` lists.
 - `CopyButton` announces "Copied" to screen readers after a successful copy.
 - `CharacterCount` (and `Input` or `Textarea` with a character count) announces the remaining characters to screen readers when 10% are left and when the limit is reached, not on every keystroke.
+- The required asterisk of `Checkbox`, `Switch` and `RadioOptions` is no longer read aloud; the native required state is announced instead.
+- Option descriptions in `RadioOptions`, `CheckboxOptions` and the `Checkbox` card variant are read once, as a description, instead of also inside the option name.
 - `IconButton` no longer renders a `div` inside its `button` (invalid HTML).
 
 ## [4.3.3] - 2026-10-29

@@ -7,12 +7,15 @@ import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_cont
 import { ModalHeader } from '#components/modal/modal_header';
 import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
-import { useWarnUnnamedModal } from '#components/modal/use_warn_unnamed_modal';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	OVERLAY_BG,
 	THIN_SCROLLBAR_SCOPE,
 } from '#components/shared/surface_tokens';
+import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
+
+const MODAL_UNNAMED_GUIDANCE =
+	'a dialog needs an accessible name. Provide a non-empty `title` or `aria-label` prop.';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -86,7 +89,11 @@ export function ModalShell({
 		handleBackdropMouseDown,
 	} = useModalDialog({ isEnded, onDismiss, dismissible, initialFocusRef });
 
-	useWarnUnnamedModal({ title, ariaLabel });
+	useWarnUnnamed(
+		'Modal',
+		Boolean(title) || Boolean(ariaLabel?.trim()),
+		MODAL_UNNAMED_GUIDANCE
+	);
 	const { focusClassName, ...scrollableProps } = useKeyboardScrollable(
 		contentRef,
 		{ labelledBy: title ? titleId : undefined, label: ariaLabel }

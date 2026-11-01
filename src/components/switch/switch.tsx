@@ -3,18 +3,17 @@ import { type ComponentPropsWithRef, type ReactNode } from 'react';
 
 import { FieldDescription } from '#components/shared/field_description';
 import { FieldError } from '#components/shared/field_error';
-import {
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
-} from '#components/shared/field_styles';
+import { FIELD_LABEL_TEXT } from '#components/shared/field_styles';
 import {
 	CONTROL_FOCUS_RING,
 	CONTROL_FOCUS_RING_COLOR,
 } from '#components/shared/focus_styles';
 import { joinIds } from '#components/shared/join_ids';
+import { RequiredMark } from '#components/shared/required_mark';
 import { SELECTED_FILL } from '#components/shared/surface_tokens';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
 
 export interface SwitchProps extends Omit<
 	ComponentPropsWithRef<'input'>,
@@ -42,6 +41,8 @@ export function Switch({
 	onChange,
 	id,
 	'aria-describedby': callerDescribedBy,
+	'aria-label': ariaLabel,
+	'aria-labelledby': ariaLabelledBy,
 	...props
 }: Readonly<SwitchProps>) {
 	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
@@ -50,6 +51,13 @@ export function Switch({
 		callerDescribedBy,
 		Boolean(description) && descriptionId,
 		error && errorId
+	);
+
+	useWarnUnnamed(
+		'Switch',
+		Boolean(label) ||
+			Boolean(ariaLabel?.trim()) ||
+			Boolean(ariaLabelledBy?.trim())
 	);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +97,8 @@ export function Switch({
 						onChange={handleChange}
 						aria-invalid={!!error}
 						aria-describedby={describedBy}
+						aria-label={ariaLabel}
+						aria-labelledby={ariaLabelledBy}
 						{...props}
 					/>
 					<span
@@ -105,16 +115,12 @@ export function Switch({
 						{typeof label === 'string' ? (
 							<span className={clsx(FIELD_LABEL_TEXT, 'select-none')}>
 								{label}
-								{props.required && (
-									<span className={FIELD_REQUIRED_MARK}>*</span>
-								)}
+								{props.required && <RequiredMark />}
 							</span>
 						) : (
 							<>
 								{label}
-								{props.required && (
-									<span className={FIELD_REQUIRED_MARK}>*</span>
-								)}
+								{props.required && <RequiredMark />}
 							</>
 						)}
 					</>

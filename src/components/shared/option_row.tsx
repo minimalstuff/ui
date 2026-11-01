@@ -93,6 +93,7 @@ export function OptionRow({
 					<span
 						id={descriptionId}
 						className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-0.5')}
+						aria-hidden="true"
 					>
 						{item.description}
 					</span>

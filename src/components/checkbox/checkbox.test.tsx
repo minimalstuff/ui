@@ -259,4 +259,38 @@ describe('Checkbox', () => {
 		const { container } = render(<Checkbox label="Select all" indeterminate />);
 		expect(await axe(container)).toHaveNoViolations();
 	});
+
+	test('should exclude the description from the accessible name and expose it as description when card variant', () => {
+		render(
+			<Checkbox
+				variant="card"
+				label="Accept terms"
+				description="Read the fine print"
+			/>
+		);
+		const checkbox = screen.getByRole('checkbox');
+
+		expect(checkbox).toHaveAccessibleName('Accept terms');
+		expect(checkbox).toHaveAccessibleDescription('Read the fine print');
+	});
+
+	test('should warn when neither label nor aria-label is given', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(<Checkbox />);
+
+		expect(warn).toHaveBeenCalledWith(
+			'Checkbox: needs an accessible name. Provide a `label`, `aria-label` or `aria-labelledby` prop.'
+		);
+		warn.mockRestore();
+	});
+
+	test('should not warn when an aria-label is given', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(<Checkbox aria-label="Accept terms" />);
+
+		expect(warn).not.toHaveBeenCalled();
+		warn.mockRestore();
+	});
 });

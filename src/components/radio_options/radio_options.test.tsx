@@ -163,4 +163,16 @@ describe('RadioOptions', () => {
 		expect(optionLabel).toHaveClass('custom');
 		expect(screen.getByText('Plan')).not.toHaveClass('custom');
 	});
+
+	test('should exclude the description from the accessible name and expose it as description when option has one', () => {
+		render(
+			<RadioOptions
+				options={[{ value: 'a', label: 'Option A', description: 'Details' }]}
+			/>
+		);
+		const radio = screen.getByRole('radio');
+
+		expect(radio).toHaveAccessibleName('Option A');
+		expect(radio).toHaveAccessibleDescription('Details');
+	});
 });

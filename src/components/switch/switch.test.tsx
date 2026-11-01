@@ -128,4 +128,24 @@ describe('Switch', () => {
 		render(<Switch required />);
 		expect(screen.queryByText('*')).not.toBeInTheDocument();
 	});
+
+	test('should warn when neither label nor aria-label is given', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(<Switch />);
+
+		expect(warn).toHaveBeenCalledWith(
+			'Switch: needs an accessible name. Provide a `label`, `aria-label` or `aria-labelledby` prop.'
+		);
+		warn.mockRestore();
+	});
+
+	test('should not warn when labelled', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(<Switch label="Enable notifications" />);
+
+		expect(warn).not.toHaveBeenCalled();
+		warn.mockRestore();
+	});
 });
