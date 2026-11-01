@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { useState, type Ref } from 'react';
+import { useState, type Ref, type ReactNode } from 'react';
 import { describe, expect, test } from 'vitest';
 import { axe } from 'vitest-axe';
 
@@ -252,6 +252,32 @@ describe('Toolbar', () => {
 		pressKey('ArrowRight');
 		expect(screen.getByRole('textbox')).toHaveFocus();
 	});
+
+	test.each<[string, ReactNode]>([
+		['range input', <input key="control" type="range" aria-label="Control" />],
+		['radio input', <input key="control" type="radio" aria-label="Control" />],
+		[
+			'select',
+			<select key="control" aria-label="Control">
+				<option>One</option>
+			</select>,
+		],
+	])(
+		'should not move focus when ArrowRight is pressed on a %s',
+		(_name, control) => {
+			render(
+				<Toolbar aria-label="Formatting">
+					<button type="button">Bold</button>
+					{control}
+					<button type="button">Italic</button>
+				</Toolbar>
+			);
+			const focusedControl = screen.getByLabelText('Control');
+			focusedControl.focus();
+			pressKey('ArrowRight');
+			expect(focusedControl).toHaveFocus();
+		}
+	);
 
 	test('should have no axe violations when rendered', async () => {
 		const { container } = renderToolbar();
