@@ -1,6 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+	within,
+} from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
@@ -29,6 +35,22 @@ const getTrigger = () =>
 	screen.getByRole('button', { name: 'Other ways to create' });
 
 describe('SplitButton', () => {
+	test('should name the group when aria-label is given', () => {
+		renderSplitButton({ 'aria-label': 'Create actions' });
+		expect(
+			screen.getByRole('group', { name: 'Create actions' })
+		).toBeInTheDocument();
+	});
+
+	test('should expose the two buttons inside a group', () => {
+		renderSplitButton();
+		const group = screen.getByRole('group');
+		expect(within(group).getByRole('button', { name: 'Create' })).toBeVisible();
+		expect(
+			within(group).getByRole('button', { name: 'Other ways to create' })
+		).toBeVisible();
+	});
+
 	test('should call onClick when the main button is clicked', () => {
 		const { onClick } = renderSplitButton();
 		fireEvent.click(screen.getByRole('button', { name: 'Create' }));
