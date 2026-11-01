@@ -102,6 +102,10 @@ function focusTypeaheadMatch(
  * provided to `MenuItem` via context instead, since `MenuItem` itself stops
  * click propagation.
  *
+ * Every key the menu handles (navigation, Escape, typeahead) stops
+ * propagating, so page-level shortcuts on `window`/`document` never see it;
+ * Tab keeps propagating since focus moves on.
+ *
  * Escape calls `event.preventDefault()` before `onClose()`, so a parent
  * `Modal` (which ignores Escape once `defaultPrevented`) stays open while the
  * menu itself closes; Tab closes without preventing the default so native
@@ -142,14 +146,19 @@ export function MenuSurface({
 		const items = getMenuItems(container);
 		const currentIndex = items.indexOf(document.activeElement as HTMLElement);
 
-		if (handleNavigationKey(event, container, items, currentIndex)) return;
+		if (handleNavigationKey(event, container, items, currentIndex)) {
+			event.stopPropagation();
+			return;
+		}
 
 		if (event.key === 'Escape') {
 			event.preventDefault();
+			event.stopPropagation();
 			onClose();
 		} else if (event.key === 'Tab') {
 			onClose();
 		} else if (isTypeaheadCharacter(event)) {
+			event.stopPropagation();
 			focusTypeaheadMatch(container, items, currentIndex, event.key);
 		}
 	};

@@ -276,4 +276,41 @@ describe('MenuSurface', () => {
 		fireEvent.keyDown(screen.getByRole('menu'), { key: 'd', ctrlKey: true });
 		expect(screen.getByText('First')).toHaveFocus();
 	});
+
+	describe('page-level shortcuts', () => {
+		const LISTENER_TARGETS = [
+			['window', () => window],
+			['document', () => document],
+		] as const;
+		const HANDLED_KEYS = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'Escape', 'c'];
+
+		describe.each(LISTENER_TARGETS)('on %s', (_name, getTarget) => {
+			test.each(HANDLED_KEYS)(
+				'should not receive %s pressed inside the menu',
+				(key) => {
+					const listener = vi.fn<(event: Event) => void>();
+					getTarget().addEventListener('keydown', listener);
+					renderSurface();
+					screen.getByText('First').focus();
+
+					fireEvent.keyDown(screen.getByText('First'), { key });
+
+					getTarget().removeEventListener('keydown', listener);
+					expect(listener).not.toHaveBeenCalled();
+				}
+			);
+
+			test('should still receive Tab pressed inside the menu', () => {
+				const listener = vi.fn<(event: Event) => void>();
+				getTarget().addEventListener('keydown', listener);
+				renderSurface();
+				screen.getByText('First').focus();
+
+				fireEvent.keyDown(screen.getByText('First'), { key: 'Tab' });
+
+				getTarget().removeEventListener('keydown', listener);
+				expect(listener).toHaveBeenCalledOnce();
+			});
+		});
+	});
 });
