@@ -476,18 +476,21 @@ describe('MultiCombobox', () => {
 	});
 
 	test('should not add a selection summary when the trigger has no explicit name', () => {
-		render(
-			<MultiCombobox
-				label={<span>Fruits</span>}
-				options={OPTIONS}
-				defaultValues={['a', 'b']}
-			/>
-		);
+		render(<MultiCombobox options={OPTIONS} defaultValues={['a', 'b']} />);
 
 		const trigger = screen.getByRole('combobox');
 		expect(trigger).not.toHaveAttribute('aria-describedby');
 		expect(
 			trigger.id && document.getElementById(`${trigger.id}-selection`)
 		).toBeNull();
+	});
+
+	test('should name the listbox with aria-label when both label and aria-label are given', () => {
+		render(
+			<MultiCombobox label="Fruits" aria-label="Pick" options={OPTIONS} />
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Pick' }));
+
+		expect(screen.getByRole('listbox', { name: 'Pick' })).toBeInTheDocument();
 	});
 });

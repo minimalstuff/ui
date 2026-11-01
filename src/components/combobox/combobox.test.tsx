@@ -284,3 +284,10 @@ describe('Combobox', () => {
 		);
 	});
 });
+
+test('should name the listbox with aria-label when both label and aria-label are given', () => {
+	render(<Combobox label="Country" aria-label="Pick" options={OPTIONS} />);
+	fireEvent.click(screen.getByRole('combobox', { name: 'Pick' }));
+
+	expect(screen.getByRole('listbox', { name: 'Pick' })).toBeInTheDocument();
+});

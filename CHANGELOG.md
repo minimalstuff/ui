@@ -31,6 +31,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Tooltip` stays open while the pointer moves onto it, so its text can be read with a screen magnifier.
 - Long `Modal` and `Drawer` content with nothing focusable inside can be scrolled with the keyboard: the content area becomes a focusable region named after the dialog.
 - `Modal` and `Drawer` return focus to the element that opened them even when a field inside uses `autoFocus`.
+- The focus ring of `Input`, `Textarea`, `Select`, `Combobox`, `MultiCombobox`, `Checkbox`, `Switch`, `RadioOptions` and `CheckboxOptions` stays visible in Windows high-contrast (forced colors) mode.
+- A `label` passed as a React node instead of a string now names its control in `Input`, `Textarea`, `Select`, `Combobox` and `MultiCombobox`, and names the `Combobox` and `MultiCombobox` lists.
 
 ## [4.3.3] - 2026-10-29
 

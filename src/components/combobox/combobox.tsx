@@ -21,6 +21,7 @@ import {
 } from '#components/shared/focus_styles';
 import { joinIds } from '#components/shared/join_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
 import {
 	OVERLAY_BG,
 	OVERLAY_BORDER,
@@ -251,6 +252,7 @@ export function Combobox({
 					aria-controls={listboxId}
 					aria-autocomplete="list"
 					aria-label={ariaLabel}
+					aria-labelledby={resolveNodeLabelledBy(label, labelId, ariaLabel)}
 					aria-activedescendant={activeOptionId}
 					aria-invalid={!!error}
 					aria-required={required || undefined}
@@ -301,8 +303,8 @@ export function Combobox({
 						<ul
 							id={listboxId}
 							role="listbox"
-							aria-labelledby={typeof label === 'string' ? labelId : undefined}
-							aria-label={typeof label === 'string' ? undefined : ariaLabel}
+							aria-labelledby={label && !ariaLabel ? labelId : undefined}
+							aria-label={ariaLabel}
 							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>
 							{filteredOptions.map((opt, index) => (
