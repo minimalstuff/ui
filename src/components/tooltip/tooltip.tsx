@@ -86,6 +86,13 @@ export interface TooltipProps {
 	 */
 	describeChild?: boolean;
 	/**
+	 * Keeps the tooltip open while the pointer moves onto it, so people who zoom
+	 * can read long content (WCAG 1.4.13). The tooltip then captures the pointer
+	 * and can block clicks on controls it covers: use it for long content away
+	 * from other controls.
+	 */
+	hoverable?: boolean;
+	/**
 	 * Where the tooltip is rendered. Defaults to the trigger's closest
 	 * landmark or dialog (so it stays inside a landmark and inside an open
 	 * modal), falling back to `document.body`. Transformed ancestors (such as the modal
@@ -115,6 +122,7 @@ export function Tooltip({
 	onTemporaryShow,
 	className,
 	describeChild,
+	hoverable = false,
 	portalContainer,
 	ref,
 }: Readonly<TooltipProps>) {
@@ -242,7 +250,11 @@ export function Tooltip({
 
 	const handlePointerLeave = (event: PointerEvent) => {
 		if (event.pointerType === 'touch') return;
-		scheduleHide();
+		if (hoverable) {
+			scheduleHide();
+			return;
+		}
+		handleHide();
 	};
 
 	const handleTooltipPointerEnter = (event: PointerEvent) => {
@@ -337,9 +349,12 @@ export function Tooltip({
 					<div
 						ref={setTooltipRef}
 						style={floatingStyles}
-						className="z-50 inline-block"
-						onPointerEnter={handleTooltipPointerEnter}
-						onPointerLeave={handlePointerLeave}
+						className={clsx(
+							'z-50 inline-block',
+							!hoverable && 'pointer-events-none'
+						)}
+						onPointerEnter={hoverable ? handleTooltipPointerEnter : undefined}
+						onPointerLeave={hoverable ? handlePointerLeave : undefined}
 					>
 						<div
 							id={tooltipId}

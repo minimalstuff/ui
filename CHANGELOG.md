@@ -13,6 +13,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Checkbox` and `Switch` log a warning in development when they have no `label`, `aria-label` or `aria-labelledby`.
 - `UIProvider` labels `copied`, `loading` and `charactersRemaining`, used by the new screen-reader announcements below; translate them like the other labels.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
+- `Tooltip` takes a `hoverable` prop that keeps it open while the pointer moves onto it, so long content can be read with a screen magnifier; a hoverable tooltip captures the pointer and can block clicks on controls it covers.
 
 ### Changed
 
@@ -31,7 +32,6 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Toolbar` no longer moves focus out of an open `Menu`, `SplitButton` or `ContextMenu` placed inside it when ArrowLeft or ArrowRight is pressed.
 - `Toolbar` leaves arrow keys, Home and End to range sliders, radio buttons and selects placed inside it.
 - `ContextMenu` returns focus to the element focused before it opened, even after a second right-click while it was open.
-- `Tooltip` stays open while the pointer moves onto it, so its text can be read with a screen magnifier.
 - Long `Modal` and `Drawer` content with nothing focusable inside can be scrolled with the keyboard: the content area becomes a focusable region named after the dialog.
 - `Modal` and `Drawer` return focus to the element that opened them even when a field inside uses `autoFocus`.
 - The focus ring of `Input`, `Textarea`, `Select`, `Combobox`, `MultiCombobox`, `Checkbox`, `Switch`, `RadioOptions` and `CheckboxOptions` stays visible in Windows high-contrast (forced colors) mode.
