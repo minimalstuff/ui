@@ -21,6 +21,7 @@ import * as ModalStories from '#components/modal/modal.stories';
 import * as MultiComboboxStories from '#components/multi_combobox/multi_combobox.stories';
 import * as RadioOptionsStories from '#components/radio_options/radio_options.stories';
 import * as SelectStories from '#components/select/select.stories';
+import * as SplitButtonStories from '#components/split_button/split_button.stories';
 import * as SwitchStories from '#components/switch/switch.stories';
 import * as TabsStories from '#components/tabs/tabs.stories';
 import * as TextareaStories from '#components/textarea/textarea.stories';
@@ -63,6 +64,10 @@ const RadioOptions = composeStory(
 	RadioOptionsStories.StringOptions,
 	RadioOptionsStories.default
 );
+const SplitButton = composeStory(
+	SplitButtonStories.Default,
+	SplitButtonStories.default
+);
 const Switch = composeStory(SwitchStories.Default, SwitchStories.default);
 const Avatar = composeStory(AvatarStories.Default, AvatarStories.default);
 const Badge = composeStory(BadgeStories.Default, BadgeStories.default);
@@ -93,6 +98,7 @@ export const OVERVIEW_GROUPS: readonly OverviewGroup[] = [
 		entries: [
 			{ name: 'Button', Story: Button },
 			{ name: 'IconButton', Story: IconButton },
+			{ name: 'SplitButton', Story: SplitButton },
 			{ name: 'CopyButton', Story: CopyButton },
 			{ name: 'ThemeToggle', Story: ThemeToggle },
 		],

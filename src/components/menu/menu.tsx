@@ -11,6 +11,7 @@ import {
 	cloneElement,
 	isValidElement,
 	useCallback,
+	useEffect,
 	useId,
 	useRef,
 	useState,
@@ -21,6 +22,7 @@ import {
 	type Ref,
 } from 'react';
 
+import { type MenuAlign } from '#components/menu/menu_align';
 import { MenuSurface } from '#components/menu/menu_surface';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { type Radius } from '#components/shared/radius';
@@ -32,8 +34,8 @@ import { mergeRefs } from '#lib/merge_refs';
 
 const OFFSET_FROM_TRIGGER = 4;
 
+export type { MenuAlign } from '#components/menu/menu_align';
 export type MenuSide = 'top' | 'bottom' | 'left' | 'right';
-export type MenuAlign = 'start' | 'center' | 'end';
 
 function toPlacement(side: MenuSide, align: MenuAlign): Placement {
 	return align === 'center' ? side : `${side}-${align}`;
@@ -55,6 +57,12 @@ export interface MenuProps {
 	align?: MenuAlign;
 	radius?: Radius;
 	className?: string;
+	/**
+	 * Keeps the menu closed (and closes it if open): the trigger's click and
+	 * ArrowDown/ArrowUp no longer open it. The trigger itself is left alone, so
+	 * it can stay focusable; mark it `aria-disabled` or `disabled` yourself.
+	 */
+	disabled?: boolean;
 	/** Attaches to the wrapper `<span>` around `trigger`, alongside `Menu`'s own internal ref. */
 	ref?: Ref<HTMLSpanElement>;
 }
@@ -90,6 +98,7 @@ export function Menu({
 	align = 'start',
 	radius = 'md',
 	className,
+	disabled = false,
 	ref,
 }: Readonly<MenuProps>) {
 	const wrapperRef = useRef<HTMLSpanElement>(null);
@@ -130,8 +139,13 @@ export function Menu({
 		[refs, ref]
 	);
 
+	useEffect(() => {
+		if (disabled && isMounted) close();
+	}, [disabled, isMounted, close]);
+
 	const handleTriggerClick = (event: MouseEvent) => {
 		event.stopPropagation();
+		if (disabled) return;
 		// Toggle on `isVisible`, not `isMounted`: `isMounted` stays true for
 		// the whole 150ms exit fade, so a click during that window would
 		// otherwise just re-trigger close() instead of cancelling it and
@@ -148,6 +162,7 @@ export function Menu({
 	};
 
 	const handleTriggerKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+		if (disabled) return;
 		if (!isVisible && event.key === 'ArrowDown') {
 			event.preventDefault();
 			setInitialFocus('first');

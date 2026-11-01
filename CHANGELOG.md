@@ -4,6 +4,11 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
+- `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
+
 ### Fixed
 
 - `Menu` and `ContextMenu` no longer let the keys they handle (arrows, Home, End, Escape, typeahead letters) reach shortcuts listening on `window` or `document`; Tab still does.
