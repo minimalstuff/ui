@@ -8,6 +8,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 - `Combobox` and `MultiCombobox` take a `description` prop, shown below the field and announced with it.
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
+- `Modal` logs a warning in development when it has neither a `title` nor an `aria-label`, since screen readers would announce an unnamed dialog.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 
 ### Changed
@@ -27,6 +28,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Toolbar` leaves arrow keys, Home and End to range sliders, radio buttons and selects placed inside it.
 - `ContextMenu` returns focus to the element focused before it opened, even after a second right-click while it was open.
 - `Tooltip` stays open while the pointer moves onto it, so its text can be read with a screen magnifier.
+- Long `Modal` and `Drawer` content with nothing focusable inside can be scrolled with the keyboard: the content area becomes a focusable region named after the dialog.
+- `Modal` and `Drawer` return focus to the element that opened them even when a field inside uses `autoFocus`.
 
 ## [4.3.3] - 2026-10-29
 

@@ -1,6 +1,12 @@
 import '@testing-library/jest-dom/vitest';
 
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+	act,
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
 import { axe } from 'vitest-axe';
@@ -434,5 +440,27 @@ describe('Modal', () => {
 		});
 
 		expect(await screen.findByLabelText('Fermer')).toBeInTheDocument();
+	});
+
+	test('should return focus to the opener when a child uses autoFocus', async () => {
+		render(
+			<>
+				<button>Open</button>
+				<Modal />
+			</>
+		);
+		const opener = screen.getByRole('button', { name: 'Open' });
+		opener.focus();
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: <input aria-label="Name" autoFocus />,
+			});
+		});
+		await screen.findByLabelText('Name');
+		fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+		await waitFor(() => expect(opener).toHaveFocus());
 	});
 });

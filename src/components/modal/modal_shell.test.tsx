@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
 import { ModalFooter } from './modal_footer';
@@ -595,5 +595,100 @@ describe('ModalShell', () => {
 
 		expect(document.documentElement.style.overflow).toBe('scroll');
 		document.documentElement.style.overflow = '';
+	});
+
+	describe('accessible name warning', () => {
+		afterEach(() => {
+			vi.restoreAllMocks();
+		});
+
+		test('should warn when neither title nor aria-label is given', () => {
+			const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			render(
+				<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()}>
+					Body
+				</ModalShell>
+			);
+			expect(warn).toHaveBeenCalledTimes(1);
+			expect(warn).toHaveBeenCalledWith(
+				expect.stringContaining('`title` or `aria-label`')
+			);
+		});
+
+		test('should not warn when a title is given', () => {
+			const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			render(
+				<ModalShell
+					isEnded={false}
+					onDismiss={vi.fn<() => void>()}
+					title="Named"
+				>
+					Body
+				</ModalShell>
+			);
+			expect(warn).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('keyboard scrolling', () => {
+		function stubOverflow(): void {
+			vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(
+				500
+			);
+			vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(
+				100
+			);
+		}
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+		});
+
+		test('should make the body focusable and named when it overflows and has no tabbable child', () => {
+			stubOverflow();
+			render(
+				<ModalShell
+					isEnded={false}
+					onDismiss={vi.fn<() => void>()}
+					title="Terms"
+				>
+					Long text
+				</ModalShell>
+			);
+			const region = screen.getByRole('region', { name: 'Terms' });
+			expect(region).toHaveAttribute('tabindex', '0');
+		});
+
+		test('should focus the footer button on open when the scroll region is the only other tab stop and there is no close button', () => {
+			stubOverflow();
+			render(
+				<ModalShell
+					isEnded={false}
+					onDismiss={vi.fn<() => void>()}
+					title="Terms"
+					dismissible={false}
+					role="alertdialog"
+					footer={<button>Accept</button>}
+				>
+					Long text
+				</ModalShell>
+			);
+			expect(screen.getByRole('region', { name: 'Terms' })).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: 'Accept' })).toHaveFocus();
+		});
+
+		test('should not make the body focusable when it contains a button', () => {
+			stubOverflow();
+			render(
+				<ModalShell
+					isEnded={false}
+					onDismiss={vi.fn<() => void>()}
+					title="Terms"
+				>
+					<button>Accept</button>
+				</ModalShell>
+			);
+			expect(screen.queryByRole('region')).not.toBeInTheDocument();
+		});
 	});
 });

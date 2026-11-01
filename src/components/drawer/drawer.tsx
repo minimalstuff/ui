@@ -22,6 +22,7 @@ import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
 import { useGuardedDismiss } from '#components/modal/use_guarded_dismiss';
+import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
 import { type Radius } from '#components/shared/radius';
@@ -104,6 +105,11 @@ function DrawerDialog({
 		getFocusFallback: getMainElement,
 	});
 
+	const { focusClassName, ...scrollableProps } = useKeyboardScrollable(
+		contentRef,
+		{ labelledBy: titleId }
+	);
+
 	return (
 		<DismissGuardContext.Provider value={registry}>
 			{createPortal(
@@ -150,8 +156,10 @@ function DrawerDialog({
 						/>
 						<div
 							ref={contentRef}
+							{...scrollableProps}
 							className={clsx(
 								'flex-1 overflow-y-auto min-h-0 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
+								focusClassName,
 								className
 							)}
 						>

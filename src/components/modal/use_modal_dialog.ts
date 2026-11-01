@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
+import { KEYBOARD_SCROLL_REGION_ATTRIBUTE } from '#components/modal/keyboard_scroll_region_attribute';
 import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
 import { getTabbableElements } from '#components/shared/tabbable';
 
@@ -43,14 +44,22 @@ interface FocusEntryPointParams {
 	fallbackScope: InitialFocusFallbackScope;
 }
 
+function getInitialFocusCandidates(container: HTMLElement): HTMLElement[] {
+	return getTabbableElements(container).filter(
+		(element) => !element.hasAttribute(KEYBOARD_SCROLL_REGION_ATTRIBUTE)
+	);
+}
+
 function findFirstTabbable({
 	dialog,
 	content,
 	fallbackScope,
 }: Readonly<FocusEntryPointParams>): HTMLElement | undefined {
-	const firstInContent = content ? getTabbableElements(content)[0] : undefined;
+	const firstInContent = content
+		? getInitialFocusCandidates(content)[0]
+		: undefined;
 	if (firstInContent || fallbackScope === 'content') return firstInContent;
-	return dialog ? getTabbableElements(dialog)[0] : undefined;
+	return dialog ? getInitialFocusCandidates(dialog)[0] : undefined;
 }
 
 function focusEntryPoint(params: Readonly<FocusEntryPointParams>): void {
@@ -86,6 +95,14 @@ function trapTabKey(event: KeyboardEvent, dialog: HTMLElement): void {
 		event.preventDefault();
 		first.focus();
 	}
+}
+
+/** Read during the first render, before any child `autoFocus` is applied at commit. */
+function captureActiveElement(): HTMLElement | null {
+	if (typeof document === 'undefined') return null;
+	return document.activeElement instanceof HTMLElement
+		? document.activeElement
+		: null;
 }
 
 function useOpeningFlag(): boolean {
@@ -137,8 +154,10 @@ function useDialogKeyboard(
 /**
  * The behaviour every modal dialog shares: stack registration, body scroll
  * lock, focus capture / initial focus / restore, Escape and the Tab trap.
- * `isEnded` going from `true` back to `false` (a reopen mid-exit) re-runs
- * the open-phase effects, so focus is captured and placed again.
+ * The element to restore focus to is captured once, during the first render,
+ * before any child `autoFocus` runs. `isEnded` going from `true` back to
+ * `false` (a reopen mid-exit) re-runs the open-phase effects, so initial focus
+ * is placed again.
  */
 export function useModalDialog({
 	isEnded,
@@ -152,7 +171,7 @@ export function useModalDialog({
 	const [footerSlot, setFooterSlot] = useState<HTMLDivElement | null>(null);
 	const dialogRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
-	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+	const [previouslyFocused] = useState(captureActiveElement);
 
 	useEffect(() => {
 		if (isEnded) return;
@@ -161,11 +180,6 @@ export function useModalDialog({
 
 	useBodyScrollLock();
 	const isOpening = useOpeningFlag();
-
-	useEffect(() => {
-		if (isEnded) return;
-		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
-	}, [isEnded]);
 
 	useEffect(() => {
 		if (!footerSlot || isEnded) return;
@@ -180,12 +194,11 @@ export function useModalDialog({
 
 	useEffect(() => {
 		if (!isEnded) return;
-		const previouslyFocused = previouslyFocusedRef.current;
 		const target = previouslyFocused?.isConnected
 			? previouslyFocused
 			: getFocusFallback?.();
 		target?.focus({ preventScroll: true });
-	}, [isEnded, getFocusFallback]);
+	}, [isEnded, previouslyFocused, getFocusFallback]);
 
 	useDialogKeyboard(dialogRef, { isEnded, onDismiss, dismissible, modalToken });
 

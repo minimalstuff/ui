@@ -5,7 +5,9 @@ import { createPortal } from 'react-dom';
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
+import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
+import { useWarnUnnamedModal } from '#components/modal/use_warn_unnamed_modal';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	OVERLAY_BG,
@@ -84,6 +86,13 @@ export function ModalShell({
 		handleBackdropMouseDown,
 	} = useModalDialog({ isEnded, onDismiss, dismissible, initialFocusRef });
 
+	useWarnUnnamedModal({ title, ariaLabel });
+	const { focusClassName, ...scrollableProps } = useKeyboardScrollable(
+		contentRef,
+		{ labelledBy: title ? titleId : undefined, label: ariaLabel }
+	);
+	const isAutoHeight = height === 'auto';
+
 	const hasDescribedByContent = role === 'alertdialog' && Boolean(children);
 
 	return createPortal(
@@ -142,10 +151,12 @@ export function ModalShell({
 				<div
 					ref={contentRef}
 					id={hasDescribedByContent ? contentId : undefined}
+					{...(isAutoHeight ? scrollableProps : undefined)}
 					className={clsx(
 						'flex-1 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
 						CONTENT_OVERFLOW_CLASSES[height],
 						!title && 'pt-6',
+						isAutoHeight && focusClassName,
 						className
 					)}
 				>
