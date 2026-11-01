@@ -195,8 +195,7 @@ export function MultiCombobox({
 	const listboxId = `${fieldId}-listbox`;
 	const maxHintId = `${fieldId}-max-hint`;
 	const selectionSummaryId = `${fieldId}-selection`;
-	const hasExplicitTriggerName =
-		typeof label === 'string' || Boolean(ariaLabel);
+	const hasExplicitTriggerName = label !== undefined || Boolean(ariaLabel);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const searchInputRef = useRef<HTMLInputElement>(null);
@@ -403,7 +402,7 @@ export function MultiCombobox({
 						Boolean(description) && descriptionId,
 						error && errorId
 					)}
-					aria-labelledby={typeof label === 'string' ? labelId : undefined}
+					aria-labelledby={label && !ariaLabel ? labelId : undefined}
 					aria-label={ariaLabel}
 					onClick={handleTriggerClick}
 					onKeyDown={handleKeyDown}
@@ -522,8 +521,8 @@ export function MultiCombobox({
 						<ul
 							id={listboxId}
 							role="listbox"
-							aria-labelledby={typeof label === 'string' ? labelId : undefined}
-							aria-label={typeof label === 'string' ? undefined : ariaLabel}
+							aria-labelledby={label && !ariaLabel ? labelId : undefined}
+							aria-label={ariaLabel}
 							aria-multiselectable
 							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>

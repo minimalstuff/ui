@@ -9,6 +9,7 @@ import {
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import { joinIds } from '#components/shared/join_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
 import { useFieldIds } from '#components/shared/use_field_ids';
 
 export interface SelectOption {
@@ -46,9 +47,10 @@ export function Select({
 	onChange,
 	id,
 	'aria-describedby': callerDescribedBy,
+	'aria-label': ariaLabel,
 	...props
 }: Readonly<SelectProps>) {
-	const { fieldId, errorId, descriptionId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId, labelId } = useFieldIds(id);
 
 	return (
 		<Field
@@ -79,6 +81,8 @@ export function Select({
 				{...(value === undefined ? { defaultValue } : { value })}
 				onChange={onChange}
 				aria-invalid={!!error}
+				aria-label={ariaLabel}
+				aria-labelledby={resolveNodeLabelledBy(label, labelId, ariaLabel)}
 				aria-describedby={joinIds(
 					callerDescribedBy,
 					Boolean(description) && descriptionId,

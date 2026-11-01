@@ -23,8 +23,9 @@ interface FieldProps {
 /**
  * Wrapper, label, description and error message shared by the text-entry fields (Input,
  * Textarea, Select, Combobox). A string `label` becomes a real `<label>` bound
- * to `fieldId`; any other node is rendered untouched so callers can supply
- * their own markup, with the required mark appended either way.
+ * to `fieldId`; any other node is wrapped in a `<span id="{fieldId}-label">` the
+ * control references through `aria-labelledby` (see `resolveNodeLabelledBy`),
+ * with the required mark appended either way.
  */
 export const Field = ({
 	fieldId,
@@ -38,7 +39,7 @@ export const Field = ({
 	children,
 }: Readonly<FieldProps>) => (
 	<div className={clsx('w-full', wrapperClassName)}>
-		{label !== undefined &&
+		{Boolean(label) &&
 			(typeof label === 'string' ? (
 				<label
 					id={`${fieldId}-label`}
@@ -53,14 +54,14 @@ export const Field = ({
 					)}
 				</label>
 			) : (
-				<>
+				<span id={`${fieldId}-label`}>
 					{label}
 					{required && (
 						<span className={FIELD_REQUIRED_MARK} aria-hidden="true">
 							*
 						</span>
 					)}
-				</>
+				</span>
 			))}
 		{children}
 		{descriptionId && (

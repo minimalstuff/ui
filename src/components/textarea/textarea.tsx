@@ -10,6 +10,7 @@ import {
 import { FIELD_FOCUS_RING_ERROR } from '#components/shared/focus_styles';
 import { joinIds } from '#components/shared/join_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
 import { useControlledLength } from '#components/shared/use_controlled_length';
 import { useFieldIds } from '#components/shared/use_field_ids';
 
@@ -42,9 +43,11 @@ export function Textarea({
 	onChange,
 	id,
 	'aria-describedby': callerDescribedBy,
+	'aria-label': ariaLabel,
 	...props
 }: Readonly<TextareaProps>) {
-	const { fieldId, errorId, descriptionId, characterCountId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId, labelId, characterCountId } =
+		useFieldIds(id);
 	const { length, trackLength } = useControlledLength(value, defaultValue);
 
 	const hasCharCount =
@@ -85,6 +88,8 @@ export function Textarea({
 				maxLength={maxLength}
 				onChange={handleChange}
 				aria-invalid={!!error}
+				aria-label={ariaLabel}
+				aria-labelledby={resolveNodeLabelledBy(label, labelId, ariaLabel)}
 				aria-describedby={joinIds(
 					callerDescribedBy,
 					Boolean(description) && descriptionId,
