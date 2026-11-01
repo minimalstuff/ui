@@ -9,7 +9,6 @@ import {
 	FIELD_DESCRIPTION_TEXT,
 	FIELD_ERROR_BORDER,
 	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
 } from '#components/shared/field_styles';
 import {
 	CONTROL_FOCUS_RING,
@@ -19,6 +18,7 @@ import {
 import { joinIds } from '#components/shared/join_ids';
 import { optionCardClasses } from '#components/shared/option_card_styles';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { RequiredMark } from '#components/shared/required_mark';
 import {
 	CONTROL_BG,
 	CONTROL_BORDER,
@@ -26,6 +26,7 @@ import {
 } from '#components/shared/surface_tokens';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
 import { mergeRefs } from '#lib/merge_refs';
 
 /**
@@ -45,7 +46,7 @@ function renderLabelContent(
 		return (
 			<span className={labelTextClassName}>
 				{label}
-				{isRequired && <span className={FIELD_REQUIRED_MARK}>*</span>}
+				{isRequired && <RequiredMark />}
 			</span>
 		);
 	}
@@ -53,7 +54,7 @@ function renderLabelContent(
 	return (
 		<>
 			{label}
-			{isRequired && <span className={FIELD_REQUIRED_MARK}>*</span>}
+			{isRequired && <RequiredMark />}
 		</>
 	);
 }
@@ -91,6 +92,8 @@ export function Checkbox({
 	onChange,
 	id,
 	'aria-describedby': callerDescribedBy,
+	'aria-label': ariaLabel,
+	'aria-labelledby': ariaLabelledBy,
 	ref,
 	...props
 }: Readonly<CheckboxProps>) {
@@ -103,6 +106,13 @@ export function Checkbox({
 		callerDescribedBy,
 		Boolean(description) && descriptionId,
 		error && errorId
+	);
+
+	useWarnUnnamed(
+		'Checkbox',
+		Boolean(label) ||
+			Boolean(ariaLabel?.trim()) ||
+			Boolean(ariaLabelledBy?.trim())
 	);
 
 	const mergedInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
@@ -170,6 +180,8 @@ export function Checkbox({
 						onChange={handleChange}
 						aria-invalid={!!error}
 						aria-describedby={describedBy}
+						aria-label={ariaLabel}
+						aria-labelledby={ariaLabelledBy}
 						{...props}
 					/>
 					<span
@@ -197,6 +209,7 @@ export function Checkbox({
 							<span
 								id={descriptionId}
 								className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-0.5')}
+								aria-hidden="true"
 							>
 								{description}
 							</span>

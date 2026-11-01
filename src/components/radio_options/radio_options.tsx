@@ -3,13 +3,11 @@ import { type ComponentPropsWithRef } from 'react';
 
 import { RadioOptionRow } from '#components/radio_options/radio_option_row';
 import { FieldError } from '#components/shared/field_error';
-import {
-	FIELD_LABEL_TEXT,
-	FIELD_REQUIRED_MARK,
-} from '#components/shared/field_styles';
+import { FIELD_LABEL_TEXT } from '#components/shared/field_styles';
 import { joinIds } from '#components/shared/join_ids';
 import { type ChoiceOption } from '#components/shared/option_card_styles';
 import { type Radius } from '#components/shared/radius';
+import { RequiredMark } from '#components/shared/required_mark';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
 
@@ -83,7 +81,7 @@ export function RadioOptions({
 			{label && (
 				<legend className={clsx(FIELD_LABEL_TEXT, 'mb-2')}>
 					{label}
-					{required && <span className={FIELD_REQUIRED_MARK}>*</span>}
+					{required && <RequiredMark />}
 				</legend>
 			)}
 

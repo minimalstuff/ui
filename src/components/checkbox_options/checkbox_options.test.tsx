@@ -198,4 +198,16 @@ describe('CheckboxOptions', () => {
 		const requiredMark = container.querySelector('legend > span');
 		expect(requiredMark).toHaveAttribute('aria-hidden', 'true');
 	});
+
+	test('should exclude the description from the accessible name and expose it as description when option has one', () => {
+		render(
+			<CheckboxOptions
+				options={[{ value: 'a', label: 'Option A', description: 'Details' }]}
+			/>
+		);
+		const checkbox = screen.getByRole('checkbox');
+
+		expect(checkbox).toHaveAccessibleName('Option A');
+		expect(checkbox).toHaveAccessibleDescription('Details');
+	});
 });
