@@ -366,7 +366,7 @@ describe('MultiCombobox', () => {
 		);
 		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
 
-		const searchInput = screen.getByRole('textbox', { name: 'Search' });
+		const searchInput = screen.getByRole('combobox', { name: /Search/ });
 		expect(searchInput).toHaveAccessibleDescription(
 			'You can select up to 2 items'
 		);
@@ -424,5 +424,70 @@ describe('MultiCombobox', () => {
 		const status = screen.getByRole('status');
 		expect(status).toHaveTextContent('No results found');
 		expect(screen.queryByRole('option')).not.toBeInTheDocument();
+	});
+
+	test('should announce every selected label when some are hidden behind the overflow chip', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				defaultValues={['a', 'b']}
+				maxDisplayedValues={1}
+			/>
+		);
+
+		const trigger = screen.getByRole('combobox', { name: 'Fruits' });
+		expect(trigger).toHaveAccessibleDescription('Option A, Option B');
+	});
+
+	test('should expose the description in the accessible description', () => {
+		render(
+			<MultiCombobox label="Fruits" description="Pick some" options={OPTIONS} />
+		);
+
+		expect(screen.getByText('Pick some')).toBeInTheDocument();
+		expect(
+			screen.getByRole('combobox', { name: 'Fruits' })
+		).toHaveAccessibleDescription('Pick some');
+	});
+
+	test('should expose the search field as an expanded combobox when the popup is open', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		const searchField = screen.getByRole('combobox', { name: /Search/ });
+		expect(searchField).toHaveAttribute('aria-expanded', 'true');
+	});
+
+	test('should name the listbox after the label when the popup is open', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(screen.getByRole('listbox', { name: 'Fruits' })).toBeInTheDocument();
+	});
+
+	test('should name the search field after the field label when the popup is open', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(
+			screen.getByRole('combobox', { name: 'Fruits, Search' })
+		).toBeInTheDocument();
+	});
+
+	test('should not add a selection summary when the trigger has no explicit name', () => {
+		render(
+			<MultiCombobox
+				label={<span>Fruits</span>}
+				options={OPTIONS}
+				defaultValues={['a', 'b']}
+			/>
+		);
+
+		const trigger = screen.getByRole('combobox');
+		expect(trigger).not.toHaveAttribute('aria-describedby');
+		expect(
+			trigger.id && document.getElementById(`${trigger.id}-selection`)
+		).toBeNull();
 	});
 });

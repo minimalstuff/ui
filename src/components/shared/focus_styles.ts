@@ -21,7 +21,10 @@ export const CONTROL_FOCUS_RING_COLOR = 'has-[:focus-visible]:ring-blue-500';
 export const CONTROL_FOCUS_RING_ERROR_COLOR =
 	'has-[:focus-visible]:ring-red-500';
 
-/** `MenuItem`: items receive real focus, so the outline follows `focus-visible`. */
+/**
+ * `MenuItem` and the `MultiCombobox` search field: they receive real focus, so
+ * the outline follows `focus-visible`.
+ */
 export const ACTIVE_ITEM_FOCUS_OUTLINE =
 	'outline-hidden focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-500 dark:focus-visible:outline-blue-400';
 

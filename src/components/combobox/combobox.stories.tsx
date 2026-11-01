@@ -23,6 +23,10 @@ const meta = {
 			control: 'text',
 			description: 'Label above the combobox',
 		},
+		description: {
+			control: 'text',
+			description: 'Help text below the field',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the combobox',
