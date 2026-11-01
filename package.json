@@ -49,11 +49,12 @@
 		"storybook": "storybook dev -p 6006 ",
 		"build-storybook": "storybook build",
 		"release": "release-it",
-		"ci": "storybook dev -p 6006 --ci",
+		"storybook:ci": "storybook dev -p 6006 --ci",
 		"lint:fix": "oxlint . --fix --fix-suggestions",
 		"format:check": "oxfmt . --check",
 		"typecheck": "tsc --build --force",
 		"knip": "knip",
+		"verify": "pnpm check && pnpm test && pnpm test:stories && pnpm build",
 		"check": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run knip && node scripts/verify_media_variants.ts"
 	},
 	"dependencies": {
@@ -79,7 +80,6 @@
 		"@types/react-dom": "^19.3.0",
 		"@typescript/typescript6": "^6.0.2",
 		"@unocss/preset-icons": "^66.12.0",
-		"@unocss/preset-web-fonts": "^66.12.0",
 		"@vitejs/plugin-react": "^6.1.2",
 		"@vitest/browser-playwright": "^5.0.5",
 		"@vitest/coverage-v8": "^5.0.5",

@@ -1,5 +1,4 @@
 import presetIcons from '@unocss/preset-icons';
-import presetWebFonts from '@unocss/preset-web-fonts';
 import { defineConfig, presetWind4, type Variant } from 'unocss';
 
 const isLibraryBuild = process.env.VITE_BUILD_LIB === '1';
@@ -67,9 +66,6 @@ export default defineConfig({
 		}),
 		presetIcons({
 			cdn: 'https://esm.sh/',
-		}),
-		presetWebFonts({
-			provider: 'bunny',
 		}),
 	],
 	content: {
