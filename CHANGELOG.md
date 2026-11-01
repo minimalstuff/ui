@@ -8,6 +8,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 - `Combobox` and `MultiCombobox` take a `description` prop, shown below the field and announced with it.
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
+- `Tabs` takes optional `aria-label` and `aria-labelledby` props that name its tab list, to tell several tab sets apart on one page.
 - `Modal` logs a warning in development when it has neither a `title` nor an `aria-label`, since screen readers would announce an unnamed dialog.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 

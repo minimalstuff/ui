@@ -14,6 +14,13 @@ const ITEMS = [
 ];
 
 describe('Tabs', () => {
+	test('should name the tablist when aria-label is given', () => {
+		render(<Tabs items={ITEMS} aria-label="Settings sections" />);
+		expect(
+			screen.getByRole('tablist', { name: 'Settings sections' })
+		).toBeInTheDocument();
+	});
+
 	test('renders all tab titles', () => {
 		render(<Tabs items={ITEMS} />);
 		expect(screen.getByRole('tab', { name: 'First' })).toBeInTheDocument();
