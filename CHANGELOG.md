@@ -9,6 +9,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 
+### Changed
+
+- `@floating-ui/react-dom`, `zustand`, `react-call` and `clsx` are no longer bundled into the library; they are installed as regular dependencies and shared with the consumer's own copies (nothing to install by hand).
+
 ### Fixed
 
 - Importing the library no longer throws when the browser blocks site storage; the theme falls back to `system` and theme changes are not persisted.
