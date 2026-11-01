@@ -1,6 +1,9 @@
 import { create, themes } from 'storybook/theming';
 
-import { getResolvedTheme } from '#storybook/theme/index';
+import {
+	getResolvedThemeFromPreference,
+	type ThemePreference,
+} from '#storybook/theme/index';
 
 /**
  * The docs page paints its own surface on top of the canvas. In dark mode it
@@ -12,6 +15,6 @@ const DOCS_THEMES = {
 	dark: create({ base: 'dark', appContentBg: 'var(--colors-gray-900)' }),
 };
 
-export function getDocsTheme() {
-	return DOCS_THEMES[getResolvedTheme()];
+export function getDocsTheme(preference: ThemePreference) {
+	return DOCS_THEMES[getResolvedThemeFromPreference(preference)];
 }

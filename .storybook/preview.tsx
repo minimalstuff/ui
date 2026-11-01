@@ -7,12 +7,11 @@ import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import { modalRootDecorator } from '#storybook/modal_root_decorator';
 import { DEFAULT_MOTION_MODE } from '#storybook/motion/index';
 import { motionDecorator, motionGlobalTypes } from '#storybook/motion/toolbar';
-import { getDocsTheme } from '#storybook/theme/docs_theme';
 import { getThemePreference } from '#storybook/theme/index';
+import { ThemedDocsContainer } from '#storybook/theme/themed_docs_container';
 import {
 	themeClassDecorator,
 	themeGlobalTypes,
-	themeSyncDecorator,
 } from '#storybook/theme/toolbar';
 
 const preview: Preview = {
@@ -21,12 +20,7 @@ const preview: Preview = {
 		theme: getThemePreference(),
 		motion: DEFAULT_MOTION_MODE,
 	},
-	decorators: [
-		themeClassDecorator,
-		themeSyncDecorator,
-		motionDecorator,
-		modalRootDecorator,
-	],
+	decorators: [themeClassDecorator, motionDecorator, modalRootDecorator],
 	parameters: {
 		options: {
 			storySort: {
@@ -43,7 +37,7 @@ const preview: Preview = {
 			test: 'error',
 		},
 		docs: {
-			theme: getDocsTheme(),
+			container: ThemedDocsContainer,
 		},
 		viewport: {
 			options: MINIMAL_VIEWPORTS,
