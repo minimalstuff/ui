@@ -5,6 +5,8 @@ import { useState, type Ref, type ReactNode } from 'react';
 import { describe, expect, test } from 'vitest';
 import { axe } from 'vitest-axe';
 
+import { Menu } from '#components/menu/menu';
+import { MenuItem } from '#components/menu_item/menu_item';
 import { Toolbar } from './toolbar';
 
 type RenderToolbarOptions = {
@@ -278,6 +280,27 @@ describe('Toolbar', () => {
 			expect(focusedControl).toHaveFocus();
 		}
 	);
+
+	test('should not move focus out of an open menu when ArrowRight is pressed on a menu item', async () => {
+		render(
+			<Toolbar aria-label="Formatting">
+				<button type="button">Bold</button>
+				<Menu trigger={<button type="button">Options</button>}>
+					<MenuItem onClick={() => undefined}>Move up</MenuItem>
+					<MenuItem onClick={() => undefined}>Move down</MenuItem>
+				</Menu>
+			</Toolbar>
+		);
+		fireEvent.click(getButton('Options'));
+		await waitFor(() =>
+			expect(screen.getByRole('menuitem', { name: 'Move up' })).toHaveFocus()
+		);
+
+		pressKey('ArrowRight');
+
+		expect(screen.getByRole('menu')).toBeInTheDocument();
+		expect(document.activeElement).toHaveAttribute('role', 'menuitem');
+	});
 
 	test('should have no axe violations when rendered', async () => {
 		const { container } = renderToolbar();
