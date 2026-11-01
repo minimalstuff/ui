@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Textarea } from './textarea';
+import { Textarea } from '#components/textarea/textarea';
 
 describe('Textarea', () => {
 	test('renders label', () => {

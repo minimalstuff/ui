@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { MenuCloseContext } from '#components/menu/menu_context';
-import { MenuItem } from './menu_item';
+import { MenuItem } from '#components/menu_item/menu_item';
 
 describe('MenuItem', () => {
 	test('renders children', () => {

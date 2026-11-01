@@ -6,10 +6,10 @@ import { Button } from '#components/button/button';
 import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
+import { RadioOptions } from '#components/radio_options/radio_options';
 import { Switch } from '#components/switch/switch';
 import { Tooltip } from '#components/tooltip/tooltip';
-import { expectFocusOn } from '../../../.storybook/play_helpers';
-import { RadioOptions } from './radio_options';
+import { expectFocusOn } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/RadioOptions',

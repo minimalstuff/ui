@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { useIsClient } from './use_is_client';
+import { useIsClient } from '#hooks/use_is_client/use_is_client';
 
 describe('useIsClient', () => {
 	test('returns false on first render then true after mount', async () => {

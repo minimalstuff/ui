@@ -28,7 +28,7 @@ import * as TextareaStories from '#components/textarea/textarea.stories';
 import * as ThemeToggleStories from '#components/theme_toggle/theme_toggle.stories';
 import * as ToolbarStories from '#components/toolbar/toolbar.stories';
 import * as TooltipStories from '#components/tooltip/tooltip.stories';
-import type { OverviewGroup } from './overview_entry.js';
+import type { OverviewGroup } from '#overview/overview_entry';
 
 const Button = composeStory(ButtonStories.Default, ButtonStories.default);
 const IconButton = composeStory(

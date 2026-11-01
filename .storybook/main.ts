@@ -1,6 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
-import { STORYBOOK_CHANNELS, getStorybookChannel } from './channel.ts';
+import { STORYBOOK_CHANNELS, getStorybookChannel } from '#storybook/channel.ts';
 
 const CHANNEL_LINK_STORIES = {
 	[STORYBOOK_CHANNELS.stable]: './channel_links/next_docs.mdx',

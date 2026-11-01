@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { splitIntoHighlightSegments } from './split_into_highlight_segments';
+import { splitIntoHighlightSegments } from '#lib/split_into_highlight_segments';
 
 describe('splitIntoHighlightSegments', () => {
 	test('returns a single unmatched segment when there are no ranges', () => {

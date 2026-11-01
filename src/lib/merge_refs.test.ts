@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { mergeRefs } from './merge_refs';
+import { mergeRefs } from '#lib/merge_refs';
 
 describe('mergeRefs', () => {
 	test('calls every callback ref with the node', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { resolveNodeLabelledBy } from './resolve_node_labelled_by';
+import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
 
 describe('resolveNodeLabelledBy', () => {
 	test('should return the label id when the label is a node', () => {

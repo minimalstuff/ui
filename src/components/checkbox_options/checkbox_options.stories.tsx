@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
-import { CheckboxOptions } from './checkbox_options';
+import { CheckboxOptions } from '#components/checkbox_options/checkbox_options';
 
 const meta = {
 	title: 'Components/CheckboxOptions',

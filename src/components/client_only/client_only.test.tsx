@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { ClientOnly } from './client_only';
+import { ClientOnly } from '#components/client_only/client_only';
 
 describe('ClientOnly', () => {
 	test('renders nothing before the client has mounted', () => {

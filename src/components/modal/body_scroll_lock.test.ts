@@ -1,7 +1,7 @@
 import { cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 
-import { useBodyScrollLock } from './body_scroll_lock';
+import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
 
 const SCROLLBAR_WIDTH = 15;
 const VIEWPORT_WIDTH = 1024;

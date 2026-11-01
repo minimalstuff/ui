@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { getTabStopIndex } from './use_tabs_keyboard_navigation';
+import { getTabStopIndex } from '#components/tabs/use_tabs_keyboard_navigation';
 
 const ITEMS = [
 	{ title: 'First', content: 'First content' },

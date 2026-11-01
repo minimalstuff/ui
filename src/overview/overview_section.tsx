@@ -1,5 +1,5 @@
-import { OverviewCard } from './overview_card.js';
-import type { OverviewGroup } from './overview_entry.js';
+import { OverviewCard } from '#overview/overview_card';
+import type { OverviewGroup } from '#overview/overview_entry';
 
 export function OverviewSection({ group }: Readonly<{ group: OverviewGroup }>) {
 	return (

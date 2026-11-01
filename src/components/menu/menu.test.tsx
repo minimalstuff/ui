@@ -3,8 +3,8 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
+import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
-import { Menu } from './menu';
 
 describe('Menu', () => {
 	test('is closed by default', () => {

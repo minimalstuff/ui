@@ -1,4 +1,7 @@
-import { substituteReducedMotionQuery, type MotionMode } from './index';
+import {
+	substituteReducedMotionQuery,
+	type MotionMode,
+} from '#storybook/motion/index';
 
 const REDUCED_MOTION_MARKER = 'prefers-reduced-motion';
 

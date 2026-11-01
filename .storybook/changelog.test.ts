@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { removeEmptyUnreleasedSection } from './changelog';
+import { removeEmptyUnreleasedSection } from '#storybook/changelog';
 
 describe('removeEmptyUnreleasedSection', () => {
 	it('should remove the Unreleased heading when it has no entries', () => {

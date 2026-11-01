@@ -3,10 +3,7 @@ import { fireEvent, userEvent, within } from 'storybook/test';
 
 import { ContextMenu } from '#components/context_menu/context_menu';
 import { MenuItem } from '#components/menu_item/menu_item';
-import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
+import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/ContextMenu',

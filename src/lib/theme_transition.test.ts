@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { getNextTheme, switchTheme } from './theme_transition';
+import { getNextTheme, switchTheme } from '#lib/theme_transition';
 
 describe('getNextTheme', () => {
 	test('cycles light to dark', () => {

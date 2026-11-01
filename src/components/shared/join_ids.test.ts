@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { joinIds } from './join_ids';
+import { joinIds } from '#components/shared/join_ids';
 
 describe('joinIds', () => {
 	test('joins truthy ids with a space, dropping falsy ones', () => {

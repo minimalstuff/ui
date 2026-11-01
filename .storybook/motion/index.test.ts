@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { substituteReducedMotionQuery } from './index';
+import { substituteReducedMotionQuery } from '#storybook/motion/index';
 
 describe('substituteReducedMotionQuery', () => {
 	it('should leave the query untouched in system mode', () => {

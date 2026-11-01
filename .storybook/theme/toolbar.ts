@@ -5,7 +5,7 @@ import {
 	getResolvedThemeFromPreference,
 	getThemePreference,
 	type ThemePreference,
-} from './index';
+} from '#storybook/theme/index';
 
 const THEME_TOOLBAR_ITEMS: { value: ThemePreference; title: string }[] = [
 	{ value: 'light', title: 'Light' },

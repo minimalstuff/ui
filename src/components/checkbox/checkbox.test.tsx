@@ -5,7 +5,7 @@ import { type ChangeEvent, createRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Checkbox } from './checkbox';
+import { Checkbox } from '#components/checkbox/checkbox';
 
 describe('Checkbox', () => {
 	test('renders label', () => {

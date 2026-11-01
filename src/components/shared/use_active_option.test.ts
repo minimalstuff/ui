@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { useActiveOption } from './use_active_option';
+import { useActiveOption } from '#components/shared/use_active_option';
 
 const OPTION_COUNT = 3;
 const getOptionId = (index: number) => `option-${index}`;

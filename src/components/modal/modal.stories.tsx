@@ -24,12 +24,12 @@ import { Select } from '#components/select/select';
 import { Switch } from '#components/switch/switch';
 import { Tabs } from '#components/tabs/tabs';
 import { Textarea } from '#components/textarea/textarea';
-import { consumerUtilitiesDecorator } from '../../../.storybook/consumer_utilities_decorator';
+import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
 import {
 	expectFocusOn,
 	getPortalScope,
 	waitPastModalExitAnimation,
-} from '../../../.storybook/play_helpers';
+} from '#storybook/play_helpers';
 
 function ModalTrigger(props: ModalProps) {
 	const handleOpen = () => {

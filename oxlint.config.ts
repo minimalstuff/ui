@@ -3,6 +3,12 @@ import { minimalstuffPreset } from '@minimalstuff/tooling/oxc/lint';
 const COMPONENT_FILES = ['src/components/**'];
 
 /**
+ * API Extractor crashes when the root entry re-exports the barrels through
+ * subpath imports, so it keeps relative paths.
+ */
+const ROOT_ENTRY_FILES = ['src/index.ts'];
+
+/**
  * Components implement WAI-ARIA patterns by hand: custom roles on divs,
  * backdrop mouse dismissal mirrored by Escape, a native-checked role=switch,
  * roving-focus containers and intentional autofocus. These rules assume native
@@ -29,6 +35,10 @@ export default minimalstuffPreset({
 			rules: Object.fromEntries(
 				ARIA_WIDGET_CONFLICTING_RULES.map((rule) => [rule, 'off'])
 			),
+		},
+		{
+			files: ROOT_ENTRY_FILES,
+			rules: { 'no-restricted-imports': 'off' },
 		},
 	],
 });

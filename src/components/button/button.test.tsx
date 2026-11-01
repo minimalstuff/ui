@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import type { SyntheticEvent } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { Button } from './button';
+import { Button } from '#components/button/button';
 
 describe('Button', () => {
 	test('renders children', () => {

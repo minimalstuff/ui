@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { MultiCombobox } from './multi_combobox';
+import { MultiCombobox } from '#components/multi_combobox/multi_combobox';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

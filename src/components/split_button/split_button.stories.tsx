@@ -10,10 +10,7 @@ import {
 import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 import { SplitButton } from '#components/split_button/split_button';
-import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
+import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/SplitButton',

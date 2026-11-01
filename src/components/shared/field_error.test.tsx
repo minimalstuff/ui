@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { FieldError } from './field_error';
+import { FieldError } from '#components/shared/field_error';
 
 describe('FieldError', () => {
 	test('renders nothing without an error', () => {

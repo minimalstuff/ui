@@ -3,7 +3,10 @@ import '@testing-library/jest-dom/vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { ConfirmModal, type ConfirmModalResponse } from './confirm_modal';
+import {
+	ConfirmModal,
+	type ConfirmModalResponse,
+} from '#components/modal/confirm_modal';
 
 describe('ConfirmModal', () => {
 	test('renders title and default labels', async () => {

@@ -15,7 +15,10 @@ import { Drawer } from '#components/drawer/drawer';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal } from '#components/modal/modal';
 import { ModalFooter } from '#components/modal/modal_footer';
-import { useDismissGuard, type DismissGuard } from './use_dismiss_guard';
+import {
+	useDismissGuard,
+	type DismissGuard,
+} from '#components/modal/use_dismiss_guard';
 
 const GUARDED_INPUT_LABEL = 'Display name';
 const DISCARD_TITLE = 'Discard your changes?';

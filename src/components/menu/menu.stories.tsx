@@ -11,10 +11,7 @@ import { IconButton } from '#components/icon_button/icon_button';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
-import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
+import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/Menu',

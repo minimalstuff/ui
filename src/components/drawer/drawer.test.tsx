@@ -6,10 +6,10 @@ import { createPortal } from 'react-dom';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
+import { Drawer, type DrawerProps } from '#components/drawer/drawer';
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { ModalFooter } from '#components/modal/modal_footer';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
-import { Drawer, type DrawerProps } from './drawer';
 
 function renderDrawer(props: Partial<DrawerProps> = {}) {
 	const onClose = vi.fn<() => void>();

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { findTypeaheadIndex } from './find_typeahead_index';
+import { findTypeaheadIndex } from '#components/menu/find_typeahead_index';
 
 describe('findTypeaheadIndex', () => {
 	test('finds the next label starting with the character', () => {

@@ -6,10 +6,7 @@ import {
 	ConfirmModal,
 	type ConfirmModalProps,
 } from '#components/modal/confirm_modal';
-import {
-	expectFocusOn,
-	getPortalScope,
-} from '../../../.storybook/play_helpers';
+import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 function ConfirmModalTrigger(props: ConfirmModalProps) {
 	const handleOpen = () => {
@@ -59,7 +56,7 @@ const meta = {
 		cancelLabel: 'Cancel',
 		confirmColor: 'primary',
 		onConfirm: async () => {
-			await new Promise((r) => setTimeout(r, 800));
+			await new Promise((resolve) => setTimeout(resolve, 800));
 		},
 	},
 } satisfies Meta<typeof ConfirmModalTrigger>;

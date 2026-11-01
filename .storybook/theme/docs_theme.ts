@@ -1,6 +1,6 @@
 import { create, themes } from 'storybook/theming';
 
-import { getResolvedTheme } from './index';
+import { getResolvedTheme } from '#storybook/theme/index';
 
 /**
  * The docs page paints its own surface on top of the canvas. In dark mode it

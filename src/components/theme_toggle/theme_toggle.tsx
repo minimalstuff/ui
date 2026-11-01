@@ -1,4 +1,4 @@
-import './theme_toggle.css';
+import '#components/theme_toggle/theme_toggle.css';
 
 import { useCallback, useRef } from 'react';
 

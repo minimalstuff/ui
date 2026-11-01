@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { MenuSeparator } from './menu_separator';
+import { MenuSeparator } from '#components/menu_separator/menu_separator';
 
 describe('MenuSeparator', () => {
 	test('renders a horizontal separator', () => {

@@ -1,7 +1,11 @@
 import type React from 'react';
 
-import { applyMotionMode } from './apply';
-import { DEFAULT_MOTION_MODE, isMotionMode, type MotionMode } from './index';
+import { applyMotionMode } from '#storybook/motion/apply';
+import {
+	DEFAULT_MOTION_MODE,
+	isMotionMode,
+	type MotionMode,
+} from '#storybook/motion/index';
 
 const MOTION_TOOLBAR_ITEMS: { value: MotionMode; title: string }[] = [
 	{ value: 'system', title: 'Motion: system' },

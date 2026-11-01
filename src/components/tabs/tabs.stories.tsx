@@ -5,7 +5,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Badge } from '#components/badge/badge';
 import { Input } from '#components/input/input';
 import { Tabs } from '#components/tabs/tabs';
-import { expectFocusOn } from '../../../.storybook/play_helpers';
+import { expectFocusOn } from '#storybook/play_helpers';
 
 const panelText = (text: string) => (
 	<p className="text-sm text-gray-700 dark:text-gray-300">{text}</p>

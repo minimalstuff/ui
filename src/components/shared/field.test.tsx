@@ -7,8 +7,8 @@ import { Combobox } from '#components/combobox/combobox';
 import { Input } from '#components/input/input';
 import { MultiCombobox } from '#components/multi_combobox/multi_combobox';
 import { Select } from '#components/select/select';
+import { Field } from '#components/shared/field';
 import { Textarea } from '#components/textarea/textarea';
-import { Field } from './field';
 
 const OPTIONS = [{ value: 'fr', label: 'France' }];
 const NODE_LABEL = <span>Email</span>;

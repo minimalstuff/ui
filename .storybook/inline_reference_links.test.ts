@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { inlineReferenceLinks } from './inline_reference_links';
+import { inlineReferenceLinks } from '#storybook/inline_reference_links';
 
 describe('inlineReferenceLinks', () => {
 	it('should turn reference links into inline links and drop their definitions', () => {

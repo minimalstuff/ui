@@ -11,8 +11,8 @@ import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Modal } from './modal';
-import { ModalFooter } from './modal_footer';
+import { Modal } from '#components/modal/modal';
+import { ModalFooter } from '#components/modal/modal_footer';
 
 const MAX_RENDERS_BEFORE_LOOP_DETECTED = 50;
 

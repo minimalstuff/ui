@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 
 import { ConfirmModal } from '#components/modal/confirm_modal';
 import { Modal } from '#components/modal/modal';
-import { ModalProvider } from './modal_provider';
+import { ModalProvider } from '#components/modal_provider/modal_provider';
 
 describe('ModalProvider', () => {
 	test('provides a single working root for Modal', async () => {

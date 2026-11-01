@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { resolveChannelUrl } from './resolve_channel_url';
+import { resolveChannelUrl } from '#storybook/channel_links/resolve_channel_url';
 
 type ChannelRedirectProps = {
 	href: string;

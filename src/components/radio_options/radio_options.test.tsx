@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { RadioOptions } from './radio_options';
+import { RadioOptions } from '#components/radio_options/radio_options';
 
 const OPTIONS = [
 	{ value: 'a', label: 'Option A' },

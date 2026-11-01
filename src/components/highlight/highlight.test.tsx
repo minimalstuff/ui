@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Highlight } from './highlight';
+import { Highlight } from '#components/highlight/highlight';
 
 describe('Highlight', () => {
 	test('renders plain text when there are no ranges', () => {
