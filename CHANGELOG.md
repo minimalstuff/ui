@@ -17,6 +17,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 - Importing the library no longer throws when the browser blocks site storage; the theme falls back to `system` and theme changes are not persisted.
 - `Menu` and `ContextMenu` no longer let the keys they handle (arrows, Home, End, Escape, typeahead letters) reach shortcuts listening on `window` or `document`; Tab still does.
+- `Toolbar` no longer moves focus out of an open `Menu`, `SplitButton` or `ContextMenu` placed inside it when ArrowLeft or ArrowRight is pressed.
 - `Toolbar` leaves arrow keys, Home and End to range sliders, radio buttons and selects placed inside it.
 
 ## [4.3.3] - 2026-10-29

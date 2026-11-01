@@ -82,7 +82,8 @@ export function useToolbarRovingFocus(
 
 	const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
 		const toolbar = toolbarRef.current;
-		if (!toolbar || ownsArrowKeys(event.target)) return;
+		if (!toolbar || !toolbar.contains(event.target as Node)) return;
+		if (ownsArrowKeys(event.target)) return;
 
 		const items = getEnabledItems(toolbar);
 		const targetPosition = getTargetPosition({
