@@ -25,8 +25,21 @@ function applyThemeToDocument(theme: Theme) {
 
 function readStoredTheme(): Theme {
 	if (!isBrowserEnvironment()) return 'system';
-	const storedTheme = globalThis.localStorage.getItem(THEME_STORAGE_KEY);
-	return isTheme(storedTheme) ? storedTheme : 'system';
+	try {
+		const storedTheme = globalThis.localStorage.getItem(THEME_STORAGE_KEY);
+		return isTheme(storedTheme) ? storedTheme : 'system';
+	} catch {
+		return 'system';
+	}
+}
+
+function writeStoredTheme(theme: Theme) {
+	if (!isBrowserEnvironment()) return;
+	try {
+		globalThis.localStorage.setItem(THEME_STORAGE_KEY, theme);
+	} catch {
+		return;
+	}
 }
 
 interface ThemeStore {
@@ -48,9 +61,7 @@ export const useThemeStore = create<ThemeStore>((set) => ({
 	setTheme: (theme) => {
 		applyThemeToDocument(theme);
 
-		if (isBrowserEnvironment()) {
-			globalThis.localStorage.setItem(THEME_STORAGE_KEY, theme);
-		}
+		writeStoredTheme(theme);
 
 		set({ theme });
 	},
