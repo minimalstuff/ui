@@ -117,9 +117,7 @@ describe('IconButton', () => {
 				<IconButton icon="i-mdi-close" aria-label="Close" tooltip="right" />
 			);
 			hoverButton();
-			expect(screen.getByRole('tooltip')).toHaveClass(
-				'data-[state=closed]:-translate-x-1'
-			);
+			expect(screen.getByRole('tooltip')).toHaveClass('ms-tooltip-enter-right');
 		});
 
 		test('should apply the position when tooltip is an object', () => {
@@ -131,9 +129,7 @@ describe('IconButton', () => {
 				/>
 			);
 			hoverButton();
-			expect(screen.getByRole('tooltip')).toHaveClass(
-				'data-[state=closed]:translate-x-1'
-			);
+			expect(screen.getByRole('tooltip')).toHaveClass('ms-tooltip-enter-left');
 		});
 
 		test('should describe the button when the tooltip has custom content', () => {

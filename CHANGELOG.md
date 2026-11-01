@@ -24,6 +24,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ### Fixed
 
+- `Button`, `Modal`, `Menu`, `ContextMenu`, `SplitButton`, `Tooltip` and `Switch` honour `prefers-reduced-motion`: no scaling or sliding, only fades.
 - `MultiCombobox` announces its selected values to screen readers, including those hidden behind the `+N` badge.
 - `MultiCombobox` search field is exposed as a combobox named after the field label (for example "Fruits, Search") and shows a focus outline when it receives focus; the `Combobox` and `MultiCombobox` lists are named after the field label.
 - The clear buttons of `Combobox` and `MultiCombobox` have a 24 px touch target; their look is unchanged.

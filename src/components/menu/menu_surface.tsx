@@ -183,7 +183,7 @@ export function MenuSurface({
 					className={clsx(
 						'w-max min-w-40 max-w-xs origin-top border py-1 shadow-lg backdrop-blur-sm',
 						'transition-[opacity,transform] duration-150 ease-out',
-						isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0',
+						isVisible ? 'scale-100 opacity-100' : 'ms-menu-surface-closed',
 						OVERLAY_BG,
 						OVERLAY_BORDER,
 						RADIUS_CLASSES[radius]

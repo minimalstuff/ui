@@ -36,6 +36,21 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-drawer-transition':
 		'transition-transform duration-200 ease-out motion-reduce:transition-none',
 	'ms-modal-backdrop-padding': 'p-2 sm:py-[3rem] lg:py-[5rem]',
+	'ms-button-press':
+		'interactive:active:scale-[0.95] motion-reduce:interactive:active:scale-100',
+	'ms-modal-panel-closed':
+		'opacity-0 scale-95 translate-y-1 motion-reduce:scale-100 motion-reduce:translate-y-0',
+	'ms-menu-surface-closed': 'scale-95 opacity-0 motion-reduce:scale-100',
+	'ms-tooltip-enter-top':
+		'data-[state=closed]:translate-y-1 motion-reduce:data-[state=closed]:translate-y-0',
+	'ms-tooltip-enter-bottom':
+		'data-[state=closed]:-translate-y-1 motion-reduce:data-[state=closed]:translate-y-0',
+	'ms-tooltip-enter-left':
+		'data-[state=closed]:translate-x-1 motion-reduce:data-[state=closed]:translate-x-0',
+	'ms-tooltip-enter-right':
+		'data-[state=closed]:-translate-x-1 motion-reduce:data-[state=closed]:translate-x-0',
+	'ms-switch-thumb-transition':
+		'transition duration-200 ease-in-out motion-reduce:transition-none',
 	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
 		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
