@@ -1,7 +1,25 @@
 import clsx from 'clsx';
+import { useState } from 'react';
+
+import { useLabels } from '#components/ui_provider/use_labels';
 
 const CHARACTER_COUNT_STYLES =
 	'text-xs text-gray-500 dark:text-gray-400 mt-1 text-right';
+
+const LOW_REMAINING_RATIO = 0.1;
+
+type RemainingZone = 'ok' | 'low' | 'empty';
+
+function getRemainingZone(
+	current: number,
+	max: number | undefined
+): RemainingZone {
+	if (max === undefined) return 'ok';
+	const remainingCount = max - current;
+	if (remainingCount <= 0) return 'empty';
+	const lowThreshold = Math.max(1, Math.ceil(max * LOW_REMAINING_RATIO));
+	return remainingCount <= lowThreshold ? 'low' : 'ok';
+}
 
 type BoundStatus = 'ok' | 'atLimit' | 'overLimit';
 
@@ -33,6 +51,18 @@ export function CharacterCount({
 	id,
 	className,
 }: Readonly<CharacterCountProps>) {
+	const labels = useLabels();
+	const zone = getRemainingZone(current, max);
+	const [announcement, setAnnouncement] = useState({ zone, message: '' });
+
+	if (announcement.zone !== zone) {
+		const remainingCount = Math.max(0, (max ?? 0) - current);
+		setAnnouncement({
+			zone,
+			message: zone === 'ok' ? '' : labels.charactersRemaining(remainingCount),
+		});
+	}
+
 	const showLabels = showMin === true || showMax === true;
 
 	const minStatus: BoundStatus =
@@ -50,31 +80,36 @@ export function CharacterCount({
 	const maxText = showLabels ? `${current}/${max} max` : `${current}/${max}`;
 
 	return (
-		<div
-			id={id}
-			className={clsx(!unstyled && CHARACTER_COUNT_STYLES, className)}
-		>
-			{showMin && min !== undefined && (
-				<span className={getBoundStatusClass(minStatus, unstyled)}>
-					{minText}
-				</span>
-			)}
-			{showMin && showMax && ' · '}
-			{showMax && max !== undefined && (
-				<span className={getBoundStatusClass(maxStatus, unstyled)}>
-					{maxText}
-				</span>
-			)}
-			{!showMin && !showMax && max !== undefined && (
-				<span className={getBoundStatusClass(maxStatus, unstyled)}>
-					{maxText}
-				</span>
-			)}
-			{!showMin && !showMax && min !== undefined && max === undefined && (
-				<span className={getBoundStatusClass(minStatus, unstyled)}>
-					{minText}
-				</span>
-			)}
-		</div>
+		<>
+			<div
+				id={id}
+				className={clsx(!unstyled && CHARACTER_COUNT_STYLES, className)}
+			>
+				{showMin && min !== undefined && (
+					<span className={getBoundStatusClass(minStatus, unstyled)}>
+						{minText}
+					</span>
+				)}
+				{showMin && showMax && ' · '}
+				{showMax && max !== undefined && (
+					<span className={getBoundStatusClass(maxStatus, unstyled)}>
+						{maxText}
+					</span>
+				)}
+				{!showMin && !showMax && max !== undefined && (
+					<span className={getBoundStatusClass(maxStatus, unstyled)}>
+						{maxText}
+					</span>
+				)}
+				{!showMin && !showMax && min !== undefined && max === undefined && (
+					<span className={getBoundStatusClass(minStatus, unstyled)}>
+						{minText}
+					</span>
+				)}
+			</div>
+			<span aria-live="polite" className="sr-only">
+				{announcement.message}
+			</span>
+		</>
 	);
 }

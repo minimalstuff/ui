@@ -104,7 +104,7 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 			)}
 			{...props}
 		>
-			<div
+			<span
 				className={clsx(icon, ICON_SIZE_CLASSES[size], children && 'mr-1')}
 			/>
 			{children}

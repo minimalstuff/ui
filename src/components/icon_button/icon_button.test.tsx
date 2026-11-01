@@ -176,4 +176,13 @@ describe('IconButton', () => {
 			expect(await axe(document.body)).toHaveNoViolations();
 		});
 	});
+
+	test('should not render block elements inside the button when rendered', () => {
+		render(
+			<IconButton icon="i-mdi-close" aria-label="Close">
+				text
+			</IconButton>
+		);
+		expect(screen.getByRole('button').querySelector('div')).toBeNull();
+	});
 });

@@ -105,7 +105,7 @@ describe('SplitButton', () => {
 		const { onClick } = renderSplitButton({ loading: true });
 		fireEvent.click(getTrigger());
 		fireEvent.keyDown(getTrigger(), { key: 'ArrowDown' });
-		fireEvent.click(screen.getByRole('button', { name: 'Create' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Create Loading' }));
 		expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 		expect(onClick).not.toHaveBeenCalled();
 	});

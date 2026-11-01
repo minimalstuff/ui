@@ -19,6 +19,12 @@ export interface UILabels {
 	clear: string;
 	/** Screen-reader suffix of a required `CheckboxOptions` group. */
 	required: string;
+	/** Screen-reader announcement of `CopyButton` after a successful copy. */
+	copied: string;
+	/** Screen-reader text added to a `Button` while it is loading. */
+	loading: string;
+	/** Screen-reader announcement of `CharacterCount` near and at the limit. */
+	charactersRemaining: (remainingCount: number) => string;
 	/** Accessible name of `ThemeToggle` for the current theme. */
 	currentTheme: (theme: Theme) => string;
 	/** `MultiCombobox` badge summarising the values that do not fit. */
@@ -38,6 +44,10 @@ const DEFAULT_LABELS: UILabels = {
 	search: 'Search',
 	clear: 'Clear',
 	required: 'required',
+	copied: 'Copied',
+	loading: 'Loading',
+	charactersRemaining: (remainingCount) =>
+		`${remainingCount} ${remainingCount === 1 ? 'character' : 'characters'} remaining`,
 	currentTheme: (theme) => `Current theme: ${theme}`,
 	overflowCount: (hiddenCount) => `+${hiddenCount} more`,
 	selectedCount: (selectedCount) => `${selectedCount} selected`,

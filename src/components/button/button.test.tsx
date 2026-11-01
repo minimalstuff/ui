@@ -122,4 +122,22 @@ describe('Button', () => {
 		render(<Button unstyled>Submit</Button>);
 		expect(screen.getByRole('button')).toHaveClass('inline-flex');
 	});
+
+	test('should include the loading label in the accessible name when loading', () => {
+		render(<Button loading>Save</Button>);
+		expect(
+			screen.getByRole('button', { name: 'Save Loading' })
+		).toBeInTheDocument();
+	});
+
+	test('should append the loading label to aria-label when loading', () => {
+		render(
+			<Button loading aria-label="Save">
+				Save
+			</Button>
+		);
+		expect(
+			screen.getByRole('button', { name: 'Save Loading' })
+		).toBeInTheDocument();
+	});
 });

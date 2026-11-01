@@ -116,4 +116,47 @@ describe('CopyButton', () => {
 
 		expect(onError).toHaveBeenCalledWith(clipboardError);
 	});
+
+	test('should announce the copy in a status region when the copy succeeds', async () => {
+		render(
+			<CopyButton value="hello">
+				{({ copy }) => <button onClick={() => void copy()}>copy</button>}
+			</CopyButton>
+		);
+		expect(screen.getByRole('status')).toBeEmptyDOMElement();
+
+		await act(async () => {
+			screen.getByRole('button').click();
+		});
+		await act(async () => {
+			vi.advanceTimersByTime(0);
+		});
+
+		expect(screen.getByRole('status')).toHaveTextContent('Copied');
+	});
+
+	test('should re-announce when copied twice within the indicator window', async () => {
+		render(
+			<CopyButton value="hello">
+				{({ copy }) => <button onClick={() => void copy()}>copy</button>}
+			</CopyButton>
+		);
+		await act(async () => {
+			screen.getByRole('button').click();
+		});
+		await act(async () => {
+			vi.advanceTimersByTime(0);
+		});
+		expect(screen.getByRole('status')).toHaveTextContent('Copied');
+
+		await act(async () => {
+			screen.getByRole('button').click();
+		});
+		expect(screen.getByRole('status')).toBeEmptyDOMElement();
+
+		await act(async () => {
+			vi.advanceTimersByTime(0);
+		});
+		expect(screen.getByRole('status')).toHaveTextContent('Copied');
+	});
 });
