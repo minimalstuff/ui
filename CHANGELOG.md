@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `Menu` and `ContextMenu` no longer let the keys they handle (arrows, Home, End, Escape, typeahead letters) reach shortcuts listening on `window` or `document`; Tab still does.
+
 ## [4.3.3] - 2026-10-29
 
 ### Changed
