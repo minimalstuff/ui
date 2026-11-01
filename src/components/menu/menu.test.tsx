@@ -343,4 +343,35 @@ describe('Menu', () => {
 
 		expect(handleTriggerKeyDown).toHaveBeenCalledTimes(1);
 	});
+
+	describe('disabled', () => {
+		test('should stay closed on trigger click and ArrowDown', () => {
+			render(
+				<Menu trigger={<button>Options</button>} disabled>
+					<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				</Menu>
+			);
+			fireEvent.click(screen.getByText('Options'));
+			fireEvent.keyDown(screen.getByText('Options'), { key: 'ArrowDown' });
+			fireEvent.keyDown(screen.getByText('Options'), { key: 'ArrowUp' });
+			expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+		});
+
+		test('should close an open menu when it becomes disabled', async () => {
+			const items = <MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>;
+			const { rerender } = render(
+				<Menu trigger={<button>Options</button>}>{items}</Menu>
+			);
+			fireEvent.click(screen.getByText('Options'));
+			await waitFor(() => expect(screen.getByRole('menu')).toBeInTheDocument());
+			rerender(
+				<Menu trigger={<button>Options</button>} disabled>
+					{items}
+				</Menu>
+			);
+			await waitFor(() =>
+				expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+			);
+		});
+	});
 });

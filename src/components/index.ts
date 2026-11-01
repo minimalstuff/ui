@@ -106,6 +106,10 @@ export {
 export type { RadioOption } from './radio_options/radio_options';
 export { Select, type SelectProps } from './select/select';
 export type { SelectOption } from './select/select';
+export {
+	SplitButton,
+	type SplitButtonProps,
+} from './split_button/split_button';
 export { Switch, type SwitchProps } from './switch/switch';
 export { Tabs, type TabsProps } from './tabs/tabs';
 export type { TabItem } from './tabs/tabs';
