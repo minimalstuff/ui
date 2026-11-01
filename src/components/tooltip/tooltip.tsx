@@ -43,6 +43,7 @@ export type { TooltipPosition } from '#components/tooltip/tooltip_position';
 
 const OFFSET_FROM_TRIGGER = 8;
 const ARROW_SIZE_PX = 8;
+const POINTER_LEAVE_GRACE_MS = 100;
 
 const ENTER_TRANSLATE_CLASSES: Record<TooltipPosition, string> = {
 	top: 'data-[state=closed]:translate-y-1',
@@ -131,6 +132,8 @@ export function Tooltip({
 		null
 	);
 	const temporaryTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+	const pointerLeaveTimeoutRef =
+		useRef<ReturnType<typeof setTimeout>>(undefined);
 
 	const { refs, floatingStyles, placement, middlewareData, isPositioned } =
 		useFloating({
@@ -210,8 +213,21 @@ export function Tooltip({
 
 	const handleHide = useCallback(() => {
 		clearTimeout(temporaryTimeoutRef.current);
+		clearTimeout(pointerLeaveTimeoutRef.current);
 		closeTooltip();
 	}, [closeTooltip]);
+
+	const cancelPendingHide = () => {
+		clearTimeout(pointerLeaveTimeoutRef.current);
+	};
+
+	const scheduleHide = () => {
+		clearTimeout(pointerLeaveTimeoutRef.current);
+		pointerLeaveTimeoutRef.current = setTimeout(
+			handleHide,
+			POINTER_LEAVE_GRACE_MS
+		);
+	};
 
 	const handleFocus = (event: FocusEvent) => {
 		if (!event.target.matches(':focus-visible')) return;
@@ -220,26 +236,40 @@ export function Tooltip({
 
 	const handlePointerEnter = (event: PointerEvent) => {
 		if (event.pointerType === 'touch') return;
+		cancelPendingHide();
 		handleShow();
 	};
 
 	const handlePointerLeave = (event: PointerEvent) => {
 		if (event.pointerType === 'touch') return;
-		handleHide();
+		scheduleHide();
 	};
 
-	useEffect(() => () => clearTimeout(temporaryTimeoutRef.current), []);
+	const handleTooltipPointerEnter = (event: PointerEvent) => {
+		if (event.pointerType === 'touch') return;
+		cancelPendingHide();
+	};
+
+	useEffect(
+		() => () => {
+			clearTimeout(temporaryTimeoutRef.current);
+			clearTimeout(pointerLeaveTimeoutRef.current);
+		},
+		[]
+	);
 
 	useEffect(() => {
-		if (!isMounted) return;
+		if (!isVisible || disabled) return;
 
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') handleHide();
+			if (event.key !== 'Escape') return;
+			event.preventDefault();
+			handleHide();
 		};
 
-		document.addEventListener('keydown', handleKeyDown);
-		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isMounted, handleHide]);
+		window.addEventListener('keydown', handleKeyDown, true);
+		return () => window.removeEventListener('keydown', handleKeyDown, true);
+	}, [isVisible, disabled, handleHide]);
 
 	const isTooltipShown = isMounted && !disabled;
 	const displayContent =
@@ -307,7 +337,9 @@ export function Tooltip({
 					<div
 						ref={setTooltipRef}
 						style={floatingStyles}
-						className="z-50 inline-block pointer-events-none"
+						className="z-50 inline-block"
+						onPointerEnter={handleTooltipPointerEnter}
+						onPointerLeave={handlePointerLeave}
 					>
 						<div
 							id={tooltipId}
