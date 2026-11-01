@@ -13,6 +13,14 @@ import { axe } from 'vitest-axe';
 import { Tooltip } from './tooltip';
 
 const EXIT_ANIMATION_DURATION_MS = 150;
+const POINTER_LEAVE_GRACE_MS = 100;
+const ENTER_FRAME_DURATION_MS = 20;
+
+async function waitForEnterFrame() {
+	await act(async () => {
+		await vi.advanceTimersByTimeAsync(ENTER_FRAME_DURATION_MS);
+	});
+}
 
 describe('Tooltip', () => {
 	beforeEach(() => {
@@ -51,7 +59,9 @@ describe('Tooltip', () => {
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
 		act(() => {
-			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+			vi.advanceTimersByTime(
+				POINTER_LEAVE_GRACE_MS + EXIT_ANIMATION_DURATION_MS
+			);
 		});
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
@@ -320,7 +330,7 @@ describe('Tooltip', () => {
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 	});
 
-	test('Escape hides a tooltip shown via focus', () => {
+	test('Escape hides a tooltip shown via focus', async () => {
 		render(
 			<Tooltip content="Helpful text">
 				<button>Focus me</button>
@@ -331,6 +341,7 @@ describe('Tooltip', () => {
 		act(() => {
 			trigger.focus();
 		});
+		await waitForEnterFrame();
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
 		act(() => {
@@ -342,7 +353,7 @@ describe('Tooltip', () => {
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 
-	test('Escape hides a tooltip shown via mouse hover', () => {
+	test('Escape hides a tooltip shown via mouse hover', async () => {
 		render(
 			<Tooltip content="Helpful text">
 				<button>Hover me</button>
@@ -353,6 +364,7 @@ describe('Tooltip', () => {
 		act(() => {
 			fireEvent.pointerEnter(wrapper);
 		});
+		await waitForEnterFrame();
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
 		act(() => {
@@ -364,7 +376,7 @@ describe('Tooltip', () => {
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 
-	test('does not prevent the default behavior of the Escape keydown event', () => {
+	test('should prevent the default behavior of the Escape keydown event when the tooltip is shown', async () => {
 		render(
 			<Tooltip content="Helpful text">
 				<button>Hover me</button>
@@ -375,6 +387,26 @@ describe('Tooltip', () => {
 		act(() => {
 			fireEvent.pointerEnter(wrapper);
 		});
+
+		await waitForEnterFrame();
+
+		const escapeEvent = new KeyboardEvent('keydown', {
+			key: 'Escape',
+			cancelable: true,
+		});
+		act(() => {
+			document.dispatchEvent(escapeEvent);
+		});
+
+		expect(escapeEvent.defaultPrevented).toBe(true);
+	});
+
+	test('should not prevent the default behavior of the Escape keydown event when the tooltip is hidden', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
 
 		const escapeEvent = new KeyboardEvent('keydown', {
 			key: 'Escape',
@@ -385,6 +417,110 @@ describe('Tooltip', () => {
 		});
 
 		expect(escapeEvent.defaultPrevented).toBe(false);
+	});
+
+	test('should not prevent the default behavior of the Escape keydown event when pressed during the exit animation', async () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		await waitForEnterFrame();
+		act(() => {
+			fireEvent.keyDown(document, { key: 'Escape' });
+		});
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+		const escapeEvent = new KeyboardEvent('keydown', {
+			key: 'Escape',
+			cancelable: true,
+		});
+		act(() => {
+			document.dispatchEvent(escapeEvent);
+		});
+
+		expect(escapeEvent.defaultPrevented).toBe(false);
+	});
+
+	test('should be defaultPrevented before a document bubble listener sees Escape when the tooltip is shown', async () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		await waitForEnterFrame();
+		const wasDefaultPrevented: boolean[] = [];
+		const recordEscape = (event: KeyboardEvent) => {
+			wasDefaultPrevented.push(event.defaultPrevented);
+		};
+		document.addEventListener('keydown', recordEscape);
+
+		act(() => {
+			fireEvent.keyDown(document, { key: 'Escape' });
+		});
+		document.removeEventListener('keydown', recordEscape);
+
+		expect(wasDefaultPrevented).toEqual([true]);
+	});
+
+	test('should stay visible when the pointer moves from the trigger onto the tooltip', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		const tooltipShell = screen.getByRole('tooltip')
+			.parentElement as HTMLElement;
+
+		act(() => {
+			fireEvent.pointerLeave(wrapper);
+			fireEvent.pointerEnter(tooltipShell);
+			vi.advanceTimersByTime(
+				POINTER_LEAVE_GRACE_MS + EXIT_ANIMATION_DURATION_MS
+			);
+		});
+
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+	});
+
+	test('should hide after the grace delay when the pointer leaves both the trigger and the tooltip', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		const tooltipShell = screen.getByRole('tooltip')
+			.parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerLeave(wrapper);
+			fireEvent.pointerEnter(tooltipShell);
+			fireEvent.pointerLeave(tooltipShell);
+		});
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+		act(() => {
+			vi.advanceTimersByTime(
+				POINTER_LEAVE_GRACE_MS + EXIT_ANIMATION_DURATION_MS
+			);
+		});
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 
 	test("keeps the child's own aria-describedby when the tooltip is not shown", () => {

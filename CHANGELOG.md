@@ -14,6 +14,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 - `@floating-ui/react-dom`, `zustand`, `react-call` and `clsx` are no longer bundled into the library; they are installed as regular dependencies and shared with the consumer's own copies (nothing to install by hand).
 - `MultiCombobox` search field now has the `combobox` role and a name that starts with the field label: tests that query it as `getByRole('textbox', { name: 'Search' })` should use `getByRole('combobox', { name: /Search/ })`.
+- `Tooltip`: while a tooltip is visible, Escape only hides it and marks the event as handled (`defaultPrevented`), so a surrounding `Modal` or `Drawer` closes on the next Escape. Escape handlers that skip handled events do not run while a tooltip is visible.
 
 ### Fixed
 
@@ -25,6 +26,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Toolbar` no longer moves focus out of an open `Menu`, `SplitButton` or `ContextMenu` placed inside it when ArrowLeft or ArrowRight is pressed.
 - `Toolbar` leaves arrow keys, Home and End to range sliders, radio buttons and selects placed inside it.
 - `ContextMenu` returns focus to the element focused before it opened, even after a second right-click while it was open.
+- `Tooltip` stays open while the pointer moves onto it, so its text can be read with a screen magnifier.
 
 ## [4.3.3] - 2026-10-29
 
