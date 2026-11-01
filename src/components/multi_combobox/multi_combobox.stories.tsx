@@ -46,6 +46,10 @@ const meta = {
 			control: 'text',
 			description: 'Label above the combobox',
 		},
+		description: {
+			control: 'text',
+			description: 'Help text below the field',
+		},
 		error: {
 			control: 'text',
 			description: 'Error message below the combobox',
@@ -131,7 +135,7 @@ export const WithLabel: Story = {
 			'ArrowUp opens the listbox with the last option active',
 			async () => {
 				await userEvent.keyboard('{ArrowUp}');
-				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const searchInput = canvas.getByRole('combobox', { name: /Search/ });
 				const lastOption = canvas.getByRole('option', { name: 'Mango' });
 				await expect(searchInput).toHaveAttribute(
 					'aria-activedescendant',
@@ -196,7 +200,7 @@ export const Capped: Story = {
 			'ArrowDown opens the listbox with the first option active and moves focus into the named search input',
 			async () => {
 				await userEvent.keyboard('{ArrowDown}');
-				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const searchInput = canvas.getByRole('combobox', { name: /Search/ });
 				await expectFocusOn(searchInput);
 				await expect(searchInput).toHaveAccessibleDescription(
 					'You can select up to 2 items'
@@ -230,7 +234,7 @@ export const Capped: Story = {
 			'ArrowDown lands on the disabled "Date (desc)" option, which still shows as active',
 			async () => {
 				await userEvent.keyboard('{ArrowDown}');
-				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const searchInput = canvas.getByRole('combobox', { name: /Search/ });
 				const dateDescOption = canvas.getByRole('option', {
 					name: 'Date (desc)',
 				});
@@ -269,7 +273,7 @@ export const Capped: Story = {
 			'activating the footer Clear button empties the selection and refocuses the search input',
 			async () => {
 				await userEvent.keyboard('{Enter}');
-				await expectFocusOn(canvas.getByRole('textbox', { name: 'Search' }));
+				await expectFocusOn(canvas.getByRole('combobox', { name: /Search/ }));
 				await expect(
 					canvas.getByRole('option', { name: 'Name' })
 				).toHaveAttribute('aria-selected', 'false');
@@ -402,7 +406,7 @@ export const NoResults: Story = {
 			'typing a query with no matches announces "No results found"',
 			async () => {
 				await userEvent.click(trigger);
-				const searchInput = canvas.getByRole('textbox', { name: 'Search' });
+				const searchInput = canvas.getByRole('combobox', { name: /Search/ });
 				await userEvent.type(searchInput, 'zzz');
 				await expect(canvas.getByRole('status')).toHaveTextContent(
 					'No results found'

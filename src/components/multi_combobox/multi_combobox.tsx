@@ -21,10 +21,12 @@ import {
 	FIELD_TEXT_COLORS,
 } from '#components/shared/field_styles';
 import {
+	ACTIVE_ITEM_FOCUS_OUTLINE,
 	ACTIVE_OPTION_OUTLINE,
 	BUTTON_FOCUS_OUTLINE,
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
+import { joinIds } from '#components/shared/join_ids';
 import {
 	PANEL_RADIUS_CLASSES,
 	RADIUS_CLASSES,
@@ -53,6 +55,7 @@ export interface MultiComboboxOption {
 export interface MultiComboboxProps {
 	options: readonly MultiComboboxOption[];
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	'aria-label'?: string;
 	error?: string;
 	placeholder?: string;
@@ -140,6 +143,16 @@ function resolveDisplayedPills(
 	};
 }
 
+function resolveSearchFieldName(
+	label: ReactNode,
+	ariaLabel: string | undefined,
+	searchText: string
+): string {
+	if (typeof label === 'string') return `${label}, ${searchText}`;
+	if (ariaLabel) return `${ariaLabel}, ${searchText}`;
+	return searchText;
+}
+
 const PILL_CLASSES =
 	'inline-flex items-center rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-900 dark:text-gray-100';
 
@@ -151,6 +164,7 @@ const PILL_CLASSES =
 export function MultiCombobox({
 	options,
 	label,
+	description,
 	'aria-label': ariaLabel,
 	error,
 	placeholder,
@@ -177,9 +191,12 @@ export function MultiCombobox({
 	id,
 }: Readonly<MultiComboboxProps>): ReactElement {
 	const labels = useLabels();
-	const { fieldId, errorId, labelId } = useFieldIds(id);
+	const { fieldId, errorId, descriptionId, labelId } = useFieldIds(id);
 	const listboxId = `${fieldId}-listbox`;
 	const maxHintId = `${fieldId}-max-hint`;
+	const selectionSummaryId = `${fieldId}-selection`;
+	const hasExplicitTriggerName =
+		typeof label === 'string' || Boolean(ariaLabel);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const searchInputRef = useRef<HTMLInputElement>(null);
@@ -217,6 +234,8 @@ export function MultiCombobox({
 		() => options.filter((option) => selectedValues.includes(option.value)),
 		[options, selectedValues]
 	);
+	const hasSelectionSummary =
+		hasExplicitTriggerName && selectedOptions.length > 0;
 
 	const { visibleOptions, hiddenCount } = resolveDisplayedPills(
 		selectedOptions,
@@ -355,12 +374,19 @@ export function MultiCombobox({
 		<Field
 			fieldId={fieldId}
 			errorId={errorId}
+			descriptionId={descriptionId}
 			label={label}
+			description={description}
 			error={error}
 			required={required}
 			wrapperClassName={wrapperClassName}
 		>
 			<div ref={wrapperRef} className="relative" onBlur={handleWrapperBlur}>
+				{hasSelectionSummary && (
+					<span id={selectionSummaryId} className="sr-only">
+						{selectedOptions.map((option) => option.label).join(', ')}
+					</span>
+				)}
 				<button
 					ref={triggerRef}
 					type="button"
@@ -372,7 +398,11 @@ export function MultiCombobox({
 					aria-haspopup="listbox"
 					aria-invalid={!!error}
 					aria-required={required || undefined}
-					aria-describedby={error ? errorId : undefined}
+					aria-describedby={joinIds(
+						hasSelectionSummary && selectionSummaryId,
+						Boolean(description) && descriptionId,
+						error && errorId
+					)}
 					aria-labelledby={typeof label === 'string' ? labelId : undefined}
 					aria-label={ariaLabel}
 					onClick={handleTriggerClick}
@@ -421,7 +451,7 @@ export function MultiCombobox({
 						onMouseDown={(event) => event.preventDefault()}
 						onClick={handleTriggerClearClick}
 						className={clsx(
-							'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300',
+							"absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 before:content-[''] before:absolute before:-inset-[4px]",
 							BUTTON_FOCUS_OUTLINE,
 							BUTTON_COLOR_TOKENS.primary.focusOutline
 						)}
@@ -446,12 +476,20 @@ export function MultiCombobox({
 							ref={searchInputRef}
 							type="text"
 							autoFocus
+							role="combobox"
+							aria-expanded="true"
+							aria-autocomplete="list"
+							aria-haspopup="listbox"
 							autoComplete="off"
 							value={query}
 							onChange={handleSearchChange}
 							onKeyDown={handleKeyDown}
 							placeholder={searchPlaceholder ?? labels.search}
-							aria-label={searchPlaceholder ?? labels.search}
+							aria-label={resolveSearchFieldName(
+								label,
+								ariaLabel,
+								searchPlaceholder ?? labels.search
+							)}
 							aria-controls={listboxId}
 							aria-activedescendant={activeOptionId}
 							aria-describedby={
@@ -460,7 +498,8 @@ export function MultiCombobox({
 							className={clsx(
 								'w-full',
 								!unstyled && [
-									'px-3 py-2 border-b bg-transparent focus:outline-none',
+									'px-3 py-2 border-b bg-transparent',
+									ACTIVE_ITEM_FOCUS_OUTLINE,
 									FIELD_TEXT_COLORS,
 									OVERLAY_BORDER,
 								]
@@ -483,6 +522,8 @@ export function MultiCombobox({
 						<ul
 							id={listboxId}
 							role="listbox"
+							aria-labelledby={typeof label === 'string' ? labelId : undefined}
+							aria-label={typeof label === 'string' ? undefined : ariaLabel}
 							aria-multiselectable
 							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>

@@ -19,6 +19,7 @@ import {
 	BUTTON_FOCUS_OUTLINE,
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
+import { joinIds } from '#components/shared/join_ids';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	OVERLAY_BG,
@@ -38,6 +39,7 @@ export interface ComboboxOption {
 export interface ComboboxProps {
 	options: ComboboxOption[];
 	label?: string | ReactNode;
+	description?: string | ReactNode;
 	'aria-label'?: string;
 	error?: string;
 	placeholder?: string;
@@ -58,6 +60,7 @@ export interface ComboboxProps {
 export function Combobox({
 	options,
 	label,
+	description,
 	'aria-label': ariaLabel,
 	error,
 	placeholder,
@@ -75,7 +78,12 @@ export function Combobox({
 	id,
 }: Readonly<ComboboxProps>) {
 	const labels = useLabels();
-	const { fieldId: comboboxId, errorId } = useFieldIds(id);
+	const {
+		fieldId: comboboxId,
+		errorId,
+		descriptionId,
+		labelId,
+	} = useFieldIds(id);
 	const listboxId = `${comboboxId}-listbox`;
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -212,7 +220,9 @@ export function Combobox({
 		<Field
 			fieldId={comboboxId}
 			errorId={errorId}
+			descriptionId={descriptionId}
 			label={label}
+			description={description}
 			error={error}
 			required={required}
 			wrapperClassName={wrapperClassName}
@@ -244,7 +254,10 @@ export function Combobox({
 					aria-activedescendant={activeOptionId}
 					aria-invalid={!!error}
 					aria-required={required || undefined}
-					aria-describedby={error ? errorId : undefined}
+					aria-describedby={joinIds(
+						Boolean(description) && descriptionId,
+						error && errorId
+					)}
 					className={clsx(
 						'w-full disabled:opacity-50 disabled:cursor-not-allowed',
 						!unstyled && [
@@ -265,7 +278,7 @@ export function Combobox({
 						onMouseDown={handleClearMouseDown}
 						onClick={clearSelection}
 						className={clsx(
-							'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300',
+							"absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 before:content-[''] before:absolute before:-inset-[4px]",
 							BUTTON_FOCUS_OUTLINE,
 							BUTTON_COLOR_TOKENS.primary.focusOutline
 						)}
@@ -288,6 +301,8 @@ export function Combobox({
 						<ul
 							id={listboxId}
 							role="listbox"
+							aria-labelledby={typeof label === 'string' ? labelId : undefined}
+							aria-label={typeof label === 'string' ? undefined : ariaLabel}
 							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
 						>
 							{filteredOptions.map((opt, index) => (

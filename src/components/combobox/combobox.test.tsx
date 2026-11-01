@@ -263,4 +263,24 @@ describe('Combobox', () => {
 		);
 		expect(screen.getByRole('button', { name: 'Effacer' })).toBeInTheDocument();
 	});
+
+	test('should name the listbox after the label when it is open', () => {
+		render(<Combobox label="Country" options={OPTIONS} />);
+		fireEvent.click(screen.getByLabelText('Country'));
+
+		expect(
+			screen.getByRole('listbox', { name: 'Country' })
+		).toBeInTheDocument();
+	});
+
+	test('should expose the description in the accessible description', () => {
+		render(
+			<Combobox label="Country" description="Pick one" options={OPTIONS} />
+		);
+
+		expect(screen.getByText('Pick one')).toBeInTheDocument();
+		expect(screen.getByRole('combobox')).toHaveAccessibleDescription(
+			'Pick one'
+		);
+	});
 });

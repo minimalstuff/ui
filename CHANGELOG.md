@@ -6,15 +6,20 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ### Added
 
+- `Combobox` and `MultiCombobox` take a `description` prop, shown below the field and announced with it.
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 
 ### Changed
 
 - `@floating-ui/react-dom`, `zustand`, `react-call` and `clsx` are no longer bundled into the library; they are installed as regular dependencies and shared with the consumer's own copies (nothing to install by hand).
+- `MultiCombobox` search field now has the `combobox` role and a name that starts with the field label: tests that query it as `getByRole('textbox', { name: 'Search' })` should use `getByRole('combobox', { name: /Search/ })`.
 
 ### Fixed
 
+- `MultiCombobox` announces its selected values to screen readers, including those hidden behind the `+N` badge.
+- `MultiCombobox` search field is exposed as a combobox named after the field label (for example "Fruits, Search") and shows a focus outline when it receives focus; the `Combobox` and `MultiCombobox` lists are named after the field label.
+- The clear buttons of `Combobox` and `MultiCombobox` have a 24 px touch target; their look is unchanged.
 - Importing the library no longer throws when the browser blocks site storage; the theme falls back to `system` and theme changes are not persisted.
 - `Menu` and `ContextMenu` no longer let the keys they handle (arrows, Home, End, Escape, typeahead letters) reach shortcuts listening on `window` or `document`; Tab still does.
 - `Toolbar` no longer moves focus out of an open `Menu`, `SplitButton` or `ContextMenu` placed inside it when ArrowLeft or ArrowRight is pressed.
