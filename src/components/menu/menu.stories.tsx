@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	expect,
 	userEvent,
+	waitFor,
 	waitForElementToBeRemoved,
 	within,
 } from 'storybook/test';
@@ -108,6 +109,21 @@ export const Default: Story = {
 				await expectFocusOn(within(menu).getByText('Delete'));
 			}
 		);
+	},
+};
+
+export const ReducedMotion: Story = {
+	globals: { motion: 'reduced' },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: 'Options' }));
+		const menu = await body.findByRole('menu', { name: 'Options' });
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(menu).toHaveAttribute('data-state', 'closed'));
+
+		await expect(['none', '1']).toContain(getComputedStyle(menu).scale);
 	},
 };
 

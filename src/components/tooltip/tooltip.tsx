@@ -46,10 +46,10 @@ const ARROW_SIZE_PX = 8;
 const POINTER_LEAVE_GRACE_MS = 100;
 
 const ENTER_TRANSLATE_CLASSES: Record<TooltipPosition, string> = {
-	top: 'data-[state=closed]:translate-y-1',
-	bottom: 'data-[state=closed]:-translate-y-1',
-	left: 'data-[state=closed]:translate-x-1',
-	right: 'data-[state=closed]:-translate-x-1',
+	top: 'ms-tooltip-enter-top',
+	bottom: 'ms-tooltip-enter-bottom',
+	left: 'ms-tooltip-enter-left',
+	right: 'ms-tooltip-enter-right',
 };
 
 const ARROW_STATIC_SIDE: Record<

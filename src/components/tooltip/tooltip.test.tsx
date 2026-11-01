@@ -279,9 +279,7 @@ describe('Tooltip', () => {
 			fireEvent.pointerEnter(wrapper);
 		});
 
-		expect(screen.getByRole('tooltip')).toHaveClass(
-			'data-[state=closed]:-translate-x-1'
-		);
+		expect(screen.getByRole('tooltip')).toHaveClass('ms-tooltip-enter-right');
 	});
 
 	test('forwards a custom className to the wrapper', () => {

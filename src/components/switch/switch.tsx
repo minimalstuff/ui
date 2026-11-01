@@ -104,7 +104,7 @@ export function Switch({
 					<span
 						className={clsx(
 							'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0',
-							'transition duration-200 ease-in-out',
+							'ms-switch-thumb-transition',
 							isChecked ? 'translate-x-5.25' : 'translate-x-0'
 						)}
 						aria-hidden

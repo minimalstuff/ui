@@ -142,7 +142,7 @@ export function ModalShell({
 					'focus:outline-none',
 					isVisible
 						? 'opacity-100 scale-100 translate-y-0'
-						: 'opacity-0 scale-95 translate-y-1'
+						: 'ms-modal-panel-closed'
 				)}
 				onClick={(e) => e.stopPropagation()}
 			>
