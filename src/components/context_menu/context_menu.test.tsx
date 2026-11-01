@@ -119,6 +119,34 @@ describe('ContextMenu', () => {
 		await waitFor(() => expect(screen.getByText('Edit')).toHaveFocus());
 	});
 
+	test('returns focus to the original element on Escape after a second right-click while open', async () => {
+		render(
+			<>
+				<button type="button">Elsewhere</button>
+				<ContextMenu
+					items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+				>
+					<div>Right-click area</div>
+				</ContextMenu>
+			</>
+		);
+		const elsewhere = screen.getByText('Elsewhere');
+		elsewhere.focus();
+		fireEvent.contextMenu(screen.getByText('Right-click area'), {
+			clientX: 100,
+			clientY: 200,
+		});
+		await waitFor(() => expect(screen.getByText('Edit')).toHaveFocus());
+
+		fireEvent.contextMenu(screen.getByText('Edit'), {
+			clientX: 120,
+			clientY: 220,
+		});
+		fireEvent.keyDown(screen.getByText('Edit'), { key: 'Escape' });
+
+		await waitFor(() => expect(elsewhere).toHaveFocus());
+	});
+
 	test('closes and returns focus to the previously focused element on Escape', async () => {
 		render(
 			<>

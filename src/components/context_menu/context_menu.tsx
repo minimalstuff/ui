@@ -111,7 +111,10 @@ export function ContextMenu({
 
 	const handleContextMenu = (event: MouseEvent) => {
 		event.preventDefault();
-		previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+		if (!isMounted) {
+			previouslyFocusedRef.current =
+				document.activeElement as HTMLElement | null;
+		}
 		const { x, y } = resolveAnchorPoint(event);
 		refs.setReference(virtualElementAt(x, y));
 		// Always a fresh position for a new click point: defer to the
