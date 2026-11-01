@@ -44,6 +44,10 @@ export type SplitButtonProps = {
 	loading?: boolean;
 	/** Disables both halves. */
 	disabled?: boolean;
+	/** Accessible name of the group formed by both halves. */
+	'aria-label'?: string;
+	/** Id of the element that names the group. Takes precedence over `aria-label`. */
+	'aria-labelledby'?: string;
 	/** Class on the wrapper around both halves. */
 	className?: string;
 	/** Ref to the main button. */
@@ -76,6 +80,8 @@ export function SplitButton(splitButtonProps: Readonly<SplitButtonProps>) {
 		size = 'md',
 		loading = false,
 		disabled = false,
+		'aria-label': ariaLabel,
+		'aria-labelledby': ariaLabelledby,
 		className,
 		ref,
 		unstyled = false,
@@ -106,7 +112,12 @@ export function SplitButton(splitButtonProps: Readonly<SplitButtonProps>) {
 	);
 
 	return (
-		<div className={clsx('inline-flex', className)}>
+		<div
+			role="group"
+			aria-label={ariaLabel}
+			aria-labelledby={ariaLabelledby}
+			className={clsx('inline-flex', className)}
+		>
 			<Button
 				ref={ref}
 				size={size}
