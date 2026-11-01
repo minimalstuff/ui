@@ -1,8 +1,17 @@
-export const THEME_STORAGE_KEY = 'sb-theme-preference';
+const THEME_STORAGE_KEY = 'sb-theme-preference';
 
 export type ThemePreference = 'light' | 'dark' | 'system';
 
 const VALID_PREFERENCES: ThemePreference[] = ['light', 'dark', 'system'];
+
+export function isThemePreference(value: unknown): value is ThemePreference {
+	return VALID_PREFERENCES.some((preference) => preference === value);
+}
+
+export function storeThemePreference(preference: ThemePreference): void {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+	window.localStorage.setItem(THEME_STORAGE_KEY, preference);
+}
 
 export function getThemePreference(): ThemePreference {
 	if (typeof window === 'undefined' || !window.localStorage) return 'system';
@@ -11,10 +20,6 @@ export function getThemePreference(): ThemePreference {
 		return stored as ThemePreference;
 	}
 	return 'system';
-}
-
-export function getResolvedTheme(): 'light' | 'dark' {
-	return getResolvedThemeFromPreference(getThemePreference());
 }
 
 export function getResolvedThemeFromPreference(

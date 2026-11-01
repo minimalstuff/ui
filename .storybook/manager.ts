@@ -1,16 +1,23 @@
+import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 import { addons } from 'storybook/manager-api';
-import { themes } from 'storybook/theming';
 
-import { STORYBOOK_CHANNELS, getStorybookChannel } from '#storybook/channel';
-import { getResolvedTheme } from '#storybook/theme/index';
+import {
+	getThemePreference,
+	isThemePreference,
+	storeThemePreference,
+} from '#storybook/theme/index';
+import { getManagerTheme } from '#storybook/theme/manager_theme';
 
-const NEXT_BRAND_TITLE = '@minimalstuff/ui next';
+const THEME_SYNC_ADDON_ID = 'minimalstuff/theme-sync';
 
-const baseTheme = themes[getResolvedTheme()];
+type GlobalsUpdatedPayload = { globals: { theme?: unknown } };
 
-addons.setConfig({
-	theme:
-		getStorybookChannel() === STORYBOOK_CHANNELS.next
-			? { ...baseTheme, brandTitle: NEXT_BRAND_TITLE }
-			: baseTheme,
+addons.setConfig({ theme: getManagerTheme(getThemePreference()) });
+
+addons.register(THEME_SYNC_ADDON_ID, (api) => {
+	api.on(GLOBALS_UPDATED, ({ globals }: GlobalsUpdatedPayload) => {
+		if (!isThemePreference(globals.theme)) return;
+		storeThemePreference(globals.theme);
+		api.setOptions({ theme: getManagerTheme(globals.theme) });
+	});
 });
