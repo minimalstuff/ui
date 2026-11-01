@@ -10,6 +10,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Menu` takes a `disabled` prop that keeps it closed (and closes it if open) while its trigger stays focusable.
 - `Tabs` takes optional `aria-label` and `aria-labelledby` props that name its tab list, to tell several tab sets apart on one page.
 - `Modal` logs a warning in development when it has neither a `title` nor an `aria-label`, since screen readers would announce an unnamed dialog.
+- `UIProvider` labels `copied`, `loading` and `charactersRemaining`, used by the new screen-reader announcements below; translate them like the other labels.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 
 ### Changed
@@ -17,6 +18,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `@floating-ui/react-dom`, `zustand`, `react-call` and `clsx` are no longer bundled into the library; they are installed as regular dependencies and shared with the consumer's own copies (nothing to install by hand).
 - `MultiCombobox` search field now has the `combobox` role and a name that starts with the field label: tests that query it as `getByRole('textbox', { name: 'Search' })` should use `getByRole('combobox', { name: /Search/ })`.
 - `Tooltip`: while a tooltip is visible, Escape only hides it and marks the event as handled (`defaultPrevented`), so a surrounding `Modal` or `Drawer` closes on the next Escape. Escape handlers that skip handled events do not run while a tooltip is visible.
+- `Button` in its `loading` state adds the `loading` label ("Loading") to its accessible name: tests that query a loading button by its exact name, such as `getByRole('button', { name: 'Save' })`, should use `{ name: /^Save/ }`.
 
 ### Fixed
 
@@ -33,6 +35,9 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Modal` and `Drawer` return focus to the element that opened them even when a field inside uses `autoFocus`.
 - The focus ring of `Input`, `Textarea`, `Select`, `Combobox`, `MultiCombobox`, `Checkbox`, `Switch`, `RadioOptions` and `CheckboxOptions` stays visible in Windows high-contrast (forced colors) mode.
 - A `label` passed as a React node instead of a string now names its control in `Input`, `Textarea`, `Select`, `Combobox` and `MultiCombobox`, and names the `Combobox` and `MultiCombobox` lists.
+- `CopyButton` announces "Copied" to screen readers after a successful copy.
+- `CharacterCount` (and `Input` or `Textarea` with a character count) announces the remaining characters to screen readers when 10% are left and when the limit is reached, not on every keystroke.
+- `IconButton` no longer renders a `div` inside its `button` (invalid HTML).
 
 ## [4.3.3] - 2026-10-29
 

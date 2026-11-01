@@ -10,6 +10,7 @@ import {
 } from '#components/shared/button_styles';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { type ControlSize } from '#components/shared/sizes';
+import { useLabels } from '#components/ui_provider/use_labels';
 
 export type {
 	ButtonColor,
@@ -80,8 +81,13 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 		endIcon,
 		disabled,
 		onClick,
+		'aria-label': ariaLabel,
 		...props
 	} = buttonProps as ButtonProps & FlatButtonStyle;
+	const labels = useLabels();
+	const hasAriaLabel = ariaLabel !== undefined;
+	const accessibleLabel =
+		loading && hasAriaLabel ? `${ariaLabel} ${labels.loading}` : ariaLabel;
 	const tokens = BUTTON_COLOR_TOKENS[color];
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
 
@@ -112,6 +118,7 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 			disabled={disabled}
 			aria-disabled={(loading && !disabled) || undefined}
 			aria-busy={loading || undefined}
+			aria-label={accessibleLabel}
 			{...props}
 			onClick={handleClick}
 		>
@@ -125,6 +132,9 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 				<span className={clsx(startIcon, iconSizeClass)} aria-hidden="true" />
 			)}
 			{children}
+			{loading && !hasAriaLabel && (
+				<span className="sr-only">{labels.loading}</span>
+			)}
 			{!loading && endIcon && (
 				<span className={clsx(endIcon, iconSizeClass)} aria-hidden="true" />
 			)}

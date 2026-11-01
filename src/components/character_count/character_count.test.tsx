@@ -1,8 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
+import { Input } from '#components/input/input';
 import { CharacterCount } from './character_count';
 
 describe('CharacterCount', () => {
@@ -54,5 +55,62 @@ describe('CharacterCount', () => {
 	test('merges a custom className on the wrapper', () => {
 		render(<CharacterCount current={5} max={20} className="mt-4" />);
 		expect(screen.getByText('5/20').parentElement).toHaveClass('mt-4');
+	});
+
+	test('should announce when the remaining count crosses the threshold', () => {
+		const { container, rerender } = render(
+			<CharacterCount current={80} max={100} />
+		);
+		const liveRegion = container.querySelector('[aria-live="polite"]');
+		expect(liveRegion).toBeEmptyDOMElement();
+
+		rerender(<CharacterCount current={90} max={100} />);
+
+		expect(liveRegion).toHaveTextContent('10 characters remaining');
+	});
+
+	test('should not announce on other keystrokes when the threshold is not crossed', () => {
+		const { container, rerender } = render(
+			<CharacterCount current={80} max={100} />
+		);
+		const liveRegion = container.querySelector('[aria-live="polite"]');
+
+		rerender(<CharacterCount current={85} max={100} />);
+		expect(liveRegion).toBeEmptyDOMElement();
+
+		rerender(<CharacterCount current={90} max={100} />);
+		rerender(<CharacterCount current={92} max={100} />);
+		expect(liveRegion).toHaveTextContent('10 characters remaining');
+	});
+
+	test('should announce when the limit is reached', () => {
+		const { container, rerender } = render(
+			<CharacterCount current={95} max={100} />
+		);
+		const liveRegion = container.querySelector('[aria-live="polite"]');
+
+		rerender(<CharacterCount current={100} max={100} />);
+
+		expect(liveRegion).toHaveTextContent('0 characters remaining');
+	});
+
+	test('should not include the announcement in the field accessible description when the threshold is crossed', () => {
+		render(<Input label="Name" showCharCount maxLength={100} />);
+		const input = screen.getByRole('textbox');
+
+		fireEvent.change(input, { target: { value: 'a'.repeat(95) } });
+
+		expect(screen.getByText('5 characters remaining')).toBeInTheDocument();
+		expect(input).toHaveAccessibleDescription('95/100 max');
+	});
+
+	test('should use the singular form in the default label when one character remains', () => {
+		const { container, rerender } = render(
+			<CharacterCount current={50} max={100} />
+		);
+		rerender(<CharacterCount current={99} max={100} />);
+		expect(container.querySelector('[aria-live="polite"]')).toHaveTextContent(
+			'1 character remaining'
+		);
 	});
 });

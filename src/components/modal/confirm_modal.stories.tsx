@@ -105,7 +105,9 @@ export const Default: Story = {
 			'Enter confirms; focus stays inside the alertdialog while it loads',
 			async () => {
 				await userEvent.keyboard('{Enter}');
-				const confirmButton = body.getByRole('button', { name: 'Confirm' });
+				const confirmButton = body.getByRole('button', {
+					name: 'Confirm Loading',
+				});
 				await expectFocusOn(confirmButton);
 				await expect(confirmButton).toHaveAttribute('aria-disabled', 'true');
 				await userEvent.tab();
