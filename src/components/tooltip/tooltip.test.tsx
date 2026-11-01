@@ -59,9 +59,7 @@ describe('Tooltip', () => {
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
 		act(() => {
-			vi.advanceTimersByTime(
-				POINTER_LEAVE_GRACE_MS + EXIT_ANIMATION_DURATION_MS
-			);
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
 		});
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
@@ -471,9 +469,60 @@ describe('Tooltip', () => {
 		expect(wasDefaultPrevented).toEqual([true]);
 	});
 
-	test('should stay visible when the pointer moves from the trigger onto the tooltip', () => {
+	test('should not capture the pointer when the tooltip is not hoverable', () => {
 		render(
 			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+
+		expect(screen.getByRole('tooltip').parentElement).toHaveClass(
+			'pointer-events-none'
+		);
+	});
+
+	test('should hide right after the exit animation when the pointer leaves the trigger and the tooltip is not hoverable', () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+
+		act(() => {
+			fireEvent.pointerLeave(wrapper);
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+		});
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('should capture the pointer when the tooltip is hoverable', () => {
+		render(
+			<Tooltip content="Helpful text" hoverable>
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+
+		expect(screen.getByRole('tooltip').parentElement).not.toHaveClass(
+			'pointer-events-none'
+		);
+	});
+
+	test('should stay visible when the pointer moves from the trigger onto the tooltip when hoverable', () => {
+		render(
+			<Tooltip content="Helpful text" hoverable>
 				<button>Hover me</button>
 			</Tooltip>
 		);
@@ -495,9 +544,9 @@ describe('Tooltip', () => {
 		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 	});
 
-	test('should hide after the grace delay when the pointer leaves both the trigger and the tooltip', () => {
+	test('should hide after the grace delay when the pointer leaves both the trigger and the tooltip when hoverable', () => {
 		render(
-			<Tooltip content="Helpful text">
+			<Tooltip content="Helpful text" hoverable>
 				<button>Hover me</button>
 			</Tooltip>
 		);

@@ -42,6 +42,11 @@ const meta = {
 			description:
 				'Describe the trigger with the tooltip. Unset: only when the text differs from the trigger name',
 		},
+		hoverable: {
+			control: 'boolean',
+			description:
+				'Keep the tooltip open while the pointer is on it (WCAG 1.4.13). It then captures the pointer and can block clicks on controls it covers: use it for long content away from other controls',
+		},
 		portalContainer: {
 			control: false,
 			description:
@@ -182,6 +187,15 @@ export const DescribeChild: Story = {
 				tooltip.id
 			);
 		});
+	},
+};
+
+export const Hoverable: Story = {
+	args: {
+		hoverable: true,
+		position: 'bottom',
+		content:
+			'Hoverable: the pointer can move onto this long text without closing it, so it can be read with a magnifier. It captures the pointer, so keep it away from other controls.',
 	},
 };
 
