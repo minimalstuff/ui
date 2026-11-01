@@ -67,6 +67,10 @@ export interface TabsProps {
 	 * `false`.
 	 */
 	keepMounted?: boolean;
+	/** Accessible name of the tablist. Distinguishes several tab sets on one page. */
+	'aria-label'?: string;
+	/** Id of the element that names the tablist. Takes precedence over `aria-label`. */
+	'aria-labelledby'?: string;
 	className?: string;
 	tabListClassName?: string;
 	panelClassName?: string;
@@ -85,6 +89,8 @@ export function Tabs({
 	unstyled = false,
 	animated = true,
 	keepMounted = false,
+	'aria-label': ariaLabel,
+	'aria-labelledby': ariaLabelledby,
 	className,
 	tabListClassName,
 	panelClassName,
@@ -160,6 +166,8 @@ export function Tabs({
 		<div className={tabsRootClasses(orientation, className)}>
 			<div
 				role="tablist"
+				aria-label={ariaLabel}
+				aria-labelledby={ariaLabelledby}
 				aria-orientation={orientation}
 				className={tabsListClasses({
 					variant,
