@@ -1,5 +1,6 @@
 import { composeStory } from '@storybook/react-vite';
 
+import * as AppBarStories from '#components/app_bar/app_bar.stories';
 import * as AvatarStories from '#components/avatar/avatar.stories';
 import * as BadgeStories from '#components/badge/badge.stories';
 import * as ButtonStories from '#components/button/button.stories';
@@ -71,6 +72,7 @@ const SplitButton = composeStory(
 );
 const Spinner = composeStory(SpinnerStories.Default, SpinnerStories.default);
 const Switch = composeStory(SwitchStories.Default, SwitchStories.default);
+const AppBar = composeStory(AppBarStories.Default, AppBarStories.default);
 const Avatar = composeStory(AvatarStories.Default, AvatarStories.default);
 const Badge = composeStory(BadgeStories.Default, BadgeStories.default);
 const Card = composeStory(CardStories.Default, CardStories.default);
@@ -123,6 +125,7 @@ export const OVERVIEW_GROUPS: readonly OverviewGroup[] = [
 	{
 		label: 'Display',
 		entries: [
+			{ name: 'AppBar', Story: AppBar, isWide: true },
 			{ name: 'Avatar', Story: Avatar },
 			{ name: 'Badge', Story: Badge },
 			{ name: 'Card', Story: Card, isWide: true },
