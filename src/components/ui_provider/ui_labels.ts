@@ -21,7 +21,7 @@ export interface UILabels {
 	required: string;
 	/** Screen-reader announcement of `CopyButton` after a successful copy. */
 	copied: string;
-	/** Screen-reader text added to a `Button` while it is loading. */
+	/** Screen-reader text added to a `Button` while it is loading, and announced by `Spinner` without a visible label. */
 	loading: string;
 	/** Screen-reader announcement of `CharacterCount` near and at the limit. */
 	charactersRemaining: (remainingCount: number) => string;

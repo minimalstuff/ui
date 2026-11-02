@@ -114,6 +114,7 @@ export {
 	SplitButton,
 	type SplitButtonProps,
 } from './split_button/split_button';
+export { Spinner, type SpinnerProps } from './spinner/spinner';
 export { Switch, type SwitchProps } from './switch/switch';
 export { Tabs, type TabsProps } from './tabs/tabs';
 export type { TabItem } from './tabs/tabs';
