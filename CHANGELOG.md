@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Changed
+
+- `Select`, `Combobox`, `Tabs`, `RadioOptions` and `CheckboxOptions` now accept readonly arrays for `options` (and `items` for `Tabs`), so `as const` arrays can be passed directly.
+
 ## [5.0.1] - 2026-11-02
 
 ### Fixed

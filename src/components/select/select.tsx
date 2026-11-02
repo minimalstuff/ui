@@ -21,7 +21,7 @@ export interface SelectProps extends Omit<
 	ComponentPropsWithRef<'select'>,
 	'children'
 > {
-	options: SelectOption[];
+	options: readonly SelectOption[];
 	label?: string | ReactNode;
 	description?: string | ReactNode;
 	error?: string;

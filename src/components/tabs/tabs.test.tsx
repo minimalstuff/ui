@@ -754,3 +754,11 @@ describe('Tabs badge', () => {
 		expect(await axe(container)).toHaveNoViolations();
 	});
 });
+
+const READONLY_ITEMS = [{ title: 'First', content: 'First content' }] as const;
+
+test('should accept a readonly array of options', () => {
+	render(<Tabs items={READONLY_ITEMS} />);
+
+	expect(screen.getAllByRole('tab').length).toBeGreaterThan(0);
+});

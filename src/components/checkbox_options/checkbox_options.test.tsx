@@ -211,3 +211,16 @@ describe('CheckboxOptions', () => {
 		expect(checkbox).toHaveAccessibleDescription('Details');
 	});
 });
+
+const READONLY_OPTIONS = ['a', 'b'] as const;
+
+test('should accept readonly arrays of options and values', () => {
+	render(
+		<CheckboxOptions
+			options={READONLY_OPTIONS}
+			defaultValues={['a'] as const}
+		/>
+	);
+
+	expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+});

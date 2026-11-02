@@ -176,3 +176,11 @@ describe('RadioOptions', () => {
 		expect(radio).toHaveAccessibleDescription('Details');
 	});
 });
+
+const READONLY_OPTIONS = ['a', 'b'] as const;
+
+test('should accept a readonly array of options', () => {
+	render(<RadioOptions options={READONLY_OPTIONS} />);
+
+	expect(screen.getAllByRole('radio').length).toBeGreaterThan(0);
+});
