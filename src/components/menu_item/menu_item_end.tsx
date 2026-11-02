@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 export interface MenuItemEndProps {
 	trailing?: ReactNode;
 	selected?: boolean;
+	unstyled?: boolean;
 }
 
 /**
@@ -16,6 +17,7 @@ export interface MenuItemEndProps {
 export function MenuItemEnd({
 	trailing,
 	selected,
+	unstyled = false,
 }: Readonly<MenuItemEndProps>) {
 	const isOption = selected !== undefined;
 	if (!trailing && !isOption) return null;
@@ -24,7 +26,11 @@ export function MenuItemEnd({
 		<span className="ml-auto flex flex-shrink-0 items-center gap-2 pl-2">
 			{trailing && (
 				// Dimmed, but not below AA: gray-400 sits at 2.5:1 on white.
-				<span className="text-xs text-gray-500 dark:text-gray-400">
+				<span
+					className={clsx(
+						!unstyled && 'text-xs text-gray-500 dark:text-gray-400'
+					)}
+				>
 					{trailing}
 				</span>
 			)}
@@ -33,7 +39,8 @@ export function MenuItemEnd({
 				// row it left behind.
 				<span
 					className={clsx(
-						'i-mdi-check h-4 w-4 text-blue-600 dark:text-blue-400',
+						'i-mdi-check h-4 w-4',
+						!unstyled && 'text-blue-600 dark:text-blue-400',
 						!selected && 'invisible'
 					)}
 					aria-hidden="true"

@@ -167,6 +167,29 @@ export const WithoutTitle: Story = {
 	},
 };
 
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		panelClassName:
+			'bg-slate-900 text-slate-100 border-2 border-fuchsia-500 rounded-none p-6',
+		backdropClassName: 'bg-fuchsia-950/70',
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await step('opens named by its title', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+			await body.findByRole('dialog', { name: 'Modal title' });
+		});
+
+		await step('Escape closes it', async () => {
+			await userEvent.keyboard('{Escape}');
+			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		});
+	},
+};
+
 export const Small: Story = {
 	args: {
 		title: 'Small modal',

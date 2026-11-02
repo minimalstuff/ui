@@ -799,4 +799,105 @@ describe('Tooltip', () => {
 			).toHaveNoViolations();
 		});
 	});
+
+	describe('unstyled', () => {
+		async function showUnstyledTooltip() {
+			render(
+				<Tooltip content="Helpful text" unstyled panelClassName="custom-bubble">
+					<button>Focus me</button>
+				</Tooltip>
+			);
+			act(() => {
+				screen.getByRole('button').focus();
+			});
+			await waitForEnterFrame();
+			return screen.getByRole('tooltip');
+		}
+
+		test('should drop the visual classes of the bubble', async () => {
+			const tooltip = await showUnstyledTooltip();
+
+			for (const token of [
+				'px-3',
+				'py-1.5',
+				'text-sm',
+				'text-white',
+				'bg-gray-900',
+				'shadow-lg',
+				'rounded-lg',
+				'opacity-100',
+				'ms-tooltip-enter-top',
+			]) {
+				expect(tooltip).not.toHaveClass(token);
+			}
+		});
+
+		test('should keep the positioning and behaviour of the bubble', async () => {
+			const tooltip = await showUnstyledTooltip();
+
+			expect(tooltip).toHaveAttribute('data-state', 'open');
+			expect(tooltip.parentElement).toHaveClass(
+				'z-50',
+				'inline-block',
+				'pointer-events-none'
+			);
+			expect(screen.getByRole('button').parentElement).toHaveClass(
+				'inline-flex'
+			);
+		});
+
+		test('should apply panelClassName to the tooltip element', async () => {
+			const tooltip = await showUnstyledTooltip();
+			expect(tooltip).toHaveClass('custom-bubble');
+		});
+
+		test('should not render the arrow', async () => {
+			const tooltip = await showUnstyledTooltip();
+			expect(tooltip.querySelector('.rotate-45')).not.toBeInTheDocument();
+			expect(tooltip.children).toHaveLength(0);
+		});
+
+		test('should show on pointer hover', () => {
+			render(
+				<Tooltip content="Helpful text" unstyled>
+					<button>Hover me</button>
+				</Tooltip>
+			);
+			act(() => {
+				fireEvent.pointerEnter(
+					screen.getByRole('button').parentElement as HTMLElement
+				);
+			});
+			expect(screen.getByRole('tooltip')).toBeInTheDocument();
+		});
+
+		test('should hide on Escape', async () => {
+			await showUnstyledTooltip();
+
+			act(() => {
+				fireEvent.keyDown(document, { key: 'Escape' });
+			});
+			act(() => {
+				vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+			});
+			expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+		});
+
+		test('should apply panelClassName without unstyled', async () => {
+			render(
+				<Tooltip content="Helpful text" panelClassName="custom-bubble">
+					<button>Focus me</button>
+				</Tooltip>
+			);
+			act(() => {
+				screen.getByRole('button').focus();
+			});
+			await waitForEnterFrame();
+
+			expect(screen.getByRole('tooltip')).toHaveClass(
+				'custom-bubble',
+				'bg-gray-900'
+			);
+		});
+	});
 });

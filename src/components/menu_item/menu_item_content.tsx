@@ -9,15 +9,18 @@ import type { MenuItemBaseProps } from '#components/menu_item/menu_item_props';
 export const MenuItemContent = ({
 	icon,
 	danger = false,
+	unstyled = false,
 	children,
-}: Readonly<Pick<MenuItemBaseProps, 'icon' | 'danger' | 'children'>>) => (
+}: Readonly<
+	Pick<MenuItemBaseProps, 'icon' | 'danger' | 'unstyled' | 'children'>
+>) => (
 	<>
 		{icon && (
 			<span
 				className={clsx(
 					icon,
 					'h-4 w-4 flex-shrink-0',
-					!danger && 'text-gray-500 dark:text-gray-400'
+					!danger && !unstyled && 'text-gray-500 dark:text-gray-400'
 				)}
 				aria-hidden="true"
 			/>

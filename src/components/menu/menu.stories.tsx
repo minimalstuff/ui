@@ -258,3 +258,40 @@ export const InDrawer: Story = {
 		await expectMenuInDialogSurvivesTab(body, dialog);
 	},
 };
+
+export const Unstyled: Story = {
+	render: () => (
+		<Menu
+			unstyled
+			panelClassName="mt-1 min-w-40 rounded-xl bg-indigo-950 p-2 text-white shadow-2xl"
+			trigger={<IconButton icon="i-mdi-dots-vertical" aria-label="Options" />}
+		>
+			<MenuItem
+				unstyled
+				className="rounded-lg px-3 py-2 text-sm text-white hover:bg-indigo-800 focus-visible:bg-indigo-800"
+				onClick={() => {}}
+			>
+				Edit
+			</MenuItem>
+			<MenuItem
+				unstyled
+				className="rounded-lg px-3 py-2 text-sm text-white hover:bg-indigo-800 focus-visible:bg-indigo-800"
+				onClick={() => {}}
+			>
+				Duplicate
+			</MenuItem>
+		</Menu>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: 'Options' }));
+
+		const menu = await body.findByRole('menu', { name: 'Options' });
+		await expect(menu).toHaveClass('bg-indigo-950');
+		await expect(
+			within(menu).getByRole('menuitem', { name: 'Edit' })
+		).toBeVisible();
+	},
+};

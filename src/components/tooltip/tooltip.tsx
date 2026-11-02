@@ -76,6 +76,15 @@ export interface TooltipProps {
 	temporaryDuration?: number;
 	disabled?: boolean;
 	radius?: Radius;
+	/**
+	 * Strips the bubble's visual styling (background, text colour and size,
+	 * padding, radius, shadow, enter animation) and removes the arrow.
+	 * Positioning, `data-state` and the hover handling stay. `radius` is
+	 * ignored.
+	 */
+	unstyled?: boolean;
+	/** Styles the bubble (`role="tooltip"`), with or without `unstyled`. */
+	panelClassName?: string;
 	onTemporaryShow?: () => void;
 	className?: string;
 	/**
@@ -119,6 +128,8 @@ export function Tooltip({
 	temporaryDuration = 2000,
 	disabled = false,
 	radius = 'lg',
+	unstyled = false,
+	panelClassName,
 	onTemporaryShow,
 	className,
 	describeChild,
@@ -361,27 +372,33 @@ export function Tooltip({
 							role="tooltip"
 							data-state={isVisible ? 'open' : 'closed'}
 							className={clsx(
-								'px-3 py-1.5 text-sm whitespace-nowrap',
-								'text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 shadow-lg',
-								'transition-[opacity,transform] duration-150 ease-out',
-								isVisible ? 'opacity-100' : 'opacity-0',
-								ENTER_TRANSLATE_CLASSES[resolvedSide],
-								RADIUS_CLASSES[radius]
+								'whitespace-nowrap',
+								!unstyled && [
+									'px-3 py-1.5 text-sm',
+									'text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 shadow-lg',
+									'transition-[opacity,transform] duration-150 ease-out',
+									isVisible ? 'opacity-100' : 'opacity-0',
+									ENTER_TRANSLATE_CLASSES[resolvedSide],
+									RADIUS_CLASSES[radius],
+								],
+								panelClassName
 							)}
 						>
 							{displayContent}
-							<div
-								ref={arrowRef}
-								style={{
-									position: 'absolute',
-									width: `${ARROW_SIZE_PX}px`,
-									height: `${ARROW_SIZE_PX}px`,
-									left: arrowX !== undefined ? `${arrowX}px` : undefined,
-									top: arrowY !== undefined ? `${arrowY}px` : undefined,
-									[arrowStaticSide]: `-${ARROW_SIZE_PX / 2}px`,
-								}}
-								className="rotate-45 bg-gray-900 dark:bg-gray-100"
-							/>
+							{!unstyled && (
+								<div
+									ref={arrowRef}
+									style={{
+										position: 'absolute',
+										width: `${ARROW_SIZE_PX}px`,
+										height: `${ARROW_SIZE_PX}px`,
+										left: arrowX !== undefined ? `${arrowX}px` : undefined,
+										top: arrowY !== undefined ? `${arrowY}px` : undefined,
+										[arrowStaticSide]: `-${ARROW_SIZE_PX / 2}px`,
+									}}
+									className="rotate-45 bg-gray-900 dark:bg-gray-100"
+								/>
+							)}
 						</div>
 					</div>,
 					portalContainer ?? findLandmarkPortalTarget(triggerElement)

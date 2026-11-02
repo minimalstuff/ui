@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 
 import { Kbd } from '#components/kbd/kbd';
 import {
@@ -24,6 +25,13 @@ const meta = {
 		},
 		disabled: {
 			control: 'boolean',
+		},
+		unstyled: {
+			control: 'boolean',
+		},
+		radius: {
+			control: 'select',
+			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
 		},
 	},
 	args: {
@@ -142,4 +150,27 @@ export const DisabledLink: Story = {
 			disabled: true,
 			children: 'Settings',
 		}),
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		icon: 'i-mdi-pencil',
+		className:
+			'rounded-lg bg-indigo-950 px-4 py-2 text-sm text-white hover:bg-indigo-800 focus-visible:bg-indigo-800',
+	},
+	play: async ({ canvasElement }) => {
+		const item = within(canvasElement).getByRole('menuitem', {
+			name: 'Move up',
+		});
+
+		await expect(item).toHaveClass('bg-indigo-950');
+		await expect(item).not.toHaveClass('px-3');
+	},
+};
+
+export const Rounded: Story = {
+	args: {
+		radius: 'lg',
+	},
 };

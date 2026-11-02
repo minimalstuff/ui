@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 
 import { Highlight } from '#components/highlight/highlight';
 
@@ -41,5 +42,17 @@ export const Default: Story = {};
 export const NoMatches: Story = {
 	args: {
 		ranges: [],
+	},
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		markClassName: 'bg-pink-200 px-0.5 font-semibold text-pink-900',
+	},
+	play: async ({ canvas }) => {
+		const mark = canvas.getByText('quick');
+		await expect(mark).toHaveClass('bg-pink-200');
+		await expect(mark).not.toHaveClass('bg-yellow-200');
 	},
 };

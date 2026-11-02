@@ -59,6 +59,18 @@ export interface MenuProps {
 	radius?: Radius;
 	className?: string;
 	/**
+	 * Strips the panel's visual styling (border, background, shadow, blur,
+	 * padding, radius, width bounds and the open/close animation). Positioning,
+	 * the backdrop and the keyboard handling stay. `radius` is ignored.
+	 */
+	unstyled?: boolean;
+	/**
+	 * Styles the floating panel (`role="menu"`), with or without `unstyled`.
+	 * Its position comes from inline floating styles: don't set
+	 * `position`, `top` or `left` on it.
+	 */
+	panelClassName?: string;
+	/**
 	 * Keeps the menu closed (and closes it if open): the trigger's click and
 	 * ArrowDown/ArrowUp no longer open it. The trigger itself is left alone, so
 	 * it can stay focusable; mark it `aria-disabled` or `disabled` yourself.
@@ -98,6 +110,8 @@ export function Menu({
 	side = 'bottom',
 	align = 'start',
 	radius = 'md',
+	unstyled = false,
+	panelClassName,
 	className,
 	disabled = false,
 	ref,
@@ -212,6 +226,8 @@ export function Menu({
 					isVisible={isVisible}
 					isPositioned={isPositioned}
 					radius={radius}
+					unstyled={unstyled}
+					panelClassName={panelClassName}
 					onClose={closeAndReturnFocus}
 					initialFocus={initialFocus}
 					portalTarget={findDialogPortalTarget(wrapperElement)}

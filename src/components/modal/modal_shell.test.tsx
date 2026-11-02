@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { afterEach, describe, expect, test, vi } from 'vitest';
@@ -690,5 +690,186 @@ describe('ModalShell', () => {
 			);
 			expect(screen.queryByRole('region')).not.toBeInTheDocument();
 		});
+	});
+});
+
+describe('ModalShell unstyled and styling hooks', () => {
+	function renderShell(
+		props: Partial<React.ComponentProps<typeof ModalShell>>
+	) {
+		const handleDismiss = vi.fn<() => void>();
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={handleDismiss}
+				title="Title"
+				{...props}
+			>
+				<button>First</button>
+				<button>Second</button>
+			</ModalShell>
+		);
+		const dialog = screen.getByRole('dialog');
+		return {
+			handleDismiss,
+			dialog,
+			backdrop: dialog.previousElementSibling as HTMLElement,
+			content: screen.getByText('First').parentElement as HTMLElement,
+			heading: screen.getByRole('heading'),
+		};
+	}
+
+	test('should strip the visual classes when unstyled', () => {
+		const { dialog, backdrop, content, heading } = renderShell({
+			unstyled: true,
+		});
+		expect(dialog).not.toHaveClass(
+			'bg-white',
+			'shadow-2xl',
+			'rounded-xl',
+			'transition-all'
+		);
+		expect(backdrop).not.toHaveClass('bg-black/60', 'backdrop-blur-md');
+		expect(content).not.toHaveClass('px-6', 'text-sm');
+		expect(heading).not.toHaveClass('text-base');
+		expect(heading.parentElement).not.toHaveClass('px-6');
+	});
+
+	test('should keep the layout classes when unstyled', () => {
+		const { dialog, backdrop, content } = renderShell({
+			unstyled: true,
+			size: 'lg',
+		});
+		expect(dialog).toHaveClass(
+			'flex',
+			'flex-col',
+			'ms-modal-max-height',
+			'overflow-hidden',
+			'focus:outline-none',
+			'max-w-2xl'
+		);
+		expect(backdrop).toHaveClass('fixed', 'inset-0');
+		expect(dialog.parentElement).toHaveClass('fixed', 'inset-0', 'z-50');
+		expect(content).toHaveClass('flex-1', 'min-h-0', 'overflow-y-auto');
+	});
+
+	test('should render the close button without library styling when unstyled', () => {
+		renderShell({ unstyled: true });
+		const closeButton = screen.getByRole('button', { name: 'Close' });
+		expect(closeButton).not.toHaveClass('border');
+		expect(closeButton).toHaveClass('min-h-6', 'min-w-6');
+	});
+
+	test('should keep the visual classes by default', () => {
+		const { dialog, backdrop, content } = renderShell({});
+		expect(dialog).toHaveClass('bg-white', 'shadow-2xl');
+		expect(backdrop).toHaveClass('bg-black/60');
+		expect(content).toHaveClass('px-6');
+	});
+
+	test('should apply panelClassName to the dialog and backdropClassName to the backdrop', () => {
+		const { dialog, backdrop } = renderShell({
+			panelClassName: 'my-panel',
+			backdropClassName: 'my-backdrop',
+		});
+		expect(dialog).toHaveClass('my-panel');
+		expect(backdrop).toHaveClass('my-backdrop');
+	});
+
+	test('should apply the hooks when unstyled too', () => {
+		const { dialog, backdrop } = renderShell({
+			unstyled: true,
+			panelClassName: 'my-panel',
+			backdropClassName: 'my-backdrop',
+		});
+		expect(dialog).toHaveClass('my-panel');
+		expect(backdrop).toHaveClass('my-backdrop');
+	});
+
+	test('should still dismiss on Escape and backdrop click when unstyled', () => {
+		const { handleDismiss, dialog } = renderShell({ unstyled: true });
+		fireEvent.keyDown(document, { key: 'Escape' });
+		fireEvent.click(dialog.parentElement as Element);
+		expect(handleDismiss).toHaveBeenCalledTimes(2);
+	});
+
+	test('should still trap focus when unstyled', () => {
+		renderShell({ unstyled: true, dismissible: false });
+		screen.getByText('Second').focus();
+		fireEvent.keyDown(document, { key: 'Tab' });
+		expect(screen.getByText('First')).toHaveFocus();
+	});
+
+	test('should still return focus once ended when unstyled', () => {
+		const trigger = document.createElement('button');
+		document.body.appendChild(trigger);
+		trigger.focus();
+		const { rerender } = render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				title="Title"
+				unstyled
+			>
+				Body
+			</ModalShell>
+		);
+		rerender(
+			<ModalShell
+				isEnded
+				onDismiss={vi.fn<() => void>()}
+				title="Title"
+				unstyled
+			>
+				Body
+			</ModalShell>
+		);
+		expect(trigger).toHaveFocus();
+		trigger.remove();
+	});
+
+	test('should drop the wrapper transition but keep its visibility when unstyled', async () => {
+		const { dialog } = renderShell({ unstyled: true });
+		expect(dialog.parentElement).not.toHaveClass('transition-opacity');
+		await waitFor(() =>
+			expect(dialog.parentElement).toHaveClass('opacity-100')
+		);
+	});
+
+	test('should keep the wrapper transition by default', () => {
+		const { dialog } = renderShell({});
+		expect(dialog.parentElement).toHaveClass('transition-opacity');
+	});
+
+	test('should strip the footer slot visual classes when unstyled', () => {
+		renderShell({ unstyled: true, footer: <button>Save</button> });
+		const slot = screen.getByRole('button', { name: 'Save' })
+			.parentElement as HTMLElement;
+		expect(slot).not.toHaveClass('px-6', 'py-4', 'border-t', 'gap-3');
+		expect(slot).toHaveClass('flex', 'items-center', 'justify-end');
+	});
+
+	test('should keep the footer slot visual classes by default', () => {
+		renderShell({ footer: <button>Save</button> });
+		const slot = screen.getByRole('button', { name: 'Save' })
+			.parentElement as HTMLElement;
+		expect(slot).toHaveClass('px-6', 'py-4', 'border-t', 'gap-3');
+	});
+
+	test('should set data-state to open then closed once ended', async () => {
+		const { rerender } = render(
+			<ModalShell isEnded={false} onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		await waitFor(() =>
+			expect(screen.getByRole('dialog')).toHaveAttribute('data-state', 'open')
+		);
+		rerender(
+			<ModalShell isEnded onDismiss={vi.fn<() => void>()} title="Title">
+				Body
+			</ModalShell>
+		);
+		expect(screen.getByRole('dialog')).toHaveAttribute('data-state', 'closed');
 	});
 });

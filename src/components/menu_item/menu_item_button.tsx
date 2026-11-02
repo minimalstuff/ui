@@ -28,6 +28,8 @@ export function MenuItemButton({
 	danger = false,
 	disabled = false,
 	children,
+	radius,
+	unstyled = false,
 	className,
 	ref,
 }: Readonly<MenuItemButtonProps>) {
@@ -49,17 +51,23 @@ export function MenuItemButton({
 			tabIndex={-1}
 			onClick={handleClick}
 			disabled={disabled}
-			className={menuItemClasses(
-				HOVER_CLASSES,
-				STATE_CLASSES,
+			className={menuItemClasses({
+				hoverClasses: HOVER_CLASSES,
+				stateClasses: STATE_CLASSES,
 				danger,
-				className
-			)}
+				unstyled,
+				radius,
+				className,
+			})}
 		>
-			<MenuItemContent icon={icon} danger={danger}>
+			<MenuItemContent icon={icon} danger={danger} unstyled={unstyled}>
 				{children}
 			</MenuItemContent>
-			<MenuItemEnd trailing={trailing} selected={selected} />
+			<MenuItemEnd
+				trailing={trailing}
+				selected={selected}
+				unstyled={unstyled}
+			/>
 		</button>
 	);
 }

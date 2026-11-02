@@ -34,6 +34,18 @@ export interface ContextMenuProps {
 	items: ReactNode;
 	radius?: Radius;
 	className?: string;
+	/**
+	 * Strips the panel's visual styling (border, background, shadow, blur,
+	 * padding, radius, width bounds and the open/close animation). Positioning,
+	 * the backdrop and the keyboard handling stay. `radius` is ignored.
+	 */
+	unstyled?: boolean;
+	/**
+	 * Styles the floating panel (`role="menu"`), with or without `unstyled`.
+	 * Its position comes from inline floating styles: don't set
+	 * `position`, `top` or `left` on it.
+	 */
+	panelClassName?: string;
 	ref?: Ref<HTMLDivElement>;
 	/** Names the menu for assistive tech, since there is no trigger element to label it from. */
 	'aria-label'?: string;
@@ -87,6 +99,8 @@ export function ContextMenu({
 	children,
 	items,
 	radius = 'md',
+	unstyled = false,
+	panelClassName,
 	className,
 	ref,
 	'aria-label': ariaLabel,
@@ -149,6 +163,8 @@ export function ContextMenu({
 					isVisible={isVisible}
 					isPositioned={isPositioned}
 					radius={radius}
+					unstyled={unstyled}
+					panelClassName={panelClassName}
 					onClose={closeAndReturnFocus}
 					portalTarget={findDialogPortalTarget(areaElement)}
 				>

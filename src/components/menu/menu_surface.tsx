@@ -18,6 +18,8 @@ interface MenuSurfaceProps {
 	isVisible: boolean;
 	isPositioned: boolean;
 	radius: Radius;
+	unstyled?: boolean;
+	panelClassName?: string;
 	onClose: () => void;
 	children: ReactNode;
 	/** Sets the `id` on the `role="menu"` element, e.g. for a trigger's `aria-controls`. */
@@ -119,6 +121,8 @@ export function MenuSurface({
 	isVisible,
 	isPositioned,
 	radius,
+	unstyled = false,
+	panelClassName,
 	onClose,
 	children,
 	id,
@@ -184,12 +188,16 @@ export function MenuSurface({
 					data-state={isVisible ? 'open' : 'closed'}
 					onKeyDown={handleKeyDown}
 					className={clsx(
-						'w-max min-w-40 max-w-xs origin-top border py-1 shadow-lg backdrop-blur-sm',
-						'transition-[opacity,transform] duration-150 ease-out',
-						isVisible ? 'scale-100 opacity-100' : 'ms-menu-surface-closed',
-						OVERLAY_BG,
-						OVERLAY_BORDER,
-						RADIUS_CLASSES[radius]
+						'w-max',
+						!unstyled && [
+							'min-w-40 max-w-xs origin-top border py-1 shadow-lg backdrop-blur-sm',
+							'transition-[opacity,transform] duration-150 ease-out',
+							isVisible ? 'scale-100 opacity-100' : 'ms-menu-surface-closed',
+							OVERLAY_BG,
+							OVERLAY_BORDER,
+							RADIUS_CLASSES[radius],
+						],
+						panelClassName
 					)}
 					onClick={(event) => event.stopPropagation()}
 				>

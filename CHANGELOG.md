@@ -26,6 +26,9 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `UIProvider` labels `copied`, `loading` and `charactersRemaining`, used by the new screen-reader announcements below; translate them like the other labels.
 - `SplitButton`: a primary action joined to a chevron menu trigger offering secondary variants of that action, with shared variant, color, size and radius, a divider that fits every variant, and a menu that stays closed while `disabled` or `loading`.
 - `Tooltip` takes a `hoverable` prop that keeps it open while the pointer moves onto it, so long content can be read with a screen magnifier; a hoverable tooltip captures the pointer and can block clicks on controls it covers.
+- `unstyled` prop on `Badge`, `ContextMenu`, `Drawer`, `Highlight`, `Menu`, `MenuItem`, `Modal`, `ThemeToggle` and `Tooltip`: it strips the library's colours, borders, shadows, spacing, typography and animations and keeps layout, positioning and behaviour, so you can restyle them from scratch. `radius`, `color`, `variant` and `size` styling props are ignored while it is set.
+- `panelClassName` prop on `Modal`, `Drawer`, `Menu`, `ContextMenu` and `Tooltip`, and `backdropClassName` on `Modal` and `Drawer`, to style the dialog panel, the menu panel or the tooltip bubble and the backdrop (`className` keeps styling the content, trigger or area as before). `Modal` and `Drawer` panels expose `data-state="open"`/`"closed"` for your own animations.
+- `radius` prop on `Highlight` (default `sm`, the same rounding as before) and `MenuItem` (no rounding by default), and `markClassName` on `Highlight` to style each match.
 
 ### Changed
 

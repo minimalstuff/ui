@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
 	type HighlightSegment,
 	splitIntoHighlightSegments,
@@ -6,7 +9,25 @@ import {
 export interface HighlightProps {
 	text: string;
 	ranges: readonly number[];
+	/**
+	 * Corner radius of each `<mark>`. The default (`sm`) renders the same
+	 * `border-radius` as the previous hard-coded `rounded`. Ignored when
+	 * `unstyled` is set.
+	 */
+	radius?: Radius;
+	/**
+	 * Removes the library's classes from each `<mark>` (radius, background and
+	 * text colours). `radius` then has no effect. Matches then rely on
+	 * `markClassName` (or the browser's default `<mark>` style) to stay visible,
+	 * so a consumer who resets `mark` styles must style `markClassName`.
+	 */
+	unstyled?: boolean;
+	/** Applied to every `<mark>`, whether or not `unstyled` is set. */
+	markClassName?: string;
 }
+
+const MARK_CLASSES =
+	'bg-yellow-200 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-100';
 
 type PositionedHighlightSegment = HighlightSegment & { start: number };
 
@@ -28,7 +49,13 @@ function positionHighlightSegments(
 	});
 }
 
-export function Highlight({ text, ranges }: Readonly<HighlightProps>) {
+export function Highlight({
+	text,
+	ranges,
+	radius = 'sm',
+	unstyled = false,
+	markClassName,
+}: Readonly<HighlightProps>) {
 	const segments = splitIntoHighlightSegments(text, ranges);
 	const positionedSegments = positionHighlightSegments(segments);
 
@@ -38,7 +65,10 @@ export function Highlight({ text, ranges }: Readonly<HighlightProps>) {
 				segment.isMatch ? (
 					<mark
 						key={segment.start}
-						className="rounded bg-yellow-200 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-100"
+						className={clsx(
+							!unstyled && [RADIUS_CLASSES[radius], MARK_CLASSES],
+							markClassName
+						)}
 					>
 						{segment.text}
 					</mark>

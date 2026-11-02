@@ -26,6 +26,11 @@ export interface BadgeProps extends ComponentPropsWithRef<'span'> {
 	variant?: BadgeVariant;
 	size?: BadgeSize;
 	radius?: Radius;
+	/**
+	 * Strips the library's styling and keeps only `inline-flex items-center`.
+	 * `color`, `variant`, `size` and `radius` then have no effect.
+	 */
+	unstyled?: boolean;
 }
 
 export const Badge = ({
@@ -34,15 +39,19 @@ export const Badge = ({
 	variant = 'subtle',
 	size = 'sm',
 	radius = 'md',
+	unstyled = false,
 	className,
 	...props
 }: Readonly<BadgeProps>) => (
 	<span
 		className={clsx(
-			'inline-flex items-center gap-1 border',
-			RADIUS_CLASSES[radius],
-			SIZE_CLASSES[size],
-			BUTTON_COLOR_TOKENS[color][variant],
+			'inline-flex items-center',
+			!unstyled && [
+				'gap-1 border',
+				RADIUS_CLASSES[radius],
+				SIZE_CLASSES[size],
+				BUTTON_COLOR_TOKENS[color][variant],
+			],
 			className
 		)}
 		{...props}

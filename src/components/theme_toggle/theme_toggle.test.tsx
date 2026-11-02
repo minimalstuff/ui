@@ -94,6 +94,33 @@ describe('ThemeToggle', () => {
 		expect(screen.getByRole('button')).not.toHaveClass('border-gray-300');
 	});
 
+	test('should keep its accessible name and drop visual classes when unstyled', () => {
+		render(<ThemeToggle unstyled />);
+		const button = screen.getByRole('button', {
+			name: 'Current theme: system',
+		});
+		expect(button).not.toHaveClass('border', 'p-2', 'rounded-md');
+		expect(button.querySelector('.text-blue-500')).toBeNull();
+	});
+
+	test('should ignore radius and variant when unstyled', () => {
+		render(<ThemeToggle unstyled radius="full" variant="solid" />);
+		expect(screen.getByRole('button')).not.toHaveClass(
+			'rounded-full',
+			'border'
+		);
+	});
+
+	test('should still toggle the theme when unstyled', async () => {
+		render(<ThemeToggle unstyled />);
+
+		fireEvent.click(screen.getByRole('button'));
+
+		await waitFor(() => {
+			expect(useThemeStore.getState().theme).toBe('light');
+		});
+	});
+
 	test('should not start a view transition when the user agent is WebKitGTK and the prop is undefined', async () => {
 		vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
 			WEBKIT_GTK_USER_AGENT

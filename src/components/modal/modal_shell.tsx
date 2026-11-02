@@ -34,6 +34,12 @@ interface ModalShellProps {
 	height?: ModalHeight;
 	radius?: Radius;
 	className?: string;
+	/** Applied to the `role=dialog` element. A `transform`, `filter` or `backdrop-filter` on the open panel makes it the containing block of `position: fixed` descendants, so Menus opened inside it get clipped. Keep these off the open state. Carries `data-state="open"` or `"closed"`, so `data-[state=closed]:` variants can animate it. Put your own transitions behind `motion-reduce:` variants, since `unstyled` drops the library's reduced-motion handling along with its animations. */
+	panelClassName?: string;
+	/** Applied to the backdrop element, which carries the click-to-dismiss. */
+	backdropClassName?: string;
+	/** Strips the library's visual styling (background, shadow, radius, transitions, backdrop tint, header and content typography and padding), keeping layout, sizing, scrolling and behaviour. `radius` is ignored. The close button keeps a 24px minimum target size. */
+	unstyled?: boolean;
 	dismissible?: boolean;
 	closeLabel?: string;
 	/** `alertdialog` is described by its body content, so this sets `aria-describedby` to the content wrapper's id when there are children. */
@@ -71,6 +77,9 @@ export function ModalShell({
 	height = 'auto',
 	radius = 'xl',
 	className,
+	panelClassName,
+	backdropClassName,
+	unstyled = false,
 	dismissible = true,
 	closeLabel,
 	role = 'dialog',
@@ -107,7 +116,7 @@ export function ModalShell({
 			className={clsx(
 				'fixed inset-0 z-50 flex items-start justify-center',
 				'ms-modal-backdrop-padding',
-				'transition-opacity duration-200 ease-out',
+				!unstyled && 'transition-opacity duration-200 ease-out',
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
 			onClick={handleBackdropClick}
@@ -115,9 +124,13 @@ export function ModalShell({
 		>
 			<div
 				className={clsx(
-					'fixed inset-0 bg-black/60 backdrop-blur-md',
-					'transition-opacity duration-200 ease-out',
-					isVisible ? 'opacity-100' : 'opacity-0'
+					'fixed inset-0',
+					!unstyled && [
+						'bg-black/60 backdrop-blur-md',
+						'transition-opacity duration-200 ease-out',
+						isVisible ? 'opacity-100' : 'opacity-0',
+					],
+					backdropClassName
 				)}
 				aria-hidden="true"
 			/>
@@ -129,18 +142,22 @@ export function ModalShell({
 				aria-label={title ? undefined : ariaLabel}
 				aria-describedby={hasDescribedByContent ? contentId : undefined}
 				tabIndex={-1}
+				data-state={isVisible ? 'open' : 'closed'}
 				className={clsx(
 					'relative w-full',
 					SIZE_CLASSES[size],
 					HEIGHT_CLASSES[height],
-					OVERLAY_BG,
-					THIN_SCROLLBAR_SCOPE,
-					'shadow-2xl',
-					RADIUS_CLASSES[radius],
 					'ms-modal-max-height overflow-hidden flex flex-col',
-					'transition-all duration-200 ease-out',
 					'focus:outline-none',
-					isVisible ? 'opacity-100' : 'ms-modal-panel-closed'
+					!unstyled && [
+						OVERLAY_BG,
+						THIN_SCROLLBAR_SCOPE,
+						'shadow-2xl',
+						RADIUS_CLASSES[radius],
+						'transition-all duration-200 ease-out',
+						isVisible ? 'opacity-100' : 'ms-modal-panel-closed',
+					],
+					panelClassName
 				)}
 				onClick={(e) => e.stopPropagation()}
 			>
@@ -151,6 +168,7 @@ export function ModalShell({
 						onDismiss={onDismiss}
 						dismissible={dismissible}
 						closeLabel={closeLabel}
+						unstyled={unstyled}
 					/>
 				)}
 				<div
@@ -158,9 +176,11 @@ export function ModalShell({
 					id={hasDescribedByContent ? contentId : undefined}
 					{...(isAutoHeight ? scrollableProps : undefined)}
 					className={clsx(
-						'flex-1 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400 min-h-0',
+						'flex-1 min-h-0',
+						!unstyled &&
+							'px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
 						CONTENT_OVERFLOW_CLASSES[height],
-						!title && 'pt-6',
+						!unstyled && !title && 'pt-6',
 						isAutoHeight && focusClassName,
 						className
 					)}
@@ -169,7 +189,9 @@ export function ModalShell({
 						{children}
 					</ModalFooterSlotContext.Provider>
 				</div>
-				<ModalFooterSlot onSlotChange={setFooterSlot}>{footer}</ModalFooterSlot>
+				<ModalFooterSlot onSlotChange={setFooterSlot} unstyled={unstyled}>
+					{footer}
+				</ModalFooterSlot>
 			</div>
 		</div>,
 		document.body
