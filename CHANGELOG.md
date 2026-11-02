@@ -4,6 +4,18 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Breaking
+
+- `Modal` requires a name: pass a non-empty `title` or an `aria-label`, never both. TypeScript now rejects a `Modal.call` with neither, with both, or with `title: undefined`/`null`; add a `title` or an `aria-label` to each Modal it reports. `ModalProps` is now a type alias of a union: replace `interface X extends ModalProps` with `type X = ModalProps & {...}`, and note that `Omit`/`Pick` on `ModalProps` drop the name requirement.
+
+  ```tsx
+  // Before
+  Modal.call({ children: <Form /> });
+  // After
+  Modal.call({ title: 'Edit profile', children: <Form /> });
+  Modal.call({ 'aria-label': 'Edit profile', children: <Form /> });
+  ```
+
 ### Added
 
 - `Combobox` and `MultiCombobox` take a `description` prop, shown below the field and announced with it.
