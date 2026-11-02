@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-11-02
+
 ### Added
 
 - `AppBar`: a thin application bar rendering a `<header>` (the `banner` landmark) with `start`, centered `title` and `end` slots, a minimum height that grows with enlarged text, safe-area aware horizontal padding, and `unstyled`, `startClassName`, `titleClassName` and `endClassName` to restyle it.
@@ -534,7 +536,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.0.1...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/minimalstuff/ui/compare/5.0.1...5.1.0
 [5.0.1]: https://github.com/minimalstuff/ui/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/minimalstuff/ui/compare/4.3.3...5.0.0
 [4.3.3]: https://github.com/minimalstuff/ui/compare/4.3.2...4.3.3
