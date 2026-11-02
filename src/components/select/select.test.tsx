@@ -189,3 +189,11 @@ describe('Select', () => {
 		expect(await axe(container)).toHaveNoViolations();
 	});
 });
+
+const READONLY_OPTIONS = [{ value: 'a', label: 'Option A' }] as const;
+
+test('should accept a readonly array of options', () => {
+	render(<Select label="Pick" options={READONLY_OPTIONS} />);
+
+	expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
+});

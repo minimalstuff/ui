@@ -38,7 +38,7 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps {
-	options: ComboboxOption[];
+	options: readonly ComboboxOption[];
 	label?: string | ReactNode;
 	description?: string | ReactNode;
 	'aria-label'?: string;

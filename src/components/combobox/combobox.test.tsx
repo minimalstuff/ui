@@ -291,3 +291,11 @@ test('should name the listbox with aria-label when both label and aria-label are
 
 	expect(screen.getByRole('listbox', { name: 'Pick' })).toBeInTheDocument();
 });
+
+test('should accept a readonly array of options', () => {
+	render(
+		<Combobox label="Pick" options={[{ value: 'a', label: 'A' }] as const} />
+	);
+
+	expect(screen.getByLabelText('Pick')).toBeInTheDocument();
+});

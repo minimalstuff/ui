@@ -35,7 +35,7 @@ export interface TabItem {
 }
 
 export interface TabsProps {
-	items: TabItem[];
+	items: readonly TabItem[];
 	value?: number;
 	defaultIndex?: number;
 	variant?: TabsVariant;

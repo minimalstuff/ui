@@ -17,7 +17,7 @@ export interface RadioOptionsProps extends Omit<
 	ComponentPropsWithRef<'fieldset'>,
 	'onChange'
 > {
-	options: string[] | RadioOption[];
+	options: readonly string[] | readonly RadioOption[];
 	orientation?: 'vertical' | 'horizontal';
 	value?: string;
 	defaultValue?: string;

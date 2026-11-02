@@ -18,7 +18,7 @@ export interface CheckboxOptionsProps extends Omit<
 	ComponentPropsWithRef<'fieldset'>,
 	'onChange'
 > {
-	options: string[] | CheckboxOption[];
+	options: readonly string[] | readonly CheckboxOption[];
 	orientation?: 'vertical' | 'horizontal';
 	values?: readonly string[];
 	defaultValues?: readonly string[];
