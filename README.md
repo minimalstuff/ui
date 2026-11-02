@@ -42,6 +42,8 @@ export function Root() {
 }
 ```
 
+For French, pass the bundled preset: `<UIProvider labels={FRENCH_UI_LABELS}>` (import `FRENCH_UI_LABELS` from `@minimalstuff/ui`).
+
 ### Dark mode
 
 Dark styles apply when `<html>` has the `dark` class. `useThemeStore` (and the `ThemeToggle` built on it) sets that class from the `light`, `dark` or `system` preference and keeps it in `localStorage`.
