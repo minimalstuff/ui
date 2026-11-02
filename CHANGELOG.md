@@ -7,6 +7,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 ### Added
 
 - `Combobox` takes a `filterOption` prop to replace how typed text matches options, for example to ignore accents.
+- `MultiCombobox`: new `filterOption` prop to customise how the search field matches options (for example to ignore accents). The default match is unchanged.
 
 ### Changed
 

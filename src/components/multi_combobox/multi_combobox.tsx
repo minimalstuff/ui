@@ -54,6 +54,12 @@ export interface MultiComboboxOption {
 
 export interface MultiComboboxProps {
 	options: readonly MultiComboboxOption[];
+	/**
+	 * Decides whether an option matches the text typed in the search field.
+	 * Replaces the default case-insensitive "label contains the query" match,
+	 * for example to ignore accents.
+	 */
+	filterOption?: (option: MultiComboboxOption, query: string) => boolean;
 	label?: string | ReactNode;
 	description?: string | ReactNode;
 	'aria-label'?: string;
@@ -153,6 +159,10 @@ function resolveSearchFieldName(
 	return searchText;
 }
 
+function matchesLabel(option: MultiComboboxOption, query: string): boolean {
+	return option.label.toLowerCase().includes(query.trim().toLowerCase());
+}
+
 const PILL_CLASSES =
 	'inline-flex items-center rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-900 dark:text-gray-100';
 
@@ -163,6 +173,7 @@ const PILL_CLASSES =
  */
 export function MultiCombobox({
 	options,
+	filterOption = matchesLabel,
 	label,
 	description,
 	'aria-label': ariaLabel,
@@ -209,12 +220,9 @@ export function MultiCombobox({
 	const [isOpen, setIsOpen] = useState(false);
 
 	const filteredOptions = useMemo(() => {
-		const normalizedQuery = query.trim().toLowerCase();
-		if (!normalizedQuery) return options;
-		return options.filter((option) =>
-			option.label.toLowerCase().includes(normalizedQuery)
-		);
-	}, [options, query]);
+		if (!query.trim()) return options;
+		return options.filter((option) => filterOption(option, query));
+	}, [options, filterOption, query]);
 
 	const {
 		activeIndex,
