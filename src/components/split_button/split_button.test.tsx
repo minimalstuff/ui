@@ -132,15 +132,15 @@ describe('SplitButton', () => {
 		renderSplitButton({ radius: 'xl' });
 		expect(screen.getByRole('button', { name: 'Create' })).toHaveClass(
 			'rounded-xl',
-			'rounded-r-none'
+			'!rounded-r-none'
 		);
-		expect(getTrigger()).toHaveClass('rounded-xl', 'rounded-l-none');
+		expect(getTrigger()).toHaveClass('rounded-xl', '!rounded-l-none');
 	});
 
 	test('should drop the library styling when unstyled', () => {
 		renderSplitButton({ unstyled: true });
 		expect(screen.getByRole('button', { name: 'Create' })).not.toHaveClass(
-			'rounded-r-none'
+			'!rounded-r-none'
 		);
 	});
 });

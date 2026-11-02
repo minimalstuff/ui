@@ -10,6 +10,7 @@ import {
 import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 import { SplitButton } from '#components/split_button/split_button';
+import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
 import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
 
 const meta = {
@@ -182,4 +183,41 @@ export const Radius: Story = {
 			))}
 		</div>
 	),
+};
+
+export const JoinWithConsumerUtilities: Story = {
+	decorators: [consumerUtilitiesDecorator],
+	render: (args) => (
+		<div className="flex flex-col gap-4">
+			{(['solid', 'outline'] as const).map((variant) => (
+				<SplitButton
+					key={variant}
+					{...args}
+					variant={variant}
+					unstyled={false}
+					menuLabel={`${variant} options`}
+				>
+					{variant}
+				</SplitButton>
+			))}
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const getStyle = (name: string) =>
+			getComputedStyle(canvas.getByRole('button', { name }));
+		const solidMain = getStyle('solid');
+		const solidTrigger = getStyle('solid options');
+		const outlineMain = getStyle('outline');
+		const outlineTrigger = getStyle('outline options');
+
+		await expect(solidMain.borderTopRightRadius).toBe('0px');
+		await expect(solidMain.borderBottomRightRadius).toBe('0px');
+		await expect(outlineMain.borderTopRightRadius).toBe('0px');
+		await expect(solidTrigger.borderTopLeftRadius).toBe('0px');
+		await expect(solidTrigger.borderBottomLeftRadius).toBe('0px');
+		await expect(outlineTrigger.borderBottomLeftRadius).toBe('0px');
+		await expect(outlineTrigger.borderLeftWidth).toBe('0px');
+		await expect(solidTrigger.borderLeftColor).not.toBe('rgba(0, 0, 0, 0)');
+	},
 };

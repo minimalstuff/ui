@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `SplitButton` halves stay square where they meet when the app's own utilities load after `style.css`.
+
 ## [5.0.0] - 2026-11-02
 
 ### Breaking

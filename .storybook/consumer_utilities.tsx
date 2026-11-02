@@ -1,6 +1,13 @@
 import { useLayoutEffect, type ReactNode } from 'react';
 
-const CONSUMER_UTILITIES_CSS = '.w-full{width:100%}.p-2{padding:.5rem}';
+const CONSUMER_UTILITIES_CSS = [
+	'.w-full{width:100%}',
+	'.p-2{padding:.5rem}',
+	'.rounded-md{border-radius:.375rem}',
+	'.border{border-width:1px}',
+	'.border-transparent{border-color:transparent}',
+	'.border-blue-300{border-color:#93c5fd}',
+].join('');
 
 export function ConsumerUtilities({
 	children,
