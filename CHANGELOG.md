@@ -6,6 +6,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ### Added
 
+- `AppBar`: a thin application bar rendering a `<header>` (the `banner` landmark) with `start`, centered `title` and `end` slots, a minimum height that grows with enlarged text, safe-area aware horizontal padding, and `unstyled`, `startClassName`, `titleClassName` and `endClassName` to restyle it.
 - `Combobox` takes a `filterOption` prop to replace how typed text matches options, for example to ignore accents.
 - `MultiCombobox`: new `filterOption` prop to customise how the search field matches options (for example to ignore accents). The default match is unchanged.
 - `Spinner`: a `role="status"` loading indicator with a `size`, an optional visible `label` (otherwise it announces the `loading` label to screen readers), the icon `Button` shows while loading, a static icon under `prefers-reduced-motion`, and `unstyled`, `className`, `iconClassName` and `labelClassName` to restyle it.

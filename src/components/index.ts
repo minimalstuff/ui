@@ -1,3 +1,4 @@
+export { AppBar, type AppBarProps } from './app_bar/app_bar';
 export {
 	Avatar,
 	type AvatarColor,
