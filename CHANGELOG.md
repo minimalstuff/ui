@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Combobox` takes a `filterOption` prop to replace how typed text matches options, for example to ignore accents.
+
 ### Changed
 
 - `Select`, `Combobox`, `Tabs`, `RadioOptions` and `CheckboxOptions` now accept readonly arrays for `options` (and `items` for `Tabs`), so `as const` arrays can be passed directly.
