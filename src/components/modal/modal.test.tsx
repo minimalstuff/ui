@@ -11,7 +11,7 @@ import { createRef } from 'react';
 import { describe, expect, test } from 'vitest';
 import { axe } from 'vitest-axe';
 
-import { Modal } from '#components/modal/modal';
+import { Modal, type ModalProps } from '#components/modal/modal';
 import { ModalFooter } from '#components/modal/modal_footer';
 
 const MAX_RENDERS_BEFORE_LOOP_DETECTED = 50;
@@ -462,5 +462,28 @@ describe('Modal', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
 		await waitFor(() => expect(opener).toHaveFocus());
+	});
+
+	test('should reject a Modal without a title or aria-label at the type level', () => {
+		const assertTypes = () => {
+			// @ts-expect-error neither title nor aria-label
+			void Modal.call({ children: 'Body' });
+			// @ts-expect-error title cannot be undefined without an aria-label
+			void Modal.call({ title: undefined, children: 'Body' });
+			// @ts-expect-error title cannot be null
+			void Modal.call({ title: null, children: 'Body' });
+			// @ts-expect-error title and aria-label are mutually exclusive
+			void Modal.call({
+				title: 'Hello',
+				'aria-label': 'Notice',
+				children: 'Body',
+			});
+			void Modal.call({ title: 'Hello', children: 'Body' });
+			void Modal.call({ 'aria-label': 'Notice', children: 'Body' });
+			void ({ 'aria-label': 'Notice', children: 'Body' } satisfies ModalProps);
+			Modal.update({ title: 'Updated' });
+		};
+
+		expect(assertTypes).toBeTypeOf('function');
 	});
 });

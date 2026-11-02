@@ -21,8 +21,15 @@ export type {
 
 type ModalRenderProp = ReactNode | ((close: () => void) => ReactNode);
 
-export interface ModalProps {
-	title?: ReactNode;
+type ModalAccessibleName =
+	| { title: NonNullable<ReactNode>; 'aria-label'?: undefined }
+	| {
+			title?: undefined;
+			/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
+			'aria-label': string;
+	  };
+
+export type ModalProps = {
 	children: ModalRenderProp;
 	size?: ModalSize;
 	/** `fixed` gives the dialog a stable height so it does not jump when content changes; the content area stops scrolling and a child with `flex-1 min-h-0 overflow-y-auto` scrolls on its own. */
@@ -35,9 +42,7 @@ export interface ModalProps {
 	role?: ModalRole;
 	/** Wins over the first-tabbable rule for where focus lands on open; may point at an element in the content or in a `ModalFooter`. */
 	initialFocusRef?: RefObject<HTMLElement | null>;
-	/** Names the dialog when there is no `title`; ignored when `title` is set since the title labels it. */
-	'aria-label'?: string;
-}
+} & ModalAccessibleName;
 
 function resolveRenderProp(
 	prop: ModalRenderProp,
