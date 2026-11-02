@@ -52,6 +52,11 @@ const meta = {
 			control: 'boolean',
 			description: 'Strip all built-in styling',
 		},
+		filterOption: {
+			control: false,
+			description:
+				'Replaces the default case-insensitive "label contains the query" match',
+		},
 	},
 	args: {
 		options: defaultOptions,
@@ -302,6 +307,33 @@ export const InFormNoResults: Story = {
 				await expect(canvas.getByRole('status')).toHaveTextContent('Submitted');
 			}
 		);
+	},
+};
+
+function removeAccents(text: string): string {
+	return text.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+export const AccentInsensitive: Story = {
+	args: {
+		label: 'Drink',
+		placeholder: 'Try "cafe"',
+		options: [
+			{ value: 'cafe', label: 'Café' },
+			{ value: 'the', label: 'Thé' },
+			{ value: 'chocolat', label: 'Chocolat chaud' },
+		],
+		filterOption: (option, query) =>
+			removeAccents(option.label)
+				.toLowerCase()
+				.includes(removeAccents(query).toLowerCase()),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const combobox = canvas.getByRole('combobox');
+		await userEvent.type(combobox, 'cafe');
+		await expect(canvas.getByRole('option', { name: 'Café' })).toBeVisible();
+		await expect(canvas.getAllByRole('option')).toHaveLength(1);
 	},
 };
 

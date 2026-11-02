@@ -292,6 +292,51 @@ test('should name the listbox with aria-label when both label and aria-label are
 	expect(screen.getByRole('listbox', { name: 'Pick' })).toBeInTheDocument();
 });
 
+describe('Combobox filterOption', () => {
+	const ACCENTED_OPTIONS = [
+		{ value: 'cafe', label: 'Café' },
+		{ value: 'tea', label: 'Thé' },
+	];
+
+	function removeAccents(text: string): string {
+		return text.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+	}
+
+	test('should use the custom filter instead of the default one', () => {
+		render(
+			<Combobox
+				label="Drink"
+				options={ACCENTED_OPTIONS}
+				filterOption={(option, query) =>
+					removeAccents(option.label)
+						.toLowerCase()
+						.includes(query.toLowerCase())
+				}
+			/>
+		);
+		const input = screen.getByLabelText('Drink');
+		fireEvent.click(input);
+		fireEvent.change(input, { target: { value: 'cafe' } });
+
+		expect(screen.getByRole('option', { name: 'Café' })).toBeInTheDocument();
+		expect(
+			screen.queryByRole('option', { name: 'Thé' })
+		).not.toBeInTheDocument();
+	});
+
+	test('should keep the default case-insensitive match when no filter is given', () => {
+		render(<Combobox label="Drink" options={ACCENTED_OPTIONS} />);
+		const input = screen.getByLabelText('Drink');
+		fireEvent.click(input);
+		fireEvent.change(input, { target: { value: 'cafe' } });
+
+		expect(screen.queryByRole('option')).not.toBeInTheDocument();
+
+		fireEvent.change(input, { target: { value: 'CAF' } });
+		expect(screen.getByRole('option', { name: 'Café' })).toBeInTheDocument();
+	});
+});
+
 test('should accept a readonly array of options', () => {
 	render(
 		<Combobox label="Pick" options={[{ value: 'a', label: 'A' }] as const} />

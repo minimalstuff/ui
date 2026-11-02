@@ -39,6 +39,12 @@ export interface ComboboxOption {
 
 export interface ComboboxProps {
 	options: readonly ComboboxOption[];
+	/**
+	 * Decides whether an option matches the text typed in the field. Replaces
+	 * the default case-insensitive "label contains the query" match, for
+	 * example to ignore accents.
+	 */
+	filterOption?: (option: ComboboxOption, query: string) => boolean;
 	label?: string | ReactNode;
 	description?: string | ReactNode;
 	'aria-label'?: string;
@@ -58,8 +64,13 @@ export interface ComboboxProps {
 	id?: string;
 }
 
+function matchesLabel(option: ComboboxOption, query: string): boolean {
+	return option.label.toLowerCase().includes(query.toLowerCase());
+}
+
 export function Combobox({
 	options,
+	filterOption = matchesLabel,
 	label,
 	description,
 	'aria-label': ariaLabel,
@@ -100,12 +111,8 @@ export function Combobox({
 
 	const filteredOptions = useMemo(
 		() =>
-			isFiltering
-				? options.filter((opt) =>
-						opt.label.toLowerCase().includes(query.toLowerCase())
-					)
-				: options,
-		[options, isFiltering, query]
+			isFiltering ? options.filter((opt) => filterOption(opt, query)) : options,
+		[options, filterOption, isFiltering, query]
 	);
 
 	const {
