@@ -252,4 +252,24 @@ describe('ContextMenu', () => {
 			screen.getByText('Right-click area').parentElement
 		);
 	});
+
+	test('renders the menu inside the dialog containing the area', async () => {
+		render(
+			<div role="dialog" aria-label="Settings">
+				<ContextMenu
+					items={<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>}
+				>
+					<div>Right-click area</div>
+				</ContextMenu>
+			</div>
+		);
+
+		fireEvent.contextMenu(screen.getByText('Right-click area'), {
+			clientX: 100,
+			clientY: 200,
+		});
+
+		const menu = await screen.findByRole('menu');
+		expect(screen.getByRole('dialog').contains(menu)).toBe(true);
+	});
 });

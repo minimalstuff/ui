@@ -374,4 +374,34 @@ describe('Menu', () => {
 			);
 		});
 	});
+
+	describe('portal target', () => {
+		test('renders the menu inside the dialog containing the trigger', async () => {
+			render(
+				<div role="dialog" aria-label="Settings">
+					<Menu trigger={<button>Options</button>}>
+						<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+					</Menu>
+				</div>
+			);
+
+			fireEvent.click(screen.getByText('Options'));
+
+			const menu = await screen.findByRole('menu');
+			expect(screen.getByRole('dialog').contains(menu)).toBe(true);
+		});
+
+		test('renders the menu as a child of body when there is no dialog', async () => {
+			render(
+				<Menu trigger={<button>Options</button>}>
+					<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				</Menu>
+			);
+
+			fireEvent.click(screen.getByText('Options'));
+
+			const menu = await screen.findByRole('menu');
+			expect(menu.parentElement?.parentElement).toBe(document.body);
+		});
+	});
 });
