@@ -2,18 +2,23 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, test } from 'vitest';
 
+import { Button } from '#components/button/button';
+import { buttonClassName } from '#components/button/button_class_name';
 import { Combobox } from '#components/combobox/combobox';
 import { ContextMenu } from '#components/context_menu/context_menu';
+import { CopyButton } from '#components/copy_button/copy_button';
 import { Drawer } from '#components/drawer/drawer';
 import { IconButton } from '#components/icon_button/icon_button';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
+import { Spinner } from '#components/spinner/spinner';
 import { Tabs } from '#components/tabs/tabs';
 import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
 import { Toolbar } from '#components/toolbar/toolbar';
 import { Tooltip } from '#components/tooltip/tooltip';
 import { UIProvider } from '#components/ui_provider/ui_provider';
+import { THEME_INIT_SCRIPT } from '#stores/theme_store/theme_init_script';
 
 describe('server-side rendering', () => {
 	test('has no document, so a render-time document access would throw', () => {
@@ -83,5 +88,24 @@ describe('server-side rendering', () => {
 		expect(html).toContain('First panel');
 		expect(html).toContain('Bold');
 		expect(html).toContain('aria-label="Fruit"');
+	});
+
+	test('renders a Spinner, a pressed Button and the default CopyButton', () => {
+		const html = renderToString(
+			<>
+				<Spinner />
+				<Button pressed>Bold</Button>
+				<CopyButton value="text" />
+			</>
+		);
+
+		expect(html).toContain('role="status"');
+		expect(html).toContain('aria-pressed="true"');
+		expect(html).toContain('aria-label="Copy"');
+	});
+
+	test('builds link classes and the theme script without a document', () => {
+		expect(buttonClassName()).toContain('inline-flex');
+		expect(THEME_INIT_SCRIPT).toContain('localStorage');
 	});
 });
