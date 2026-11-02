@@ -5,6 +5,7 @@ import type { SyntheticEvent } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { Button } from '#components/button/button';
+import { buttonClassName } from '#components/button/button_class_name';
 
 describe('Button', () => {
 	test('renders children', () => {
@@ -139,5 +140,126 @@ describe('Button', () => {
 		expect(
 			screen.getByRole('button', { name: 'Save Loading' })
 		).toBeInTheDocument();
+	});
+
+	describe('pressed', () => {
+		test('should not set aria-pressed when pressed is undefined', () => {
+			render(<Button>Bold</Button>);
+			expect(screen.getByRole('button')).not.toHaveAttribute('aria-pressed');
+		});
+
+		test.each([true, false])('should set aria-pressed to %s', (isPressed) => {
+			render(<Button pressed={isPressed}>Bold</Button>);
+			expect(screen.getByRole('button')).toHaveAttribute(
+				'aria-pressed',
+				String(isPressed)
+			);
+		});
+
+		test('should darken a pressed solid button', () => {
+			render(<Button pressed>Bold</Button>);
+			const button = screen.getByRole('button');
+			expect(button).toHaveClass('bg-blue-800');
+			expect(button).not.toHaveClass('bg-blue-600');
+		});
+
+		test('should add an inset ring cue, not only a darker shade', () => {
+			render(<Button pressed>Bold</Button>);
+			expect(screen.getByRole('button')).toHaveClass('ring-2', 'ring-inset');
+		});
+
+		test('should fill a pressed outline button with the pressed fill', () => {
+			render(
+				<Button variant="outline" pressed>
+					Bold
+				</Button>
+			);
+			const button = screen.getByRole('button');
+			expect(button).toHaveClass('bg-blue-800', 'text-white');
+			expect(button).not.toHaveClass('bg-transparent');
+		});
+
+		test('should keep the unpressed look when pressed is false', () => {
+			render(
+				<Button variant="outline" pressed={false}>
+					Bold
+				</Button>
+			);
+			expect(screen.getByRole('button')).toHaveClass('bg-transparent');
+		});
+	});
+
+	describe('buttonClassName', () => {
+		const VARIANTS = ['solid', 'outline', 'ghost', 'subtle'] as const;
+		const COLORS = [
+			'primary',
+			'neutral',
+			'danger',
+			'success',
+			'warning',
+		] as const;
+
+		test.each(VARIANTS)(
+			'should equal the classes of a %s Button for every colour',
+			(variant) => {
+				for (const color of COLORS) {
+					const { unmount } = render(
+						<Button
+							variant={variant}
+							color={color}
+							size="lg"
+							radius="full"
+							fullWidth
+						>
+							Go
+						</Button>
+					);
+					expect(screen.getByRole('button').className).toBe(
+						buttonClassName({
+							variant,
+							color,
+							size: 'lg',
+							radius: 'full',
+							fullWidth: true,
+						})
+					);
+					unmount();
+				}
+			}
+		);
+
+		test('should equal the classes of a pressed and a custom-class Button', () => {
+			render(
+				<Button variant="subtle" pressed className="extra">
+					Go
+				</Button>
+			);
+			expect(screen.getByRole('button').className).toBe(
+				buttonClassName({
+					variant: 'subtle',
+					pressed: true,
+					className: 'extra',
+				})
+			);
+		});
+
+		test('should equal the classes of an unstyled Button', () => {
+			render(<Button unstyled>Go</Button>);
+			expect(screen.getByRole('button').className).toBe(
+				buttonClassName({ unstyled: true })
+			);
+		});
+
+		test('should include the focus ring so a link can be styled as a button', () => {
+			render(
+				<a href="/home" className={buttonClassName({ color: 'danger' })}>
+					Home
+				</a>
+			);
+			expect(screen.getByRole('link')).toHaveClass(
+				'focus-visible:outline-red-500',
+				'inline-flex'
+			);
+		});
 	});
 });

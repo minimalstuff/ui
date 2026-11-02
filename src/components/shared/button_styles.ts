@@ -13,6 +13,8 @@ interface ButtonColorTokens {
 	outline: string;
 	ghost: string;
 	subtle: string;
+	/** Look of a pressed button in any variant: a dark fill plus an inset ring, so the state never relies on colour alone. */
+	pressedSolid: string;
 	focusOutline: string;
 }
 
@@ -26,6 +28,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-blue-700 interactive:hover:bg-blue-50 interactive:active:bg-blue-100 dark:text-blue-400 dark:interactive:hover:bg-blue-950/40 dark:interactive:active:bg-blue-950/60',
 		subtle:
 			'border-transparent bg-blue-50 text-blue-700 interactive:hover:bg-blue-100 interactive:active:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:interactive:hover:bg-blue-500/20 dark:interactive:active:bg-blue-500/30',
+		pressedSolid:
+			'border-transparent bg-blue-800 text-white ring-2 ring-inset ring-white interactive:hover:bg-blue-900 interactive:active:bg-blue-950',
 		focusOutline: 'focus-visible:outline-blue-500',
 	},
 	neutral: {
@@ -37,6 +41,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-gray-700 interactive:hover:bg-gray-100 interactive:active:bg-gray-200 dark:text-gray-300 dark:interactive:hover:bg-gray-700/50 dark:interactive:active:bg-gray-700/80',
 		subtle:
 			'border-transparent bg-gray-100 text-gray-700 interactive:hover:bg-gray-200 interactive:active:bg-gray-300 dark:bg-gray-700/50 dark:text-gray-300 dark:interactive:hover:bg-gray-600/50 dark:interactive:active:bg-gray-600/80',
+		pressedSolid:
+			'border-transparent bg-gray-400 text-gray-900 ring-2 ring-inset ring-gray-900 interactive:hover:bg-gray-300 interactive:active:bg-gray-200 dark:bg-gray-400 dark:text-gray-900 dark:interactive:hover:bg-gray-300 dark:interactive:active:bg-gray-200',
 		focusOutline:
 			'focus-visible:outline-gray-500 dark:focus-visible:outline-gray-400',
 	},
@@ -49,6 +55,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-red-700 interactive:hover:bg-red-50 interactive:active:bg-red-100 dark:text-red-400 dark:interactive:hover:bg-red-950/40 dark:interactive:active:bg-red-950/60',
 		subtle:
 			'border-transparent bg-red-50 text-red-700 interactive:hover:bg-red-100 interactive:active:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:interactive:hover:bg-red-500/20 dark:interactive:active:bg-red-500/30',
+		pressedSolid:
+			'border-transparent bg-red-800 text-white ring-2 ring-inset ring-white interactive:hover:bg-red-900 interactive:active:bg-red-950',
 		focusOutline: 'focus-visible:outline-red-500',
 	},
 	success: {
@@ -60,6 +68,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-green-700 interactive:hover:bg-green-50 interactive:active:bg-green-100 dark:text-green-400 dark:interactive:hover:bg-green-950/40 dark:interactive:active:bg-green-950/60',
 		subtle:
 			'border-transparent bg-green-50 text-green-700 interactive:hover:bg-green-100 interactive:active:bg-green-200 dark:bg-green-500/10 dark:text-green-400 dark:interactive:hover:bg-green-500/20 dark:interactive:active:bg-green-500/30',
+		pressedSolid:
+			'border-transparent bg-green-900 text-white ring-2 ring-inset ring-white interactive:hover:bg-green-950 interactive:active:bg-green-950',
 		focusOutline: 'focus-visible:outline-green-600',
 	},
 	warning: {
@@ -71,6 +81,8 @@ export const BUTTON_COLOR_TOKENS: Record<ButtonColor, ButtonColorTokens> = {
 			'border-transparent bg-transparent text-yellow-700 interactive:hover:bg-yellow-50 interactive:active:bg-yellow-100 dark:text-yellow-400 dark:interactive:hover:bg-yellow-950/40 dark:interactive:active:bg-yellow-950/60',
 		subtle:
 			'border-transparent bg-yellow-50 text-yellow-700 interactive:hover:bg-yellow-100 interactive:active:bg-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:interactive:hover:bg-yellow-500/20 dark:interactive:active:bg-yellow-500/30',
+		pressedSolid:
+			'border-transparent bg-yellow-900 text-white ring-2 ring-inset ring-white interactive:hover:bg-yellow-950 interactive:active:bg-yellow-950',
 		focusOutline:
 			'focus-visible:outline-yellow-700 dark:focus-visible:outline-yellow-500',
 	},
@@ -82,3 +94,17 @@ export const BUTTON_LAYOUT_CLASSES =
 
 /** Visual chrome, dropped entirely when `unstyled`. */
 export const BUTTON_INTERACTIVE_CLASSES = `cursor-pointer transition-[color,background-color,border-color,transform] duration-200 interactive:active:duration-75 ms-button-press ${BUTTON_FOCUS_OUTLINE}`;
+
+/**
+ * Colour classes of a button. A pressed button of any variant takes the dark
+ * `pressedSolid` fill with an inset ring, a cue that survives without colour
+ * perception.
+ */
+export function getButtonToneClasses(
+	color: ButtonColor,
+	variant: ButtonVariant,
+	isPressed: boolean
+): string {
+	const tokens = BUTTON_COLOR_TOKENS[color];
+	return isPressed ? tokens.pressedSolid : tokens[variant];
+}

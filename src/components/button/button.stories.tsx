@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useState } from 'react';
 
 import { Button } from '#components/button/button';
+import { buttonClassName } from '#components/button/button_class_name';
 
 const meta = {
 	title: 'Components/Button',
@@ -43,6 +44,11 @@ const meta = {
 		fullWidth: {
 			control: 'boolean',
 			description: 'Stretch button to full container width',
+		},
+		pressed: {
+			control: 'boolean',
+			description:
+				'Toggle state: sets aria-pressed and a pressed look. Leave undefined for a regular button',
 		},
 		loading: {
 			control: 'boolean',
@@ -183,6 +189,79 @@ export const Unstyled: Story = {
 		>
 			Bring your own styles
 		</Button>
+	),
+	args: {
+		children: '',
+	},
+};
+
+export const ToggleGroup: Story = {
+	render: function Render() {
+		const [activeFormats, setActiveFormats] = useState<readonly string[]>([
+			'bold',
+		]);
+		const toggleFormat = (format: string) =>
+			setActiveFormats((current) =>
+				current.includes(format)
+					? current.filter((activeFormat) => activeFormat !== format)
+					: [...current, format]
+			);
+
+		return (
+			<div role="group" aria-label="Text format" className="flex gap-2">
+				{(['bold', 'italic', 'underline'] as const).map((format) => (
+					<Button
+						key={format}
+						variant="outline"
+						color="neutral"
+						pressed={activeFormats.includes(format)}
+						onClick={() => toggleFormat(format)}
+					>
+						{format}
+					</Button>
+				))}
+			</div>
+		);
+	},
+	args: {
+		children: '',
+	},
+};
+
+export const PressedMatrix: Story = {
+	render: () => (
+		<div className="flex flex-col gap-3">
+			{(['solid', 'outline', 'ghost', 'subtle'] as const).map((variant) => (
+				<div key={variant} className="flex flex-wrap items-center gap-3">
+					{(
+						['primary', 'neutral', 'danger', 'success', 'warning'] as const
+					).map((color) => (
+						<Button key={color} variant={variant} color={color} pressed>
+							{variant} {color}
+						</Button>
+					))}
+				</div>
+			))}
+		</div>
+	),
+	args: {
+		children: '',
+	},
+};
+
+export const StyledLink: Story = {
+	render: () => (
+		<div className="flex flex-wrap items-center gap-3">
+			<a href="#docs" className={buttonClassName()}>
+				Read the docs
+			</a>
+			<a
+				href="#docs"
+				className={buttonClassName({ variant: 'outline', color: 'neutral' })}
+			>
+				Outline link
+			</a>
+		</div>
 	),
 	args: {
 		children: '',

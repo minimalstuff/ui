@@ -1,14 +1,12 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 
+import { buttonClassName } from '#components/button/button_class_name';
 import {
-	BUTTON_COLOR_TOKENS,
-	BUTTON_INTERACTIVE_CLASSES,
-	BUTTON_LAYOUT_CLASSES,
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
-import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+import { type Radius } from '#components/shared/radius';
 import { type ControlSize } from '#components/shared/sizes';
 import { useLabels } from '#components/ui_provider/use_labels';
 
@@ -16,13 +14,6 @@ export type {
 	ButtonColor,
 	ButtonVariant,
 } from '#components/shared/button_styles';
-
-const SIZE_CLASSES: Record<ControlSize, string> = {
-	xs: 'px-2 py-1 text-xs',
-	sm: 'px-3 py-1.5 text-sm',
-	md: 'px-4 py-2 text-sm',
-	lg: 'px-4 py-3 text-base',
-};
 
 const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 	xs: 'w-3.5 h-3.5',
@@ -51,6 +42,11 @@ export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 	 * the tab order, exposed as `aria-disabled`.
 	 */
 	loading?: boolean;
+	/**
+	 * Turns the button into a toggle: sets `aria-pressed` and a pressed look (dark fill and inset ring).
+	 * Leave it `undefined` for a regular button (no attribute).
+	 */
+	pressed?: boolean;
 	startIcon?: string;
 	endIcon?: string;
 } & ButtonStyle;
@@ -77,6 +73,7 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 		className,
 		fullWidth = false,
 		loading = false,
+		pressed,
 		startIcon,
 		endIcon,
 		disabled,
@@ -88,7 +85,6 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 	const hasAriaLabel = ariaLabel !== undefined;
 	const accessibleLabel =
 		loading && hasAriaLabel ? `${ariaLabel} ${labels.loading}` : ariaLabel;
-	const tokens = BUTTON_COLOR_TOKENS[color];
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
 
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -102,22 +98,20 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 	return (
 		<button
 			type="button"
-			className={clsx(
-				BUTTON_LAYOUT_CLASSES,
-				!unstyled && [
-					BUTTON_INTERACTIVE_CLASSES,
-					'gap-2 font-medium border',
-					RADIUS_CLASSES[radius],
-					SIZE_CLASSES[size],
-					tokens[variant],
-					tokens.focusOutline,
-				],
-				fullWidth && 'w-full',
-				className
-			)}
+			className={buttonClassName({
+				variant,
+				color,
+				size,
+				radius,
+				fullWidth,
+				pressed,
+				unstyled,
+				className,
+			})}
 			disabled={disabled}
 			aria-disabled={(loading && !disabled) || undefined}
 			aria-busy={loading || undefined}
+			aria-pressed={pressed}
 			aria-label={accessibleLabel}
 			{...props}
 			onClick={handleClick}

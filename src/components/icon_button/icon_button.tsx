@@ -9,6 +9,7 @@ import {
 	BUTTON_COLOR_TOKENS,
 	BUTTON_INTERACTIVE_CLASSES,
 	BUTTON_LAYOUT_CLASSES,
+	getButtonToneClasses,
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
@@ -47,6 +48,11 @@ export type IconButtonProps = ComponentPropsWithRef<'button'> & {
 	size?: ControlSize;
 	children?: ReactNode;
 	tooltip?: IconButtonTooltip;
+	/**
+	 * Turns the button into a toggle: sets `aria-pressed` and a pressed look (dark fill and inset ring).
+	 * Leave it `undefined` for a regular button (no attribute).
+	 */
+	pressed?: boolean;
 } & IconButtonStyle;
 
 // See Button's `FlatButtonStyle` for why this cast is here: it only widens
@@ -79,6 +85,7 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 		className,
 		children,
 		tooltip,
+		pressed,
 		ref,
 		...props
 	} = iconButtonProps as IconButtonProps & FlatIconButtonStyle;
@@ -90,6 +97,7 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 			ref={ref}
 			type="button"
 			aria-label={ariaLabel}
+			aria-pressed={pressed}
 			className={clsx(
 				BUTTON_LAYOUT_CLASSES,
 				!unstyled && [
@@ -97,7 +105,7 @@ export function IconButton(iconButtonProps: Readonly<IconButtonProps>) {
 					'border',
 					RADIUS_CLASSES[radius],
 					SIZE_CLASSES[size],
-					tokens[variant],
+					getButtonToneClasses(color, variant, pressed ?? false),
 					tokens.focusOutline,
 				],
 				className

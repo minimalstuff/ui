@@ -18,6 +18,10 @@ export {
 	type ButtonVariant,
 } from './button/button';
 export {
+	buttonClassName,
+	type ButtonClassNameOptions,
+} from './button/button_class_name';
+export {
 	Card,
 	type CardHeadingLevel,
 	type CardPadding,
