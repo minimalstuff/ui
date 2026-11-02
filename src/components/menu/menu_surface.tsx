@@ -28,6 +28,8 @@ interface MenuSurfaceProps {
 	'aria-label'?: string;
 	/** Which item to focus once positioned: the first (default) or the last, e.g. when opened via ArrowUp. */
 	initialFocus?: MenuSurfaceInitialFocus;
+	/** Where the menu is portalled: the trigger's dialog when there is one, so screen readers honouring `aria-modal` can reach it. Defaults to `document.body`. */
+	portalTarget?: HTMLElement;
 }
 
 function getMenuItems(container: HTMLElement): HTMLElement[] {
@@ -123,6 +125,7 @@ export function MenuSurface({
 	labelledBy,
 	'aria-label': ariaLabel,
 	initialFocus = 'first',
+	portalTarget = document.body,
 }: Readonly<MenuSurfaceProps>) {
 	const panelRef = useRef<HTMLDivElement>(null);
 
@@ -196,6 +199,6 @@ export function MenuSurface({
 				</div>
 			</div>
 		</>,
-		document.body
+		portalTarget
 	);
 }

@@ -21,9 +21,11 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `MultiCombobox` search field now has the `combobox` role and a name that starts with the field label: tests that query it as `getByRole('textbox', { name: 'Search' })` should use `getByRole('combobox', { name: /Search/ })`.
 - `Tooltip`: while a tooltip is visible, Escape only hides it and marks the event as handled (`defaultPrevented`), so a surrounding `Modal` or `Drawer` closes on the next Escape. Escape handlers that skip handled events do not run while a tooltip is visible.
 - `Button` in its `loading` state adds the `loading` label ("Loading") to its accessible name: tests that query a loading button by its exact name, such as `getByRole('button', { name: 'Save' })`, should use `{ name: /^Save/ }`.
+- `Menu`, `ContextMenu` and `SplitButton` menus opened inside a `Modal` or `Drawer` are rendered inside that dialog instead of `<body>`, and positioned with `position: fixed`: tests that look for the menu with `within(document.body)` still find it, but CSS that targets it as a direct child of `body` no longer matches. The open `Modal` and `Drawer` panels no longer set `scale`/`translate` (their closed-state animation is unchanged).
 
 ### Fixed
 
+- `Menu`, `ContextMenu` and `SplitButton` menus inside a `Modal` or `Drawer` are reachable by screen readers that honour `aria-modal` (such as VoiceOver), and are no longer clipped by the panel.
 - `Button`, `Modal`, `Menu`, `ContextMenu`, `SplitButton`, `Tooltip` and `Switch` honour `prefers-reduced-motion`: no scaling or sliding, only fades.
 - `MultiCombobox` announces its selected values to screen readers, including those hidden behind the `+N` badge.
 - `MultiCombobox` search field is exposed as a combobox named after the field label (for example "Fruits, Search") and shows a focus outline when it receives focus; the `Combobox` and `MultiCombobox` lists are named after the field label.

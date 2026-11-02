@@ -12,15 +12,18 @@ import {
 	type Ref,
 	useCallback,
 	useRef,
+	useState,
 } from 'react';
 
 import { MenuSurface } from '#components/menu/menu_surface';
+import { findDialogPortalTarget } from '#components/shared/dialog_portal_target';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
 	useOverlayState,
 } from '#components/shared/use_overlay_state';
+import { mergeRefs } from '#lib/merge_refs';
 
 const CURSOR_OFFSET = 2;
 
@@ -89,10 +92,12 @@ export function ContextMenu({
 	'aria-label': ariaLabel,
 }: Readonly<ContextMenuProps>) {
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+	const [areaElement, setAreaElement] = useState<HTMLDivElement | null>(null);
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 
 	const { refs, floatingStyles, isPositioned } = useFloating({
 		placement: 'bottom-start',
+		strategy: 'fixed',
 		open: isMounted,
 		whileElementsMounted: autoUpdate,
 		middleware: [
@@ -103,6 +108,12 @@ export function ContextMenu({
 	});
 
 	useEnterOnPositioned(isMounted, isPositioned, setIsVisible);
+
+	const setAreaRef = useCallback(
+		(node: HTMLDivElement | null) =>
+			mergeRefs<HTMLDivElement>(setAreaElement, ref)(node),
+		[ref]
+	);
 
 	const closeAndReturnFocus = useCallback(() => {
 		close();
@@ -124,7 +135,11 @@ export function ContextMenu({
 	};
 
 	return (
-		<div ref={ref} className={className} onContextMenu={handleContextMenu}>
+		<div
+			ref={setAreaRef}
+			className={className}
+			onContextMenu={handleContextMenu}
+		>
 			{children}
 			{isMounted && (
 				<MenuSurface
@@ -135,6 +150,7 @@ export function ContextMenu({
 					isPositioned={isPositioned}
 					radius={radius}
 					onClose={closeAndReturnFocus}
+					portalTarget={findDialogPortalTarget(areaElement)}
 				>
 					{items}
 				</MenuSurface>

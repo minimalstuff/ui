@@ -21,8 +21,6 @@ export const OFFSCREEN_CLASSES: Record<DrawerSide, string> = {
 	left: 'ms-drawer-offscreen-left',
 };
 
-export const ONSCREEN_CLASSES = 'translate-x-0';
-
 /** Only the corners on the edge facing the page are rounded; the other edge sits flush against the viewport. */
 export const INNER_EDGE_RADIUS_CLASSES: Record<
 	DrawerSide,

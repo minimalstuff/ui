@@ -11,7 +11,6 @@ import { createPortal } from 'react-dom';
 import {
 	INNER_EDGE_RADIUS_CLASSES,
 	OFFSCREEN_CLASSES,
-	ONSCREEN_CLASSES,
 	SIDE_CLASSES,
 	SIZE_CLASSES,
 	type DrawerSide,
@@ -143,7 +142,7 @@ function DrawerDialog({
 							INNER_EDGE_RADIUS_CLASSES[side][radius],
 							'ms-drawer-transition',
 							'focus:outline-none',
-							isVisible ? ONSCREEN_CLASSES : OFFSCREEN_CLASSES[side]
+							!isVisible && OFFSCREEN_CLASSES[side]
 						)}
 						onClick={(event) => event.stopPropagation()}
 					>

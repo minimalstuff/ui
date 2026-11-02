@@ -24,6 +24,7 @@ import {
 
 import { type MenuAlign } from '#components/menu/menu_align';
 import { MenuSurface } from '#components/menu/menu_surface';
+import { findDialogPortalTarget } from '#components/shared/dialog_portal_target';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
 import { type Radius } from '#components/shared/radius';
 import {
@@ -102,11 +103,15 @@ export function Menu({
 	ref,
 }: Readonly<MenuProps>) {
 	const wrapperRef = useRef<HTMLSpanElement>(null);
+	const [wrapperElement, setWrapperElement] = useState<HTMLSpanElement | null>(
+		null
+	);
 	const [initialFocus, setInitialFocus] = useState<'first' | 'last'>('first');
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 
 	const { refs, floatingStyles, isPositioned } = useFloating({
 		placement: toPlacement(side, align),
+		strategy: 'fixed',
 		open: isMounted,
 		whileElementsMounted: autoUpdate,
 		middleware: [
@@ -135,7 +140,12 @@ export function Menu({
 	// every re-render, which would needlessly reset floating-ui's reference.
 	const setWrapperRef = useCallback(
 		(node: HTMLSpanElement | null) =>
-			mergeRefs<HTMLSpanElement>(refs.setReference, wrapperRef, ref)(node),
+			mergeRefs<HTMLSpanElement>(
+				refs.setReference,
+				wrapperRef,
+				setWrapperElement,
+				ref
+			)(node),
 		[refs, ref]
 	);
 
@@ -204,6 +214,7 @@ export function Menu({
 					radius={radius}
 					onClose={closeAndReturnFocus}
 					initialFocus={initialFocus}
+					portalTarget={findDialogPortalTarget(wrapperElement)}
 				>
 					{children}
 				</MenuSurface>

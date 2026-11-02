@@ -140,9 +140,7 @@ export function ModalShell({
 					'ms-modal-max-height overflow-hidden flex flex-col',
 					'transition-all duration-200 ease-out',
 					'focus:outline-none',
-					isVisible
-						? 'opacity-100 scale-100 translate-y-0'
-						: 'ms-modal-panel-closed'
+					isVisible ? 'opacity-100' : 'ms-modal-panel-closed'
 				)}
 				onClick={(e) => e.stopPropagation()}
 			>
