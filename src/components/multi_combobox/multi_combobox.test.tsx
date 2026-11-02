@@ -494,3 +494,53 @@ describe('MultiCombobox', () => {
 		expect(screen.getByRole('listbox', { name: 'Pick' })).toBeInTheDocument();
 	});
 });
+
+describe('MultiCombobox filterOption', () => {
+	const ACCENTED_OPTIONS = [
+		{ value: 'cafe', label: 'Café' },
+		{ value: 'tea', label: 'Thé' },
+	];
+
+	function removeAccents(text: string): string {
+		return text.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+	}
+
+	function searchFor(query: string): void {
+		fireEvent.click(screen.getByRole('combobox', { name: 'Drink' }));
+		fireEvent.change(screen.getByPlaceholderText('Search'), {
+			target: { value: query },
+		});
+	}
+
+	test('should use the custom filter instead of the default one', () => {
+		render(
+			<MultiCombobox
+				label="Drink"
+				options={ACCENTED_OPTIONS}
+				filterOption={(option, query) =>
+					removeAccents(option.label)
+						.toLowerCase()
+						.includes(query.toLowerCase())
+				}
+			/>
+		);
+		searchFor('cafe');
+
+		expect(screen.getByRole('option', { name: 'Café' })).toBeInTheDocument();
+		expect(
+			screen.queryByRole('option', { name: 'Thé' })
+		).not.toBeInTheDocument();
+	});
+
+	test('should keep the default case-insensitive match when no filter is given', () => {
+		render(<MultiCombobox label="Drink" options={ACCENTED_OPTIONS} />);
+		searchFor('cafe');
+
+		expect(screen.queryByRole('option')).not.toBeInTheDocument();
+
+		fireEvent.change(screen.getByPlaceholderText('Search'), {
+			target: { value: 'CAF' },
+		});
+		expect(screen.getByRole('option', { name: 'Café' })).toBeInTheDocument();
+	});
+});

@@ -418,3 +418,32 @@ export const NoResults: Story = {
 		);
 	},
 };
+
+function removeAccents(text: string): string {
+	return text.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+export const AccentInsensitive: Story = {
+	args: {
+		label: 'Drink',
+		options: [
+			{ value: 'cafe', label: 'Café' },
+			{ value: 'the', label: 'Thé' },
+			{ value: 'chocolat', label: 'Chocolat chaud' },
+		],
+		filterOption: (option, query) =>
+			removeAccents(option.label)
+				.toLowerCase()
+				.includes(removeAccents(query).toLowerCase()),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('combobox', { name: 'Drink' }));
+		await userEvent.type(
+			canvas.getByRole('combobox', { name: /Search/ }),
+			'cafe'
+		);
+		await expect(canvas.getByRole('option', { name: 'Café' })).toBeVisible();
+		await expect(canvas.getAllByRole('option')).toHaveLength(1);
+	},
+};
