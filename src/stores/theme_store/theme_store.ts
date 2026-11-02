@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 
+import { THEME_STORAGE_KEY } from '#stores/theme_store/theme_storage_key';
 import type { Theme } from '#types/theme';
-
-const THEME_STORAGE_KEY = 'theme';
 
 function isTheme(value: string | null): value is Theme {
 	return value === 'light' || value === 'dark' || value === 'system';
