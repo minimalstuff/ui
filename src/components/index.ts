@@ -129,6 +129,7 @@ export {
 	type ThemeToggleProps,
 } from './theme_toggle/theme_toggle';
 export { Toolbar, type ToolbarProps } from './toolbar/toolbar';
+export { FRENCH_UI_LABELS } from './ui_provider/french_ui_labels';
 export {
 	UIProvider,
 	type UILabels,

@@ -14,6 +14,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `buttonClassName(options)` returns the exact classes `Button` renders (`variant`, `color`, `size`, `radius`, `fullWidth`, `pressed`, `unstyled`, `className`), to style a router `<Link>` or an `<a>` as a button, focus ring included. Never put `aria-pressed` on a link: pair a selected link with `aria-current` instead.
 - `CopyButton` renders a default icon button (copy icon, then a check while copied) when `children` is omitted, named by the new `label` prop or the new optional `copy` label of `UIProvider` (default "Copy"; a translated label set must add `copy`, otherwise the English fallback is used). The render-prop API is unchanged.
 - `THEME_INIT_SCRIPT`: a tiny inline script that applies the saved theme to `<html>` before first paint, to avoid a light flash in dark mode. See the README.
+- `FRENCH_UI_LABELS`: a complete French set of `UIProvider` labels.
 
 ### Changed
 

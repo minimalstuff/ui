@@ -43,7 +43,7 @@ export interface UILabels {
 
 export const DEFAULT_COPY_LABEL = 'Copy';
 
-const DEFAULT_LABELS: UILabels = {
+export const DEFAULT_LABELS: UILabels = {
 	close: 'Close',
 	confirm: 'Confirm',
 	cancel: 'Cancel',
