@@ -304,7 +304,7 @@ describe('ContextMenu', () => {
 				expect(menu).not.toHaveClass(token);
 			}
 			expect(menu).toHaveClass('w-max');
-			expect(menu).toHaveAttribute('data-state', 'open');
+			await waitFor(() => expect(menu).toHaveAttribute('data-state', 'open'));
 		});
 
 		test('should apply panelClassName to the menu element', async () => {

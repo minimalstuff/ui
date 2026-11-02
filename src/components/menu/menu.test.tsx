@@ -443,7 +443,7 @@ describe('Menu', () => {
 			const menu = await openUnstyledMenu();
 
 			expect(menu).toHaveClass('w-max');
-			expect(menu).toHaveAttribute('data-state', 'open');
+			await waitFor(() => expect(menu).toHaveAttribute('data-state', 'open'));
 			expect(menu).toHaveAttribute('tabindex', '-1');
 			expect(menu.parentElement).toHaveClass('z-50');
 		});
