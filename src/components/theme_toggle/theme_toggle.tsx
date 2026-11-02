@@ -19,7 +19,27 @@ const THEME_ICON_CLASSES: Record<Theme, string> = {
 	system: 'i-tabler-device-desktop text-blue-500',
 };
 
+const UNSTYLED_THEME_ICON_CLASSES: Record<Theme, string> = {
+	light: 'i-tabler-sun',
+	dark: 'i-tabler-moon-stars',
+	system: 'i-tabler-device-desktop',
+};
+
 const FALLBACK_ICON_CLASS = 'i-tabler-device-desktop text-gray-400';
+const UNSTYLED_FALLBACK_ICON_CLASS = 'i-tabler-device-desktop';
+
+type IconButtonStyleProps =
+	| { unstyled: true }
+	| { unstyled?: false; radius?: Radius; variant?: ButtonVariant };
+
+function resolveIconButtonStyle(
+	unstyled: boolean,
+	radius: Radius | undefined,
+	variant: ButtonVariant | undefined
+): IconButtonStyleProps {
+	if (unstyled) return { unstyled: true };
+	return { radius, variant };
+}
 
 export interface ThemeToggleProps {
 	/**
@@ -34,8 +54,26 @@ export interface ThemeToggleProps {
 	size?: 'sm' | 'md' | 'lg';
 	radius?: Radius;
 	variant?: ButtonVariant;
+	/**
+	 * Strips the library's styling, including the icon colours. `variant` and
+	 * `radius` are ignored when it is set. The view transition still runs.
+	 */
+	unstyled?: boolean;
 	getAriaLabel?: (theme: Theme) => string;
 	tooltip?: IconButtonTooltip;
+}
+
+function resolveIconClass(
+	theme: Theme,
+	isClient: boolean,
+	unstyled: boolean
+): string {
+	if (unstyled) {
+		return isClient
+			? UNSTYLED_THEME_ICON_CLASSES[theme]
+			: UNSTYLED_FALLBACK_ICON_CLASS;
+	}
+	return isClient ? THEME_ICON_CLASSES[theme] : FALLBACK_ICON_CLASS;
 }
 
 export function ThemeToggle({
@@ -43,6 +81,7 @@ export function ThemeToggle({
 	transitionDuration,
 	transitionEasing,
 	size = 'md',
+	unstyled = false,
 	radius,
 	variant,
 	getAriaLabel,
@@ -80,7 +119,8 @@ export function ThemeToggle({
 		setTheme,
 	]);
 
-	const iconClass = isClient ? THEME_ICON_CLASSES[theme] : FALLBACK_ICON_CLASS;
+	const iconClass = resolveIconClass(theme, isClient, unstyled);
+	const styleProps = resolveIconButtonStyle(unstyled, radius, variant);
 
 	return (
 		<IconButton
@@ -88,8 +128,7 @@ export function ThemeToggle({
 			icon={iconClass}
 			aria-label={(getAriaLabel ?? labels.currentTheme)(theme)}
 			size={size}
-			radius={radius}
-			variant={variant}
+			{...styleProps}
 			tooltip={tooltip}
 			onClick={() => {
 				void toggleTheme();

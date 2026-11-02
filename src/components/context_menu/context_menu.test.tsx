@@ -272,4 +272,56 @@ describe('ContextMenu', () => {
 		const menu = await screen.findByRole('menu');
 		expect(screen.getByRole('dialog').contains(menu)).toBe(true);
 	});
+
+	describe('unstyled', () => {
+		const openUnstyledMenu = async () => {
+			render(
+				<ContextMenu
+					unstyled
+					panelClassName="custom-panel"
+					items={
+						<>
+							<MenuItem onClick={vi.fn<() => void>()}>Edit</MenuItem>
+							<MenuItem onClick={vi.fn<() => void>()}>Copy</MenuItem>
+						</>
+					}
+				>
+					<div>Right-click area</div>
+				</ContextMenu>
+			);
+			fireEvent.contextMenu(screen.getByText('Right-click area'), {
+				clientX: 100,
+				clientY: 200,
+			});
+			await waitFor(() => expect(screen.getByText('Edit')).toHaveFocus());
+			return screen.getByRole('menu');
+		};
+
+		test('should drop the visual classes and keep the layout of the panel', async () => {
+			const menu = await openUnstyledMenu();
+
+			for (const token of ['border', 'py-1', 'shadow-lg', 'min-w-40']) {
+				expect(menu).not.toHaveClass(token);
+			}
+			expect(menu).toHaveClass('w-max');
+			expect(menu).toHaveAttribute('data-state', 'open');
+		});
+
+		test('should apply panelClassName to the menu element', async () => {
+			const menu = await openUnstyledMenu();
+			expect(menu).toHaveClass('custom-panel');
+		});
+
+		test('should navigate with the arrow keys and close on Escape', async () => {
+			await openUnstyledMenu();
+
+			fireEvent.keyDown(screen.getByText('Edit'), { key: 'ArrowDown' });
+			expect(screen.getByText('Copy')).toHaveFocus();
+
+			fireEvent.keyDown(screen.getByText('Copy'), { key: 'Escape' });
+			await waitFor(() =>
+				expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+			);
+		});
+	});
 });

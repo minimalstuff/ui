@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 
 import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
 
@@ -68,4 +69,17 @@ export const FullPageWithoutTransition: Story = {
 			<ThemeToggle isTransitionEnabled={false} />
 		</div>
 	),
+};
+
+export const Unstyled: Story = {
+	render: () => (
+		<div className="rounded-full bg-gray-900 p-2 text-white">
+			<ThemeToggle unstyled />
+		</div>
+	),
+	play: async ({ canvas }) => {
+		const button = canvas.getByRole('button');
+		await expect(button).toHaveAccessibleName(/Current theme/);
+		await expect(button).not.toHaveClass('border');
+	},
 };

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
+	expect,
 	fireEvent,
 	userEvent,
 	waitForElementToBeRemoved,
@@ -151,5 +152,44 @@ export const InModal: Story = {
 		await expectKeysCloseMenuAndKeepFocus(TAB);
 		await openMenu();
 		await expectKeysCloseMenuAndKeepFocus(SHIFT_TAB);
+	},
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		panelClassName:
+			'rounded-xl bg-indigo-950 p-2 text-sm text-white shadow-2xl',
+		items: (
+			<>
+				<MenuItem
+					unstyled
+					className="rounded-lg px-3 py-2 hover:bg-indigo-800 focus-visible:bg-indigo-800"
+					onClick={() => {}}
+				>
+					Edit
+				</MenuItem>
+				<MenuItem
+					unstyled
+					className="rounded-lg px-3 py-2 hover:bg-indigo-800 focus-visible:bg-indigo-800"
+					onClick={() => {}}
+				>
+					Duplicate
+				</MenuItem>
+			</>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+		const region = canvas.getByRole('region', { name: 'File' });
+
+		await fireEvent.contextMenu(region, { clientX: 100, clientY: 100 });
+
+		const menu = await body.findByRole('menu', { name: 'File actions' });
+		await expect(menu).toHaveClass('bg-indigo-950');
+		await expect(
+			within(menu).getByRole('menuitem', { name: 'Edit' })
+		).toBeVisible();
 	},
 };

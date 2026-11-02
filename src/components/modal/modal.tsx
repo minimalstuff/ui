@@ -36,6 +36,12 @@ export type ModalProps = {
 	height?: ModalHeight;
 	radius?: Radius;
 	className?: string;
+	/** Applied to the `role=dialog` element. A `transform`, `filter` or `backdrop-filter` on the open panel makes it the containing block of `position: fixed` descendants, so Menus opened inside it get clipped. Keep these off the open state. Carries `data-state="open"` or `"closed"`, so `data-[state=closed]:` variants can animate it. Put your own transitions behind `motion-reduce:` variants, since `unstyled` drops the library's reduced-motion handling along with its animations. */
+	panelClassName?: string;
+	/** Applied to the backdrop element, which carries the click-to-dismiss. */
+	backdropClassName?: string;
+	/** Strips the library's visual styling (background, shadow, radius, transitions, backdrop tint, header and content typography and padding), keeping layout, sizing, scrolling and behaviour. `radius` is ignored. The close button keeps a 24px minimum target size. */
+	unstyled?: boolean;
 	dismissible?: boolean;
 	closeLabel?: string;
 	/** `alertdialog` for urgent messages that need a response (describes the dialog by its content); pair with `dismissible={false}` when it must not be dismissed. */
@@ -60,6 +66,9 @@ export const Modal = createCallable<ModalProps, void>(
 		height,
 		radius,
 		className,
+		panelClassName,
+		backdropClassName,
+		unstyled,
 		dismissible,
 		closeLabel,
 		role,
@@ -83,6 +92,9 @@ export const Modal = createCallable<ModalProps, void>(
 					height={height}
 					radius={radius}
 					className={className}
+					panelClassName={panelClassName}
+					backdropClassName={backdropClassName}
+					unstyled={unstyled}
 					dismissible={dismissible}
 					closeLabel={closeLabel}
 					role={role}

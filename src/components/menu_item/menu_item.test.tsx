@@ -5,6 +5,9 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { MenuCloseContext } from '#components/menu/menu_context';
 import { MenuItem } from '#components/menu_item/menu_item';
+import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
+
+const RADII: readonly Radius[] = ['none', 'sm', 'md', 'lg', 'xl', 'full'];
 
 describe('MenuItem', () => {
 	test('renders children', () => {
@@ -378,6 +381,125 @@ describe('MenuItem', () => {
 				</MenuItem>
 			);
 			expect(ref.current).toBe(screen.getByRole('menuitem'));
+		});
+	});
+
+	describe('unstyled', () => {
+		test('should drop the visual classes of a button', () => {
+			render(
+				<MenuItem onClick={vi.fn<() => void>()} unstyled>
+					Move up
+				</MenuItem>
+			);
+
+			const item = screen.getByRole('menuitem');
+			for (const token of [
+				'px-3',
+				'py-2',
+				'text-sm',
+				'text-gray-900',
+				'gap-2',
+				'transition-colors',
+				'focus-visible:bg-blue-50',
+				'outline-hidden',
+				'focus-visible:outline-2',
+				'focus-visible:outline-blue-500',
+				'hover:enabled:bg-gray-50',
+			]) {
+				expect(item).not.toHaveClass(token);
+			}
+		});
+
+		test('should keep the layout, disabled and focus classes of a button', () => {
+			render(
+				<MenuItem onClick={vi.fn<() => void>()} unstyled disabled>
+					Move up
+				</MenuItem>
+			);
+
+			expect(screen.getByRole('menuitem')).toHaveClass(
+				'flex',
+				'w-full',
+				'items-center',
+				'cursor-pointer',
+				'whitespace-nowrap',
+				'text-left',
+				'disabled:cursor-not-allowed'
+			);
+			expect(screen.getByRole('menuitem')).toBeDisabled();
+		});
+
+		test('should drop the visual classes and keep the layout of a link', () => {
+			render(
+				<MenuItem href="/settings" unstyled danger>
+					Settings
+				</MenuItem>
+			);
+
+			const item = screen.getByRole('menuitem');
+			expect(item).not.toHaveClass('px-3', 'text-red-700', 'hover:bg-red-50');
+			expect(item).toHaveClass('flex', 'w-full');
+		});
+
+		test('should drop the icon and trailing colours', () => {
+			const { container } = render(
+				<MenuItem
+					onClick={vi.fn<() => void>()}
+					unstyled
+					icon="i-mdi-cog"
+					trailing="Dark"
+					selected
+				>
+					Theme
+				</MenuItem>
+			);
+
+			expect(container.querySelector('.i-mdi-cog')).not.toHaveClass(
+				'text-gray-500'
+			);
+			expect(screen.getByText('Dark')).not.toHaveClass('text-xs');
+			expect(container.querySelector('.i-mdi-check')).not.toHaveClass(
+				'text-blue-600'
+			);
+		});
+
+		test('should ignore radius', () => {
+			render(
+				<MenuItem onClick={vi.fn<() => void>()} unstyled radius="lg">
+					Move up
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).not.toHaveClass('rounded-lg');
+		});
+	});
+
+	describe('radius', () => {
+		test.each(RADII)(
+			'should map %s to its radius class on a button',
+			(radius) => {
+				render(
+					<MenuItem onClick={vi.fn<() => void>()} radius={radius}>
+						Move up
+					</MenuItem>
+				);
+				expect(screen.getByRole('menuitem')).toHaveClass(
+					RADIUS_CLASSES[radius]
+				);
+			}
+		);
+
+		test('should round a link', () => {
+			render(
+				<MenuItem href="/settings" radius="md">
+					Settings
+				</MenuItem>
+			);
+			expect(screen.getByRole('menuitem')).toHaveClass('rounded-md');
+		});
+
+		test('should add no radius class by default', () => {
+			render(<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>);
+			expect(screen.getByRole('menuitem').className).not.toMatch(/rounded/);
 		});
 	});
 });

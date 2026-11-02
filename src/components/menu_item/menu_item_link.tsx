@@ -38,6 +38,8 @@ export function MenuItemLink({
 	danger = false,
 	disabled = false,
 	children,
+	radius,
+	unstyled = false,
 	className,
 	ref,
 }: Readonly<MenuItemLinkProps>) {
@@ -59,17 +61,19 @@ export function MenuItemLink({
 			rel={rel ?? (isExternal ? EXTERNAL_REL : undefined)}
 			aria-disabled={disabled || undefined}
 			onClick={handleClick}
-			className={menuItemClasses(
-				HOVER_CLASSES,
-				STATE_CLASSES,
+			className={menuItemClasses({
+				hoverClasses: HOVER_CLASSES,
+				stateClasses: STATE_CLASSES,
 				danger,
-				className
-			)}
+				unstyled,
+				radius,
+				className,
+			})}
 		>
-			<MenuItemContent icon={icon} danger={danger}>
+			<MenuItemContent icon={icon} danger={danger} unstyled={unstyled}>
 				{children}
 			</MenuItemContent>
-			<MenuItemEnd trailing={trailing} />
+			<MenuItemEnd trailing={trailing} unstyled={unstyled} />
 		</a>
 	);
 }

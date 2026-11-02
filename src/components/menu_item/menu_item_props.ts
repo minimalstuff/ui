@@ -5,6 +5,8 @@ import type {
 	Ref,
 } from 'react';
 
+import type { Radius } from '#components/shared/radius';
+
 export type MenuItemBaseProps = {
 	icon?: string;
 	/**
@@ -21,6 +23,20 @@ export type MenuItemBaseProps = {
 	danger?: boolean;
 	disabled?: boolean;
 	children: ReactNode;
+	/**
+	 * Rounds the row, which shows on its hover and focus background. Unset by
+	 * default (square corners). Ignored when `unstyled`.
+	 */
+	radius?: Radius;
+	/**
+	 * Strips the row's visual styling (padding, text colour and size, hover and
+	 * focus backgrounds, icon and trailing colours) and keeps its layout, the
+	 * disabled behaviour. The library's focus outline is removed, so the browser's
+	 * native focus indicator applies. Don't add `outline-none` through `className`
+	 * without your own `focus-visible:` indicator (WCAG 2.4.7). Style the row
+	 * through `className`.
+	 */
+	unstyled?: boolean;
 	className?: string;
 };
 

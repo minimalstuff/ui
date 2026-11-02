@@ -67,4 +67,22 @@ describe('Badge', () => {
 		render(<Badge ref={ref}>Pill</Badge>);
 		expect(ref.current).toBe(screen.getByText('Pill'));
 	});
+
+	test('keeps only layout classes when unstyled', () => {
+		render(
+			<Badge unstyled color="danger" variant="solid" size="lg" radius="full">
+				Bare
+			</Badge>
+		);
+		const badge = screen.getByText('Bare');
+		expect(badge).toHaveClass('inline-flex', 'items-center');
+		expect(badge).not.toHaveClass(
+			'gap-1',
+			'border',
+			'rounded-full',
+			'px-3.5',
+			'text-lg',
+			'bg-red-600'
+		);
+	});
 });

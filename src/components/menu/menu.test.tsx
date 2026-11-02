@@ -404,4 +404,78 @@ describe('Menu', () => {
 			expect(menu.parentElement?.parentElement).toBe(document.body);
 		});
 	});
+
+	describe('unstyled', () => {
+		const openUnstyledMenu = async () => {
+			render(
+				<Menu
+					trigger={<button>Options</button>}
+					unstyled
+					panelClassName="custom-panel"
+				>
+					<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+					<MenuItem onClick={vi.fn<() => void>()}>Move down</MenuItem>
+				</Menu>
+			);
+			fireEvent.click(screen.getByText('Options'));
+			await waitFor(() => expect(screen.getByText('Move up')).toHaveFocus());
+			return screen.getByRole('menu');
+		};
+
+		test('should drop the visual classes of the panel', async () => {
+			const menu = await openUnstyledMenu();
+
+			for (const token of [
+				'border',
+				'py-1',
+				'shadow-lg',
+				'backdrop-blur-sm',
+				'min-w-40',
+				'max-w-xs',
+				'rounded-md',
+				'duration-150',
+			]) {
+				expect(menu).not.toHaveClass(token);
+			}
+		});
+
+		test('should keep the layout and behaviour of the panel', async () => {
+			const menu = await openUnstyledMenu();
+
+			expect(menu).toHaveClass('w-max');
+			expect(menu).toHaveAttribute('data-state', 'open');
+			expect(menu).toHaveAttribute('tabindex', '-1');
+			expect(menu.parentElement).toHaveClass('z-50');
+		});
+
+		test('should apply panelClassName to the menu element', async () => {
+			const menu = await openUnstyledMenu();
+			expect(menu).toHaveClass('custom-panel');
+		});
+
+		test('should apply panelClassName without unstyled', async () => {
+			render(
+				<Menu trigger={<button>Options</button>} panelClassName="custom-panel">
+					<MenuItem onClick={vi.fn<() => void>()}>Move up</MenuItem>
+				</Menu>
+			);
+			fireEvent.click(screen.getByText('Options'));
+			await waitFor(() => expect(screen.getByRole('menu')).toBeInTheDocument());
+
+			expect(screen.getByRole('menu')).toHaveClass('custom-panel', 'border');
+		});
+
+		test('should navigate with the arrow keys and close on Escape', async () => {
+			await openUnstyledMenu();
+
+			fireEvent.keyDown(screen.getByText('Move up'), { key: 'ArrowDown' });
+			expect(screen.getByText('Move down')).toHaveFocus();
+
+			fireEvent.keyDown(screen.getByText('Move down'), { key: 'Escape' });
+			await waitFor(() =>
+				expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+			);
+			expect(screen.getByText('Options')).toHaveFocus();
+		});
+	});
 });

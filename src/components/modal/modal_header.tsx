@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { type ReactNode } from 'react';
 
 import { IconButton } from '#components/icon_button/icon_button';
@@ -9,6 +10,7 @@ interface ModalHeaderProps {
 	onDismiss: () => void;
 	dismissible: boolean;
 	closeLabel?: string;
+	unstyled?: boolean;
 }
 
 /** @internal the title row (heading and close button) shared by `Modal` and `Drawer` — not part of the public API. */
@@ -18,22 +20,41 @@ export function ModalHeader({
 	onDismiss,
 	dismissible,
 	closeLabel,
+	unstyled = false,
 }: Readonly<ModalHeaderProps>) {
 	const labels = useLabels();
+	const closeAriaLabel = closeLabel ?? labels.close;
 
 	return (
-		<div className="flex items-center justify-between gap-4 px-6 pt-5 pb-4 flex-shrink-0">
+		<div
+			className={clsx(
+				'flex items-center justify-between flex-shrink-0',
+				!unstyled && 'gap-4 px-6 pt-5 pb-4'
+			)}
+		>
 			<h2
 				id={titleId}
-				className="text-base font-medium tracking-tight text-gray-900 dark:text-gray-100"
+				className={clsx(
+					!unstyled &&
+						'text-base font-medium tracking-tight text-gray-900 dark:text-gray-100'
+				)}
 			>
 				{title}
 			</h2>
-			{dismissible && (
+			{dismissible && unstyled && (
 				<IconButton
 					icon="i-mdi-close"
 					onClick={onDismiss}
-					aria-label={closeLabel ?? labels.close}
+					aria-label={closeAriaLabel}
+					className="min-h-6 min-w-6"
+					unstyled
+				/>
+			)}
+			{dismissible && !unstyled && (
+				<IconButton
+					icon="i-mdi-close"
+					onClick={onDismiss}
+					aria-label={closeAriaLabel}
 					variant="subtle"
 					size="sm"
 					radius="full"

@@ -48,6 +48,12 @@ export interface DrawerProps {
 	radius?: Radius;
 	/** Applied to the scrollable body. */
 	className?: string;
+	/** Applied to the `role=dialog` element. A `transform`, `filter` or `backdrop-filter` on the open panel makes it the containing block of `position: fixed` descendants, so Menus opened inside it get clipped. Keep these off the open state. Carries `data-state="open"` or `"closed"`, so `data-[state=closed]:` variants can animate it. Put your own transitions behind `motion-reduce:` variants, since `unstyled` drops the library's reduced-motion handling along with its animations. */
+	panelClassName?: string;
+	/** Applied to the backdrop element, which carries the click-to-dismiss. */
+	backdropClassName?: string;
+	/** Strips the library's visual styling (background, shadow, radius, slide transition, backdrop tint, header and body typography and padding), keeping layout, `side`, `size`, scrolling and behaviour. `radius` is ignored. The close button keeps a 24px minimum target size. */
+	unstyled?: boolean;
 	/** `false` hides the close button and blocks Escape and backdrop dismissal. */
 	dismissible?: boolean;
 	closeLabel?: string;
@@ -77,6 +83,9 @@ function DrawerDialog({
 	side,
 	radius,
 	className,
+	panelClassName,
+	backdropClassName,
+	unstyled = false,
 	dismissible,
 	closeLabel,
 	initialFocusRef,
@@ -115,14 +124,18 @@ function DrawerDialog({
 				<div
 					className={clsx(
 						'fixed inset-0 z-50',
-						'transition-opacity duration-200 ease-out',
+						!unstyled && 'transition-opacity duration-200 ease-out',
 						isVisible ? 'opacity-100' : 'opacity-0'
 					)}
 					onClick={handleBackdropClick}
 					onMouseDown={handleBackdropMouseDown}
 				>
 					<div
-						className="fixed inset-0 bg-black/60 backdrop-blur-md"
+						className={clsx(
+							'fixed inset-0',
+							!unstyled && 'bg-black/60 backdrop-blur-md',
+							backdropClassName
+						)}
 						aria-hidden="true"
 					/>
 					<div
@@ -131,18 +144,22 @@ function DrawerDialog({
 						aria-modal="true"
 						aria-labelledby={titleId}
 						tabIndex={-1}
+						data-state={isVisible ? 'open' : 'closed'}
 						inert={isEnded}
 						className={clsx(
 							'fixed inset-y-0 h-full flex flex-col overflow-hidden',
 							SIDE_CLASSES[side],
 							SIZE_CLASSES[size],
-							OVERLAY_BG,
-							THIN_SCROLLBAR_SCOPE,
-							'shadow-2xl',
-							INNER_EDGE_RADIUS_CLASSES[side][radius],
-							'ms-drawer-transition',
 							'focus:outline-none',
-							!isVisible && OFFSCREEN_CLASSES[side]
+							!unstyled && [
+								OVERLAY_BG,
+								THIN_SCROLLBAR_SCOPE,
+								'shadow-2xl',
+								INNER_EDGE_RADIUS_CLASSES[side][radius],
+								'ms-drawer-transition',
+							],
+							!isVisible && OFFSCREEN_CLASSES[side],
+							panelClassName
 						)}
 						onClick={(event) => event.stopPropagation()}
 					>
@@ -152,12 +169,15 @@ function DrawerDialog({
 							onDismiss={dismiss}
 							dismissible={dismissible}
 							closeLabel={closeLabel}
+							unstyled={unstyled}
 						/>
 						<div
 							ref={contentRef}
 							{...scrollableProps}
 							className={clsx(
-								'flex-1 overflow-y-auto min-h-0 px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
+								'flex-1 overflow-y-auto min-h-0',
+								!unstyled &&
+									'px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400',
 								focusClassName,
 								className
 							)}
@@ -166,7 +186,7 @@ function DrawerDialog({
 								{children}
 							</ModalFooterSlotContext.Provider>
 						</div>
-						<ModalFooterSlot onSlotChange={setFooterSlot}>
+						<ModalFooterSlot onSlotChange={setFooterSlot} unstyled={unstyled}>
 							{footer}
 						</ModalFooterSlot>
 					</div>

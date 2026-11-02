@@ -486,4 +486,23 @@ describe('Modal', () => {
 
 		expect(assertTypes).toBeTypeOf('function');
 	});
+
+	test('should forward unstyled and the styling hooks to the dialog', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Hello',
+				children: 'Body',
+				unstyled: true,
+				panelClassName: 'my-panel',
+				backdropClassName: 'my-backdrop',
+			});
+		});
+
+		const dialog = await screen.findByRole('dialog', { name: 'Hello' });
+		expect(dialog).toHaveClass('my-panel');
+		expect(dialog).not.toHaveClass('shadow-2xl');
+		expect(dialog.previousElementSibling).toHaveClass('my-backdrop');
+	});
 });

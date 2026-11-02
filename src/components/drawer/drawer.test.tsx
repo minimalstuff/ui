@@ -425,4 +425,115 @@ describe('Drawer', () => {
 		renderDrawer();
 		expect(screen.getByRole('dialog')).toHaveClass('ms-drawer-transition');
 	});
+
+	describe('unstyled and styling hooks', () => {
+		function getParts() {
+			const dialog = screen.getByRole('dialog');
+			return {
+				dialog,
+				backdrop: dialog.previousElementSibling as HTMLElement,
+				content: screen.getByText('Body'),
+				heading: screen.getByRole('heading'),
+			};
+		}
+
+		test('should strip the visual classes when unstyled', () => {
+			renderDrawer({ unstyled: true });
+			const { dialog, backdrop, content, heading } = getParts();
+			expect(dialog).not.toHaveClass(
+				'bg-white',
+				'shadow-2xl',
+				'ms-drawer-transition'
+			);
+			expect(backdrop).not.toHaveClass('bg-black/60', 'backdrop-blur-md');
+			expect(content).not.toHaveClass('px-6', 'text-sm');
+			expect(heading).not.toHaveClass('text-base');
+			expect(heading.parentElement).not.toHaveClass('px-6');
+		});
+
+		test('should keep the layout classes when unstyled', () => {
+			renderDrawer({ unstyled: true, side: 'left', size: 'lg' });
+			const { dialog, backdrop, content } = getParts();
+			expect(dialog).toHaveClass(
+				'fixed',
+				'inset-y-0',
+				'h-full',
+				'flex',
+				'flex-col',
+				'overflow-hidden',
+				'left-0',
+				'ms-drawer-width-lg',
+				'focus:outline-none'
+			);
+			expect(backdrop).toHaveClass('fixed', 'inset-0');
+			expect(content).toHaveClass('flex-1', 'overflow-y-auto', 'min-h-0');
+		});
+
+		test('should keep the visual classes by default', () => {
+			renderDrawer();
+			const { dialog, backdrop, content } = getParts();
+			expect(dialog).toHaveClass('bg-white', 'shadow-2xl');
+			expect(backdrop).toHaveClass('bg-black/60');
+			expect(content).toHaveClass('px-6');
+		});
+
+		test('should drop the wrapper transition and strip the footer slot when unstyled', () => {
+			renderDrawer({ unstyled: true, footer: <button>Save</button> });
+			const slot = screen.getByRole('button', { name: 'Save' })
+				.parentElement as HTMLElement;
+			expect(getParts().dialog.parentElement).not.toHaveClass(
+				'transition-opacity'
+			);
+			expect(slot).not.toHaveClass('px-6', 'py-4', 'border-t', 'gap-3');
+			expect(slot).toHaveClass('flex', 'items-center', 'justify-end');
+		});
+
+		test('should set data-state to open then closed', () => {
+			vi.useFakeTimers();
+			const { rerender } = renderDrawer();
+			act(() => {
+				vi.advanceTimersByTime(100);
+			});
+			expect(getParts().dialog).toHaveAttribute('data-state', 'open');
+			rerender(
+				<Drawer isOpen={false} onClose={vi.fn<() => void>()} title="Settings">
+					Body
+				</Drawer>
+			);
+			expect(getParts().dialog).toHaveAttribute('data-state', 'closed');
+		});
+
+		test('should apply panelClassName and backdropClassName', () => {
+			renderDrawer({
+				unstyled: true,
+				panelClassName: 'my-panel',
+				backdropClassName: 'my-backdrop',
+			});
+			const { dialog, backdrop } = getParts();
+			expect(dialog).toHaveClass('my-panel');
+			expect(backdrop).toHaveClass('my-backdrop');
+		});
+
+		test('should still close on Escape and backdrop click when unstyled', () => {
+			const { onClose } = renderDrawer({ unstyled: true });
+			pressEscape();
+			fireEvent.click(getParts().dialog.parentElement as Element);
+			expect(onClose).toHaveBeenCalledTimes(2);
+		});
+
+		test('should still move focus into the dialog and restore it on close when unstyled', () => {
+			const trigger = document.createElement('button');
+			document.body.appendChild(trigger);
+			trigger.focus();
+			const { rerender } = renderDrawer({ unstyled: true });
+			expect(getParts().dialog.contains(document.activeElement)).toBe(true);
+			rerender(
+				<Drawer isOpen={false} onClose={vi.fn<() => void>()} title="Settings">
+					Body
+				</Drawer>
+			);
+			expect(trigger).toHaveFocus();
+			trigger.remove();
+		});
+	});
 });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 
 import { Badge } from '#components/badge/badge';
 
@@ -78,4 +79,18 @@ export const AllSizes: Story = {
 			<Badge size="lg">lg</Badge>
 		</div>
 	),
+};
+
+export const Unstyled: Story = {
+	args: {
+		unstyled: true,
+		className:
+			'gap-1 rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-800',
+		children: 'Custom badge',
+	},
+	play: async ({ canvas }) => {
+		const badge = canvas.getByText('Custom badge');
+		await expect(badge).toHaveClass('inline-flex', 'items-center');
+		await expect(badge).not.toHaveClass('border');
+	},
 };

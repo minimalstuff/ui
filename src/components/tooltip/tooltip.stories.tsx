@@ -103,7 +103,9 @@ export const OnIconButton: Story = {
 		await expectFocusOn(trigger);
 
 		const tooltip = await body.findByRole('tooltip');
-		await expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
+		await waitFor(async () => {
+			await expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
+		});
 
 		await userEvent.keyboard('{Escape}');
 		await waitFor(async () => {
@@ -250,4 +252,28 @@ export const Disabled: Story = {
 			</Button>
 		</Tooltip>
 	),
+};
+
+export const Unstyled: Story = {
+	render: () => (
+		<Tooltip
+			content="Delete permanently"
+			unstyled
+			panelClassName="rounded-md border border-indigo-300 bg-indigo-50 px-2 py-1 text-xs text-indigo-950"
+		>
+			<Button variant="outline" color="neutral">
+				Hover me
+			</Button>
+		</Tooltip>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.hover(canvas.getByRole('button', { name: 'Hover me' }));
+
+		const tooltip = await body.findByRole('tooltip');
+		await expect(tooltip).toHaveTextContent('Delete permanently');
+		await expect(tooltip).toHaveClass('bg-indigo-50');
+	},
 };
