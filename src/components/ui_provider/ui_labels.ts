@@ -23,6 +23,12 @@ export interface UILabels {
 	copied: string;
 	/** Screen-reader text added to a `Button` while it is loading, and announced by `Spinner` without a visible label. */
 	loading: string;
+	/**
+	 * Accessible name of the default `CopyButton` icon button. Optional so that
+	 * existing complete label objects keep compiling: a translated label set
+	 * must add it, otherwise the English "Copy" is used.
+	 */
+	copy?: string;
 	/** Screen-reader announcement of `CharacterCount` near and at the limit. */
 	charactersRemaining: (remainingCount: number) => string;
 	/** Accessible name of `ThemeToggle` for the current theme. */
@@ -35,6 +41,8 @@ export interface UILabels {
 	maxSelectedHint: (maxSelectedValues: number) => string;
 }
 
+export const DEFAULT_COPY_LABEL = 'Copy';
+
 const DEFAULT_LABELS: UILabels = {
 	close: 'Close',
 	confirm: 'Confirm',
@@ -46,6 +54,7 @@ const DEFAULT_LABELS: UILabels = {
 	required: 'required',
 	copied: 'Copied',
 	loading: 'Loading',
+	copy: DEFAULT_COPY_LABEL,
 	charactersRemaining: (remainingCount) =>
 		`${remainingCount} ${remainingCount === 1 ? 'character' : 'characters'} remaining`,
 	currentTheme: (theme) => `Current theme: ${theme}`,

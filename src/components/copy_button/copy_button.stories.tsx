@@ -15,6 +15,11 @@ const meta = {
 			control: 'text',
 			description: 'The string copied to the clipboard',
 		},
+		label: {
+			control: 'text',
+			description:
+				'Accessible name of the default icon button (when children is omitted)',
+		},
 	},
 	args: {
 		value: 'npm install @minimalstuff/ui',
@@ -35,3 +40,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const DefaultIconButton: Story = {
+	args: { children: undefined },
+};
+
+export const CustomLabel: Story = {
+	args: { children: undefined, label: 'Copy install command' },
+};

@@ -4,6 +4,7 @@ import { act, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { CopyButton } from '#components/copy_button/copy_button';
+import { UIProvider } from '#components/ui_provider/ui_provider';
 
 function stubClipboard(writeText: (text: string) => Promise<void>) {
 	Object.defineProperty(navigator, 'clipboard', {
@@ -158,5 +159,81 @@ describe('CopyButton', () => {
 			vi.advanceTimersByTime(0);
 		});
 		expect(screen.getByRole('status')).toHaveTextContent('Copied');
+	});
+
+	describe('default UI', () => {
+		test('should render an icon button named Copy when children are omitted', () => {
+			const { container } = render(<CopyButton value="hello" />);
+			expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+			expect(
+				container.querySelector('.i-mdi-content-copy')
+			).toBeInTheDocument();
+		});
+
+		test('should name the button from the label prop', () => {
+			render(<CopyButton value="hello" label="Copy the command" />);
+			expect(
+				screen.getByRole('button', { name: 'Copy the command' })
+			).toBeInTheDocument();
+		});
+
+		test('should name the button from the copy label of UIProvider', () => {
+			render(
+				<UIProvider labels={{ copy: 'Copier' }}>
+					<CopyButton value="hello" />
+				</UIProvider>
+			);
+			expect(
+				screen.getByRole('button', { name: 'Copier' })
+			).toBeInTheDocument();
+		});
+
+		test('should swap the copy icon for a check while copied', async () => {
+			const { container } = render(<CopyButton value="hello" />);
+
+			await act(async () => {
+				screen.getByRole('button').click();
+			});
+
+			expect(container.querySelector('.i-mdi-check')).toBeInTheDocument();
+			expect(container.querySelector('.i-mdi-content-copy')).toBeNull();
+
+			await act(async () => {
+				vi.advanceTimersByTime(2_000);
+			});
+			expect(
+				container.querySelector('.i-mdi-content-copy')
+			).toBeInTheDocument();
+		});
+
+		test('should write the value and announce the copy', async () => {
+			const writeText = vi
+				.fn<(text: string) => Promise<void>>()
+				.mockResolvedValue(undefined);
+			stubClipboard(writeText);
+			render(<CopyButton value="hello" />);
+
+			await act(async () => {
+				screen.getByRole('button').click();
+			});
+			await act(async () => {
+				vi.advanceTimersByTime(0);
+			});
+
+			expect(writeText).toHaveBeenCalledWith('hello');
+			expect(screen.getByRole('status')).toHaveTextContent('Copied');
+		});
+
+		test('should keep the render prop in charge when children are given', () => {
+			render(
+				<CopyButton value="hello" label="ignored">
+					{() => <button>custom</button>}
+				</CopyButton>
+			);
+			expect(screen.getAllByRole('button')).toHaveLength(1);
+			expect(
+				screen.getByRole('button', { name: 'custom' })
+			).toBeInTheDocument();
+		});
 	});
 });
