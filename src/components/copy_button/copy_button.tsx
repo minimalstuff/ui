@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
+import { IconButton } from '#components/icon_button/icon_button';
+import { DEFAULT_COPY_LABEL } from '#components/ui_provider/ui_labels';
 import { useLabels } from '#components/ui_provider/use_labels';
 import { surfaceError } from '#lib/surface_error';
 
@@ -8,16 +10,23 @@ const ANNOUNCEMENT_REFRESH_DELAY = 0;
 
 export interface CopyButtonProps {
 	value: string;
-	children: (props: {
+	/**
+	 * Render prop for a custom control. Omit it to get the default icon button,
+	 * which swaps its copy icon for a check while `copied`.
+	 */
+	children?: (props: {
 		copied: boolean;
 		copy: () => void | Promise<void>;
 	}) => ReactNode;
+	/** Accessible name of the default icon button. Defaults to `labels.copy`. */
+	label?: string;
 	onError?: (error: unknown) => void;
 }
 
 export function CopyButton({
 	value,
 	children,
+	label,
 	onError,
 }: Readonly<CopyButtonProps>) {
 	const labels = useLabels();
@@ -60,7 +69,16 @@ export function CopyButton({
 	};
 
 	// oxlint-disable-next-line react/refs -- copy is an event handler passed to a render prop; it reads timeoutRef.current only when invoked, never during render
-	const content = children({ copied, copy });
+	const customContent = children?.({ copied, copy });
+	const content =
+		customContent ??
+		(children ? null : (
+			<IconButton
+				icon={copied ? 'i-mdi-check' : 'i-mdi-content-copy'}
+				aria-label={label ?? labels.copy ?? DEFAULT_COPY_LABEL}
+				onClick={() => void copy()}
+			/>
+		));
 
 	return (
 		<>
