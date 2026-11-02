@@ -181,4 +181,20 @@ describe('IconButton', () => {
 		);
 		expect(screen.getByRole('button').querySelector('div')).toBeNull();
 	});
+
+	test('should not set aria-pressed when pressed is undefined', () => {
+		render(<IconButton icon="i-mdi-heart" aria-label="Like" />);
+		expect(screen.getByRole('button')).not.toHaveAttribute('aria-pressed');
+	});
+
+	test('should set aria-pressed and the pressed look when pressed', () => {
+		render(<IconButton icon="i-mdi-heart" aria-label="Like" pressed />);
+		const button = screen.getByRole('button', { pressed: true });
+		expect(button).toHaveClass('bg-gray-400');
+	});
+
+	test('should expose a false pressed state when not pressed', () => {
+		render(<IconButton icon="i-mdi-heart" aria-label="Like" pressed={false} />);
+		expect(screen.getByRole('button', { pressed: false })).toBeInTheDocument();
+	});
 });

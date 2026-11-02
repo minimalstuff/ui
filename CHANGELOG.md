@@ -8,6 +8,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 - `Combobox` takes a `filterOption` prop to replace how typed text matches options, for example to ignore accents.
 - `MultiCombobox`: new `filterOption` prop to customise how the search field matches options (for example to ignore accents). The default match is unchanged.
+- `Button` and `IconButton` take a `pressed` prop for toggle buttons: it sets `aria-pressed` and a pressed look (dark fill plus an inset ring, not colour alone), and adds nothing when left `undefined`. It is for real `<button>` toggles.
+- `buttonClassName(options)` returns the exact classes `Button` renders (`variant`, `color`, `size`, `radius`, `fullWidth`, `pressed`, `unstyled`, `className`), to style a router `<Link>` or an `<a>` as a button, focus ring included. Never put `aria-pressed` on a link: pair a selected link with `aria-current` instead.
 
 ### Changed
 
