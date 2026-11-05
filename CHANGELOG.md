@@ -4,6 +4,11 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Drawer` takes an `onExited` prop, called once per close when the exit animation has finished and the panel is unmounted (not when the drawer reopens during the exit, nor on an initial closed render).
+- `dismissTopmostModal()` asks the topmost open `Modal`, `ConfirmModal` or `Drawer` to close as an Escape press would (dismiss guards are honoured, a non-dismissible dialog stays open) and returns `true` when a dialog consumed the call, `false` when none is open. Call it first from an Android back button handler.
+
 ## [5.1.0] - 2026-11-02
 
 ### Added

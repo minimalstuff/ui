@@ -3,6 +3,7 @@ import {
 	type ReactNode,
 	type RefObject,
 	useEffect,
+	useEffectEvent,
 	useId,
 	useState,
 } from 'react';
@@ -57,6 +58,8 @@ export interface DrawerProps {
 	/** `false` hides the close button and blocks Escape and backdrop dismissal. */
 	dismissible?: boolean;
 	closeLabel?: string;
+	/** Called once per close, when the exit has finished and the panel is unmounted. Not called when the drawer reopens during the exit, nor on an initial render with `isOpen={false}`. */
+	onExited?: () => void;
 	/** Wins over the first-tabbable rule for where focus lands on open; may point at an element in the body or in the footer. */
 	initialFocusRef?: RefObject<HTMLElement | null>;
 }
@@ -202,19 +205,20 @@ function DrawerDialog({
  * duration after `isOpen` turns `false` so the panel can slide out.
  * Reopening during that window cancels the unmount.
  */
-function useIsMounted(isOpen: boolean): boolean {
+function useIsMounted(isOpen: boolean, onExited?: () => void): boolean {
 	const [hasExited, setHasExited] = useState(!isOpen);
+	const notifyExited = useEffectEvent(() => onExited?.());
 
 	if (isOpen && hasExited) setHasExited(false);
 
 	useEffect(() => {
-		if (isOpen) return;
-		const timerId = setTimeout(
-			() => setHasExited(true),
-			DRAWER_EXIT_DURATION_MS
-		);
+		if (isOpen || hasExited) return;
+		const timerId = setTimeout(() => {
+			setHasExited(true);
+			notifyExited();
+		}, DRAWER_EXIT_DURATION_MS);
 		return () => clearTimeout(timerId);
-	}, [isOpen]);
+	}, [isOpen, hasExited]);
 
 	return isOpen || !hasExited;
 }
@@ -227,9 +231,10 @@ export function Drawer({
 	side = 'right',
 	radius = 'none',
 	dismissible = true,
+	onExited,
 	...dialogProps
 }: Readonly<DrawerProps>) {
-	const isMounted = useIsMounted(isOpen);
+	const isMounted = useIsMounted(isOpen, onExited);
 
 	if (!isMounted) return null;
 

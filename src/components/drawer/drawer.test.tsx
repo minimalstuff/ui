@@ -537,3 +537,58 @@ describe('Drawer', () => {
 		});
 	});
 });
+
+describe('Drawer onExited', () => {
+	test('should call onExited once after the exit duration when closed', () => {
+		vi.useFakeTimers();
+		const onExited = vi.fn<() => void>();
+		const { rerender } = renderDrawer({ onExited });
+
+		rerenderDrawer(rerender, { isOpen: false, onExited });
+		expect(onExited).not.toHaveBeenCalled();
+		advancePastExit();
+
+		expect(onExited).toHaveBeenCalledTimes(1);
+		expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+	});
+
+	test('should not call onExited when the drawer reopens during the exit', () => {
+		vi.useFakeTimers();
+		const onExited = vi.fn<() => void>();
+		const { rerender } = renderDrawer({ onExited });
+
+		rerenderDrawer(rerender, { isOpen: false, onExited });
+		rerenderDrawer(rerender, { isOpen: true, onExited });
+		advancePastExit();
+
+		expect(onExited).not.toHaveBeenCalled();
+	});
+
+	test('should not call onExited on an initial closed render', () => {
+		vi.useFakeTimers();
+		const onExited = vi.fn<() => void>();
+		renderDrawer({ isOpen: false, onExited });
+		advancePastExit();
+
+		expect(onExited).not.toHaveBeenCalled();
+	});
+
+	test('should not restart the exit timer when onExited changes identity', () => {
+		vi.useFakeTimers();
+		const firstOnExited = vi.fn<() => void>();
+		const latestOnExited = vi.fn<() => void>();
+		const { rerender } = renderDrawer({ onExited: firstOnExited });
+
+		rerenderDrawer(rerender, { isOpen: false, onExited: firstOnExited });
+		act(() => {
+			vi.advanceTimersByTime(DRAWER_EXIT_DURATION_MS - 1);
+		});
+		rerenderDrawer(rerender, { isOpen: false, onExited: latestOnExited });
+		act(() => {
+			vi.advanceTimersByTime(1);
+		});
+
+		expect(firstOnExited).not.toHaveBeenCalled();
+		expect(latestOnExited).toHaveBeenCalledTimes(1);
+	});
+});
