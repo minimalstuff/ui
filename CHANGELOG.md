@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-11-06
+
 ### Added
 
 - `Drawer` takes an `onExited` prop, called once per close when the exit animation has finished and the panel is unmounted (not when the drawer reopens during the exit, nor on an initial closed render).
@@ -541,7 +543,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.1.0...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.2.0...HEAD
+[5.2.0]: https://github.com/minimalstuff/ui/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/minimalstuff/ui/compare/5.0.1...5.1.0
 [5.0.1]: https://github.com/minimalstuff/ui/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/minimalstuff/ui/compare/4.3.3...5.0.0
