@@ -1,6 +1,7 @@
 import {
 	type MouseEvent,
 	useEffect,
+	useLayoutEffect,
 	useRef,
 	useState,
 	type RefObject,
@@ -8,7 +9,11 @@ import {
 
 import { useBodyScrollLock } from '#components/modal/body_scroll_lock';
 import { KEYBOARD_SCROLL_REGION_ATTRIBUTE } from '#components/modal/keyboard_scroll_region_attribute';
-import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
+import {
+	dismissTopmostModal,
+	isTopmostModal,
+	registerModal,
+} from '#components/modal/modal_stack';
 import { getTabbableElements } from '#components/shared/tabbable';
 
 /** Where initial focus looks for a tabbable element once the content has none: anywhere in the `dialog` (header and footer included), or nowhere (`content`), which leaves focus on the dialog itself. */
@@ -122,10 +127,8 @@ function useDialogKeyboard(
 	dialogRef: RefObject<HTMLDivElement | null>,
 	{
 		isEnded,
-		onDismiss,
-		dismissible,
 		modalToken,
-	}: Pick<UseModalDialogOptions, 'isEnded' | 'onDismiss' | 'dismissible'> & {
+	}: Pick<UseModalDialogOptions, 'isEnded'> & {
 		modalToken: symbol;
 	}
 ): void {
@@ -138,7 +141,7 @@ function useDialogKeyboard(
 			if (event.key === 'Escape') {
 				if (event.defaultPrevented) return;
 				event.preventDefault();
-				if (dismissible) onDismiss();
+				dismissTopmostModal();
 				return;
 			}
 			if (event.key !== 'Tab' || !dialogRef.current) return;
@@ -148,7 +151,7 @@ function useDialogKeyboard(
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isEnded, onDismiss, dismissible, modalToken, dialogRef]);
+	}, [isEnded, modalToken, dialogRef]);
 }
 
 /**
@@ -173,9 +176,16 @@ export function useModalDialog({
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [previouslyFocused] = useState(captureActiveElement);
 
+	const requestDismissRef = useRef(() => {});
+	useLayoutEffect(() => {
+		requestDismissRef.current = () => {
+			if (dismissible) onDismiss();
+		};
+	});
+
 	useEffect(() => {
 		if (isEnded) return;
-		return registerModal(modalToken);
+		return registerModal(modalToken, () => requestDismissRef.current());
 	}, [isEnded, modalToken]);
 
 	useBodyScrollLock();
@@ -200,7 +210,7 @@ export function useModalDialog({
 		target?.focus({ preventScroll: true });
 	}, [isEnded, previouslyFocused, getFocusFallback]);
 
-	useDialogKeyboard(dialogRef, { isEnded, onDismiss, dismissible, modalToken });
+	useDialogKeyboard(dialogRef, { isEnded, modalToken });
 
 	const handleBackdropClick = () => {
 		if (!isEnded && dismissible) onDismiss();

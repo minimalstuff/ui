@@ -96,6 +96,7 @@ export {
 	type ModalRole,
 	type ModalSize,
 } from './modal/modal';
+export { dismissTopmostModal } from './modal/modal_stack';
 export { ModalFooter, type ModalFooterProps } from './modal/modal_footer';
 export { useDismissGuard, type DismissGuard } from './modal/use_dismiss_guard';
 export { ModalProvider } from './modal_provider/modal_provider';
