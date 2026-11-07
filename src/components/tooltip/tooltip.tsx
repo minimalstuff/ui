@@ -12,6 +12,7 @@ import {
 	isValidElement,
 	useCallback,
 	useEffect,
+	useEffectEvent,
 	useId,
 	useLayoutEffect,
 	useRef,
@@ -291,6 +292,15 @@ export function Tooltip({
 		},
 		[]
 	);
+
+	const closeWhenDisabled = useEffectEvent(() => {
+		if (isOpenRequested) handleHide();
+	});
+
+	useEffect(() => {
+		// oxlint-disable-next-line react/set-state-in-effect -- closing runs the timer-driven close path when the disabled prop turns true
+		if (disabled) closeWhenDisabled();
+	}, [disabled]);
 
 	useEffect(() => {
 		if (!isOpenRequested || disabled) return;

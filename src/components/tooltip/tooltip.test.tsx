@@ -187,6 +187,94 @@ describe('Tooltip', () => {
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 
+	test('should stay closed after re-enabling when disabled turned true while open', () => {
+		const { rerender } = render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+		rerender(
+			<Tooltip content="Helpful text" disabled>
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		act(() => {
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+		});
+		rerender(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('should stay closed after re-enabling when disabled turned true while focused', () => {
+		const { rerender } = render(
+			<Tooltip content="Helpful text">
+				<button>Focus me</button>
+			</Tooltip>
+		);
+		act(() => {
+			screen.getByRole('button').focus();
+		});
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+		rerender(
+			<Tooltip content="Helpful text" disabled>
+				<button>Focus me</button>
+			</Tooltip>
+		);
+		act(() => {
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+		});
+		rerender(
+			<Tooltip content="Helpful text">
+				<button>Focus me</button>
+			</Tooltip>
+		);
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('should open normally on a new hover when re-enabled after being disabled while open', () => {
+		const { rerender } = render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		rerender(
+			<Tooltip content="Helpful text" disabled>
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		act(() => {
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+		});
+		rerender(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+
+		expect(screen.getByRole('tooltip')).toHaveTextContent('Helpful text');
+	});
+
 	test('shows temporary content on click when showOnClick is set', () => {
 		render(
 			<Tooltip content="Copy" temporaryContent="Copied!" showOnClick>
