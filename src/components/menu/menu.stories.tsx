@@ -10,7 +10,7 @@ import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 import { Modal } from '#components/modal/modal';
 import {
-	expectDialogHasNoTransform,
+	expectDialogCreatesNoContainingBlock,
 	expectFocusOn,
 	expectMenuReachableInDialog,
 	getPortalScope,
@@ -263,7 +263,7 @@ export const InDrawer: Story = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }));
 		const dialog = await body.findByRole('dialog', { name: 'Item actions' });
 
-		await expectDialogHasNoTransform(dialog);
+		await expectDialogCreatesNoContainingBlock(dialog);
 		await expectMenuInDialogSurvivesTab(body, dialog);
 	},
 };
