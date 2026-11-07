@@ -88,6 +88,8 @@ pnpm verify
 
 `pnpm test:stories` runs the stories in a real browser and needs Playwright's Chromium once: `pnpm exec playwright install chromium`.
 
+To change the library from a project that uses it, see [docs/developing_from_a_consumer.md](docs/developing_from_a_consumer.md).
+
 Releases follow [docs/releasing.md](docs/releasing.md). Changes are listed in the [CHANGELOG](CHANGELOG.md).
 
 ## Report a bug

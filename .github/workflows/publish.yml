@@ -1,12 +1,25 @@
 name: CI & Publish
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: Version increment
+        type: choice
+        required: true
+        options:
+          - patch
+          - minor
+          - major
+      pre-release-id:
+        description: Prerelease identifier (for example alpha), empty for a stable release
+        type: string
+        required: false
+        default: ''
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: release
+  cancel-in-progress: false
 
 jobs:
   verify:
@@ -14,8 +27,19 @@ jobs:
     permissions:
       contents: read
 
-  build:
+  release:
     needs: verify
+    uses: minimalstuff/tooling/.github/workflows/release.yml@v0.9.0
+    with:
+      increment: ${{ inputs.increment }}
+      pre-release-id: ${{ inputs.pre-release-id }}
+    secrets:
+      release-deploy-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+    permissions:
+      contents: write
+
+  build:
+    needs: release
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -28,6 +52,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ needs.release.outputs.tag }}
 
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
 
@@ -47,6 +72,16 @@ jobs:
         run: |
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
           echo "node-version=$(tr -d '[:space:]' < .node-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Check packed version matches the release
+        env:
+          EXPECTED_VERSION: ${{ needs.release.outputs.version }}
+          PACKED_VERSION: ${{ steps.metadata.outputs.version }}
+        run: |
+          if [[ "$PACKED_VERSION" != "$EXPECTED_VERSION" ]]; then
+            echo "Packed version $PACKED_VERSION does not match released version $EXPECTED_VERSION" >&2
+            exit 1
+          fi
 
       - name: Pack tarball
         id: pack
@@ -91,3 +126,11 @@ jobs:
         run: |
           TAG=$([[ "$VERSION" == *-* ]] && echo "next" || echo "latest")
           npm publish "$RUNNER_TEMP/package/$TARBALL" --tag "$TAG"
+
+  storybook:
+    needs: publish
+    uses: ./.github/workflows/github_pages_publish.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
