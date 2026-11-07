@@ -60,6 +60,11 @@ const meta = {
 			options: ['auto', 'fixed'],
 			description: 'Modal height',
 		},
+		phoneLayout: {
+			control: 'select',
+			options: ['center', 'sheet'],
+			description: 'Bottom sheet below the sm breakpoint when set to sheet',
+		},
 		radius: {
 			control: 'select',
 			options: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
@@ -142,6 +147,26 @@ export const TabletBackdropPaddingWithConsumerUtilities: Story = {
 	globals: { viewport: { value: 'tablet', isRotated: false } },
 	play: ({ canvasElement }) =>
 		expectBackdropPaddingTopAfterOpening(canvasElement, '48px'),
+};
+
+export const PhoneSheet: Story = {
+	args: {
+		phoneLayout: 'sheet',
+		children: 'On phones this dialog is a bottom sheet.',
+	},
+	globals: { viewport: { value: 'mobile1', isRotated: false } },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+		const dialog = await body.findByRole('dialog', { name: 'Modal title' });
+
+		await waitFor(() =>
+			expect(dialog.getBoundingClientRect().bottom).toBe(window.innerHeight)
+		);
+		await expect(dialog.getBoundingClientRect().width).toBe(window.innerWidth);
+	},
 };
 
 export const WithoutTitle: Story = {

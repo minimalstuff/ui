@@ -505,4 +505,20 @@ describe('Modal', () => {
 		expect(dialog).not.toHaveClass('shadow-2xl');
 		expect(dialog.previousElementSibling).toHaveClass('my-backdrop');
 	});
+
+	test('should pass phoneLayout to the dialog when called with sheet', async () => {
+		render(<Modal />);
+
+		act(() => {
+			void Modal.call({
+				title: 'Sheet',
+				children: 'Body',
+				phoneLayout: 'sheet',
+			});
+		});
+
+		expect(await screen.findByRole('dialog')).toHaveClass(
+			'ms-modal-sheet-panel'
+		);
+	});
 });

@@ -5,6 +5,10 @@ import { createPortal } from 'react-dom';
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
+import {
+	MODAL_SHEET_RADIUS_CLASSES,
+	MODAL_SHEET_SIZE_CLASSES,
+} from '#components/modal/modal_sheet_classes';
 import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
@@ -21,6 +25,8 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export type ModalHeight = 'auto' | 'fixed';
 
+export type ModalPhoneLayout = 'center' | 'sheet';
+
 export type ModalRole = 'dialog' | 'alertdialog';
 
 interface ModalShellProps {
@@ -32,6 +38,8 @@ interface ModalShellProps {
 	size?: ModalSize;
 	/** `auto` sizes the dialog to its content up to the viewport; `fixed` gives it a stable height and leaves scrolling to the content, so a child with `flex-1 min-h-0 overflow-y-auto` scrolls on its own between the pinned header and footer. */
 	height?: ModalHeight;
+	/** `sheet` turns the dialog into a bottom sheet below the `sm` breakpoint (full width, flush with the bottom edge, only the top corners rounded, at most 85svh tall, bottom padding clearing the safe area, sliding up on open and down on close; plain fade under reduced motion). From `sm` up it renders as `center`. With `height="fixed"` the sheet is 85svh tall on phones. `unstyled` keeps the sheet position and size but drops radius and the slide. */
+	phoneLayout?: ModalPhoneLayout;
 	radius?: Radius;
 	className?: string;
 	/** Applied to the `role=dialog` element. A `transform`, `filter` or `backdrop-filter` on the open panel makes it the containing block of `position: fixed` descendants, so Menus opened inside it get clipped. Keep these off the open state. Carries `data-state="open"` or `"closed"`, so `data-[state=closed]:` variants can animate it. Put your own transitions behind `motion-reduce:` variants, since `unstyled` drops the library's reduced-motion handling along with its animations. */
@@ -75,6 +83,7 @@ export function ModalShell({
 	footer,
 	size = 'md',
 	height = 'auto',
+	phoneLayout = 'center',
 	radius = 'xl',
 	className,
 	panelClassName,
@@ -108,14 +117,17 @@ export function ModalShell({
 		{ labelledBy: title ? titleId : undefined, label: ariaLabel }
 	);
 	const isAutoHeight = height === 'auto';
+	const isSheet = phoneLayout === 'sheet';
 
 	const hasDescribedByContent = role === 'alertdialog' && Boolean(children);
 
 	return createPortal(
 		<div
 			className={clsx(
-				'fixed inset-0 z-50 flex items-start justify-center',
-				'ms-modal-backdrop-padding',
+				'fixed inset-0 z-50 flex justify-center',
+				isSheet
+					? 'ms-modal-sheet-backdrop'
+					: 'items-start ms-modal-backdrop-padding',
 				!unstyled && 'transition-opacity duration-200 ease-out',
 				isVisible ? 'opacity-100' : 'opacity-0'
 			)}
@@ -145,17 +157,25 @@ export function ModalShell({
 				data-state={isVisible ? 'open' : 'closed'}
 				className={clsx(
 					'relative w-full',
-					SIZE_CLASSES[size],
+					isSheet ? MODAL_SHEET_SIZE_CLASSES[size] : SIZE_CLASSES[size],
 					HEIGHT_CLASSES[height],
+					isSheet && 'ms-modal-sheet-panel',
+					isSheet && height === 'fixed' && 'ms-modal-sheet-height-fixed',
 					'ms-modal-max-height overflow-hidden flex flex-col',
 					'focus:outline-none',
 					!unstyled && [
 						OVERLAY_BG,
 						THIN_SCROLLBAR_SCOPE,
 						'shadow-2xl',
-						RADIUS_CLASSES[radius],
+						isSheet
+							? MODAL_SHEET_RADIUS_CLASSES[radius]
+							: RADIUS_CLASSES[radius],
 						'transition-all duration-200 ease-out',
-						isVisible ? 'opacity-100' : 'ms-modal-panel-closed',
+						isVisible
+							? 'opacity-100'
+							: isSheet
+								? 'ms-modal-sheet-closed'
+								: 'ms-modal-panel-closed',
 					],
 					panelClassName
 				)}
