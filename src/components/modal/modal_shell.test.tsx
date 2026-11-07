@@ -873,3 +873,62 @@ describe('ModalShell unstyled and styling hooks', () => {
 		expect(screen.getByRole('dialog')).toHaveAttribute('data-state', 'closed');
 	});
 });
+
+describe('ModalShell phoneLayout', () => {
+	function renderShell(
+		props: Partial<React.ComponentProps<typeof ModalShell>>
+	) {
+		render(
+			<ModalShell
+				isEnded={false}
+				onDismiss={vi.fn<() => void>()}
+				title="Title"
+				{...props}
+			>
+				Body
+			</ModalShell>
+		);
+		const dialog = screen.getByRole('dialog');
+		return { dialog, backdrop: dialog.parentElement as HTMLElement };
+	}
+
+	test('should not apply sheet classes when phoneLayout is omitted', () => {
+		const { dialog, backdrop } = renderShell({});
+		expect(dialog).not.toHaveClass('ms-modal-sheet-panel');
+		expect(backdrop).not.toHaveClass('ms-modal-sheet-backdrop');
+	});
+
+	test('should apply the sheet layout classes when phoneLayout is sheet', () => {
+		const { dialog, backdrop } = renderShell({ phoneLayout: 'sheet' });
+		expect(backdrop).toHaveClass('ms-modal-sheet-backdrop');
+		expect(dialog).toHaveClass(
+			'ms-modal-sheet-panel',
+			'ms-modal-sheet-size-md',
+			'ms-modal-sheet-radius-xl'
+		);
+	});
+
+	test('should use the sheet closed state when phoneLayout is sheet and the dialog is not visible', () => {
+		const { dialog } = renderShell({ phoneLayout: 'sheet', isEnded: true });
+		expect(dialog).toHaveClass('ms-modal-sheet-closed');
+		expect(dialog).not.toHaveClass('ms-modal-panel-closed');
+	});
+
+	test('should keep the sheet position but drop radius and slide when sheet is unstyled', () => {
+		const { dialog } = renderShell({
+			phoneLayout: 'sheet',
+			unstyled: true,
+			isEnded: true,
+		});
+		expect(dialog).toHaveClass('ms-modal-sheet-panel');
+		expect(dialog).not.toHaveClass(
+			'ms-modal-sheet-radius-xl',
+			'ms-modal-sheet-closed'
+		);
+	});
+
+	test('should apply the fixed sheet height when height is fixed', () => {
+		const { dialog } = renderShell({ phoneLayout: 'sheet', height: 'fixed' });
+		expect(dialog).toHaveClass('ms-modal-sheet-height-fixed');
+	});
+});

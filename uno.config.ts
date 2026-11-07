@@ -55,6 +55,23 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
 		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
+	'ms-modal-sheet-backdrop':
+		'items-end p-0 sm:items-start sm:px-2 sm:py-[3rem] lg:py-[5rem]',
+	'ms-modal-sheet-size-sm': 'max-w-none sm:max-w-md',
+	'ms-modal-sheet-size-md': 'max-w-none sm:max-w-lg',
+	'ms-modal-sheet-size-lg': 'max-w-none sm:max-w-2xl',
+	'ms-modal-sheet-size-xl': 'max-w-none sm:max-w-4xl',
+	'ms-modal-sheet-radius-none': 'rounded-none',
+	'ms-modal-sheet-radius-sm': 'rounded-t-sm rounded-b-none sm:rounded-sm',
+	'ms-modal-sheet-radius-md': 'rounded-t-md rounded-b-none sm:rounded-md',
+	'ms-modal-sheet-radius-lg': 'rounded-t-lg rounded-b-none sm:rounded-lg',
+	'ms-modal-sheet-radius-xl': 'rounded-t-xl rounded-b-none sm:rounded-xl',
+	'ms-modal-sheet-radius-full': 'rounded-t-full rounded-b-none sm:rounded-full',
+	'ms-modal-sheet-panel':
+		'max-sm:max-h-[85svh] max-sm:pb-[env(safe-area-inset-bottom)]',
+	'ms-modal-sheet-height-fixed': 'max-sm:h-[85svh]',
+	'ms-modal-sheet-closed':
+		'opacity-0 scale-95 translate-y-1 max-sm:scale-100 max-sm:motion-safe:translate-y-full motion-reduce:scale-100 motion-reduce:translate-y-0',
 	'ms-modal-max-height':
 		'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)]',
 };

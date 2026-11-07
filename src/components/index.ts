@@ -92,6 +92,7 @@ export {
 export {
 	Modal,
 	type ModalHeight,
+	type ModalPhoneLayout,
 	type ModalProps,
 	type ModalRole,
 	type ModalSize,

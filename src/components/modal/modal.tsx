@@ -6,6 +6,7 @@ import {
 	ModalShell,
 	type ModalRole,
 	type ModalSize,
+	type ModalPhoneLayout,
 	type ModalHeight,
 } from '#components/modal/modal_shell';
 import { useGuardedDismiss } from '#components/modal/use_guarded_dismiss';
@@ -17,6 +18,7 @@ export type {
 	ModalRole,
 	ModalSize,
 	ModalHeight,
+	ModalPhoneLayout,
 } from '#components/modal/modal_shell';
 
 type ModalRenderProp = ReactNode | ((close: () => void) => ReactNode);
@@ -34,6 +36,8 @@ export type ModalProps = {
 	size?: ModalSize;
 	/** `fixed` gives the dialog a stable height so it does not jump when content changes; the content area stops scrolling and a child with `flex-1 min-h-0 overflow-y-auto` scrolls on its own. */
 	height?: ModalHeight;
+	/** `sheet` turns the dialog into a bottom sheet below the `sm` breakpoint (full width, flush with the bottom edge, only the top corners rounded, at most 85svh tall, bottom padding clearing the safe area, sliding up on open and down on close; plain fade under reduced motion). From `sm` up it renders as `center`. With `height="fixed"` the sheet is 85svh tall on phones. `unstyled` keeps the sheet position and size but drops radius and the slide. */
+	phoneLayout?: ModalPhoneLayout;
 	radius?: Radius;
 	className?: string;
 	/** Applied to the `role=dialog` element. A `transform`, `filter` or `backdrop-filter` on the open panel makes it the containing block of `position: fixed` descendants, so Menus opened inside it get clipped. Keep these off the open state. Carries `data-state="open"` or `"closed"`, so `data-[state=closed]:` variants can animate it. Put your own transitions behind `motion-reduce:` variants, since `unstyled` drops the library's reduced-motion handling along with its animations. */
@@ -64,6 +68,7 @@ export const Modal = createCallable<ModalProps, void>(
 		children,
 		size,
 		height,
+		phoneLayout,
 		radius,
 		className,
 		panelClassName,
@@ -90,6 +95,7 @@ export const Modal = createCallable<ModalProps, void>(
 					title={title}
 					size={size}
 					height={height}
+					phoneLayout={phoneLayout}
 					radius={radius}
 					className={className}
 					panelClassName={panelClassName}
