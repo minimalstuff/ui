@@ -44,6 +44,7 @@
 		"lint": "oxlint . --deny-warnings",
 		"test": "vitest run --config vitest.ci.config.ts",
 		"test:stories": "vitest run",
+		"dev:lib": "tsc -b && VITE_BUILD_LIB=1 vite build --watch",
 		"preview": "vite preview --outDir storybook-static --port 6006 --host 0.0.0.0",
 		"format": "oxfmt && oxlint --fix",
 		"storybook": "storybook dev -p 6006 ",
