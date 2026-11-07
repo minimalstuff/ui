@@ -52,6 +52,13 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 		'data-[state=closed]:-translate-x-1 motion-reduce:data-[state=closed]:translate-x-0',
 	'ms-switch-thumb-transition':
 		'transition duration-200 ease-in-out motion-reduce:transition-none',
+	'ms-toast-region':
+		'fixed inset-x-0 bottom-[var(--ms-toast-offset-bottom,calc(1rem_+_env(safe-area-inset-bottom)))] z-[60] px-4 pointer-events-none',
+	'ms-toast-stack': 'flex flex-col items-center sm:items-end',
+	'ms-toast-width': 'w-full sm:w-[22rem] max-w-full',
+	'ms-toast-transition':
+		'transition duration-150 ease-out motion-reduce:transition-none',
+	'ms-toast-closed': 'opacity-0 translate-y-2 motion-reduce:translate-y-0',
 	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
 		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',

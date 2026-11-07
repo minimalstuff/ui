@@ -29,6 +29,13 @@ export interface UILabels {
 	 * must add it, otherwise the English "Copy" is used.
 	 */
 	copy?: string;
+	/**
+	 * Accessible name of the region holding the `ToastProvider` toasts. Optional
+	 * like `copy`: the English "Notifications" is used when a label set omits it.
+	 */
+	notifications?: string;
+	/** Accessible name of the close button of a toast. Optional: the English "Close notification" is used when omitted. */
+	closeNotification?: string;
 	/** Screen-reader announcement of `CharacterCount` near and at the limit. */
 	charactersRemaining: (remainingCount: number) => string;
 	/** Accessible name of `ThemeToggle` for the current theme. */
@@ -42,6 +49,8 @@ export interface UILabels {
 }
 
 export const DEFAULT_COPY_LABEL = 'Copy';
+export const DEFAULT_NOTIFICATIONS_LABEL = 'Notifications';
+export const DEFAULT_CLOSE_NOTIFICATION_LABEL = 'Close notification';
 
 export const DEFAULT_LABELS: UILabels = {
 	close: 'Close',
@@ -55,6 +64,8 @@ export const DEFAULT_LABELS: UILabels = {
 	copied: 'Copied',
 	loading: 'Loading',
 	copy: DEFAULT_COPY_LABEL,
+	notifications: DEFAULT_NOTIFICATIONS_LABEL,
+	closeNotification: DEFAULT_CLOSE_NOTIFICATION_LABEL,
 	charactersRemaining: (remainingCount) =>
 		`${remainingCount} ${remainingCount === 1 ? 'character' : 'characters'} remaining`,
 	currentTheme: (theme) => `Current theme: ${theme}`,

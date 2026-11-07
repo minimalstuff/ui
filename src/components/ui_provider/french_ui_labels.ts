@@ -20,6 +20,8 @@ export const FRENCH_UI_LABELS: UILabels = {
 	copied: 'Copié',
 	loading: 'Chargement',
 	copy: 'Copier',
+	notifications: 'Notifications',
+	closeNotification: 'Fermer la notification',
 	charactersRemaining: (remainingCount) =>
 		`${remainingCount} ${remainingCount > 1 ? 'caractères restants' : 'caractère restant'}`,
 	currentTheme: (theme) => `Thème actuel : ${THEME_NAMES[theme]}`,

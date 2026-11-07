@@ -130,6 +130,14 @@ export {
 	ThemeToggle,
 	type ThemeToggleProps,
 } from './theme_toggle/theme_toggle';
+export { ToastProvider, type ToastProviderProps } from './toast/toast_provider';
+export { useToast } from './toast/use_toast';
+export type {
+	ToastAction,
+	ToastApi,
+	ToastOptions,
+	ToastTone,
+} from '#components/toast/toast_types';
 export { Toolbar, type ToolbarProps } from './toolbar/toolbar';
 export { FRENCH_UI_LABELS } from './ui_provider/french_ui_labels';
 export {
