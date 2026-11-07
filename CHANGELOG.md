@@ -7,6 +7,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 ### Added
 
 - `Modal` takes a `phoneLayout` prop: `'sheet'` shows the dialog as a bottom sheet on phones (below the `sm` breakpoint) that slides up from the bottom edge and clears the safe area, while wider screens keep the centered dialog. The default `'center'` changes nothing.
+- `THEME_INIT_SCRIPT` and `useThemeStore` keep `<meta name="theme-color">` in step with the theme when the meta has `data-light` and `data-dark` attributes, so an installed PWA's status bar follows dark mode. See the README for where to put the meta. The script changed: recompute its CSP hash.
 
 ### Fixed
 

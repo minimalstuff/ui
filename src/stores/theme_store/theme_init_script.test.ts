@@ -91,3 +91,33 @@ describe('THEME_INIT_SCRIPT', () => {
 		expect(isDarkApplied()).toBe(true);
 	});
 });
+
+function addMeta(attributes: Record<string, string>) {
+	const meta = document.createElement('meta');
+	for (const [name, value] of Object.entries(attributes)) {
+		meta.setAttribute(name, value);
+	}
+	document.head.append(meta);
+	return meta;
+}
+
+describe('THEME_INIT_SCRIPT theme-color meta', () => {
+	beforeEach(() => {
+		localStorage.clear();
+		document.head.innerHTML = '';
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		document.head.innerHTML = '';
+	});
+
+	test('should leave a theme-color meta without data attributes untouched', () => {
+		const meta = addMeta({ name: 'theme-color', content: '#123456' });
+		stubSystemPrefersDark(true);
+
+		runScript();
+
+		expect(meta.getAttribute('content')).toBe('#123456');
+	});
+});

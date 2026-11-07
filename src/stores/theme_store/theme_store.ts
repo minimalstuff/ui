@@ -14,12 +14,23 @@ function isBrowserEnvironment() {
 	);
 }
 
+const THEME_COLOR_META_SELECTOR =
+	'meta[name="theme-color"][data-light][data-dark]';
+
+function syncThemeColorMetas(isDark: boolean) {
+	const attributeName = isDark ? 'data-dark' : 'data-light';
+	for (const meta of document.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
+		meta.setAttribute('content', meta.getAttribute(attributeName) ?? '');
+	}
+}
+
 function applyThemeToDocument(theme: Theme) {
 	const systemPrefersDark = window.matchMedia(
 		'(prefers-color-scheme: dark)'
 	).matches;
 	const isDark = theme === 'dark' || (theme === 'system' && systemPrefersDark);
 	document.documentElement.classList.toggle('dark', isDark);
+	syncThemeColorMetas(isDark);
 }
 
 function readStoredTheme(): Theme {

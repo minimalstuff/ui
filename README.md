@@ -59,6 +59,28 @@ import { THEME_INIT_SCRIPT } from '@minimalstuff/ui';
 </head>;
 ```
 
+#### Status bar and `theme-color`
+
+To make the browser or installed PWA status bar follow the theme, add a `theme-color` meta with a `data-light` and a `data-dark` color. `THEME_INIT_SCRIPT` and `useThemeStore` copy the matching one into `content` every time the theme is applied (init, `setTheme`, OS change while on `system`, another tab). A meta without both attributes is left alone, and without such a meta nothing changes.
+
+```html
+<head>
+	<meta
+		name="theme-color"
+		content="#ffffff"
+		data-light="#ffffff"
+		data-dark="#0b0b0b"
+	/>
+	<script>
+		/* THEME_INIT_SCRIPT */
+	</script>
+</head>
+```
+
+- Put the meta before the script in `<head>`.
+- Remove any other `theme-color` meta, notably ones with a `media` attribute: the first matching one wins.
+- Keep the meta in the static HTML. A meta recreated by a `<head>` manager (Inertia `<Head>`, react-helmet) is not resynced.
+
 With a strict Content-Security-Policy, either add the script's SHA-256 hash to `script-src` (`'sha256-<hash>'`), or write `THEME_INIT_SCRIPT` to a file at build time and load it with `<script src>`. Compute the hash with:
 
 ```bash
