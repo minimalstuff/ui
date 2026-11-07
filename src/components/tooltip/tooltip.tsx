@@ -139,6 +139,7 @@ export function Tooltip({
 }: Readonly<TooltipProps>) {
 	const { isMounted, isVisible, setIsVisible, open, close } = useOverlayState();
 	const [showTemporary, setShowTemporary] = useState(false);
+	const [isOpenRequested, setIsOpenRequested] = useState(false);
 	const tooltipId = useId();
 	const arrowRef = useRef<HTMLDivElement>(null);
 	const [triggerElement, setTriggerElement] = useState<HTMLSpanElement | null>(
@@ -171,7 +172,14 @@ export function Tooltip({
 
 	const resolvedSide = placement.split('-')[0] as TooltipPosition;
 
-	useEnterOnPositioned(isMounted, isPositioned, setIsVisible);
+	const showIfOpenRequested = useCallback(
+		(isShown: boolean) => {
+			if (isOpenRequested) setIsVisible(isShown);
+		},
+		[isOpenRequested, setIsVisible]
+	);
+
+	useEnterOnPositioned(isMounted, isPositioned, showIfOpenRequested);
 
 	// Memoized so React doesn't call it with `null` then the node again on
 	// every re-render, which would needlessly reset floating-ui's reference.
@@ -213,12 +221,14 @@ export function Tooltip({
 
 	const closeTooltip = useCallback(() => {
 		setShowTemporary(false);
+		setIsOpenRequested(false);
 		close();
 	}, [close]);
 
 	const showTemporaryContent = () => {
 		if (disabled || !temporaryContent) return;
 		setShowTemporary(true);
+		setIsOpenRequested(true);
 		open(isPositioned);
 		clearTimeout(temporaryTimeoutRef.current);
 		temporaryTimeoutRef.current = setTimeout(closeTooltip, temporaryDuration);
@@ -227,6 +237,7 @@ export function Tooltip({
 
 	const handleShow = () => {
 		if (disabled) return;
+		setIsOpenRequested(true);
 		open(isPositioned);
 	};
 
@@ -282,7 +293,7 @@ export function Tooltip({
 	);
 
 	useEffect(() => {
-		if (!isVisible || disabled) return;
+		if (!isOpenRequested || disabled) return;
 
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key !== 'Escape') return;
@@ -292,7 +303,7 @@ export function Tooltip({
 
 		window.addEventListener('keydown', handleKeyDown, true);
 		return () => window.removeEventListener('keydown', handleKeyDown, true);
-	}, [isVisible, disabled, handleHide]);
+	}, [isOpenRequested, disabled, handleHide]);
 
 	const isTooltipShown = isMounted && !disabled;
 	const displayContent =

@@ -397,6 +397,36 @@ describe('Tooltip', () => {
 		expect(escapeEvent.defaultPrevented).toBe(true);
 	});
 
+	test('should close the tooltip when Escape is pressed before it becomes visible', async () => {
+		render(
+			<Tooltip content="Helpful text">
+				<button>Hover me</button>
+			</Tooltip>
+		);
+		const wrapper = screen.getByText('Hover me').parentElement as HTMLElement;
+		act(() => {
+			fireEvent.pointerEnter(wrapper);
+		});
+		expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'closed');
+
+		const escapeEvent = new KeyboardEvent('keydown', {
+			key: 'Escape',
+			cancelable: true,
+		});
+		act(() => {
+			document.dispatchEvent(escapeEvent);
+		});
+		await waitForEnterFrame();
+
+		expect(escapeEvent.defaultPrevented).toBe(true);
+		expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'closed');
+
+		act(() => {
+			vi.advanceTimersByTime(EXIT_ANIMATION_DURATION_MS);
+		});
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
 	test('should not prevent the default behavior of the Escape keydown event when the tooltip is hidden', () => {
 		render(
 			<Tooltip content="Helpful text">
