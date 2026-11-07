@@ -293,4 +293,37 @@ describe('Checkbox', () => {
 		expect(warn).not.toHaveBeenCalled();
 		warn.mockRestore();
 	});
+
+	describe('without a label', () => {
+		test('should be named by aria-label only when no label is given', () => {
+			const { container } = render(<Checkbox aria-label="Select row" />);
+			const input = screen.getByRole('checkbox');
+
+			expect(input).toHaveAccessibleName('Select row');
+			expect((input as HTMLInputElement).labels).toHaveLength(0);
+			expect(container.querySelector('label')).toBeNull();
+		});
+
+		test('should be named by an external label when one targets its id', () => {
+			render(
+				<>
+					<label htmlFor="external">Accept terms</label>
+					<Checkbox id="external" />
+				</>
+			);
+			const input = screen.getByRole('checkbox');
+
+			expect(input).toHaveAccessibleName('Accept terms');
+			expect((input as HTMLInputElement).labels).toHaveLength(1);
+		});
+
+		test('should render no label element in the card variant', () => {
+			const { container } = render(
+				<Checkbox variant="card" aria-label="Select row" />
+			);
+
+			expect(container.querySelector('label')).toBeNull();
+			expect(screen.getByRole('checkbox')).toHaveAccessibleName('Select row');
+		});
+	});
 });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { Switch } from '#components/switch/switch';
 
@@ -122,5 +123,25 @@ export const Unstyled: Story = {
 		label: 'Unstyled switch',
 		unstyled: true,
 		className: 'bg-purple-200',
+	},
+};
+
+export const Unlabelled: Story = {
+	args: {
+		'aria-label': 'Enable notifications',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const toggle = canvas.getByRole('switch', {
+			name: 'Enable notifications',
+		});
+		const track = toggle.parentElement;
+		if (!track) throw new Error('expected the track element');
+
+		const { left, top, width, height } = track.getBoundingClientRect();
+		const hit = document.elementFromPoint(left + width / 2, top + height / 2);
+		await expect(hit).toBe(toggle);
+		await userEvent.click(toggle);
+		await expect(toggle).toBeChecked();
 	},
 };
