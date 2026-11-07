@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useEffectEvent,
 	useId,
+	useMemo,
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -22,7 +23,7 @@ import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
 import { ModalFooterSlotContext } from '#components/modal/modal_footer_slot_context';
 import { ModalHeader } from '#components/modal/modal_header';
 import { useGuardedDismiss } from '#components/modal/use_guarded_dismiss';
-import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
+import { useKeyboardScrollRegion } from '#components/modal/use_keyboard_scroll_region';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { DRAWER_EXIT_DURATION_MS } from '#components/shared/animation';
 import { type Radius } from '#components/shared/radius';
@@ -31,6 +32,7 @@ import {
 	THIN_SCROLLBAR_SCOPE,
 } from '#components/shared/surface_tokens';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
+import { mergeRefs } from '#lib/merge_refs';
 
 export type { DrawerSide, DrawerSize } from '#components/drawer/drawer_styles';
 
@@ -116,9 +118,14 @@ function DrawerDialog({
 		getFocusFallback: getMainElement,
 	});
 
-	const { focusClassName, ...scrollableProps } = useKeyboardScrollable(
-		contentRef,
-		{ labelledBy: titleId }
+	const {
+		ref: scrollRegionRef,
+		scrollableProps,
+		focusClassName,
+	} = useKeyboardScrollRegion({ labelledBy: titleId });
+	const mergedContentRef = useMemo(
+		() => mergeRefs(contentRef, scrollRegionRef),
+		[contentRef, scrollRegionRef]
 	);
 
 	return (
@@ -175,7 +182,7 @@ function DrawerDialog({
 							unstyled={unstyled}
 						/>
 						<div
-							ref={contentRef}
+							ref={mergedContentRef}
 							{...scrollableProps}
 							className={clsx(
 								'flex-1 overflow-y-auto min-h-0',

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type ReactNode, type RefObject, useId } from 'react';
+import { type ReactNode, type RefObject, useId, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ModalFooterSlot } from '#components/modal/modal_footer_slot';
@@ -9,7 +9,7 @@ import {
 	MODAL_SHEET_RADIUS_CLASSES,
 	MODAL_SHEET_SIZE_CLASSES,
 } from '#components/modal/modal_sheet_classes';
-import { useKeyboardScrollable } from '#components/modal/use_keyboard_scrollable';
+import { useKeyboardScrollRegion } from '#components/modal/use_keyboard_scroll_region';
 import { useModalDialog } from '#components/modal/use_modal_dialog';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import {
@@ -17,6 +17,7 @@ import {
 	THIN_SCROLLBAR_SCOPE,
 } from '#components/shared/surface_tokens';
 import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
+import { mergeRefs } from '#lib/merge_refs';
 
 const MODAL_UNNAMED_GUIDANCE =
 	'a dialog needs an accessible name. Provide a non-empty `title` or `aria-label` prop.';
@@ -112,9 +113,17 @@ export function ModalShell({
 		Boolean(title) || Boolean(ariaLabel?.trim()),
 		MODAL_UNNAMED_GUIDANCE
 	);
-	const { focusClassName, ...scrollableProps } = useKeyboardScrollable(
-		contentRef,
-		{ labelledBy: title ? titleId : undefined, label: ariaLabel }
+	const {
+		ref: scrollRegionRef,
+		scrollableProps,
+		focusClassName,
+	} = useKeyboardScrollRegion({
+		labelledBy: title ? titleId : undefined,
+		label: ariaLabel,
+	});
+	const mergedContentRef = useMemo(
+		() => mergeRefs(contentRef, scrollRegionRef),
+		[contentRef, scrollRegionRef]
 	);
 	const isAutoHeight = height === 'auto';
 	const isSheet = phoneLayout === 'sheet';
@@ -192,7 +201,7 @@ export function ModalShell({
 					/>
 				)}
 				<div
-					ref={contentRef}
+					ref={mergedContentRef}
 					id={hasDescribedByContent ? contentId : undefined}
 					{...(isAutoHeight ? scrollableProps : undefined)}
 					className={clsx(
