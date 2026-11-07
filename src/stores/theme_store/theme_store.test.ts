@@ -134,4 +134,72 @@ describe('useThemeStore', () => {
 
 		expect(document.documentElement.classList.contains('dark')).toBe(false);
 	});
+
+	describe('theme-color meta', () => {
+		const LIGHT_COLOR = '#ffffff';
+		const DARK_COLOR = '#0b0b0b';
+		let meta: HTMLMetaElement;
+
+		beforeEach(() => {
+			meta = document.createElement('meta');
+			meta.setAttribute('name', 'theme-color');
+			meta.setAttribute('content', LIGHT_COLOR);
+			meta.setAttribute('data-light', LIGHT_COLOR);
+			meta.setAttribute('data-dark', DARK_COLOR);
+			document.head.append(meta);
+		});
+
+		afterEach(() => {
+			meta.remove();
+		});
+
+		test('should set the meta to the dark color when setTheme is called with dark', () => {
+			useThemeStore.getState().setTheme('dark');
+
+			expect(meta.getAttribute('content')).toBe(DARK_COLOR);
+		});
+
+		test('should set the meta to the light color when setTheme is called with light', () => {
+			meta.setAttribute('content', DARK_COLOR);
+
+			useThemeStore.getState().setTheme('light');
+
+			expect(meta.getAttribute('content')).toBe(LIGHT_COLOR);
+		});
+
+		test('should update the meta when a storage event announces another theme', () => {
+			globalThis.dispatchEvent(
+				new StorageEvent('storage', { key: 'theme', newValue: 'dark' })
+			);
+
+			expect(meta.getAttribute('content')).toBe(DARK_COLOR);
+		});
+
+		test('should update the meta when the OS preference changes while the theme is system', () => {
+			useThemeStore.getState().setTheme('system');
+
+			mediaQueryMock.matches = true;
+			systemThemeChangeHandler();
+
+			expect(meta.getAttribute('content')).toBe(DARK_COLOR);
+		});
+
+		test('should leave a meta without data attributes untouched when the theme changes', () => {
+			meta.removeAttribute('data-dark');
+			meta.setAttribute('content', '#123456');
+
+			useThemeStore.getState().setTheme('dark');
+
+			expect(meta.getAttribute('content')).toBe('#123456');
+		});
+
+		test('should set the meta as soon as the module loads', async () => {
+			localStorage.setItem('theme', 'dark');
+			vi.resetModules();
+
+			await import('#stores/theme_store/theme_store');
+
+			expect(meta.getAttribute('content')).toBe(DARK_COLOR);
+		});
+	});
 });
