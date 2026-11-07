@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import type { ChangeEvent } from 'react';
+import { type ChangeEvent, createRef } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { Switch } from '#components/switch/switch';
@@ -135,7 +135,7 @@ describe('Switch', () => {
 		render(<Switch />);
 
 		expect(warn).toHaveBeenCalledWith(
-			'Switch: needs an accessible name. Provide a `label`, `aria-label` or `aria-labelledby` prop.'
+			'Switch: needs an accessible name. Provide a `label`, `aria-label` or `aria-labelledby` prop, or a `<label>` that targets it.'
 		);
 		warn.mockRestore();
 	});
@@ -147,6 +147,43 @@ describe('Switch', () => {
 
 		expect(warn).not.toHaveBeenCalled();
 		warn.mockRestore();
+	});
+
+	test('should not warn when named by an external label that targets its id', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(
+			<>
+				<label htmlFor="external">Accept terms</label>
+				<Switch id="external" />
+			</>
+		);
+
+		expect(warn).not.toHaveBeenCalled();
+		warn.mockRestore();
+	});
+
+	test('should not warn when wrapped in a consumer label', () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		render(
+			// oxlint-disable-next-line jsx-a11y/label-has-associated-control -- the control is a custom component the rule cannot see
+			<label>
+				Accept terms
+				<Switch />
+			</label>
+		);
+
+		expect(warn).not.toHaveBeenCalled();
+		warn.mockRestore();
+	});
+
+	test('should forward the consumer ref to the input', () => {
+		const ref = createRef<HTMLInputElement>();
+
+		render(<Switch ref={ref} aria-label="Enable" />);
+
+		expect(ref.current).toBe(screen.getByRole('switch'));
 	});
 
 	describe('without a label', () => {

@@ -26,7 +26,7 @@ import {
 } from '#components/shared/surface_tokens';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
-import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
+import { useWarnUnnamedInput } from '#components/shared/use_warn_unnamed';
 import { mergeRefs } from '#lib/merge_refs';
 
 /**
@@ -150,8 +150,9 @@ export function Checkbox({
 		error && errorId
 	);
 
-	useWarnUnnamed(
+	useWarnUnnamedInput(
 		'Checkbox',
+		inputRef,
 		Boolean(label) ||
 			Boolean(ariaLabel?.trim()) ||
 			Boolean(ariaLabelledBy?.trim())
