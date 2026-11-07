@@ -15,6 +15,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Checkbox` and `Switch` without a `label` no longer render an empty `<label>`, which could reduce the input's accessible name to "on". Name them with `aria-label`, `aria-labelledby` or an external `<label for>`; the click target covers the box (24px), or the whole card with `variant="card"`.
 - `Tooltip`: Escape closes the bubble as soon as it starts opening. It used to be ignored until the enter animation had started, and the bubble then showed anyway.
 - `Tooltip`: turning `disabled` on while the bubble is open now closes it. It used to come back on its own once re-enabled.
+- `Checkbox` and `Switch` no longer warn in development that they need an accessible name when a `<label for>` or an enclosing `<label>` names them.
 
 ## [5.2.0] - 2026-11-06
 

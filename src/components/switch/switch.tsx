@@ -1,5 +1,10 @@
 import clsx from 'clsx';
-import { type ComponentPropsWithRef, type ReactNode } from 'react';
+import {
+	type ComponentPropsWithRef,
+	type ReactNode,
+	useMemo,
+	useRef,
+} from 'react';
 
 import { FieldDescription } from '#components/shared/field_description';
 import { FieldError } from '#components/shared/field_error';
@@ -13,7 +18,8 @@ import { RequiredMark } from '#components/shared/required_mark';
 import { SELECTED_FILL } from '#components/shared/surface_tokens';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
-import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
+import { useWarnUnnamedInput } from '#components/shared/use_warn_unnamed';
+import { mergeRefs } from '#lib/merge_refs';
 
 const UNLABELLED_INPUT_CLASSES =
 	'absolute -inset-0.5 m-0 h-6 w-11 appearance-none opacity-0';
@@ -75,10 +81,12 @@ export function Switch({
 	'aria-describedby': callerDescribedBy,
 	'aria-label': ariaLabel,
 	'aria-labelledby': ariaLabelledBy,
+	ref,
 	...props
 }: Readonly<SwitchProps>) {
 	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const hasLabel = Boolean(label);
 	const describedBy = joinIds(
 		callerDescribedBy,
@@ -86,12 +94,15 @@ export function Switch({
 		error && errorId
 	);
 
-	useWarnUnnamed(
+	useWarnUnnamedInput(
 		'Switch',
+		inputRef,
 		Boolean(label) ||
 			Boolean(ariaLabel?.trim()) ||
 			Boolean(ariaLabelledBy?.trim())
 	);
+
+	const mergedInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setIsChecked(event.target.checked);
@@ -124,6 +135,7 @@ export function Switch({
 					<input
 						type="checkbox"
 						role="switch"
+						ref={mergedInputRef}
 						id={switchId}
 						className={getInputClassName(hasLabel, props.disabled === true)}
 						checked={isChecked}
