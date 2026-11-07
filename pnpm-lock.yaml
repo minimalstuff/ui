@@ -189,8 +189,8 @@ importers:
         specifier: ^7.60.1
         version: 7.60.1(@types/node@26.6.6)
       '@minimalstuff/tooling':
-        specifier: ^0.8.0
-        version: 0.8.0(@adonisjs/eslint-plugin@2.2.2(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2))(knip@6.44.1)(oxfmt@0.75.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.90.0(oxlint-tsgolint@7.0.2005))
+        specifier: ^0.9.0
+        version: 0.9.0(@adonisjs/eslint-plugin@2.2.2(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2))(knip@6.44.1)(oxfmt@0.75.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.90.0(oxlint-tsgolint@7.0.2005))
       '@release-it/keep-a-changelog':
         specifier: ^8.0.1
         version: 8.0.1(release-it@21.1.2(@types/node@26.6.6)(magicast@0.5.5)(supports-color@8.1.1))
@@ -840,8 +840,8 @@ packages:
   '@microsoft/tsdoc@0.17.1':
     resolution: {integrity: sha512-VHyYyyoH63jFoO3shpw9Zfijk5v/9p/VrClW35z0/q6ooK7sSmxpzOkS4iZPxs3vO4XtBW4H38HRAKkAMIK7DA==}
 
-  '@minimalstuff/tooling@0.8.0':
-    resolution: {integrity: sha512-jduHCcYtJOvPYx6tlvM18NVbyKMlvF1ozDWcnh2Ct7JqP5AG7tID93G9Bez5U1OYHgSTs61mUHEILlngLFlTmg==}
+  '@minimalstuff/tooling@0.9.0':
+    resolution: {integrity: sha512-y94Y9CWVmFh8UzCPyybsFLm2wON/6p8YEXiFvhwMgHC580ovfuVOJTwN3k738ckiVatL4p9Yy4w/yaW1xramJw==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -4881,12 +4881,13 @@ snapshots:
 
   '@microsoft/tsdoc@0.17.1': {}
 
-  '@minimalstuff/tooling@0.8.0(@adonisjs/eslint-plugin@2.2.2(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2))(knip@6.44.1)(oxfmt@0.75.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.90.0(oxlint-tsgolint@7.0.2005))':
+  '@minimalstuff/tooling@0.9.0(@adonisjs/eslint-plugin@2.2.2(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2))(knip@6.44.1)(oxfmt@0.75.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.90.0(oxlint-tsgolint@7.0.2005))':
     dependencies:
       '@antfu/install-pkg': 2.1.0
       '@clack/prompts': 1.8.1
       jsonc-parser: 3.3.1
       picocolors: 1.1.1
+      yaml: 2.9.1
     optionalDependencies:
       '@adonisjs/eslint-plugin': 2.2.2(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2)
       knip: 6.44.1
