@@ -9,6 +9,7 @@ import { ConfirmModal } from '#components/modal/confirm_modal';
 import { ModalFooter } from '#components/modal/modal_footer';
 import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
 import {
+	expectDialogCreatesNoContainingBlock,
 	expectFocusOn,
 	getPortalScope,
 	waitForRemoval,
@@ -99,7 +100,8 @@ export const Default: Story = {
 
 		await step('opens named by its title', async () => {
 			await userEvent.click(trigger);
-			await body.findByRole('dialog', { name: 'Settings' });
+			const dialog = await body.findByRole('dialog', { name: 'Settings' });
+			await expectDialogCreatesNoContainingBlock(dialog);
 		});
 
 		await step(
@@ -128,7 +130,8 @@ export const Unstyled: Story = {
 			await userEvent.click(
 				canvas.getByRole('button', { name: 'Open drawer' })
 			);
-			await body.findByRole('dialog', { name: 'Settings' });
+			const dialog = await body.findByRole('dialog', { name: 'Settings' });
+			await expectDialogCreatesNoContainingBlock(dialog);
 		});
 
 		await step('Escape closes it', async () => {

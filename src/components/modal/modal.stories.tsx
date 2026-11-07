@@ -20,6 +20,7 @@ import { Tabs } from '#components/tabs/tabs';
 import { Textarea } from '#components/textarea/textarea';
 import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
 import {
+	expectDialogCreatesNoContainingBlock,
 	expectFocusOn,
 	getPortalScope,
 	waitForMenuReady,
@@ -101,6 +102,10 @@ export const Default: Story = {
 
 		const dialog = await body.findByRole('dialog', { name: 'Modal title' });
 
+		await step('the open panel creates no containing block', async () => {
+			await expectDialogCreatesNoContainingBlock(dialog);
+		});
+
 		await step('Tab cycles inside the dialog', async () => {
 			await userEvent.tab();
 			await expect(dialog.contains(document.activeElement)).toBe(true);
@@ -145,25 +150,43 @@ export const TabletBackdropPaddingWithConsumerUtilities: Story = {
 		expectBackdropPaddingTopAfterOpening(canvasElement, '48px'),
 };
 
+async function expectSheetOpenWithoutContainingBlock(
+	canvasElement: HTMLElement
+): Promise<void> {
+	const canvas = within(canvasElement);
+	const body = getPortalScope(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+	const dialog = await body.findByRole('dialog', { name: 'Modal title' });
+
+	await waitFor(async () => {
+		const { bottom, width } = dialog.getBoundingClientRect();
+		await expect(bottom).toBe(window.innerHeight);
+		await expect(width).toBe(window.innerWidth);
+	});
+	await expectDialogCreatesNoContainingBlock(dialog);
+}
+
 export const PhoneSheet: Story = {
 	args: {
 		phoneLayout: 'sheet',
 		children: 'On phones this dialog is a bottom sheet.',
 	},
 	globals: { viewport: { value: 'mobile1', isRotated: false } },
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const body = getPortalScope(canvasElement);
+	play: ({ canvasElement }) =>
+		expectSheetOpenWithoutContainingBlock(canvasElement),
+};
 
-		await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
-		const dialog = await body.findByRole('dialog', { name: 'Modal title' });
-
-		await waitFor(async () => {
-			const { bottom, width } = dialog.getBoundingClientRect();
-			await expect(bottom).toBe(window.innerHeight);
-			await expect(width).toBe(window.innerWidth);
-		});
+export const PhoneSheetUnstyled: Story = {
+	args: {
+		phoneLayout: 'sheet',
+		unstyled: true,
+		panelClassName: 'bg-slate-900 text-slate-100 p-6',
+		children: 'On phones this unstyled dialog is a bottom sheet.',
 	},
+	globals: { viewport: { value: 'mobile1', isRotated: false } },
+	play: ({ canvasElement }) =>
+		expectSheetOpenWithoutContainingBlock(canvasElement),
 };
 
 export const WithoutTitle: Story = {
@@ -202,7 +225,8 @@ export const Unstyled: Story = {
 
 		await step('opens named by its title', async () => {
 			await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
-			await body.findByRole('dialog', { name: 'Modal title' });
+			const dialog = await body.findByRole('dialog', { name: 'Modal title' });
+			await expectDialogCreatesNoContainingBlock(dialog);
 		});
 
 		await step('Escape closes it', async () => {

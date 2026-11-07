@@ -48,20 +48,45 @@ export async function waitForDialogOpen(dialog: HTMLElement): Promise<void> {
 	);
 }
 
+const CONTAINING_BLOCK_PROPERTIES = [
+	'transform',
+	'translate',
+	'scale',
+	'rotate',
+	'filter',
+	'backdrop-filter',
+] as const;
+
+async function expectPropertyIsNone(
+	dialog: HTMLElement,
+	property: string
+): Promise<void> {
+	const value = getComputedStyle(dialog).getPropertyValue(property);
+	await expect(
+		value,
+		`dialog computed \`${property}\` is "${value}", expected "none": it would become the containing block of fixed descendants and clip menus`
+	).toBe('none');
+}
+
 /**
- * Asserts that the open `dialog` has no `scale` or `translate` left, which
- * would make it the containing block of a fixed descendant and clip a menu
- * portalled into it. Used where the geometry cannot expose the clipping on
- * its own: a drawer spans the full viewport height and floating-ui keeps the
- * menu inside the clipping ancestor, so the menu never leaves the panel.
+ * Asserts that the open `dialog` has no `transform`, `translate`, `scale`,
+ * `rotate`, `filter` or `backdrop-filter` left, any of which would make it the
+ * containing block of a fixed descendant and clip a menu portalled into it.
+ * Reads the computed style because `ms-*` shortcuts hide the utilities behind
+ * them. Used where the geometry cannot expose the clipping on its own: a
+ * drawer spans the full viewport height and floating-ui keeps the menu inside
+ * the clipping ancestor, so the menu never leaves the panel.
  */
-export async function expectDialogHasNoTransform(
+export async function expectDialogCreatesNoContainingBlock(
 	dialog: HTMLElement
 ): Promise<void> {
 	await waitForDialogOpen(dialog);
 	await waitFor(async () => {
-		await expect(getComputedStyle(dialog).scale).toBe('none');
-		await expect(getComputedStyle(dialog).translate).toBe('none');
+		await Promise.all(
+			CONTAINING_BLOCK_PROPERTIES.map((property) =>
+				expectPropertyIsNone(dialog, property)
+			)
+		);
 	});
 }
 
