@@ -2,6 +2,9 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { MODAL_EXIT_DURATION_MS } from '#components/shared/animation';
 
+/** The enter transition starts from a requestAnimationFrame, which a starved CPU delays well past the default `asyncUtilTimeout`. */
+const DIALOG_OPEN_TIMEOUT_MS = 10_000;
+
 /** Margin on top of the modal exit animation, so a "still open" check can't pass merely because it ran before react-call finished unmounting a closing modal. */
 const EXIT_ANIMATION_SETTLE_MARGIN_MS = 100;
 
@@ -12,7 +15,7 @@ export async function expectFocusOn(element: Element): Promise<void> {
 
 /** Scopes queries to `document.body`, for content rendered through a portal (e.g. `Modal`, `ConfirmModal`) rather than into `canvasElement`. */
 export function getPortalScope(
-	canvasElement: HTMLElement
+	canvasElement: Element
 ): ReturnType<typeof within> {
 	return within(canvasElement.ownerDocument.body);
 }
@@ -27,21 +30,22 @@ export function waitPastModalExitAnimation(): Promise<void> {
 	});
 }
 
-/** Waits until no CSS transition or animation is running on `element`, so geometry and computed styles can be measured at rest. */
 function isFullyOpaque(element: HTMLElement): boolean {
 	return getComputedStyle(element).opacity === '1';
 }
 
-/** Waits until `dialog` and all its ancestors are fully opaque and no transition is running, i.e. its open transition is over. */
+/** Waits until `dialog` and all its ancestors are fully opaque, i.e. its open transition is over. */
 export async function waitForDialogOpen(dialog: HTMLElement): Promise<void> {
 	const chain: HTMLElement[] = [];
 	for (let node: HTMLElement | null = dialog; node; node = node.parentElement) {
 		chain.push(node);
 	}
-	await waitFor(async () => {
-		await expect(chain.every(isFullyOpaque)).toBe(true);
-	});
-	await waitForTransitionsToSettle(dialog);
+	await waitFor(
+		async () => {
+			await expect(chain.every(isFullyOpaque)).toBe(true);
+		},
+		{ timeout: DIALOG_OPEN_TIMEOUT_MS }
+	);
 }
 
 /**
@@ -55,13 +59,9 @@ export async function expectDialogHasNoTransform(
 	dialog: HTMLElement
 ): Promise<void> {
 	await waitForDialogOpen(dialog);
-	await expect(getComputedStyle(dialog).scale).toBe('none');
-	await expect(getComputedStyle(dialog).translate).toBe('none');
-}
-
-async function waitForTransitionsToSettle(element: HTMLElement): Promise<void> {
 	await waitFor(async () => {
-		await expect(element.getAnimations()).toHaveLength(0);
+		await expect(getComputedStyle(dialog).scale).toBe('none');
+		await expect(getComputedStyle(dialog).translate).toBe('none');
 	});
 }
 
@@ -74,11 +74,48 @@ async function expectMenuItemHittable(item: HTMLElement): Promise<void> {
 	await expect(item.contains(hit)).toBe(true);
 }
 
-/** Asserts that every menu item is the topmost element at its centre, so no part of the menu is clipped by an ancestor or covered by another layer. */
+/** Waits until every menu item is the topmost element at its centre, so no part of the menu is clipped by an ancestor or covered by another layer (the menu may still be moving into place when it first renders). */
 async function expectEveryMenuItemHittable(menu: HTMLElement): Promise<void> {
-	await Promise.all(
-		within(menu).getAllByRole('menuitem').map(expectMenuItemHittable)
-	);
+	await waitFor(async () => {
+		await Promise.all(
+			within(menu).getAllByRole('menuitem').map(expectMenuItemHittable)
+		);
+	});
+}
+
+/** Waits until `query` finds nothing. Unlike `waitForElementToBeRemoved` it also passes when the element is already gone, which happens when the exit timer fires before the first poll. */
+export async function waitForRemoval(
+	query: () => HTMLElement | null
+): Promise<void> {
+	await waitFor(async () => {
+		await expect(query()).not.toBeInTheDocument();
+	});
+}
+
+/** Waits until `overlay` (a tooltip or menu) reports `data-state="open"`. A tooltip is mounted before it is visible, and its Escape handler is only attached once visible, so a key pressed in between is silently lost. */
+export async function waitForOverlayOpen(overlay: HTMLElement): Promise<void> {
+	await waitFor(async () => {
+		await expect(overlay).toHaveAttribute('data-state', 'open');
+	});
+}
+
+/** Waits until `menu` is open and holds focus on its first item, so the keys a play sends next reach it. */
+export async function waitForMenuReady(menu: HTMLElement): Promise<void> {
+	await waitForOverlayOpen(menu);
+	const [firstItem] = within(menu).getAllByRole('menuitem');
+	await waitFor(() => expectFocusOn(firstItem));
+}
+
+/** Opens the menu named `name` by clicking `trigger`, and returns it once it is ready (see `waitForMenuReady`). */
+export async function openMenu(
+	trigger: HTMLElement,
+	name: string
+): Promise<HTMLElement> {
+	const scope = getPortalScope(trigger);
+	await userEvent.click(trigger);
+	const menu = await scope.findByRole('menu', { name });
+	await waitForMenuReady(menu);
+	return menu;
 }
 
 /** Asserts that `menu` sits inside `dialog` and is fully reachable (no item clipped or covered) once the dialog's open transition is over. */
@@ -87,7 +124,6 @@ export async function expectMenuReachableInDialog(
 	dialog: HTMLElement
 ): Promise<void> {
 	await expect(dialog.contains(menu)).toBe(true);
-	await waitForTransitionsToSettle(menu);
 	await expectEveryMenuItemHittable(menu);
 }
 

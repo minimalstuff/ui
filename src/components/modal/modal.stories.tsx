@@ -1,12 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createRef, useState, type SyntheticEvent } from 'react';
-import {
-	expect,
-	userEvent,
-	waitFor,
-	waitForElementToBeRemoved,
-	within,
-} from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Badge } from '#components/badge/badge';
 import { Button } from '#components/button/button';
@@ -28,6 +22,8 @@ import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decora
 import {
 	expectFocusOn,
 	getPortalScope,
+	waitForMenuReady,
+	waitForRemoval,
 	waitPastModalExitAnimation,
 } from '#storybook/play_helpers';
 
@@ -114,7 +110,7 @@ export const Default: Story = {
 			'Escape closes the dialog and returns focus to the trigger',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+				await waitForRemoval(() => body.queryByRole('dialog'));
 				await expectFocusOn(trigger);
 			}
 		);
@@ -162,10 +158,11 @@ export const PhoneSheet: Story = {
 		await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
 		const dialog = await body.findByRole('dialog', { name: 'Modal title' });
 
-		await waitFor(() =>
-			expect(dialog.getBoundingClientRect().bottom).toBe(window.innerHeight)
-		);
-		await expect(dialog.getBoundingClientRect().width).toBe(window.innerWidth);
+		await waitFor(async () => {
+			const { bottom, width } = dialog.getBoundingClientRect();
+			await expect(bottom).toBe(window.innerHeight);
+			await expect(width).toBe(window.innerWidth);
+		});
 	},
 };
 
@@ -187,7 +184,7 @@ export const WithoutTitle: Story = {
 
 		await step('close it', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -210,7 +207,7 @@ export const Unstyled: Story = {
 
 		await step('Escape closes it', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -319,7 +316,7 @@ export const AlertDialog: Story = {
 
 		await step('the action button closes it', async () => {
 			await userEvent.click(body.getByRole('button', { name: 'Reconnect' }));
-			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+			await waitForRemoval(() => body.queryByRole('alertdialog'));
 		});
 	},
 };
@@ -365,7 +362,7 @@ export const InitialFocus: Story = {
 
 		await step('close it', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -599,7 +596,7 @@ export const SettingsWithVerticalTabs: Story = {
 		});
 
 		await userEvent.click(dialogScope.getByRole('button', { name: 'Annuler' }));
-		await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+		await waitForRemoval(() => body.queryByRole('dialog'));
 	},
 };
 
@@ -686,7 +683,7 @@ export const DismissGuard: Story = {
 			await userEvent.click(trigger);
 			await body.findByRole('dialog', { name: 'Profile' });
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 
 		await step('a dirty form asks before closing', async () => {
@@ -701,7 +698,7 @@ export const DismissGuard: Story = {
 			'declining keeps the form open with focus on the input',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+				await waitForRemoval(() => body.queryByRole('alertdialog'));
 				await waitPastModalExitAnimation();
 				await expect(
 					body.getByRole('dialog', { name: 'Profile' })
@@ -715,7 +712,7 @@ export const DismissGuard: Story = {
 			await userEvent.click(
 				await body.findByRole('button', { name: 'Discard' })
 			);
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -883,7 +880,7 @@ export const ComboboxInModal: Story = {
 
 		await step('Escape again closes the dialog', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 			await expectFocusOn(trigger);
 		});
 	},
@@ -925,14 +922,14 @@ export const MenuInModal: Story = {
 		await step('ArrowDown opens the menu', async () => {
 			await userEvent.keyboard('{ArrowDown}');
 			const menu = await body.findByRole('menu');
-			await expectFocusOn(within(menu).getByText('Move up'));
+			await waitForMenuReady(menu);
 		});
 
 		await step(
 			'Escape closes the menu but leaves the dialog open',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('menu'));
+				await waitForRemoval(() => body.queryByRole('menu'));
 				await waitPastModalExitAnimation();
 				await expect(
 					body.getByRole('dialog', { name: 'Item actions' })
@@ -944,7 +941,7 @@ export const MenuInModal: Story = {
 			'Escape again closes the dialog and returns focus to the "Open modal" trigger',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+				await waitForRemoval(() => body.queryByRole('dialog'));
 				await expectFocusOn(trigger);
 			}
 		);
@@ -970,7 +967,7 @@ export const StackedModals: Story = {
 
 		await step('Escape closes only the alertdialog', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+			await waitForRemoval(() => body.queryByRole('alertdialog'));
 			await waitPastModalExitAnimation();
 			await expect(
 				body.getByRole('dialog', { name: 'Manage item' })
@@ -980,7 +977,7 @@ export const StackedModals: Story = {
 
 		await step('Escape closes the remaining dialog', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -1014,7 +1011,7 @@ export const RadioLast: Story = {
 
 		await step('close it', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };

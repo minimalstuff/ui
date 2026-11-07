@@ -1,12 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import {
-	expect,
-	userEvent,
-	waitFor,
-	waitForElementToBeRemoved,
-	within,
-} from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { Drawer } from '#components/drawer/drawer';
@@ -20,8 +14,11 @@ import {
 	expectFocusOn,
 	expectMenuReachableInDialog,
 	getPortalScope,
+	openMenu,
 	pressKeysAndExpectFocusInDialog,
 	waitForDialogOpen,
+	waitForMenuReady,
+	waitForRemoval,
 } from '#storybook/play_helpers';
 
 const TAB = '{Tab}';
@@ -83,22 +80,21 @@ async function expectMenuInDialogSurvivesTab(
 ): Promise<void> {
 	await waitForDialogOpen(dialog);
 
-	const openMenu = async () => {
-		await userEvent.click(
-			within(dialog).getByRole('button', { name: 'Options' })
+	const openOptionsMenu = () =>
+		openMenu(
+			within(dialog).getByRole('button', { name: 'Options' }),
+			'Options'
 		);
-		return body.findByRole('menu', { name: 'Options' });
-	};
 
-	await expectMenuReachableInDialog(await openMenu(), dialog);
+	await expectMenuReachableInDialog(await openOptionsMenu(), dialog);
 
 	const expectKeysCloseMenuAndKeepFocus = async (keys: string) => {
 		await pressKeysAndExpectFocusInDialog(dialog, keys);
-		await waitForElementToBeRemoved(() => body.queryByRole('menu'));
+		await waitForRemoval(() => body.queryByRole('menu'));
 	};
 
 	await expectKeysCloseMenuAndKeepFocus(TAB);
-	await openMenu();
+	await openOptionsMenu();
 	await expectKeysCloseMenuAndKeepFocus(SHIFT_TAB);
 }
 
@@ -164,8 +160,8 @@ export const Default: Story = {
 			async () => {
 				await userEvent.keyboard('{ArrowDown}');
 				const menu = await body.findByRole('menu', { name: 'Options' });
+				await waitForMenuReady(menu);
 				const firstItem = within(menu).getByText('Move up');
-				await expectFocusOn(firstItem);
 				const style = getComputedStyle(firstItem);
 				await expect(style.outlineStyle).toBe('solid');
 				await expect(style.outlineWidth).toBe('2px');
@@ -182,8 +178,8 @@ export const Default: Story = {
 			'Escape closes the menu and returns focus to the trigger',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('menu'));
-				await expectFocusOn(trigger);
+				await waitForRemoval(() => body.queryByRole('menu'));
+				await waitFor(() => expectFocusOn(trigger));
 			}
 		);
 
@@ -192,7 +188,7 @@ export const Default: Story = {
 			async () => {
 				await userEvent.keyboard('{ArrowUp}');
 				const menu = await body.findByRole('menu', { name: 'Options' });
-				await expectFocusOn(within(menu).getByText('Delete'));
+				await waitFor(() => expectFocusOn(within(menu).getByText('Delete')));
 			}
 		);
 	},
@@ -202,15 +198,28 @@ export const ReducedMotion: Story = {
 	globals: { motion: 'reduced' },
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const body = getPortalScope(canvasElement);
 
-		await userEvent.click(canvas.getByRole('button', { name: 'Options' }));
-		const menu = await body.findByRole('menu', { name: 'Options' });
-		await waitFor(() => expectFocusOn(within(menu).getByText('Move up')));
+		const menu = await openMenu(
+			canvas.getByRole('button', { name: 'Options' }),
+			'Options'
+		);
+		const scalesWhenClosed: string[] = [];
+		const closedObserver = new MutationObserver(() => {
+			if (menu.getAttribute('data-state') !== 'closed') return;
+			scalesWhenClosed.push(getComputedStyle(menu).scale);
+		});
+		closedObserver.observe(menu, {
+			attributes: true,
+			attributeFilter: ['data-state'],
+		});
+
 		await userEvent.keyboard('{Escape}');
-		await waitFor(() => expect(menu).toHaveAttribute('data-state', 'closed'));
+		await waitFor(async () => {
+			await expect(scalesWhenClosed).toHaveLength(1);
+		});
+		closedObserver.disconnect();
 
-		await expect(['none', '1']).toContain(getComputedStyle(menu).scale);
+		await expect(['none', '1']).toContain(scalesWhenClosed[0]);
 	},
 };
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { type SyntheticEvent, useState } from 'react';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Combobox, type ComboboxOption } from '#components/combobox/combobox';
 import { expectFocusOn } from '#storybook/play_helpers';
@@ -226,11 +226,15 @@ export const LongList: Story = {
 
 			const scrollContainer = canvas.getByRole('listbox');
 
-			const optionRect = activeOptionElement.getBoundingClientRect();
-			const containerRect = scrollContainer.getBoundingClientRect();
+			await waitFor(async () => {
+				const optionRect = activeOptionElement.getBoundingClientRect();
+				const containerRect = scrollContainer.getBoundingClientRect();
 
-			await expect(optionRect.top).toBeGreaterThanOrEqual(containerRect.top);
-			await expect(optionRect.bottom).toBeLessThanOrEqual(containerRect.bottom);
+				await expect(optionRect.top).toBeGreaterThanOrEqual(containerRect.top);
+				await expect(optionRect.bottom).toBeLessThanOrEqual(
+					containerRect.bottom
+				);
+			});
 		});
 	},
 };

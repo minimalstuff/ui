@@ -1,17 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-	expect,
-	fn,
-	userEvent,
-	waitForElementToBeRemoved,
-	within,
-} from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { MenuItem } from '#components/menu_item/menu_item';
 import { MenuSeparator } from '#components/menu_separator/menu_separator';
 import { SplitButton } from '#components/split_button/split_button';
 import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decorator';
-import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
+import {
+	expectFocusOn,
+	getPortalScope,
+	waitForRemoval,
+} from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/SplitButton',
@@ -87,7 +85,7 @@ export const Default: Story = {
 
 		await step('choosing an item closes the menu', async () => {
 			await userEvent.click(body.getByText('Save as draft'));
-			await waitForElementToBeRemoved(() => body.queryByRole('menu'));
+			await waitForRemoval(() => body.queryByRole('menu'));
 		});
 
 		await step('the main button calls onClick', async () => {

@@ -1,11 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import {
-	expect,
-	userEvent,
-	waitForElementToBeRemoved,
-	within,
-} from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { Drawer, type DrawerProps } from '#components/drawer/drawer';
@@ -16,6 +11,7 @@ import { consumerUtilitiesDecorator } from '#storybook/consumer_utilities_decora
 import {
 	expectFocusOn,
 	getPortalScope,
+	waitForRemoval,
 	waitPastModalExitAnimation,
 } from '#storybook/play_helpers';
 
@@ -110,7 +106,7 @@ export const Default: Story = {
 			'Escape closes it and returns focus to the trigger',
 			async () => {
 				await userEvent.keyboard('{Escape}');
-				await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+				await waitForRemoval(() => body.queryByRole('dialog'));
 				await expectFocusOn(trigger);
 			}
 		);
@@ -137,7 +133,7 @@ export const Unstyled: Story = {
 
 		await step('Escape closes it', async () => {
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('dialog'));
+			await waitForRemoval(() => body.queryByRole('dialog'));
 		});
 	},
 };
@@ -261,7 +257,7 @@ export const WithConfirmModal: Story = {
 			);
 			await body.findByRole('alertdialog', { name: 'Discard changes?' });
 			await userEvent.keyboard('{Escape}');
-			await waitForElementToBeRemoved(() => body.queryByRole('alertdialog'));
+			await waitForRemoval(() => body.queryByRole('alertdialog'));
 			await expect(drawer).toBeVisible();
 		});
 
