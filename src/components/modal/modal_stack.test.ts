@@ -1,6 +1,10 @@
 import { describe, expect, test, vi } from 'vitest';
 
-import { isTopmostModal, registerModal } from '#components/modal/modal_stack';
+import {
+	clearModalStack,
+	isTopmostModal,
+	registerModal,
+} from '#components/modal/modal_stack';
 
 describe('modal stack', () => {
 	test('a single registered modal is topmost', () => {
@@ -56,5 +60,14 @@ describe('modal stack', () => {
 		expect(isTopmostModal(secondToken)).toBe(true);
 
 		unregisterSecond();
+	});
+
+	test('clearing the stack leaves no modal open', () => {
+		const token = Symbol('modal');
+		registerModal(token, vi.fn<() => void>());
+
+		clearModalStack();
+
+		expect(isTopmostModal(token)).toBe(false);
 	});
 });

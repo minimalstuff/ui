@@ -4,7 +4,11 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '#components/button/button';
 import { IconButton } from '#components/icon_button/icon_button';
 import { Tooltip } from '#components/tooltip/tooltip';
-import { expectFocusOn, getPortalScope } from '#storybook/play_helpers';
+import {
+	expectFocusOn,
+	getPortalScope,
+	waitForOverlayOpen,
+} from '#storybook/play_helpers';
 
 const meta = {
 	title: 'Components/Tooltip',
@@ -103,6 +107,7 @@ export const OnIconButton: Story = {
 		await expectFocusOn(trigger);
 
 		const tooltip = await body.findByRole('tooltip');
+		await waitForOverlayOpen(tooltip);
 		await waitFor(async () => {
 			await expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
 		});
@@ -134,20 +139,20 @@ export const WithOwnDescription: Story = {
 		const body = getPortalScope(canvasElement);
 		const trigger = canvas.getByRole('button', { name: 'Delete' });
 
-		trigger.blur();
-		await userEvent.unhover(trigger);
-		await waitFor(async () => {
-			await expect(trigger).toHaveAttribute('aria-describedby', 'delete-hint');
-		});
-
 		await userEvent.tab();
 		await expectFocusOn(trigger);
 
 		const tooltip = await body.findByRole('tooltip');
+		await waitForOverlayOpen(tooltip);
 		await waitFor(async () => {
 			const describedBy = trigger.getAttribute('aria-describedby');
 			await expect(describedBy).toContain('delete-hint');
 			await expect(describedBy).toContain(tooltip.id);
+		});
+
+		await userEvent.keyboard('{Escape}');
+		await waitFor(async () => {
+			await expect(trigger).toHaveAttribute('aria-describedby', 'delete-hint');
 		});
 	},
 };
@@ -173,14 +178,17 @@ export const DescribeChild: Story = {
 		await userEvent.tab();
 		const sameName = canvas.getByRole('button', { name: 'Delete' });
 		await expectFocusOn(sameName);
-		await body.findByRole('tooltip');
+		await body.findByRole('tooltip', { name: 'Delete' });
 		await expect(sameName).not.toHaveAttribute('aria-describedby');
 
 		await userEvent.tab();
 		const differentName = canvas.getByRole('button', { name: 'Remove' });
 		await expectFocusOn(differentName);
-		const tooltip = await body.findByRole('tooltip');
+		const tooltip = await body.findByRole('tooltip', {
+			name: 'Removes the item permanently',
+		});
 		await waitFor(async () => {
+			await expect(body.getAllByRole('tooltip')).toHaveLength(1);
 			await expect(differentName).toHaveAttribute(
 				'aria-describedby',
 				tooltip.id

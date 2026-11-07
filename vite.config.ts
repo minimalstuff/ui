@@ -8,6 +8,8 @@ import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
+import { movePointerOutOfStory } from './scripts/move_pointer_out_of_story.ts';
+
 const dirname = import.meta.dirname;
 
 const isLibBuild = process.env.VITE_BUILD_LIB === '1';
@@ -30,6 +32,9 @@ function isExternalModule(moduleId: string) {
 			moduleId === packageName || moduleId.startsWith(`${packageName}/`)
 	);
 }
+
+/** Stories share a few cores with other browsers; the first story of a file also pays the module loading cost. */
+const STORYBOOK_TEST_TIMEOUT_MS = 30_000;
 
 const STORYBOOK_BROWSER_LAUNCH_OPTIONS = {
 	args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
@@ -76,11 +81,13 @@ export default defineConfig({
 				],
 				test: {
 					name: 'storybook',
-					retry: 2,
+					retry: 0,
+					testTimeout: STORYBOOK_TEST_TIMEOUT_MS,
 					setupFiles: [path.join(dirname, '.storybook/vitest.setup.ts')],
 					browser: {
 						enabled: true,
 						headless: true,
+						commands: { movePointerOutOfStory },
 						instances: [
 							{
 								browser: 'chromium',

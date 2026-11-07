@@ -1,11 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-	expect,
-	fireEvent,
-	userEvent,
-	waitForElementToBeRemoved,
-	within,
-} from 'storybook/test';
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { ContextMenu } from '#components/context_menu/context_menu';
@@ -17,6 +11,8 @@ import {
 	getPortalScope,
 	pressKeysAndExpectFocusInDialog,
 	waitForDialogOpen,
+	waitForMenuReady,
+	waitForRemoval,
 } from '#storybook/play_helpers';
 
 const TAB = '{Tab}';
@@ -116,7 +112,7 @@ export const Default: Story = {
 			async () => {
 				await fireEvent.contextMenu(region, { clientX: 0, clientY: 0 });
 				const menu = await body.findByRole('menu', { name: 'File actions' });
-				await expectFocusOn(within(menu).getByText('Edit'));
+				await waitFor(() => expectFocusOn(within(menu).getByText('Edit')));
 			}
 		);
 	},
@@ -139,14 +135,16 @@ export const InModal: Story = {
 				clientX: left + 10,
 				clientY: top + 10,
 			});
-			return body.findByRole('menu', { name: 'File actions' });
+			const menu = await body.findByRole('menu', { name: 'File actions' });
+			await waitForMenuReady(menu);
+			return menu;
 		};
 
 		await expectMenuReachableInDialog(await openMenu(), dialog);
 
 		const expectKeysCloseMenuAndKeepFocus = async (keys: string) => {
 			await pressKeysAndExpectFocusInDialog(dialog, keys);
-			await waitForElementToBeRemoved(() => body.queryByRole('menu'));
+			await waitForRemoval(() => body.queryByRole('menu'));
 		};
 
 		await expectKeysCloseMenuAndKeepFocus(TAB);

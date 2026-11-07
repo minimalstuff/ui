@@ -55,3 +55,8 @@ export function dismissTopmostModal(): boolean {
 	topmost.requestDismiss();
 	return true;
 }
+
+/** Empties the stack. It exists for test isolation only: a modal left open by a failed test never unregisters, so the next test would start with it still on top. */
+export function clearModalStack(): void {
+	modalStack.length = 0;
+}
