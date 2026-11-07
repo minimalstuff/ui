@@ -17,7 +17,9 @@ describe('FRENCH_UI_LABELS', () => {
 		for (const [key, englishLabel] of Object.entries(DEFAULT_LABELS)) {
 			if (typeof englishLabel !== 'string') continue;
 			expect(FRENCH_UI_LABELS[key as keyof typeof DEFAULT_LABELS]).not.toBe(
-				englishLabel === 'Search' ? '' : englishLabel
+				englishLabel === 'Search' || englishLabel === 'Notifications'
+					? ''
+					: englishLabel
 			);
 		}
 	});

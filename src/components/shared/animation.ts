@@ -12,3 +12,6 @@ export const DRAWER_EXIT_DURATION_MS = 200;
 
 /** Matches `duration-150` on the menu and tooltip panels. */
 export const OVERLAY_EXIT_DURATION_MS = 150;
+
+/** Matches `duration-150` on the toast. */
+export const TOAST_EXIT_DURATION_MS = 150;
