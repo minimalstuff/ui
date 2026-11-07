@@ -239,3 +239,51 @@ export const CardWithError: Story = {
 		error: 'You must accept the terms to continue',
 	},
 };
+
+async function expectInputAtCentreOf(
+	input: HTMLElement,
+	target: Element
+): Promise<void> {
+	const { left, top, width, height } = target.getBoundingClientRect();
+	const hit = document.elementFromPoint(left + width / 2, top + height / 2);
+	await expect(hit).toBe(input);
+}
+
+export const Unlabelled: Story = {
+	args: {
+		'aria-label': 'Select row',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const checkbox = canvas.getByRole('checkbox', { name: 'Select row' });
+		const visualBox = checkbox.nextElementSibling;
+		if (!visualBox)
+			throw new Error('expected the visual box next to the input');
+
+		await expectInputAtCentreOf(checkbox, visualBox);
+		await userEvent.click(checkbox);
+		await expect(checkbox).toBeChecked();
+	},
+};
+
+export const UnlabelledCard: Story = {
+	args: {
+		'aria-label': 'Select row',
+		variant: 'card',
+	},
+	render: (args) => (
+		<div data-testid="card-host">
+			<Checkbox {...args} />
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const checkbox = canvas.getByRole('checkbox', { name: 'Select row' });
+		const card = checkbox.parentElement?.parentElement;
+		if (!card) throw new Error('expected the card container');
+
+		await expectInputAtCentreOf(checkbox, card);
+		await userEvent.click(checkbox);
+		await expect(checkbox).toBeChecked();
+	},
+};

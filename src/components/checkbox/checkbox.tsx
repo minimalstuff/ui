@@ -59,6 +59,47 @@ function renderLabelContent(
 	);
 }
 
+const UNLABELLED_INPUT_BASE_CLASSES = 'absolute m-0 appearance-none opacity-0';
+
+/**
+ * Input classes: visually hidden next to a label, otherwise transparent and
+ * stretched over its visual box (24x24 target) or over the whole card.
+ */
+function getInputClassName(options: {
+	hasLabel: boolean;
+	isCardVariant: boolean;
+	isDisabled: boolean;
+}): string {
+	const { hasLabel, isCardVariant, isDisabled } = options;
+
+	if (hasLabel) return 'sr-only';
+
+	return clsx(
+		UNLABELLED_INPUT_BASE_CLASSES,
+		isCardVariant ? 'inset-0 h-full w-full' : '-inset-0.5 h-6 w-6',
+		isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'
+	);
+}
+
+/** A `label` when the control has one, a plain `div` otherwise so the input gets no empty extra label. */
+function ControlRow({
+	htmlFor,
+	className,
+	children,
+}: Readonly<{
+	htmlFor: string | undefined;
+	className: string;
+	children: React.ReactNode;
+}>) {
+	if (htmlFor === undefined) return <div className={className}>{children}</div>;
+
+	return (
+		<label htmlFor={htmlFor} className={className}>
+			{children}
+		</label>
+	);
+}
+
 export interface CheckboxProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
@@ -101,6 +142,7 @@ export function Checkbox({
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const isCardVariant = variant === 'card';
+	const hasLabel = Boolean(label);
 	const isFilled = isChecked || indeterminate;
 	const describedBy = joinIds(
 		callerDescribedBy,
@@ -153,7 +195,8 @@ export function Checkbox({
 		: clsx(FIELD_LABEL_TEXT, 'select-none');
 
 	const checkboxWrapperClassName = clsx(
-		'relative shrink-0',
+		'shrink-0',
+		(hasLabel || !isCardVariant) && 'relative',
 		RADIUS_CLASSES[radius],
 		!isCardVariant && [
 			CONTROL_FOCUS_RING,
@@ -169,13 +212,20 @@ export function Checkbox({
 
 	return (
 		<div className={clsx(fullWidth ? 'w-full' : 'w-fit', wrapperClassName)}>
-			<label htmlFor={checkboxId} className={labelClassName}>
+			<ControlRow
+				htmlFor={hasLabel ? checkboxId : undefined}
+				className={labelClassName}
+			>
 				<span className={checkboxWrapperClassName}>
 					<input
 						type="checkbox"
 						ref={mergedInputRef}
 						id={checkboxId}
-						className="sr-only"
+						className={getInputClassName({
+							hasLabel,
+							isCardVariant,
+							isDisabled: props.disabled === true,
+						})}
 						checked={isChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
@@ -218,7 +268,7 @@ export function Checkbox({
 				) : (
 					labelContent
 				)}
-			</label>
+			</ControlRow>
 			{!isCardVariant && (
 				<FieldDescription
 					id={descriptionId}

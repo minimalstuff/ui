@@ -15,6 +15,38 @@ import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
 
+const UNLABELLED_INPUT_CLASSES =
+	'absolute -inset-0.5 m-0 h-6 w-11 appearance-none opacity-0';
+
+/** Input classes: visually hidden next to a label, otherwise transparent and stretched over the track (44x24 target). */
+function getInputClassName(hasLabel: boolean, isDisabled: boolean): string {
+	if (hasLabel) return 'sr-only';
+
+	return clsx(
+		UNLABELLED_INPUT_CLASSES,
+		isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'
+	);
+}
+
+/** A `label` when the control has one, a plain `div` otherwise so the input gets no empty extra label. */
+function ControlRow({
+	htmlFor,
+	className,
+	children,
+}: Readonly<{
+	htmlFor: string | undefined;
+	className: string;
+	children: ReactNode;
+}>) {
+	if (htmlFor === undefined) return <div className={className}>{children}</div>;
+
+	return (
+		<label htmlFor={htmlFor} className={className}>
+			{children}
+		</label>
+	);
+}
+
 export interface SwitchProps extends Omit<
 	ComponentPropsWithRef<'input'>,
 	'type' | 'className'
@@ -47,6 +79,7 @@ export function Switch({
 }: Readonly<SwitchProps>) {
 	const { fieldId: switchId, errorId, descriptionId } = useFieldIds(id);
 	const [isChecked, setIsChecked] = useControlledState(checked, defaultChecked);
+	const hasLabel = Boolean(label);
 	const describedBy = joinIds(
 		callerDescribedBy,
 		Boolean(description) && descriptionId,
@@ -67,8 +100,8 @@ export function Switch({
 
 	return (
 		<div className={clsx(fullWidth ? 'w-full' : 'w-fit', wrapperClassName)}>
-			<label
-				htmlFor={switchId}
+			<ControlRow
+				htmlFor={hasLabel ? switchId : undefined}
 				className={clsx(
 					'flex items-center gap-3 cursor-pointer',
 					props.disabled && 'cursor-not-allowed opacity-50'
@@ -92,7 +125,7 @@ export function Switch({
 						type="checkbox"
 						role="switch"
 						id={switchId}
-						className="sr-only"
+						className={getInputClassName(hasLabel, props.disabled === true)}
 						checked={isChecked}
 						onChange={handleChange}
 						aria-invalid={!!error}
@@ -125,7 +158,7 @@ export function Switch({
 						)}
 					</>
 				)}
-			</label>
+			</ControlRow>
 			<FieldDescription
 				id={descriptionId}
 				description={description}
