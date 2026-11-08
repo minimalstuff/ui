@@ -1,3 +1,4 @@
+export { Alert, type AlertProps, type AlertTone } from './alert/alert';
 export { AppBar, type AppBarProps } from './app_bar/app_bar';
 export {
 	Avatar,
