@@ -27,14 +27,19 @@ import {
 	type ListboxOptionState,
 } from '#components/shared/listbox_options';
 import { readListboxPageSize } from '#components/shared/listbox_page_size';
+import { isWindowedListbox } from '#components/shared/listbox_window';
+import type { OptionLabelOverflow } from '#components/shared/option_label_overflow';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { useControlledState } from '#components/shared/use_controlled_state';
+import { useDropdownViewportFit } from '#components/shared/use_dropdown_viewport_fit';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useStableCallback } from '#components/shared/use_stable_callback';
 import { useLabels } from '#components/ui_provider/use_labels';
+
+export type { OptionLabelOverflow } from '#components/shared/option_label_overflow';
 
 export interface ComboboxOption {
 	value: string;
@@ -42,7 +47,7 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps {
-	/** Long lists render faster when the array keeps the same identity between renders (memoize it). */
+	/** Long lists render faster when the array keeps the same identity between renders (memoize it), and when `optionLabelOverflow` is not `'wrap'`. */
 	options: readonly ComboboxOption[];
 	/**
 	 * Decides whether an option matches the text typed in the field. Replaces
@@ -63,6 +68,19 @@ export interface ComboboxProps {
 	required?: boolean;
 	className?: string;
 	wrapperClassName?: string;
+	/**
+	 * Classes for the dropdown panel, applied last so they can override its
+	 * defaults, for example a width wider than the field when option labels are
+	 * long (`w-96`, `min-w-80`). The panel is kept inside the viewport.
+	 */
+	dropdownClassName?: string;
+	/**
+	 * How option labels that do not fit on one line are shown.
+	 * - `'wrap'` (default): labels wrap; every option is rendered, so lists of thousands of options open slower.
+	 * - `'wrap-active'`: labels are truncated with a native tooltip, except the active option, which wraps in full; long lists only render the visible options. Recommended for long lists.
+	 * - `'truncate'`: every label is truncated with a native tooltip, the active one included; keyboard and zoom users can no longer read long labels (WCAG 1.4.10), use only for labels known to be short.
+	 */
+	optionLabelOverflow?: OptionLabelOverflow;
 	value?: string;
 	defaultValue?: string;
 	onChange?: (value: string) => void;
@@ -89,6 +107,8 @@ export function Combobox({
 	required = false,
 	className,
 	wrapperClassName,
+	dropdownClassName,
+	optionLabelOverflow = 'wrap',
 	value,
 	defaultValue = '',
 	onChange,
@@ -114,6 +134,7 @@ export function Combobox({
 	const [query, setQuery] = useState('');
 	const [isFiltering, setIsFiltering] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
+	const dropdownRef = useDropdownViewportFit(isOpen);
 
 	const lowercasedLabels = useMemo(
 		() =>
@@ -145,6 +166,12 @@ export function Combobox({
 		getOptionId: (index) => getListboxOptionId(listboxId, index),
 		isOpen,
 	});
+
+	const isWindowed =
+		optionLabelOverflow !== 'wrap' && isWindowedListbox(options.length);
+	const selectedOptionIndex = filteredOptions.findIndex(
+		(option) => option.value === selectedValue
+	);
 
 	const displayValue = isOpen ? query : (selectedOption?.label ?? '');
 
@@ -238,7 +265,7 @@ export function Combobox({
 		if (!isOpen || hasModifierKey(e)) return;
 		e.preventDefault();
 		moveActiveOptionWithinBounds(
-			direction * readListboxPageSize(listboxRef.current)
+			direction * readListboxPageSize(listboxRef.current, activeIndex)
 		);
 	};
 
@@ -335,14 +362,18 @@ export function Combobox({
 				)}
 				{isOpen && (
 					<div
+						ref={dropdownRef}
 						className={clsx(
-							'absolute z-10 mt-1 w-full text-sm shadow-lg',
+							'absolute z-10 mt-1',
+							dropdownClassName ? 'min-w-full' : 'w-full',
+							'text-sm shadow-lg',
 							!unstyled && [
 								'border',
 								OVERLAY_BG,
 								OVERLAY_BORDER,
 								RADIUS_CLASSES[radius],
-							]
+							],
+							dropdownClassName
 						)}
 					>
 						<ListboxOptions
@@ -350,6 +381,9 @@ export function Combobox({
 							id={listboxId}
 							options={filteredOptions}
 							activeIndex={activeIndex}
+							isWindowed={isWindowed}
+							labelOverflow={optionLabelOverflow}
+							initialVisibleIndex={selectedOptionIndex}
 							noResultsText={noResultsText ?? labels.noResults}
 							aria-labelledby={label && !ariaLabel ? labelId : undefined}
 							aria-label={ariaLabel}

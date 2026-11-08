@@ -205,3 +205,37 @@ export async function pressKeyUntilActivePosition(
 		await expect(getActiveOptionPosition(combobox)).toBe(targetPosition);
 	});
 }
+
+/** The most `option` elements a windowed listbox may keep mounted in a story. */
+const MAX_WINDOWED_OPTION_COUNT = 60;
+
+/** Waits until the listbox holds between `expectedMinimum` and `MAX_WINDOWED_OPTION_COUNT` options, so a windowed list is proven not to render everything. */
+export async function expectBoundedOptionCount(
+	listbox: HTMLElement,
+	expectedMinimum = 1
+): Promise<void> {
+	await waitFor(async () => {
+		const optionCount = listbox.querySelectorAll('[role="option"]').length;
+		await expect(optionCount).toBeGreaterThanOrEqual(expectedMinimum);
+		await expect(optionCount).toBeLessThan(MAX_WINDOWED_OPTION_COUNT);
+	});
+}
+
+/** Waits until the active option is mounted, inside the listbox rect, and the listbox still mounts a bounded number of options. */
+export async function expectWindowedActiveOptionInView(
+	combobox: HTMLElement,
+	listbox: HTMLElement
+): Promise<void> {
+	await expectActiveOptionInView(combobox, listbox);
+	await expectBoundedOptionCount(listbox);
+}
+
+/** Finds the option at the 1-based `position` inside `listbox`, or null when it is not mounted. */
+export function findOptionAtPosition(
+	listbox: HTMLElement,
+	position: number
+): HTMLElement | null {
+	return listbox.querySelector<HTMLElement>(
+		`[role="option"][aria-posinset="${position}"]`
+	);
+}
