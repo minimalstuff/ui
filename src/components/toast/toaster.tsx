@@ -59,7 +59,7 @@ function ToasterView({
 				aria-label={labels.notifications ?? DEFAULT_NOTIFICATIONS_LABEL}
 				tabIndex={-1}
 				className={clsx(
-					'-m-2 max-h-[calc(100dvh_-_2rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain p-2',
+					'-m-2 ms-toaster-region-height overflow-y-auto overscroll-contain p-2',
 					ACTIVE_ITEM_FOCUS_OUTLINE
 				)}
 				onFocus={handleFocus}

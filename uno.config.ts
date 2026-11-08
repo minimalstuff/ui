@@ -21,6 +21,10 @@ const interactiveVariant: Variant = (matcher) => {
 	};
 };
 
+const TOAST_OFFSET_TOP =
+	'var(--ms-toast-offset-top,calc(1rem_+_env(safe-area-inset-top)))';
+const TOAST_OFFSET_BOTTOM =
+	'var(--ms-toast-offset-bottom,calc(1rem_+_env(safe-area-inset-bottom)))';
 const TOASTER_ITEM_CLOSED = 'data-[state=closed]:opacity-0';
 const TOASTER_ITEM_SLIDE_LEFT =
 	'sm:motion-safe:data-[state=closed]:-translate-x-4';
@@ -67,10 +71,9 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-switch-thumb-transition':
 		'transition duration-200 ease-in-out motion-reduce:transition-none',
 	'ms-toaster': 'fixed z-[60] pointer-events-none max-sm:inset-x-0 max-sm:px-4',
-	'ms-toaster-bottom':
-		'bottom-[var(--ms-toast-offset-bottom,calc(1rem_+_env(safe-area-inset-bottom)))] max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:bottom-auto max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:top-[var(--ms-toast-offset-top,calc(1rem_+_env(safe-area-inset-top)))]',
-	'ms-toaster-top':
-		'top-[var(--ms-toast-offset-top,calc(1rem_+_env(safe-area-inset-top)))]',
+	'ms-toaster-bottom': `bottom-[${TOAST_OFFSET_BOTTOM}] max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:bottom-auto max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:top-[${TOAST_OFFSET_TOP}]`,
+	'ms-toaster-top': `top-[${TOAST_OFFSET_TOP}]`,
+	'ms-toaster-region-height': `max-h-[calc(100dvh_-_${TOAST_OFFSET_TOP}_-_${TOAST_OFFSET_BOTTOM})]`,
 	'ms-toaster-left':
 		'sm:left-[calc(1rem_+_env(safe-area-inset-left))] sm:w-[22rem]',
 	'ms-toaster-right':

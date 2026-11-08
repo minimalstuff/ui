@@ -148,4 +148,33 @@ describe('useToastTimer', () => {
 		});
 		expect(result.current.isRunning).toBe(false);
 	});
+
+	it('should pause every mounted timer when the document becomes hidden', () => {
+		const firstElapsed = vi.fn<() => void>();
+		const secondElapsed = vi.fn<() => void>();
+		renderTimer(firstElapsed);
+		renderTimer(secondElapsed);
+
+		setVisibility('hidden');
+		vi.advanceTimersByTime(DURATION_MS * 5);
+
+		expect(firstElapsed).not.toHaveBeenCalled();
+		expect(secondElapsed).not.toHaveBeenCalled();
+	});
+
+	it('should share one visibilitychange listener between all timers', () => {
+		const addSpy = vi.spyOn(document, 'addEventListener');
+		const removeSpy = vi.spyOn(document, 'removeEventListener');
+		const countCalls = (spy: typeof addSpy) =>
+			spy.mock.calls.filter(([type]) => type === 'visibilitychange').length;
+		const first = renderTimer(vi.fn<() => void>());
+		const second = renderTimer(vi.fn<() => void>());
+
+		expect(countCalls(addSpy)).toBe(1);
+
+		first.unmount();
+		expect(countCalls(removeSpy)).toBe(0);
+		second.unmount();
+		expect(countCalls(removeSpy)).toBe(1);
+	});
 });
