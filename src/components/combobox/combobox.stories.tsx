@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { type SyntheticEvent, useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { page } from 'vitest/browser';
 
 import { Combobox, type ComboboxOption } from '#components/combobox/combobox';
 import {
@@ -769,5 +770,48 @@ export const WideDropdown: Story = {
 			top + height / 2
 		);
 		await expect(option.contains(hit)).toBe(true);
+	},
+};
+
+const NARROW_VIEWPORT_WIDTH = 320;
+const NARROW_VIEWPORT_HEIGHT = 640;
+const VIEWPORT_GUTTER = 8;
+
+export const WideDropdownNarrowViewport: Story = {
+	parameters: { layout: 'fullscreen' },
+	decorators: [
+		(Story) => (
+			<div style={{ position: 'fixed', top: 16, right: 16, width: 200 }}>
+				<Story />
+			</div>
+		),
+	],
+	args: {
+		label: 'Fruit',
+		dropdownClassName: 'min-w-80',
+	},
+	play: async ({ canvasElement }) => {
+		const previousWidth = window.innerWidth;
+		const previousHeight = window.innerHeight;
+		await page.viewport(NARROW_VIEWPORT_WIDTH, NARROW_VIEWPORT_HEIGHT);
+		try {
+			const canvas = within(canvasElement);
+			await userEvent.click(canvas.getByRole('combobox', { name: 'Fruit' }));
+			const listbox = await canvas.findByRole('listbox');
+			const panel = listbox.parentElement;
+			if (!panel) throw new Error('expected the listbox to sit in a panel');
+			const root = canvasElement.ownerDocument.documentElement;
+
+			await waitFor(async () => {
+				const panelRect = panel.getBoundingClientRect();
+				await expect(panelRect.left).toBeGreaterThanOrEqual(VIEWPORT_GUTTER);
+				await expect(panelRect.right).toBeLessThanOrEqual(
+					root.clientWidth - VIEWPORT_GUTTER
+				);
+				await expect(root.scrollWidth).toBeLessThanOrEqual(root.clientWidth);
+			});
+		} finally {
+			await page.viewport(previousWidth, previousHeight);
+		}
 	},
 };
