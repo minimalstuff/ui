@@ -4,6 +4,11 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `Button` and `IconButton` optional props (`pressed`, `loading`, `size`, `variant`, `color`, `radius`, `startIcon`, `endIcon`...) now accept an explicit `undefined` under `exactOptionalPropertyTypes`.
+- The `Button` loading spinner respects `prefers-reduced-motion`: it swaps to a static indicator instead of animating.
+
 ## [5.4.0] - 2026-11-08
 
 ### Added
