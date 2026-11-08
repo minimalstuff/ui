@@ -11,6 +11,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 ### Changed
 
 - `ToastProvider` and `useToast()` now render through `Toaster`: toasts take the `Alert` look, up to five show at once instead of three, errors join the same stack in order of arrival, a toast with an `action` and no `duration` stays until closed, and announcements come from live regions outside the "Notifications" region. Tests that look for a toast's text should query inside the region, for example `within(screen.getByRole('region', { name: 'Notifications' }))`, since the text also appears in the announcer. `useToast()` no longer throws outside a `ToastProvider`.
+- `Modal` and `Drawer` now hold two empty live regions (`role="status"` and `role="alert"`) inside the dialog, where toasts are announced while it is open. A test that finds an error message with `within(dialog).getByRole('alert')` now matches several elements: query it by its text or name instead.
+- Hovering a toast now pauses it through pointer events: a test that pauses a toast with `fireEvent.mouseEnter` should use `fireEvent.pointerEnter` with `pointerType: 'mouse'`, or `userEvent.hover`. A touch tap no longer pauses it.
 
 ### Deprecated
 
