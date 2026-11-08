@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import type { ListboxOptionData } from '#components/shared/listbox_option';
@@ -278,5 +278,24 @@ describe('ListboxOptions label overflow', () => {
 			'title',
 			SMALL_OPTIONS[ACTIVE_INDEX].label
 		);
+	});
+});
+
+describe('ListboxOptions no results status', () => {
+	test('should mount the status region empty then fill it with the text when the list is empty', async () => {
+		const { getByRole } = renderListbox({ options: [] });
+
+		expect(getByRole('status')).toBeEmptyDOMElement();
+		await waitFor(() =>
+			expect(getByRole('status')).toHaveTextContent('No results')
+		);
+	});
+
+	test('should keep the status region empty when there are options', async () => {
+		const { getByRole } = renderListbox();
+
+		await new Promise((resolve) => setTimeout(resolve, 100));
+
+		expect(getByRole('status')).toBeEmptyDOMElement();
 	});
 });

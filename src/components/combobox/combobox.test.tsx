@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { Combobox } from '#components/combobox/combobox';
@@ -47,23 +47,23 @@ describe('Combobox', () => {
 		).toBeInTheDocument();
 	});
 
-	test('shows noResultsText when nothing matches', () => {
+	test('shows noResultsText when nothing matches', async () => {
 		render(<Combobox label="Country" options={OPTIONS} noResultsText="Nada" />);
 		const input = screen.getByLabelText('Country');
 		fireEvent.click(input);
 		fireEvent.change(input, { target: { value: 'zzz' } });
 
-		expect(screen.getByText('Nada')).toBeInTheDocument();
+		expect(await screen.findByText('Nada')).toBeInTheDocument();
 	});
 
-	test('renders "No results" in a status region, not inside the listbox', () => {
+	test('renders "No results" in a status region, not inside the listbox', async () => {
 		render(<Combobox label="Country" options={OPTIONS} />);
 		const input = screen.getByLabelText('Country');
 		fireEvent.click(input);
 		fireEvent.change(input, { target: { value: 'zzz' } });
 
 		const status = screen.getByRole('status');
-		expect(status).toHaveTextContent('No results found');
+		await waitFor(() => expect(status).toHaveTextContent('No results found'));
 		expect(screen.queryByRole('option')).not.toBeInTheDocument();
 	});
 

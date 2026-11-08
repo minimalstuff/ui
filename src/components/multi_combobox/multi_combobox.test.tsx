@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { MultiCombobox } from '#components/multi_combobox/multi_combobox';
@@ -414,7 +414,7 @@ describe('MultiCombobox', () => {
 		);
 	});
 
-	test('renders "No results" in a status region, not inside the listbox', () => {
+	test('renders "No results" in a status region, not inside the listbox', async () => {
 		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
 		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
 		fireEvent.change(screen.getByPlaceholderText('Search'), {
@@ -422,7 +422,7 @@ describe('MultiCombobox', () => {
 		});
 
 		const status = screen.getByRole('status');
-		expect(status).toHaveTextContent('No results found');
+		await waitFor(() => expect(status).toHaveTextContent('No results found'));
 		expect(screen.queryByRole('option')).not.toBeInTheDocument();
 	});
 
