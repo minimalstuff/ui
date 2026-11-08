@@ -13,6 +13,7 @@ import {
 	useState,
 } from 'react';
 
+import { MultiComboboxCheckbox } from '#components/multi_combobox/multi_combobox_checkbox';
 import { BUTTON_COLOR_TOKENS } from '#components/shared/button_styles';
 import { Field } from '#components/shared/field';
 import {
@@ -22,30 +23,32 @@ import {
 } from '#components/shared/field_styles';
 import {
 	ACTIVE_ITEM_FOCUS_OUTLINE,
-	ACTIVE_OPTION_OUTLINE,
 	BUTTON_FOCUS_OUTLINE,
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
+import { hasModifierKey } from '#components/shared/has_modifier_key';
 import { joinIds } from '#components/shared/join_ids';
+import type { ListboxOptionData } from '#components/shared/listbox_option';
+import { getListboxOptionId } from '#components/shared/listbox_option_id';
+import {
+	ListboxOptions,
+	type ListboxOptionState,
+} from '#components/shared/listbox_options';
+import { readListboxPageSize } from '#components/shared/listbox_page_size';
 import {
 	PANEL_RADIUS_CLASSES,
 	RADIUS_CLASSES,
 	type Radius,
 } from '#components/shared/radius';
-import {
-	CONTROL_BG,
-	CONTROL_BORDER,
-	OVERLAY_BG,
-	OVERLAY_BORDER,
-	SELECTED_FILL,
-	THIN_SCROLLBAR,
-} from '#components/shared/surface_tokens';
+import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useStableCallback } from '#components/shared/use_stable_callback';
 import { useLabels } from '#components/ui_provider/use_labels';
 
 const DEFAULT_MAX_DISPLAYED_VALUES = 2;
+const OPTION_ROW_CLASSES = 'flex items-center gap-2';
 
 export interface MultiComboboxOption {
 	value: string;
@@ -53,6 +56,7 @@ export interface MultiComboboxOption {
 }
 
 export interface MultiComboboxProps {
+	/** Long lists render faster when the array keeps the same identity between renders (memoize it). */
 	options: readonly MultiComboboxOption[];
 	/**
 	 * Decides whether an option matches the text typed in the search field.
@@ -105,6 +109,7 @@ export interface MultiComboboxProps {
 function resolveIsOptionDisabled(
 	optionValue: string,
 	selectedValues: readonly string[],
+	selectedValueSet: ReadonlySet<string>,
 	maxSelectedValues: number | undefined,
 	isOptionDisabled:
 		| ((optionValue: string, selectedValues: readonly string[]) => boolean)
@@ -112,15 +117,16 @@ function resolveIsOptionDisabled(
 ): boolean {
 	if (isOptionDisabled?.(optionValue, selectedValues)) return true;
 	if (maxSelectedValues === undefined) return false;
-	if (selectedValues.includes(optionValue)) return false;
+	if (selectedValueSet.has(optionValue)) return false;
 	return selectedValues.length >= maxSelectedValues;
 }
 
 function toggleSelectedValue(
 	selectedValues: readonly string[],
+	selectedValueSet: ReadonlySet<string>,
 	optionValue: string
 ): readonly string[] {
-	return selectedValues.includes(optionValue)
+	return selectedValueSet.has(optionValue)
 		? selectedValues.filter((value) => value !== optionValue)
 		: [...selectedValues, optionValue];
 }
@@ -159,10 +165,6 @@ function resolveSearchFieldName(
 	return searchText;
 }
 
-function matchesLabel(option: MultiComboboxOption, query: string): boolean {
-	return option.label.toLowerCase().includes(query.trim().toLowerCase());
-}
-
 const PILL_CLASSES =
 	'inline-flex items-center rounded-full bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-900 dark:text-gray-100';
 
@@ -173,7 +175,7 @@ const PILL_CLASSES =
  */
 export function MultiCombobox({
 	options,
-	filterOption = matchesLabel,
+	filterOption,
 	label,
 	description,
 	'aria-label': ariaLabel,
@@ -210,6 +212,7 @@ export function MultiCombobox({
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const searchInputRef = useRef<HTMLInputElement>(null);
+	const listboxRef = useRef<HTMLUListElement>(null);
 
 	const [selectedValues, setSelectedValues] = useControlledState(
 		values,
@@ -219,27 +222,45 @@ export function MultiCombobox({
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
 
+	const selectedValueSet = useMemo(
+		() => new Set(selectedValues),
+		[selectedValues]
+	);
+
+	const lowercasedLabels = useMemo(
+		() =>
+			filterOption ? [] : options.map((option) => option.label.toLowerCase()),
+		[options, filterOption]
+	);
+
 	const filteredOptions = useMemo(() => {
-		if (!query.trim()) return options;
-		return options.filter((option) => filterOption(option, query));
-	}, [options, filterOption, query]);
+		const normalizedQuery = query.trim().toLowerCase();
+		if (!normalizedQuery) return options;
+		if (filterOption) {
+			return options.filter((option) => filterOption(option, query));
+		}
+		return options.filter((_, index) =>
+			lowercasedLabels[index].includes(normalizedQuery)
+		);
+	}, [options, filterOption, lowercasedLabels, query]);
 
 	const {
 		activeIndex,
 		activeOptionId,
 		move: moveActiveOption,
+		moveWithinBounds: moveActiveOptionWithinBounds,
 		first: firstActiveOption,
 		last: lastActiveOption,
 		reset: resetActiveOption,
 	} = useActiveOption({
 		optionCount: filteredOptions.length,
-		getOptionId: (index) => `${listboxId}-option-${index}`,
+		getOptionId: (index) => getListboxOptionId(listboxId, index),
 		isOpen,
 	});
 
 	const selectedOptions = useMemo(
-		() => options.filter((option) => selectedValues.includes(option.value)),
-		[options, selectedValues]
+		() => options.filter((option) => selectedValueSet.has(option.value)),
+		[options, selectedValueSet]
 	);
 	const hasSelectionSummary =
 		hasExplicitTriggerName && selectedOptions.length > 0;
@@ -270,11 +291,16 @@ export function MultiCombobox({
 		const isDisabled = resolveIsOptionDisabled(
 			optionValue,
 			selectedValues,
+			selectedValueSet,
 			maxSelectedValues,
 			isOptionDisabled
 		);
 		if (isDisabled) return;
-		const nextValues = toggleSelectedValue(selectedValues, optionValue);
+		const nextValues = toggleSelectedValue(
+			selectedValues,
+			selectedValueSet,
+			optionValue
+		);
 		setSelectedValues(nextValues);
 		onChange?.(nextValues);
 	};
@@ -340,7 +366,47 @@ export function MultiCombobox({
 		triggerRef.current?.focus();
 	};
 
+	const handlePage = (event: KeyboardEvent<HTMLElement>, direction: 1 | -1) => {
+		if (!isOpen || hasModifierKey(event)) return;
+		event.preventDefault();
+		moveActiveOptionWithinBounds(
+			direction * readListboxPageSize(listboxRef.current)
+		);
+	};
+
+	const handleOptionClick = useStableCallback((option: ListboxOptionData) => {
+		toggleOption(option.value);
+	});
+
+	const getOptionState = (option: ListboxOptionData): ListboxOptionState => ({
+		isSelected: selectedValueSet.has(option.value),
+		isDisabled: resolveIsOptionDisabled(
+			option.value,
+			selectedValues,
+			selectedValueSet,
+			maxSelectedValues,
+			isOptionDisabled
+		),
+		className: OPTION_ROW_CLASSES,
+	});
+
+	const renderOptionContent = useCallback(
+		(option: ListboxOptionData, isSelected: boolean) => (
+			<>
+				<MultiComboboxCheckbox
+					isSelected={isSelected}
+					unstyled={unstyled}
+					radius={radius}
+				/>
+				{option.label}
+			</>
+		),
+		[unstyled, radius]
+	);
+
 	const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+		if (event.key === 'PageDown') return handlePage(event, 1);
+		if (event.key === 'PageUp') return handlePage(event, -1);
 		if (event.key === 'ArrowDown') return handleArrowDown(event);
 		if (event.key === 'ArrowUp') return handleArrowUp(event);
 		if (event.key === 'Enter') return handleEnter(event);
@@ -526,91 +592,19 @@ export function MultiCombobox({
 								)}
 							</div>
 						)}
-						<ul
+						<ListboxOptions
+							ref={listboxRef}
 							id={listboxId}
-							role="listbox"
+							options={filteredOptions}
+							activeIndex={activeIndex}
+							noResultsText={noResultsText ?? labels.noResults}
 							aria-labelledby={label && !ariaLabel ? labelId : undefined}
 							aria-label={ariaLabel}
 							aria-multiselectable
-							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
-						>
-							{filteredOptions.map((option, index) => {
-								const isSelected = selectedValues.includes(option.value);
-								const isDisabled = resolveIsOptionDisabled(
-									option.value,
-									selectedValues,
-									maxSelectedValues,
-									isOptionDisabled
-								);
-								return (
-									<li
-										key={option.value}
-										id={`${listboxId}-option-${index}`}
-										role="option"
-										aria-selected={isSelected}
-										aria-disabled={isDisabled}
-										onClick={() => toggleOption(option.value)}
-										className={clsx(
-											'px-3 py-2 flex items-center gap-2 text-gray-900 dark:text-gray-100',
-											isDisabled
-												? 'opacity-50 cursor-not-allowed'
-												: 'cursor-pointer',
-											index === activeIndex
-												? clsx(
-														'bg-blue-50 dark:bg-blue-900/40',
-														ACTIVE_OPTION_OUTLINE
-													)
-												: !isDisabled &&
-														'hover:bg-gray-50 dark:hover:bg-gray-800/60'
-										)}
-									>
-										<span
-											aria-hidden
-											className={clsx(
-												'flex h-4 w-4 shrink-0 items-center justify-center',
-												!unstyled && [
-													'border-2',
-													RADIUS_CLASSES[radius],
-													isSelected
-														? clsx(
-																'border-blue-600 dark:border-blue-500',
-																SELECTED_FILL
-															)
-														: clsx(CONTROL_BORDER, CONTROL_BG),
-												]
-											)}
-										>
-											{isSelected && (
-												<svg
-													className="h-3 w-3 text-white"
-													viewBox="0 0 12 12"
-													fill="none"
-													stroke="currentColor"
-													strokeWidth="2.5"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-												>
-													<polyline points="2 6 5 9 10 3" />
-												</svg>
-											)}
-										</span>
-										{option.label}
-									</li>
-								);
-							})}
-						</ul>
-						<div
-							role="status"
-							className={
-								filteredOptions.length === 0
-									? 'px-3 py-2 text-gray-500 dark:text-gray-400'
-									: undefined
-							}
-						>
-							{filteredOptions.length === 0
-								? (noResultsText ?? labels.noResults)
-								: ''}
-						</div>
+							getOptionState={getOptionState}
+							renderOptionContent={renderOptionContent}
+							onOptionClick={handleOptionClick}
+						/>
 						{maxSelectedValues !== undefined && (
 							<div
 								className={clsx(

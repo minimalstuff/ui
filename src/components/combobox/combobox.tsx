@@ -15,21 +15,25 @@ import {
 	FIELD_ERROR_BORDER,
 } from '#components/shared/field_styles';
 import {
-	ACTIVE_OPTION_OUTLINE,
 	BUTTON_FOCUS_OUTLINE,
 	FIELD_FOCUS_RING_ERROR,
 } from '#components/shared/focus_styles';
+import { hasModifierKey } from '#components/shared/has_modifier_key';
 import { joinIds } from '#components/shared/join_ids';
+import type { ListboxOptionData } from '#components/shared/listbox_option';
+import { getListboxOptionId } from '#components/shared/listbox_option_id';
+import {
+	ListboxOptions,
+	type ListboxOptionState,
+} from '#components/shared/listbox_options';
+import { readListboxPageSize } from '#components/shared/listbox_page_size';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { resolveNodeLabelledBy } from '#components/shared/resolve_node_labelled_by';
-import {
-	OVERLAY_BG,
-	OVERLAY_BORDER,
-	THIN_SCROLLBAR,
-} from '#components/shared/surface_tokens';
+import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { useControlledState } from '#components/shared/use_controlled_state';
 import { useFieldIds } from '#components/shared/use_field_ids';
+import { useStableCallback } from '#components/shared/use_stable_callback';
 import { useLabels } from '#components/ui_provider/use_labels';
 
 export interface ComboboxOption {
@@ -38,6 +42,7 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps {
+	/** Long lists render faster when the array keeps the same identity between renders (memoize it). */
 	options: readonly ComboboxOption[];
 	/**
 	 * Decides whether an option matches the text typed in the field. Replaces
@@ -64,13 +69,13 @@ export interface ComboboxProps {
 	id?: string;
 }
 
-function matchesLabel(option: ComboboxOption, query: string): boolean {
-	return option.label.toLowerCase().includes(query.toLowerCase());
+function renderOptionLabel(option: ListboxOptionData): string {
+	return option.label;
 }
 
 export function Combobox({
 	options,
-	filterOption = matchesLabel,
+	filterOption,
 	label,
 	description,
 	'aria-label': ariaLabel,
@@ -98,6 +103,7 @@ export function Combobox({
 	} = useFieldIds(id);
 	const listboxId = `${comboboxId}-listbox`;
 	const inputRef = useRef<HTMLInputElement>(null);
+	const listboxRef = useRef<HTMLUListElement>(null);
 
 	const [selectedValue, setSelectedValue] = useControlledState(
 		value,
@@ -109,22 +115,34 @@ export function Combobox({
 	const [isFiltering, setIsFiltering] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 
-	const filteredOptions = useMemo(
+	const lowercasedLabels = useMemo(
 		() =>
-			isFiltering ? options.filter((opt) => filterOption(opt, query)) : options,
-		[options, filterOption, isFiltering, query]
+			filterOption ? [] : options.map((option) => option.label.toLowerCase()),
+		[options, filterOption]
 	);
+
+	const filteredOptions = useMemo(() => {
+		if (!isFiltering) return options;
+		if (filterOption) {
+			return options.filter((option) => filterOption(option, query));
+		}
+		const normalizedQuery = query.toLowerCase();
+		return options.filter((_, index) =>
+			lowercasedLabels[index].includes(normalizedQuery)
+		);
+	}, [options, filterOption, lowercasedLabels, isFiltering, query]);
 
 	const {
 		activeIndex,
 		activeOptionId,
 		move: moveActiveOption,
+		moveWithinBounds: moveActiveOptionWithinBounds,
 		first: firstActiveOption,
 		last: lastActiveOption,
 		reset: resetActiveOption,
 	} = useActiveOption({
 		optionCount: filteredOptions.length,
-		getOptionId: (index) => `${listboxId}-option-${index}`,
+		getOptionId: (index) => getListboxOptionId(listboxId, index),
 		isOpen,
 	});
 
@@ -213,7 +231,27 @@ export function Combobox({
 		closeDropdown();
 	};
 
+	const handlePage = (
+		e: KeyboardEvent<HTMLInputElement>,
+		direction: 1 | -1
+	) => {
+		if (!isOpen || hasModifierKey(e)) return;
+		e.preventDefault();
+		moveActiveOptionWithinBounds(
+			direction * readListboxPageSize(listboxRef.current)
+		);
+	};
+
+	const getOptionState = (option: ListboxOptionData): ListboxOptionState => {
+		const isSelected = option.value === selectedValue;
+		return { isSelected, className: isSelected ? 'font-medium' : undefined };
+	};
+
+	const handleOptionClick = useStableCallback(selectOption);
+
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'PageDown') return handlePage(e, 1);
+		if (e.key === 'PageUp') return handlePage(e, -1);
 		if (e.key === 'ArrowDown') return handleArrowDown(e);
 		if (e.key === 'ArrowUp') return handleArrowUp(e);
 		if (e.key === 'Enter') return handleEnter(e);
@@ -307,48 +345,18 @@ export function Combobox({
 							]
 						)}
 					>
-						<ul
+						<ListboxOptions
+							ref={listboxRef}
 							id={listboxId}
-							role="listbox"
+							options={filteredOptions}
+							activeIndex={activeIndex}
+							noResultsText={noResultsText ?? labels.noResults}
 							aria-labelledby={label && !ariaLabel ? labelId : undefined}
 							aria-label={ariaLabel}
-							className={clsx('max-h-60 overflow-auto py-1', THIN_SCROLLBAR)}
-						>
-							{filteredOptions.map((opt, index) => (
-								<li
-									key={opt.value}
-									id={`${listboxId}-option-${index}`}
-									role="option"
-									aria-selected={opt.value === selectedValue}
-									onMouseDown={(e) => e.preventDefault()}
-									onClick={() => selectOption(opt)}
-									className={clsx(
-										'px-3 py-2 cursor-pointer text-gray-900 dark:text-gray-100',
-										index === activeIndex
-											? clsx(
-													'bg-blue-50 dark:bg-blue-900/40',
-													ACTIVE_OPTION_OUTLINE
-												)
-											: 'hover:bg-gray-50 dark:hover:bg-gray-800/60',
-										opt.value === selectedValue && 'font-medium'
-									)}
-								>
-									{opt.label}
-								</li>
-							))}
-						</ul>
-						<div
-							role="status"
-							className={
-								filteredOptions.length === 0
-									? 'px-3 py-2 text-gray-500 dark:text-gray-400'
-									: undefined
-							}
-						>
-							{filteredOptions.length === 0
-								? (noResultsText ?? labels.noResults)
-								: ''}
-						</div>
+							getOptionState={getOptionState}
+							renderOptionContent={renderOptionLabel}
+							onOptionClick={handleOptionClick}
+						/>
 					</div>
 				)}
 			</div>

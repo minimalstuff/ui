@@ -1,11 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import {
 	MultiCombobox,
 	type MultiComboboxOption,
 } from '#components/multi_combobox/multi_combobox';
-import { expectFocusOn } from '#storybook/play_helpers';
+import {
+	expectActiveOptionInView,
+	expectFocusOn,
+	getActiveOptionPosition,
+	pressKeyUntilActivePosition,
+} from '#storybook/play_helpers';
 
 const defaultOptions: MultiComboboxOption[] = [
 	{ value: 'apple', label: 'Apple' },
@@ -445,5 +450,107 @@ export const AccentInsensitive: Story = {
 		);
 		await expect(canvas.getByRole('option', { name: 'Café' })).toBeVisible();
 		await expect(canvas.getAllByRole('option')).toHaveLength(1);
+	},
+};
+
+const THOUSANDS_OPTION_COUNT = 3000;
+
+const thousandsOfOptions: MultiComboboxOption[] = Array.from(
+	{ length: THOUSANDS_OPTION_COUNT },
+	(_, index) => ({
+		value: `city-${index + 1}`,
+		label: `City ${index + 1}`,
+	})
+);
+
+export const ThousandsOfOptions: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('combobox', { name: 'City' }));
+		const combobox = await canvas.findByRole('combobox', { name: /Search/ });
+
+		await step(
+			'lists every option with its set size and position',
+			async () => {
+				const listbox = await canvas.findByRole('listbox');
+				await waitFor(async () => {
+					await expect(
+						listbox.querySelectorAll('[role="option"]')
+					).toHaveLength(THOUSANDS_OPTION_COUNT);
+				});
+				const lastOption = listbox.querySelector('[role="option"]:last-child');
+				await expect(lastOption).toHaveAttribute(
+					'aria-setsize',
+					String(THOUSANDS_OPTION_COUNT)
+				);
+				await expect(lastOption).toHaveAttribute(
+					'aria-posinset',
+					String(THOUSANDS_OPTION_COUNT)
+				);
+			}
+		);
+
+		await step('PageDown moves forward by more than one row', async () => {
+			await userEvent.keyboard('{PageDown}');
+			await waitFor(async () => {
+				await expect(getActiveOptionPosition(combobox)).toBeGreaterThan(2);
+			});
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+
+		await step('PageUp goes back to the first option', async () => {
+			await userEvent.keyboard('{PageUp}');
+			await waitFor(async () => {
+				await expect(getActiveOptionPosition(combobox)).toBe(1);
+			});
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+	},
+};
+
+const PAGE_NAVIGATION_OPTION_COUNT = 30;
+
+const pageNavigationOptions: MultiComboboxOption[] = Array.from(
+	{ length: PAGE_NAVIGATION_OPTION_COUNT },
+	(_, index) => ({
+		value: `option-${index}`,
+		label: `Option ${index + 1}`,
+	})
+);
+const PAGE_NAVIGATION_MAX_PRESSES = 10;
+
+export const PageNavigation: Story = {
+	args: {
+		label: 'City',
+		options: pageNavigationOptions,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('combobox', { name: 'City' }));
+		const combobox = await canvas.findByRole('combobox', { name: /Search/ });
+
+		await step('repeated PageDown reaches the last option', async () => {
+			await pressKeyUntilActivePosition(
+				combobox,
+				'PageDown',
+				PAGE_NAVIGATION_OPTION_COUNT,
+				PAGE_NAVIGATION_MAX_PRESSES
+			);
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+
+		await step('repeated PageUp reaches the first option', async () => {
+			await pressKeyUntilActivePosition(
+				combobox,
+				'PageUp',
+				1,
+				PAGE_NAVIGATION_MAX_PRESSES
+			);
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
 	},
 };

@@ -160,3 +160,48 @@ export async function pressKeysAndExpectFocusInDialog(
 	await userEvent.keyboard(keys);
 	await expect(dialog.contains(dialog.ownerDocument.activeElement)).toBe(true);
 }
+
+/** The option a combobox points to through `aria-activedescendant`. */
+function getActiveOption(combobox: HTMLElement): HTMLElement {
+	const activeOptionId = combobox.getAttribute('aria-activedescendant');
+	if (!activeOptionId) throw new Error('expected an active option');
+	const activeOption = combobox.ownerDocument.getElementById(activeOptionId);
+	if (!activeOption) throw new Error('expected the active option to exist');
+	return activeOption;
+}
+
+/** The 1-based `aria-posinset` of the active option, or 0 when none is active. */
+export function getActiveOptionPosition(combobox: HTMLElement): number {
+	if (!combobox.hasAttribute('aria-activedescendant')) return 0;
+	return Number(getActiveOption(combobox).getAttribute('aria-posinset'));
+}
+
+/** Waits until the active option lies entirely within the listbox rect. */
+export async function expectActiveOptionInView(
+	combobox: HTMLElement,
+	listbox: HTMLElement
+): Promise<void> {
+	await waitFor(async () => {
+		const optionRect = getActiveOption(combobox).getBoundingClientRect();
+		const listboxRect = listbox.getBoundingClientRect();
+		await expect(optionRect.top).toBeGreaterThanOrEqual(listboxRect.top);
+		await expect(optionRect.bottom).toBeLessThanOrEqual(listboxRect.bottom);
+	});
+}
+
+/** Presses `key` until the active option reaches `targetPosition` (1-based), failing after `maxPresses`. */
+export async function pressKeyUntilActivePosition(
+	combobox: HTMLElement,
+	key: 'PageDown' | 'PageUp',
+	targetPosition: number,
+	maxPresses: number
+): Promise<void> {
+	for (let press = 0; press < maxPresses; press += 1) {
+		if (getActiveOptionPosition(combobox) === targetPosition) return;
+		// oxlint-disable-next-line no-await-in-loop -- each press depends on where the previous one landed
+		await userEvent.keyboard(`{${key}}`);
+	}
+	await waitFor(async () => {
+		await expect(getActiveOptionPosition(combobox)).toBe(targetPosition);
+	});
+}
