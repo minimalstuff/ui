@@ -12,6 +12,7 @@ import {
 	expectDialogCreatesNoContainingBlock,
 	expectFocusOn,
 	getPortalScope,
+	waitForDialogOpen,
 	waitForRemoval,
 	waitPastModalExitAnimation,
 } from '#storybook/play_helpers';
@@ -224,11 +225,13 @@ export const NonDismissible: Story = {
 		const body = getPortalScope(canvasElement);
 
 		await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }));
-		await body.findByRole('dialog', { name: 'Settings' });
+		const dialog = await body.findByRole('dialog', { name: 'Settings' });
+		await waitForDialogOpen(dialog);
 		await userEvent.keyboard('{Escape}');
 		await waitPastModalExitAnimation();
 
-		await expect(body.getByRole('dialog', { name: 'Settings' })).toBeVisible();
+		await expect(dialog).toHaveAttribute('data-state', 'open');
+		await expect(dialog).toBeVisible();
 	},
 };
 
@@ -253,12 +256,16 @@ export const WithConfirmModal: Story = {
 
 		await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }));
 		const drawer = await body.findByRole('dialog', { name: 'Settings' });
+		await waitForDialogOpen(drawer);
 
 		await step('the confirmation takes Escape first', async () => {
 			await userEvent.click(
 				body.getByRole('button', { name: 'Discard changes…' })
 			);
-			await body.findByRole('alertdialog', { name: 'Discard changes?' });
+			const confirmation = await body.findByRole('alertdialog', {
+				name: 'Discard changes?',
+			});
+			await waitForDialogOpen(confirmation);
 			await userEvent.keyboard('{Escape}');
 			await waitForRemoval(() => body.queryByRole('alertdialog'));
 			await expect(drawer).toBeVisible();
