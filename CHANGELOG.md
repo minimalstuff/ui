@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.4.0] - 2026-11-08
+
 ### Added
 
 - `Alert`: an in-page message box with a `tone` (`info`, `success`, `warning`, `danger`), an optional bold `title`, a default icon per tone (`icon` to replace it, `false` to hide it), an `actions` slot and a close button shown when `onDismiss` is set (named by `dismissLabel` or the `close` label). No role by default; pass `role="alert"` for an error that appears after an action, or `role="note"` for an aside. Takes `radius` (default `lg`) and `unstyled`.
@@ -571,7 +573,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.3.0...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.4.0...HEAD
+[5.4.0]: https://github.com/minimalstuff/ui/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/minimalstuff/ui/compare/5.2.0...5.3.0
 [5.2.0]: https://github.com/minimalstuff/ui/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/minimalstuff/ui/compare/5.0.1...5.1.0
