@@ -21,6 +21,20 @@ const interactiveVariant: Variant = (matcher) => {
 	};
 };
 
+const TOASTER_ITEM_CLOSED = 'data-[state=closed]:opacity-0';
+const TOASTER_ITEM_SLIDE_LEFT =
+	'sm:motion-safe:data-[state=closed]:-translate-x-4';
+const TOASTER_ITEM_SLIDE_RIGHT =
+	'sm:motion-safe:data-[state=closed]:translate-x-4';
+const TOASTER_ITEM_SLIDE_UP =
+	'sm:motion-safe:data-[state=closed]:-translate-y-2';
+const TOASTER_ITEM_SLIDE_DOWN =
+	'sm:motion-safe:data-[state=closed]:translate-y-2';
+const TOASTER_ITEM_PHONE_TOP =
+	'max-sm:motion-safe:data-[state=closed]:-translate-y-2';
+const TOASTER_ITEM_PHONE_BOTTOM =
+	'max-sm:motion-safe:data-[state=closed]:translate-y-2';
+
 /**
  * Library-namespaced `ms-*` shortcuts hold every base + media-variant
  * combination. A consumer stylesheet loaded after `style.css` never generates
@@ -52,13 +66,25 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 		'data-[state=closed]:-translate-x-1 motion-reduce:data-[state=closed]:translate-x-0',
 	'ms-switch-thumb-transition':
 		'transition duration-200 ease-in-out motion-reduce:transition-none',
-	'ms-toast-region':
-		'fixed inset-x-0 bottom-[var(--ms-toast-offset-bottom,calc(1rem_+_env(safe-area-inset-bottom)))] z-[60] px-4 pointer-events-none',
-	'ms-toast-stack': 'flex flex-col items-center sm:items-end',
-	'ms-toast-width': 'w-full sm:w-[22rem] max-w-full',
-	'ms-toast-transition':
-		'transition duration-150 ease-out motion-reduce:transition-none',
-	'ms-toast-closed': 'opacity-0 translate-y-2 motion-reduce:translate-y-0',
+	'ms-toaster': 'fixed z-[60] pointer-events-none max-sm:inset-x-0 max-sm:px-4',
+	'ms-toaster-bottom':
+		'bottom-[var(--ms-toast-offset-bottom,calc(1rem_+_env(safe-area-inset-bottom)))] max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:bottom-auto max-sm:[body:has([data-phone-layout=sheet][data-state=open])_&]:top-[var(--ms-toast-offset-top,calc(1rem_+_env(safe-area-inset-top)))]',
+	'ms-toaster-top':
+		'top-[var(--ms-toast-offset-top,calc(1rem_+_env(safe-area-inset-top)))]',
+	'ms-toaster-left':
+		'sm:left-[calc(1rem_+_env(safe-area-inset-left))] sm:w-[22rem]',
+	'ms-toaster-right':
+		'sm:right-[calc(1rem_+_env(safe-area-inset-right))] sm:w-[22rem]',
+	'ms-toaster-center': 'sm:left-1/2 sm:-translate-x-1/2 sm:w-[22rem]',
+	'ms-toaster-item-transition':
+		'transition duration-150 ease-out motion-reduce:transition-opacity',
+	'ms-toaster-item-top-left': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_LEFT} ${TOASTER_ITEM_PHONE_TOP}`,
+	'ms-toaster-item-top-center': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_UP} ${TOASTER_ITEM_PHONE_TOP}`,
+	'ms-toaster-item-top-right': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_RIGHT} ${TOASTER_ITEM_PHONE_TOP}`,
+	'ms-toaster-item-bottom-left': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_LEFT} ${TOASTER_ITEM_PHONE_BOTTOM}`,
+	'ms-toaster-item-bottom-center': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_DOWN} ${TOASTER_ITEM_PHONE_BOTTOM}`,
+	'ms-toaster-item-bottom-right': `${TOASTER_ITEM_CLOSED} ${TOASTER_ITEM_SLIDE_RIGHT} ${TOASTER_ITEM_PHONE_BOTTOM}`,
+	'ms-toast-timer-bar': 'animate-ms-toast-timer motion-reduce:hidden',
 	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
 		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
@@ -85,6 +111,15 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 
 export default defineConfig({
 	shortcuts: LIBRARY_SHORTCUTS,
+	theme: {
+		animation: {
+			keyframes: {
+				'ms-toast-timer': '{from{transform:scaleX(1)}to{transform:scaleX(0)}}',
+			},
+			durations: { 'ms-toast-timer': '1s' },
+			timingFns: { 'ms-toast-timer': 'linear' },
+		},
+	},
 	variants: [interactiveVariant],
 	presets: [
 		presetWind4({

@@ -133,6 +133,11 @@ export {
 } from './theme_toggle/theme_toggle';
 export { ToastProvider, type ToastProviderProps } from './toast/toast_provider';
 export { toast } from './toast/toast';
+export {
+	Toaster,
+	type ToasterPosition,
+	type ToasterProps,
+} from './toast/toaster';
 export { useToast } from './toast/use_toast';
 export type {
 	ToastAction,

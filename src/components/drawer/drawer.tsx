@@ -31,6 +31,7 @@ import {
 	OVERLAY_BG,
 	THIN_SCROLLBAR_SCOPE,
 } from '#components/shared/surface_tokens';
+import { ToastAnnouncerSlot } from '#components/toast/toast_announcer_slot';
 import { useDisableHotkeysWhileMounted } from '#hooks/use_disable_hotkeys_while_mounted/use_disable_hotkeys_while_mounted';
 import { mergeRefs } from '#lib/merge_refs';
 
@@ -173,6 +174,7 @@ function DrawerDialog({
 						)}
 						onClick={(event) => event.stopPropagation()}
 					>
+						<ToastAnnouncerSlot />
 						<ModalHeader
 							titleId={titleId}
 							title={title}

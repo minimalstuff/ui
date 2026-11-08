@@ -130,4 +130,22 @@ describe('useToastTimer', () => {
 			expect(onElapsed).not.toHaveBeenCalled();
 		}
 	);
+
+	it('should report whether the countdown is running', () => {
+		const onElapsed = vi.fn<() => void>();
+		const { result, rerender } = renderTimer(onElapsed);
+		expect(result.current.isRunning).toBe(true);
+
+		rerender({ duration: DURATION_MS, isPaused: true, revision: 0 });
+		expect(result.current.isRunning).toBe(false);
+
+		rerender({ duration: Infinity, isPaused: false, revision: 0 });
+		expect(result.current.isRunning).toBe(false);
+
+		rerender({ duration: DURATION_MS, isPaused: false, revision: 0 });
+		act(() => {
+			vi.advanceTimersByTime(DURATION_MS);
+		});
+		expect(result.current.isRunning).toBe(false);
+	});
 });
