@@ -17,6 +17,7 @@ import {
 	THIN_SCROLLBAR_SCOPE,
 } from '#components/shared/surface_tokens';
 import { useWarnUnnamed } from '#components/shared/use_warn_unnamed';
+import { ToastAnnouncerSlot } from '#components/toast/toast_announcer_slot';
 import { mergeRefs } from '#lib/merge_refs';
 
 const MODAL_UNNAMED_GUIDANCE =
@@ -164,6 +165,7 @@ export function ModalShell({
 				aria-describedby={hasDescribedByContent ? contentId : undefined}
 				tabIndex={-1}
 				data-state={isVisible ? 'open' : 'closed'}
+				data-phone-layout={isSheet ? 'sheet' : undefined}
 				className={clsx(
 					'relative w-full',
 					isSheet ? MODAL_SHEET_SIZE_CLASSES[size] : SIZE_CLASSES[size],
@@ -190,6 +192,7 @@ export function ModalShell({
 				)}
 				onClick={(e) => e.stopPropagation()}
 			>
+				<ToastAnnouncerSlot />
 				{title && (
 					<ModalHeader
 						titleId={titleId}

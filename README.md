@@ -44,6 +44,30 @@ export function Root() {
 
 For French, pass the bundled preset: `<UIProvider labels={FRENCH_UI_LABELS}>` (import `FRENCH_UI_LABELS` from `@minimalstuff/ui`).
 
+### Toasts
+
+Mount `<Toaster />` once at the app root, then call `toast()` from anywhere (event handlers, services, outside React).
+
+```tsx
+import { Toaster, toast } from '@minimalstuff/ui';
+
+export function Root() {
+	return (
+		<>
+			<App />
+			<Toaster position="bottom-right" />
+		</>
+	);
+}
+
+toast.success('Saved');
+toast.error('Could not save', { description: 'Check your connection.' });
+```
+
+Only the first mounted `Toaster` renders. Toasts sit above `Modal` and `Drawer`. Warning and error toasts, and toasts with an action, stay until dismissed, because a Modal's focus trap keeps toasts out of keyboard reach. Move the stack with the `--ms-toast-offset-bottom` and `--ms-toast-offset-top` CSS custom properties (default: 1rem plus the safe-area inset).
+
+`ToastProvider` and `useToast()` still work but are deprecated: mount `<Toaster />` and call `toast()` instead.
+
 ### Dark mode
 
 Dark styles apply when `<html>` has the `dark` class. `useThemeStore` (and the `ThemeToggle` built on it) sets that class from the `light`, `dark` or `system` preference and keeps it in `localStorage`.

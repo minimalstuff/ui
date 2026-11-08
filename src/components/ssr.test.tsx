@@ -16,6 +16,8 @@ import { ModalProvider } from '#components/modal_provider/modal_provider';
 import { Spinner } from '#components/spinner/spinner';
 import { Tabs } from '#components/tabs/tabs';
 import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
+import { ToastProvider } from '#components/toast/toast_provider';
+import { Toaster } from '#components/toast/toaster';
 import { Toolbar } from '#components/toolbar/toolbar';
 import { Tooltip } from '#components/tooltip/tooltip';
 import { UIProvider } from '#components/ui_provider/ui_provider';
@@ -54,6 +56,21 @@ describe('server-side rendering', () => {
 
 		expect(html).toContain('Heads up');
 		expect(html).toContain('aria-label="Close"');
+	});
+
+	test('renders nothing for a Toaster', () => {
+		expect(renderToString(<Toaster />)).toBe('');
+	});
+
+	test('renders the children of a ToastProvider', () => {
+		const html = renderToString(
+			<ToastProvider>
+				<p>App content</p>
+			</ToastProvider>
+		);
+
+		expect(html).toContain('App content');
+		expect(html).not.toContain('Notifications');
 	});
 
 	test('renders a ThemeToggle with a tooltip', () => {

@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 
 import { type Radius } from '#components/shared/radius';
 
+/** @deprecated Use the `toast.info`, `toast.success`, `toast.warning` and `toast.error` functions. */
 export type ToastTone = 'info' | 'success' | 'error';
 
 export interface ToastAction {
@@ -10,6 +11,7 @@ export interface ToastAction {
 	onClick: () => void;
 }
 
+/** @deprecated Use `toast()` and its `ToastMessageOptions`. */
 export interface ToastOptions {
 	message: ReactNode;
 	/** Defaults to `'info'`. `'error'` is announced assertively, the others politely. */
@@ -26,6 +28,7 @@ export interface ToastOptions {
 	unstyled?: boolean;
 }
 
+/** @deprecated Use `toast()` instead of `useToast()`. */
 export interface ToastApi {
 	/** Shows a toast and returns its id. */
 	show: (options: Readonly<ToastOptions>) => string;

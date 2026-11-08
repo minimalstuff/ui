@@ -4,6 +4,18 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Toaster` and `toast()`: mount `<Toaster />` once at the app root, then call `toast(message)`, `toast.success`, `toast.warning` or `toast.error` from anywhere (also outside React) with an optional `description`, `action` and `duration`; each call returns the toast's id and `toast.dismiss(id)` closes it (all of them without id). Showing an id already on screen replaces that toast, restarts its timer and announces it again. Info and success close after 5 seconds; warning, error and any toast with an action stay until closed. Toasts look like `Alert`, sit above `Modal` and `Drawer`, and take `position` (`top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`, default `bottom-right`), `radius` and `unstyled`. On phones the stack spans the full width and moves to the top while a `Modal` with `phoneLayout="sheet"` is open; new `--ms-toast-offset-top` CSS custom property next to `--ms-toast-offset-bottom`. Screen readers hear only the new toast's text, also while a `Modal` or `Drawer` is open.
+
+### Changed
+
+- `ToastProvider` and `useToast()` now render through `Toaster`: toasts take the `Alert` look, up to five show at once instead of three, errors join the same stack in order of arrival, a toast with an `action` and no `duration` stays until closed, and announcements come from live regions outside the "Notifications" region. Tests that look for a toast's text should query inside the region, for example `within(screen.getByRole('region', { name: 'Notifications' }))`, since the text also appears in the announcer. `useToast()` no longer throws outside a `ToastProvider`.
+
+### Deprecated
+
+- `ToastProvider`, `useToast()` and their types `ToastProviderProps`, `ToastOptions`, `ToastTone` and `ToastApi`: mount `<Toaster />` once and call `toast()` instead. They keep working until the next major version.
+
 ### Fixed
 
 - `Button` and `IconButton` optional props (`pressed`, `loading`, `size`, `variant`, `color`, `radius`, `startIcon`, `endIcon`...) now accept an explicit `undefined` under `exactOptionalPropertyTypes`.

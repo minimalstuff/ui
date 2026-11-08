@@ -25,6 +25,13 @@ const ARIA_WIDGET_CONFLICTING_RULES = [
 	'jsx-a11y/no-autofocus',
 ];
 
+/** The deprecated toast API (`ToastProvider`, `useToast`) stays published and is still implemented, exported and tested here. */
+const DEPRECATED_TOAST_API_FILES = [
+	'src/components/toast/**',
+	'src/components/index.ts',
+	'src/components/ssr.test.tsx',
+];
+
 export default minimalstuffPreset({
 	react: true,
 	vitest: true,
@@ -35,6 +42,10 @@ export default minimalstuffPreset({
 			rules: Object.fromEntries(
 				ARIA_WIDGET_CONFLICTING_RULES.map((rule) => [rule, 'off'])
 			),
+		},
+		{
+			files: DEPRECATED_TOAST_API_FILES,
+			rules: { 'typescript/no-deprecated': 'off' },
 		},
 		{
 			files: ROOT_ENTRY_FILES,

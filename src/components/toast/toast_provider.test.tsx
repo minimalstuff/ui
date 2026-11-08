@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom/vitest';
 
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+	act,
+	fireEvent,
+	render,
+	renderHook,
+	screen,
+	within,
+} from '@testing-library/react';
 import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
@@ -9,6 +16,7 @@ import { TOAST_EXIT_DURATION_MS } from '#components/shared/animation';
 import { ToastProvider } from '#components/toast/toast_provider';
 import { type ToastApi } from '#components/toast/toast_types';
 import { useToast } from '#components/toast/use_toast';
+import { TOAST_ANNOUNCE_DELAY_MS } from '#components/toast/use_toast_announcer';
 
 function renderToasts() {
 	let toastApi: ToastApi | null = null;
@@ -29,6 +37,10 @@ function renderToasts() {
 		return toastApi;
 	};
 	return { getApi, ...view };
+}
+
+function stack() {
+	return within(screen.getByRole('region', { name: 'Notifications' }));
 }
 
 function advance(milliseconds: number): void {
@@ -57,12 +69,12 @@ describe('ToastProvider', () => {
 		act(() => {
 			id = getApi().show({ message: 'Saved' });
 		});
-		expect(screen.getByText('Saved')).toBeInTheDocument();
+		expect(stack().getByText('Saved')).toBeInTheDocument();
 
 		act(() => getApi().dismiss(id));
 		advance(TOAST_EXIT_DURATION_MS);
 
-		expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+		expect(stack().queryByText('Saved')).not.toBeInTheDocument();
 	});
 
 	test('should dismiss itself after the default duration', () => {
@@ -72,10 +84,10 @@ describe('ToastProvider', () => {
 		});
 
 		advance(3999);
-		expect(screen.getByText('Saved')).toBeInTheDocument();
+		expect(stack().getByText('Saved')).toBeInTheDocument();
 
 		advanceThroughExit(1);
-		expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+		expect(stack().queryByText('Saved')).not.toBeInTheDocument();
 	});
 
 	test('should keep an error longer than an info toast', () => {
@@ -85,10 +97,10 @@ describe('ToastProvider', () => {
 		});
 
 		advance(4000 + TOAST_EXIT_DURATION_MS);
-		expect(screen.getByText('Failed')).toBeInTheDocument();
+		expect(stack().getByText('Failed')).toBeInTheDocument();
 
 		advanceThroughExit(2000);
-		expect(screen.queryByText('Failed')).not.toBeInTheDocument();
+		expect(stack().queryByText('Failed')).not.toBeInTheDocument();
 	});
 
 	test.each([0, Infinity])(
@@ -101,7 +113,7 @@ describe('ToastProvider', () => {
 
 			advance(60_000);
 
-			expect(screen.getByText('Sticky')).toBeInTheDocument();
+			expect(stack().getByText('Sticky')).toBeInTheDocument();
 		}
 	);
 
@@ -110,18 +122,18 @@ describe('ToastProvider', () => {
 		act(() => {
 			getApi().show({ message: 'Saved', duration: 1000 });
 		});
-		const toast = screen.getByText('Saved');
+		const toast = stack().getByText('Saved');
 
 		advance(600);
-		fireEvent.mouseEnter(toast);
+		fireEvent.pointerEnter(toast, { pointerType: 'mouse' });
 		advance(5000);
-		expect(screen.getByText('Saved')).toBeInTheDocument();
+		expect(stack().getByText('Saved')).toBeInTheDocument();
 
-		fireEvent.mouseLeave(toast);
+		fireEvent.pointerLeave(toast, { pointerType: 'mouse' });
 		advance(399);
-		expect(screen.getByText('Saved')).toBeInTheDocument();
+		expect(stack().getByText('Saved')).toBeInTheDocument();
 		advanceThroughExit(1);
-		expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+		expect(stack().queryByText('Saved')).not.toBeInTheDocument();
 	});
 
 	test('should pause the timer while focus is inside the toast', () => {
@@ -135,25 +147,25 @@ describe('ToastProvider', () => {
 
 		act(() => closeButton.focus());
 		advance(5000);
-		expect(screen.getByText('Saved')).toBeInTheDocument();
+		expect(stack().getByText('Saved')).toBeInTheDocument();
 
 		act(() => closeButton.blur());
 		advanceThroughExit(1000);
-		expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+		expect(stack().queryByText('Saved')).not.toBeInTheDocument();
 	});
 
-	test('should dismiss the oldest toasts beyond three', () => {
+	test('should dismiss the oldest toasts beyond five', () => {
 		const { getApi } = renderToasts();
 		act(() => {
-			for (const message of ['One', 'Two', 'Three', 'Four']) {
+			for (const message of ['One', 'Two', 'Three', 'Four', 'Five', 'Six']) {
 				getApi().show({ message, duration: 0 });
 			}
 		});
 		advance(TOAST_EXIT_DURATION_MS);
 
-		expect(screen.queryByText('One')).not.toBeInTheDocument();
-		expect(screen.getByText('Two')).toBeInTheDocument();
-		expect(screen.getByText('Four')).toBeInTheDocument();
+		expect(stack().queryByText('One')).not.toBeInTheDocument();
+		expect(stack().getByText('Two')).toBeInTheDocument();
+		expect(stack().getByText('Six')).toBeInTheDocument();
 	});
 
 	test('should run the action and dismiss the toast when it is clicked', () => {
@@ -171,7 +183,7 @@ describe('ToastProvider', () => {
 		advance(TOAST_EXIT_DURATION_MS);
 
 		expect(onClick).toHaveBeenCalledTimes(1);
-		expect(screen.queryByText('Removed')).not.toBeInTheDocument();
+		expect(stack().queryByText('Removed')).not.toBeInTheDocument();
 	});
 
 	test('should dismiss the toast from its close button', () => {
@@ -183,7 +195,7 @@ describe('ToastProvider', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Close notification' }));
 		advance(TOAST_EXIT_DURATION_MS);
 
-		expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+		expect(stack().queryByText('Saved')).not.toBeInTheDocument();
 	});
 
 	test('should announce an error through an alert and the others through a status', () => {
@@ -192,20 +204,22 @@ describe('ToastProvider', () => {
 			getApi().show({ message: 'Failed', tone: 'error', duration: 0 });
 			getApi().show({ message: 'Saved', tone: 'success', duration: 0 });
 		});
+		advance(TOAST_ANNOUNCE_DELAY_MS);
 
 		expect(screen.getByRole('alert')).toHaveTextContent('Failed');
 		expect(screen.getByRole('alert')).not.toHaveTextContent('Saved');
 		expect(screen.getByRole('status')).toHaveTextContent('Saved');
 	});
 
-	test('should render empty live regions inside a labelled region before any toast', () => {
+	test('should render empty live regions outside the labelled region before any toast', () => {
 		renderToasts();
+		const region = screen.getByRole('region', { name: 'Notifications' });
 
-		expect(
-			screen.getByRole('region', { name: 'Notifications' })
-		).toBeInTheDocument();
+		expect(region).toBeInTheDocument();
 		expect(screen.getByRole('status')).toBeEmptyDOMElement();
 		expect(screen.getByRole('alert')).toBeEmptyDOMElement();
+		expect(region).not.toContainElement(screen.getByRole('status'));
+		expect(region).not.toContainElement(screen.getByRole('alert'));
 	});
 
 	test('should not move focus when a toast appears', () => {
@@ -235,16 +249,19 @@ describe('ToastProvider', () => {
 });
 
 describe('useToast', () => {
-	test('should throw outside a ToastProvider', () => {
-		const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+	test('should not throw outside a ToastProvider', () => {
 		function Orphan() {
 			useToast();
 			return null;
 		}
 
-		expect(() => render(<Orphan />)).toThrow(
-			'useToast must be used inside a ToastProvider'
-		);
-		spy.mockRestore();
+		expect(() => render(<Orphan />)).not.toThrow();
+	});
+
+	test('should return the same api on every render', () => {
+		const first = renderHook(() => useToast());
+		const second = renderHook(() => useToast());
+
+		expect(second.result.current).toBe(first.result.current);
 	});
 });

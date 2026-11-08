@@ -10,6 +10,11 @@ interface UseToastTimerOptions {
 	revision?: number;
 }
 
+interface UseToastTimerReturn {
+	/** Whether the countdown is currently advancing. */
+	isRunning: boolean;
+}
+
 function isDocumentHidden(): boolean {
 	return document.visibilityState === 'hidden';
 }
@@ -24,11 +29,12 @@ export function useToastTimer({
 	isPaused,
 	onElapsed,
 	revision = 0,
-}: Readonly<UseToastTimerOptions>): void {
+}: Readonly<UseToastTimerOptions>): UseToastTimerReturn {
 	const remainingRef = useRef(duration);
 	const revisionRef = useRef(revision);
-	const hasElapsedRef = useRef(false);
+	const [elapsedRevision, setElapsedRevision] = useState<number | null>(null);
 	const [isHidden, setIsHidden] = useState(isDocumentHidden);
+	const hasElapsed = elapsedRevision === revision;
 	const handleElapsed = useEffectEvent(onElapsed);
 
 	useEffect(() => {
@@ -43,23 +49,21 @@ export function useToastTimer({
 		if (revisionRef.current !== revision) {
 			revisionRef.current = revision;
 			remainingRef.current = duration;
-			hasElapsedRef.current = false;
 		}
-		if (
-			hasElapsedRef.current ||
-			isPaused ||
-			isHidden ||
-			isPersistentDuration(duration)
-		)
+		if (hasElapsed || isPaused || isHidden || isPersistentDuration(duration))
 			return;
 		const startedAt = Date.now();
 		const timeoutId = setTimeout(() => {
-			hasElapsedRef.current = true;
+			setElapsedRevision(revision);
 			handleElapsed();
 		}, remainingRef.current);
 		return () => {
 			clearTimeout(timeoutId);
 			remainingRef.current -= Date.now() - startedAt;
 		};
-	}, [duration, isPaused, isHidden, revision]);
+	}, [duration, isPaused, isHidden, revision, hasElapsed]);
+
+	const isRunning =
+		!hasElapsed && !isPaused && !isHidden && !isPersistentDuration(duration);
+	return { isRunning };
 }

@@ -55,10 +55,9 @@ function ToastStage() {
 }
 
 const meta = {
-	title: 'Components/Toast',
+	title: 'Components/Toast (deprecated)',
 	component: ToastStage,
 	parameters: { layout: 'centered' },
-	tags: ['autodocs'],
 } satisfies Meta<typeof ToastStage>;
 
 export default meta;
