@@ -379,6 +379,34 @@ export const ShortViewportKeepsEveryCloseButtonReachable: Story = {
 	},
 };
 
+export const RaisedOffsetKeepsTheStackInsideTheViewport: Story = {
+	play: async ({ canvasElement }) => {
+		const RAISED_OFFSET = '6rem';
+		await page.viewport(SHORT_VIEWPORT.width, SHORT_VIEWPORT.height);
+		document.documentElement.style.setProperty(
+			'--ms-toast-offset-bottom',
+			RAISED_OFFSET
+		);
+		try {
+			await Array.from({ length: STACK_SIZE }).reduce<Promise<void>>(
+				(previous) =>
+					previous.then(() => clickButton(canvasElement, 'Add persistent')),
+				Promise.resolve()
+			);
+			await waitFor(() =>
+				expect(getToasts(canvasElement)).toHaveLength(STACK_SIZE)
+			);
+
+			const rect = getRegion(canvasElement).getBoundingClientRect();
+			await expect(rect.top).toBeGreaterThanOrEqual(0);
+			await expect(rect.bottom).toBeLessThanOrEqual(window.innerHeight);
+		} finally {
+			document.documentElement.style.removeProperty('--ms-toast-offset-bottom');
+			await page.viewport(DESKTOP_VIEWPORT.width, DESKTOP_VIEWPORT.height);
+		}
+	},
+};
+
 type Corner = { isTop: boolean; horizontal: 'left' | 'center' | 'right' };
 
 async function expectToasterAtCorner(

@@ -1,4 +1,10 @@
-import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import {
+	useEffect,
+	useEffectEvent,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from 'react';
 
 import { isPersistentDuration } from '#components/toast/toast_styles';
 
@@ -19,6 +25,30 @@ function isDocumentHidden(): boolean {
 	return document.visibilityState === 'hidden';
 }
 
+const visibilitySubscribers = new Set<() => void>();
+
+function notifyVisibilitySubscribers(): void {
+	for (const subscriber of visibilitySubscribers) subscriber();
+}
+
+function subscribeToVisibility(subscriber: () => void): () => void {
+	if (visibilitySubscribers.size === 0)
+		document.addEventListener('visibilitychange', notifyVisibilitySubscribers);
+	visibilitySubscribers.add(subscriber);
+	return () => {
+		visibilitySubscribers.delete(subscriber);
+		if (visibilitySubscribers.size > 0) return;
+		document.removeEventListener(
+			'visibilitychange',
+			notifyVisibilitySubscribers
+		);
+	};
+}
+
+function getServerHiddenSnapshot(): boolean {
+	return false;
+}
+
 /**
  * Calls `onElapsed` once `duration` ms have run while not paused. A pause
  * (or a hidden document) keeps the time already spent, so resuming continues
@@ -33,17 +63,13 @@ export function useToastTimer({
 	const remainingRef = useRef(duration);
 	const revisionRef = useRef(revision);
 	const [elapsedRevision, setElapsedRevision] = useState<number | null>(null);
-	const [isHidden, setIsHidden] = useState(isDocumentHidden);
+	const isHidden = useSyncExternalStore(
+		subscribeToVisibility,
+		isDocumentHidden,
+		getServerHiddenSnapshot
+	);
 	const hasElapsed = elapsedRevision === revision;
 	const handleElapsed = useEffectEvent(onElapsed);
-
-	useEffect(() => {
-		const handleVisibilityChange = () => setIsHidden(isDocumentHidden());
-		handleVisibilityChange();
-		document.addEventListener('visibilitychange', handleVisibilityChange);
-		return () =>
-			document.removeEventListener('visibilitychange', handleVisibilityChange);
-	}, []);
 
 	useEffect(() => {
 		if (revisionRef.current !== revision) {
