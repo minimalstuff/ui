@@ -64,7 +64,7 @@ toast.success('Saved');
 toast.error('Could not save', { description: 'Check your connection.' });
 ```
 
-Only the first mounted `Toaster` renders. Toasts sit above `Modal` and `Drawer`. Warning and error toasts, and toasts with an action, stay until dismissed, because a Modal's focus trap keeps toasts out of keyboard reach. Move the stack with the `--ms-toast-offset-bottom` and `--ms-toast-offset-top` CSS custom properties (default: 1rem plus the safe-area inset).
+Only the first mounted `Toaster` renders. Toasts sit above `Modal` and `Drawer`. Warning and error toasts, and toasts with an action, stay until dismissed, because a Modal's focus trap keeps toasts out of keyboard reach. Press F8 to jump to the toasts and F8 again to return to where you were; Escape closes the focused toast. F8 does nothing while a Modal or Drawer is open. Move the stack with the `--ms-toast-offset-bottom` and `--ms-toast-offset-top` CSS custom properties (default: 1rem plus the safe-area inset).
 
 `ToastProvider` and `useToast()` still work but are deprecated: mount `<Toaster />` and call `toast()` instead.
 
