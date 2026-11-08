@@ -1,5 +1,12 @@
 import clsx from 'clsx';
-import { type ReactNode, type Ref, useMemo, useRef } from 'react';
+import {
+	type ReactNode,
+	type Ref,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
 import {
 	ListboxOption,
@@ -46,6 +53,7 @@ type ListboxOptionsProps = {
 	onOptionClick: (option: ListboxOptionData) => void;
 };
 
+const STATUS_ANNOUNCE_DELAY_MS = 50;
 const LISTBOX_CLASSES = 'max-h-60 overflow-auto py-1';
 const TRUNCATING_LISTBOX_CLASSES = 'w-0 min-w-full';
 
@@ -57,10 +65,23 @@ function getRowTop(index: number, metrics: ListboxMetrics): string {
 	return `${metrics.edgePadding + index * metrics.rowHeight}px`;
 }
 
+function useStatusReady(): boolean {
+	const [isReady, setIsReady] = useState(false);
+
+	useEffect(() => {
+		const timer = setTimeout(() => setIsReady(true), STATUS_ANNOUNCE_DELAY_MS);
+		return () => clearTimeout(timer);
+	}, []);
+
+	return isReady;
+}
+
 /**
  * The listbox and its "no results" live region, shared by `Combobox` and
  * `MultiCombobox`. The status region is a sibling of the listbox, never a
- * child, so the listbox only contains options. When windowed, the space of
+ * child, so the listbox only contains options. The region mounts empty and
+ * receives its text shortly after, so assistive technology announces it even
+ * when the popup opens with no match. When windowed, the space of
  * the unmounted rows is a margin on the first and last mounted rows (listbox
  * padding would count against its max height, and spacer elements are not
  * options), and the active option stays mounted so `aria-activedescendant` always resolves.
@@ -82,6 +103,7 @@ export function ListboxOptions({
 	onOptionClick,
 }: Readonly<ListboxOptionsProps>) {
 	const isEmpty = options.length === 0;
+	const isStatusReady = useStatusReady();
 	const listboxRef = useRef<HTMLUListElement | null>(null);
 	const mergedRef = useMemo(() => mergeRefs(ref, listboxRef), [ref]);
 	const { startIndex, endIndex, metrics, refreshWindow } = useListboxWindow({
@@ -174,7 +196,7 @@ export function ListboxOptions({
 					isEmpty ? 'px-3 py-2 text-gray-500 dark:text-gray-400' : undefined
 				}
 			>
-				{isEmpty ? noResultsText : ''}
+				{isEmpty && isStatusReady ? noResultsText : ''}
 			</div>
 		</>
 	);

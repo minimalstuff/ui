@@ -23,6 +23,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Tooltip`: Escape closes the bubble as soon as it starts opening. It used to be ignored until the enter animation had started, and the bubble then showed anyway.
 - `Tooltip`: turning `disabled` on while the bubble is open now closes it. It used to come back on its own once re-enabled.
 - `Checkbox` and `Switch` no longer warn in development that they need an accessible name when a `<label for>` or an enclosing `<label>` names them.
+- `Combobox` and `MultiCombobox`: screen readers now announce "No results" when the list opens with no matching option, for example when typing again in a closed field. The text used to be in place before the live region was, so it was not read.
 
 ## [5.2.0] - 2026-11-06
 

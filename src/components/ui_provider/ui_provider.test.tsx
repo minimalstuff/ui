@@ -32,13 +32,17 @@ describe('UIProvider', () => {
 			).toBeInTheDocument();
 		});
 
-		test('should render the English no-results text when no provider is mounted', () => {
+		test('should render the English no-results text when no provider is mounted', async () => {
 			render(<Combobox label="Country" options={OPTIONS} />);
 			const input = screen.getByLabelText('Country');
 			fireEvent.click(input);
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
-			expect(screen.getByRole('status')).toHaveTextContent('No results found');
+			expect(
+				await screen.findByText('No results found', {
+					selector: '[role="status"]',
+				})
+			).toBeInTheDocument();
 		});
 	});
 
@@ -88,7 +92,7 @@ describe('UIProvider', () => {
 			).toBeInTheDocument();
 		});
 
-		test('should translate the combobox no-results text when labels.noResults is provided', () => {
+		test('should translate the combobox no-results text when labels.noResults is provided', async () => {
 			render(
 				<UIProvider labels={{ noResults: 'Aucun résultat' }}>
 					<Combobox label="Country" options={OPTIONS} />
@@ -98,7 +102,11 @@ describe('UIProvider', () => {
 			fireEvent.click(input);
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
-			expect(screen.getByRole('status')).toHaveTextContent('Aucun résultat');
+			expect(
+				await screen.findByText('Aucun résultat', {
+					selector: '[role="status"]',
+				})
+			).toBeInTheDocument();
 		});
 
 		test('should translate the multi combobox search field when labels.search is provided', () => {
@@ -173,7 +181,7 @@ describe('UIProvider', () => {
 	});
 
 	describe('precedence', () => {
-		test('should prefer the explicit prop over the provider when both are set', () => {
+		test('should prefer the explicit prop over the provider when both are set', async () => {
 			render(
 				<UIProvider labels={{ noResults: 'Aucun résultat' }}>
 					<Combobox label="Country" options={OPTIONS} noResultsText="Nada" />
@@ -183,10 +191,12 @@ describe('UIProvider', () => {
 			fireEvent.click(input);
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
-			expect(screen.getByRole('status')).toHaveTextContent('Nada');
+			expect(
+				await screen.findByText('Nada', { selector: '[role="status"]' })
+			).toBeInTheDocument();
 		});
 
-		test('should override a parent label when a nested provider sets the same key', () => {
+		test('should override a parent label when a nested provider sets the same key', async () => {
 			render(
 				<UIProvider labels={{ noResults: 'Aucun résultat' }}>
 					<UIProvider labels={{ noResults: 'Sin resultados' }}>
@@ -198,7 +208,11 @@ describe('UIProvider', () => {
 			fireEvent.click(input);
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
-			expect(screen.getByRole('status')).toHaveTextContent('Sin resultados');
+			expect(
+				await screen.findByText('Sin resultados', {
+					selector: '[role="status"]',
+				})
+			).toBeInTheDocument();
 		});
 
 		test('should keep the parent label when a key is undefined', async () => {
@@ -218,7 +232,7 @@ describe('UIProvider', () => {
 			).toBeInTheDocument();
 		});
 
-		test('should keep parent labels when a nested provider sets other keys', () => {
+		test('should keep parent labels when a nested provider sets other keys', async () => {
 			render(
 				<UIProvider labels={{ noResults: 'Aucun résultat' }}>
 					<UIProvider labels={{ search: 'Rechercher' }}>
@@ -230,7 +244,11 @@ describe('UIProvider', () => {
 			fireEvent.click(input);
 			fireEvent.change(input, { target: { value: 'zzz' } });
 
-			expect(screen.getByRole('status')).toHaveTextContent('Aucun résultat');
+			expect(
+				await screen.findByText('Aucun résultat', {
+					selector: '[role="status"]',
+				})
+			).toBeInTheDocument();
 		});
 	});
 

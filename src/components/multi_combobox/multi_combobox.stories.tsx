@@ -419,9 +419,11 @@ export const NoResults: Story = {
 				await userEvent.click(trigger);
 				const searchInput = canvas.getByRole('combobox', { name: /Search/ });
 				await userEvent.type(searchInput, 'zzz');
-				await expect(canvas.getByRole('status')).toHaveTextContent(
-					'No results found'
-				);
+				await waitFor(async () => {
+					await expect(canvas.getByRole('status')).toHaveTextContent(
+						'No results found'
+					);
+				});
 			}
 		);
 	},
