@@ -2,6 +2,7 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, test } from 'vitest';
 
+import { Alert } from '#components/alert/alert';
 import { Button } from '#components/button/button';
 import { buttonClassName } from '#components/button/button_class_name';
 import { Combobox } from '#components/combobox/combobox';
@@ -42,6 +43,17 @@ describe('server-side rendering', () => {
 		);
 
 		expect(html).toContain('aria-label="Settings"');
+	});
+
+	test('renders a dismissible Alert', () => {
+		const html = renderToString(
+			<Alert title="Heads up" onDismiss={() => {}}>
+				Body text
+			</Alert>
+		);
+
+		expect(html).toContain('Heads up');
+		expect(html).toContain('aria-label="Close"');
 	});
 
 	test('renders a ThemeToggle with a tooltip', () => {

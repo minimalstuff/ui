@@ -6,6 +6,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ### Added
 
+- `Alert`: an in-page message box with a `tone` (`info`, `success`, `warning`, `danger`), an optional bold `title`, a default icon per tone (`icon` to replace it, `false` to hide it), an `actions` slot and a close button shown when `onDismiss` is set (named by `dismissLabel` or the `close` label). No role by default; pass `role="alert"` for an error that appears after an action, or `role="note"` for an aside. Takes `radius` (default `lg`) and `unstyled`.
 - `ToastProvider` and `useToast()`: `show({ message, tone, duration, action, radius, unstyled })` displays a toast (tones `info`, `success`, `error`, each with its own icon) and returns its id, `dismiss(id)` closes it. At most three show at once, the timer pauses on hover and focus, errors are announced assertively and the others politely. The stack sits bottom-center on phones and bottom-right from the `sm` breakpoint; raise it above a bottom bar with the `--ms-toast-offset-bottom` CSS custom property. New optional `notifications` and `closeNotification` entries in `UILabels` (translated in `FRENCH_UI_LABELS`).
 
 ## [5.3.0] - 2026-11-08
