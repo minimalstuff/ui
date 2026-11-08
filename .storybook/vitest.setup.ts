@@ -6,6 +6,7 @@ import { commands } from 'vitest/browser';
 
 import { clearModalStack } from '#components/modal/modal_stack';
 import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
+import { useToastStore } from '#stores/toast_store/toast_store';
 import { resetGlobalModalRoot } from '#storybook/modal_root_decorator';
 
 /** Default 1000 ms is too short for floating-ui positioning and focus hand-offs when several browsers share a loaded CPU. */
@@ -33,6 +34,7 @@ beforeEach(async () => {
 	resetGlobalModalRoot();
 	clearModalStack();
 	useGlobalHotkeysStore.setState({ globalHotkeysEnabled: true });
+	useToastStore.getState().resetToasts();
 	(document.activeElement as HTMLElement | null)?.blur();
 	await commands.movePointerOutOfStory();
 });
