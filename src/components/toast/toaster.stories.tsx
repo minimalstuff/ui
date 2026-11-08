@@ -407,6 +407,34 @@ export const RaisedOffsetKeepsTheStackInsideTheViewport: Story = {
 	},
 };
 
+export const KeyboardJumpAndEscape: Story = {
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await clickButton(canvasElement, 'Add persistent');
+		await waitFor(() => expect(getToasts(canvasElement)).toHaveLength(1));
+		const pageButton = canvas.getByRole('button', { name: 'Info' });
+		pageButton.focus();
+
+		await userEvent.keyboard('{F8}');
+		await waitFor(() =>
+			expect(document.activeElement).toBe(getRegion(canvasElement))
+		);
+
+		await userEvent.tab();
+		const closeButton = within(getToasts(canvasElement)[0]).getByRole(
+			'button',
+			{
+				name: 'Close notification',
+			}
+		);
+		await expect(document.activeElement).toBe(closeButton);
+
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(getToasts(canvasElement)).toHaveLength(0));
+		await expect(document.activeElement).toBe(pageButton);
+	},
+};
+
 type Corner = { isTop: boolean; horizontal: 'left' | 'center' | 'right' };
 
 async function expectToasterAtCorner(

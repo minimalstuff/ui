@@ -10,6 +10,10 @@ import { TOASTER_POSITION_CLASSES } from '#components/toast/toaster_styles';
 import { useIsActiveToaster } from '#components/toast/use_is_active_toaster';
 import { useToastAnnouncer } from '#components/toast/use_toast_announcer';
 import {
+	TOASTER_JUMP_KEY,
+	useToasterHotkey,
+} from '#components/toast/use_toaster_hotkey';
+import {
 	DEFAULT_CLOSE_NOTIFICATION_LABEL,
 	DEFAULT_NOTIFICATIONS_LABEL,
 } from '#components/ui_provider/ui_labels';
@@ -37,7 +41,9 @@ function ToasterView({
 	const listRef = useRef<HTMLOListElement>(null);
 	const politeRef = useRef<HTMLDivElement>(null);
 	const assertiveRef = useRef<HTMLDivElement>(null);
+	const regionRef = useRef<HTMLElement>(null);
 	const previousFocusRef = useRef<HTMLElement | null>(null);
+	useToasterHotkey({ regionRef, previousFocusRef });
 	useToastAnnouncer({ entries, listRef, politeRef, assertiveRef });
 
 	const isTop = position.startsWith('top');
@@ -55,7 +61,9 @@ function ToasterView({
 	return createPortal(
 		<div className={clsx('ms-toaster', TOASTER_POSITION_CLASSES[position])}>
 			<section
+				ref={regionRef}
 				data-ms-toaster-region=""
+				aria-keyshortcuts={TOASTER_JUMP_KEY}
 				aria-label={labels.notifications ?? DEFAULT_NOTIFICATIONS_LABEL}
 				tabIndex={-1}
 				className={clsx(
@@ -94,6 +102,10 @@ function ToasterView({
  * render. Toasts sit above `Modal` and `Drawer` (`z-[60]`) and never block
  * the page outside themselves. The stack scrolls when it is taller than the
  * viewport.
+ *
+ * Press F8 to jump to the toasts and F8 again to go back to where focus was;
+ * Escape closes the focused toast. F8 is inactive while a Modal or Drawer is
+ * open, and when no toast is open.
  *
  * While a Modal is open its Tab trap leaves the toasts unreachable by
  * keyboard. This is why warning and error toasts, and toasts with an action,

@@ -6,6 +6,7 @@ import {
 	useRef,
 	useState,
 	type FocusEvent,
+	type KeyboardEvent,
 	type PointerEvent,
 	type RefObject,
 } from 'react';
@@ -105,6 +106,14 @@ function ToasterItemView({
 		setIsHovered(false);
 	};
 	const handleFocus = () => setIsFocusWithin(true);
+	const handleKeyDown = (event: KeyboardEvent<HTMLLIElement>) => {
+		if (event.key !== 'Escape' || isClosing) return;
+		if (event.ctrlKey || event.altKey || event.metaKey || event.shiftKey)
+			return;
+		event.preventDefault();
+		event.stopPropagation();
+		dismissToast(id);
+	};
 	const handleDismiss = () => dismissToast(id);
 	const handleAction = () => {
 		action?.onClick();
@@ -134,6 +143,7 @@ function ToasterItemView({
 			onPointerEnter={handlePointerEnter}
 			onPointerLeave={handlePointerLeave}
 			onFocus={handleFocus}
+			onKeyDown={handleKeyDown}
 			onBlur={handleBlur}
 		>
 			<ToasterItemContent

@@ -16,6 +16,7 @@ import { TOAST_EXIT_DURATION_MS } from '#components/shared/animation';
 import { toast } from '#components/toast/toast';
 import { Toaster } from '#components/toast/toaster';
 import { TOAST_ANNOUNCE_DELAY_MS } from '#components/toast/use_toast_announcer';
+import { useGlobalHotkeysStore } from '#stores/global_hotkeys_store/global_hotkeys_store';
 import { useToastStore } from '#stores/toast_store/toast_store';
 
 function getRegion() {
@@ -374,5 +375,130 @@ describe('Toaster radius and unstyled', () => {
 		render(<Toaster unstyled />);
 
 		expect(showEntry({ unstyled: false })).toHaveClass('shadow-lg');
+	});
+});
+
+describe('Toaster keyboard', () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+	});
+
+	afterEach(() => {
+		useGlobalHotkeysStore.setState({ globalHotkeysEnabled: true });
+	});
+
+	function renderWithOutsideButton() {
+		render(
+			<>
+				<button>Outside</button>
+				<Toaster />
+			</>
+		);
+		const outside = screen.getByRole('button', { name: 'Outside' });
+		act(() => outside.focus());
+		return outside;
+	}
+
+	function showPersistentToast(): string {
+		let id = '';
+		act(() => {
+			id = toast('Saved', { duration: 0 });
+		});
+		return id;
+	}
+
+	test('should dismiss the toast and stop the event when Escape is pressed on it', () => {
+		render(<Toaster />);
+		showPersistentToast();
+		const documentListener = vi.fn<(event: KeyboardEvent) => void>();
+		document.addEventListener('keydown', documentListener);
+		const item = within(getRegion()).getByRole('listitem');
+
+		fireEvent.keyDown(item, { key: 'Escape' });
+		document.removeEventListener('keydown', documentListener);
+
+		expect(useToastStore.getState().entries[0]?.isClosing).toBe(true);
+		expect(documentListener).not.toHaveBeenCalled();
+	});
+
+	test('should ignore Escape on a closing toast', () => {
+		render(<Toaster />);
+		const id = showPersistentToast();
+		const item = within(getRegion()).getByRole('listitem');
+		act(() => toast.dismiss(id));
+		const documentListener = vi.fn<(event: KeyboardEvent) => void>();
+		document.addEventListener('keydown', documentListener);
+
+		fireEvent.keyDown(item, { key: 'Escape' });
+		document.removeEventListener('keydown', documentListener);
+
+		expect(documentListener).toHaveBeenCalledTimes(1);
+	});
+
+	test('should focus the region when F8 is pressed', () => {
+		renderWithOutsideButton();
+		showPersistentToast();
+
+		fireEvent.keyDown(document, { key: 'F8' });
+
+		expect(document.activeElement).toBe(getRegion());
+	});
+
+	test('should restore the previous focus when F8 is pressed again', () => {
+		const outside = renderWithOutsideButton();
+		showPersistentToast();
+		fireEvent.keyDown(document, { key: 'F8' });
+
+		fireEvent.keyDown(document, { key: 'F8' });
+
+		expect(document.activeElement).toBe(outside);
+	});
+
+	test.each([
+		['a modifier is held', { key: 'F8', shiftKey: true }],
+		['Ctrl is held', { key: 'F8', ctrlKey: true }],
+	])('should ignore F8 when %s', (_label, eventInit) => {
+		const outside = renderWithOutsideButton();
+		showPersistentToast();
+
+		fireEvent.keyDown(document, eventInit);
+
+		expect(document.activeElement).toBe(outside);
+	});
+
+	test('should ignore F8 when another handler already prevented it', () => {
+		const outside = renderWithOutsideButton();
+		showPersistentToast();
+		const prevent = (event: KeyboardEvent) => event.preventDefault();
+		document.addEventListener('keydown', prevent, { capture: true });
+
+		fireEvent.keyDown(document, { key: 'F8' });
+		document.removeEventListener('keydown', prevent, { capture: true });
+
+		expect(document.activeElement).toBe(outside);
+	});
+
+	test('should ignore F8 when there is no toast', () => {
+		const outside = renderWithOutsideButton();
+
+		fireEvent.keyDown(document, { key: 'F8' });
+
+		expect(document.activeElement).toBe(outside);
+	});
+
+	test('should ignore F8 when global hotkeys are disabled', () => {
+		const outside = renderWithOutsideButton();
+		showPersistentToast();
+		useGlobalHotkeysStore.setState({ globalHotkeysEnabled: false });
+
+		fireEvent.keyDown(document, { key: 'F8' });
+
+		expect(document.activeElement).toBe(outside);
+	});
+
+	test('should advertise the shortcut on the region without renaming it', () => {
+		render(<Toaster />);
+
+		expect(getRegion()).toHaveAttribute('aria-keyshortcuts', 'F8');
 	});
 });
