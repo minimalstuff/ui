@@ -5,7 +5,10 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Combobox, type ComboboxOption } from '#components/combobox/combobox';
 import {
 	expectActiveOptionInView,
+	expectBoundedOptionCount,
 	expectFocusOn,
+	expectWindowedActiveOptionInView,
+	findOptionAtPosition,
 	getActiveOptionPosition,
 	pressKeyUntilActivePosition,
 } from '#storybook/play_helpers';
@@ -246,59 +249,339 @@ export const LongList: Story = {
 
 const THOUSANDS_OPTION_COUNT = 3000;
 
+const LONG_LABEL_INTERVAL = 50;
+const LONG_LABEL_OFFSET = 25;
+
+function getThousandsLabel(position: number): string {
+	return position % LONG_LABEL_INTERVAL === LONG_LABEL_OFFSET
+		? `Saint-Martin-de-Bienfaite-la-Cressonnière ${position}`
+		: `City ${position}`;
+}
+
 const thousandsOfOptions: ComboboxOption[] = Array.from(
 	{ length: THOUSANDS_OPTION_COUNT },
 	(_, index) => ({
 		value: `city-${index + 1}`,
-		label: `City ${index + 1}`,
+		label: getThousandsLabel(index + 1),
 	})
 );
+
+const THOUSANDS_PAGE_DOWN_PRESSES = 10;
+const THOUSANDS_MAX_PAGE_UP_PRESSES = 15;
+const THOUSANDS_DEEP_INDEX = 1500;
+
+async function openThousandsListbox(
+	canvasElement: HTMLElement
+): Promise<{ combobox: HTMLElement; listbox: HTMLElement }> {
+	const canvas = within(canvasElement);
+	const combobox = canvas.getByRole('combobox', { name: 'City' });
+	await userEvent.click(combobox);
+	const listbox = await canvas.findByRole('listbox');
+	return { combobox, listbox };
+}
 
 export const ThousandsOfOptions: Story = {
 	args: {
 		label: 'City',
 		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
 	},
 	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-		const combobox = canvas.getByRole('combobox', { name: 'City' });
-		await userEvent.click(combobox);
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+
+		await step('mounts only a bounded number of options', async () => {
+			await expectBoundedOptionCount(listbox, 2);
+			const firstOption = findOptionAtPosition(listbox, 1);
+			await expect(firstOption).toHaveAttribute(
+				'aria-setsize',
+				String(THOUSANDS_OPTION_COUNT)
+			);
+		});
 
 		await step(
-			'lists every option with its set size and position',
+			'repeated PageDown keeps the active option in view',
 			async () => {
-				const listbox = await canvas.findByRole('listbox');
-				await waitFor(async () => {
-					await expect(
-						listbox.querySelectorAll('[role="option"]')
-					).toHaveLength(THOUSANDS_OPTION_COUNT);
-				});
-				const lastOption = listbox.querySelector('[role="option"]:last-child');
-				await expect(lastOption).toHaveAttribute(
-					'aria-setsize',
-					String(THOUSANDS_OPTION_COUNT)
-				);
-				await expect(lastOption).toHaveAttribute(
-					'aria-posinset',
-					String(THOUSANDS_OPTION_COUNT)
+				await userEvent.keyboard('{ArrowDown}');
+				for (let press = 0; press < THOUSANDS_PAGE_DOWN_PRESSES; press += 1) {
+					// oxlint-disable-next-line no-await-in-loop -- each press builds on the previous position
+					await userEvent.keyboard('{PageDown}');
+					// oxlint-disable-next-line no-await-in-loop -- the position is checked after every press
+					await expectWindowedActiveOptionInView(combobox, listbox);
+				}
+				await expect(getActiveOptionPosition(combobox)).toBeGreaterThan(
+					THOUSANDS_PAGE_DOWN_PRESSES
 				);
 			}
 		);
 
-		await step('PageDown moves forward by more than one row', async () => {
-			await userEvent.keyboard('{PageDown}');
+		await step('PageUp goes back to the first option', async () => {
+			await pressKeyUntilActivePosition(
+				combobox,
+				'PageUp',
+				1,
+				THOUSANDS_MAX_PAGE_UP_PRESSES
+			);
+			await expectWindowedActiveOptionInView(combobox, listbox);
+		});
+	},
+};
+
+export const ThousandsOfOptionsFarEnd: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
+	},
+	play: async ({ canvasElement, step }) => {
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+
+		await step('ArrowUp from the first option wraps to the last', async () => {
+			await userEvent.keyboard('{ArrowDown}{ArrowUp}');
 			await waitFor(async () => {
-				await expect(getActiveOptionPosition(combobox)).toBeGreaterThan(2);
+				await expect(getActiveOptionPosition(combobox)).toBe(
+					THOUSANDS_OPTION_COUNT
+				);
 			});
-			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+			await expectWindowedActiveOptionInView(combobox, listbox);
 		});
 
-		await step('PageUp goes back to the first option', async () => {
-			await userEvent.keyboard('{PageUp}');
+		await step('PageUp, ArrowDown and ArrowUp keep it in view', async () => {
+			for (const key of [
+				'PageUp',
+				'PageUp',
+				'PageUp',
+				'ArrowDown',
+				'ArrowUp',
+			]) {
+				// oxlint-disable-next-line no-await-in-loop -- each key builds on the previous position
+				await userEvent.keyboard(`{${key}}`);
+				// oxlint-disable-next-line no-await-in-loop -- the position is checked after every key
+				await expectWindowedActiveOptionInView(combobox, listbox);
+			}
+		});
+
+		await step(
+			'the far active option stays mounted and absolutely placed',
+			async () => {
+				const farPosition = getActiveOptionPosition(combobox);
+				listbox.scrollTop = 0;
+				await waitFor(async () => {
+					const activeId = combobox.getAttribute('aria-activedescendant');
+					const activeOption = activeId
+						? canvasElement.ownerDocument.getElementById(activeId)
+						: null;
+					await expect(activeOption).not.toBeNull();
+					await expect(activeOption).toHaveAttribute(
+						'aria-posinset',
+						String(farPosition)
+					);
+					await expect(getComputedStyle(activeOption as Element).position).toBe(
+						'absolute'
+					);
+				});
+				await userEvent.keyboard('{ArrowDown}');
+				await waitFor(async () => {
+					await expect(getActiveOptionPosition(combobox)).toBe(farPosition + 1);
+				});
+				await expectWindowedActiveOptionInView(combobox, listbox);
+			}
+		);
+
+		await step(
+			'scrolling the listbox to the bottom mounts the last option',
+			async () => {
+				listbox.scrollTop = listbox.scrollHeight;
+				await waitFor(async () => {
+					await expect(
+						findOptionAtPosition(listbox, THOUSANDS_OPTION_COUNT)
+					).not.toBeNull();
+				});
+				await expectBoundedOptionCount(listbox);
+			}
+		);
+	},
+};
+
+export const ThousandsOfOptionsSelection: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
+	},
+	play: async ({ canvasElement, step }) => {
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+
+		await step('Enter selects the last option', async () => {
+			await userEvent.keyboard('{ArrowUp}');
+			await expectWindowedActiveOptionInView(combobox, listbox);
+			await userEvent.keyboard('{Enter}');
 			await waitFor(async () => {
-				await expect(getActiveOptionPosition(combobox)).toBe(1);
+				await expect(combobox).toHaveValue(`City ${THOUSANDS_OPTION_COUNT}`);
 			});
-			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+
+		await step('reopening shows the selected option in view', async () => {
+			await userEvent.click(combobox);
+			const reopenedListbox = await within(canvasElement).findByRole('listbox');
+			await waitFor(async () => {
+				const selectedOption = findOptionAtPosition(
+					reopenedListbox,
+					THOUSANDS_OPTION_COUNT
+				);
+				await expect(selectedOption).toHaveAttribute('aria-selected', 'true');
+				const optionRect = selectedOption?.getBoundingClientRect();
+				const listboxRect = reopenedListbox.getBoundingClientRect();
+				await expect(optionRect?.top).toBeGreaterThanOrEqual(listboxRect.top);
+				await expect(optionRect?.bottom).toBeLessThanOrEqual(
+					listboxRect.bottom
+				);
+			});
+		});
+	},
+};
+
+export const ThousandsOfOptionsFiltering: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
+	},
+	play: async ({ canvasElement, step }) => {
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+
+		await step(
+			'a broad query still mounts a bounded number of options',
+			async () => {
+				await userEvent.type(combobox, '9');
+				await expectBoundedOptionCount(listbox, 2);
+				const firstOption = listbox.querySelector('[role="option"]');
+				await expect(
+					Number(firstOption?.getAttribute('aria-setsize'))
+				).toBeGreaterThan(100);
+			}
+		);
+
+		await step('a narrow query mounts exactly the matches', async () => {
+			await userEvent.clear(combobox);
+			await userEvent.type(combobox, 'City 299');
+			await waitFor(async () => {
+				await expect(listbox.querySelectorAll('[role="option"]')).toHaveLength(
+					11
+				);
+			});
+		});
+	},
+};
+
+const LONG_LABEL_POSITION = 25;
+
+export const ThousandsOfOptionsLongActiveLabel: Story = {
+	decorators: [
+		(Story) => (
+			<div style={{ width: 200 }}>
+				<Story />
+			</div>
+		),
+	],
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
+	},
+	play: async ({ canvasElement, step }) => {
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+
+		await step('the active long label wraps and is fully in view', async () => {
+			await userEvent.keyboard(`{ArrowDown>${LONG_LABEL_POSITION}/}`);
+			await waitFor(async () => {
+				await expect(getActiveOptionPosition(combobox)).toBe(
+					LONG_LABEL_POSITION
+				);
+			});
+			await expectWindowedActiveOptionInView(combobox, listbox);
+			const activeOption = findOptionAtPosition(listbox, LONG_LABEL_POSITION);
+			const regularOption = findOptionAtPosition(
+				listbox,
+				LONG_LABEL_POSITION - 1
+			);
+			await expect(
+				activeOption?.getBoundingClientRect().height
+			).toBeGreaterThan(regularOption?.getBoundingClientRect().height ?? 0);
+		});
+	},
+};
+
+const overflowOptions: ComboboxOption[] = ['a', 'b', 'c'].map((value) => ({
+	value,
+	label:
+		value === 'c'
+			? 'Court'
+			: `Saint-Martin-de-Bienfaite-la-Cressonnière ${value}`,
+}));
+
+export const OptionLabelOverflow: Story = {
+	decorators: [
+		(Story) => (
+			<div style={{ width: 200 }}>
+				<Story />
+			</div>
+		),
+	],
+	args: {
+		label: 'City',
+		options: overflowOptions,
+		optionLabelOverflow: 'wrap-active',
+	},
+	play: async ({ canvasElement }) => {
+		const { combobox, listbox } = await openThousandsListbox(canvasElement);
+		await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+
+		await waitFor(async () => {
+			const [inactiveRow, activeRow] = within(listbox).getAllByRole('option');
+			await expect(activeRow.getBoundingClientRect().height).toBeGreaterThan(
+				inactiveRow.getBoundingClientRect().height
+			);
+			await expect(getActiveOptionPosition(combobox)).toBe(2);
+		});
+
+		const [longInactiveRow, , shortRow] =
+			within(listbox).getAllByRole('option');
+		await userEvent.hover(longInactiveRow);
+		await waitFor(async () => {
+			await expect(longInactiveRow).toHaveAttribute('title');
+		});
+		await userEvent.hover(shortRow);
+		await expect(shortRow).not.toHaveAttribute('title');
+
+		for (const row of within(listbox).getAllByRole('option')) {
+			const { left, top, width, height } = row.getBoundingClientRect();
+			const hit = canvasElement.ownerDocument.elementFromPoint(
+				left + width / 2,
+				top + height / 2
+			);
+			// oxlint-disable-next-line no-await-in-loop -- one assertion per row
+			await expect(row.contains(hit)).toBe(true);
+		}
+	},
+};
+
+export const SelectedOptionDeepInList: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+		optionLabelOverflow: 'wrap-active',
+		defaultValue: thousandsOfOptions[THOUSANDS_DEEP_INDEX].value,
+	},
+	play: async ({ canvasElement }) => {
+		const { listbox } = await openThousandsListbox(canvasElement);
+
+		await waitFor(async () => {
+			const selectedOption = listbox.querySelector('[aria-selected="true"]');
+			await expect(selectedOption).not.toBeNull();
+			const optionRect = selectedOption?.getBoundingClientRect();
+			const listboxRect = listbox.getBoundingClientRect();
+			await expect(optionRect?.top).toBeGreaterThanOrEqual(listboxRect.top);
+			await expect(optionRect?.bottom).toBeLessThanOrEqual(listboxRect.bottom);
 		});
 	},
 };
@@ -444,5 +727,45 @@ export const Unstyled: Story = {
 	args: {
 		label: 'Fruit',
 		unstyled: true,
+	},
+};
+
+export const WideDropdown: Story = {
+	parameters: { layout: 'fullscreen' },
+	decorators: [
+		(Story) => (
+			<div style={{ position: 'fixed', top: 16, right: 16, width: 200 }}>
+				<Story />
+			</div>
+		),
+	],
+	args: {
+		label: 'Fruit',
+		dropdownClassName: 'w-96',
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const field = canvas.getByRole('combobox', { name: 'Fruit' });
+		await userEvent.click(field);
+		const listbox = await canvas.findByRole('listbox');
+		const panel = listbox.parentElement;
+		if (!panel) throw new Error('expected the listbox to sit in a panel');
+
+		await waitFor(async () => {
+			const panelRect = panel.getBoundingClientRect();
+			await expect(panelRect.left).toBeGreaterThanOrEqual(0);
+			await expect(panelRect.right).toBeLessThanOrEqual(window.innerWidth);
+			await expect(panelRect.width).toBeGreaterThan(
+				field.getBoundingClientRect().width
+			);
+		});
+
+		const option = canvas.getAllByRole('option')[0];
+		const { left, top, width, height } = option.getBoundingClientRect();
+		const hit = canvasElement.ownerDocument.elementFromPoint(
+			left + width / 2,
+			top + height / 2
+		);
+		await expect(option.contains(hit)).toBe(true);
 	},
 };

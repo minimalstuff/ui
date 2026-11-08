@@ -445,3 +445,93 @@ describe('Combobox paging and set semantics', () => {
 		expect(getActiveOptionName()).toBe(activeBefore);
 	});
 });
+
+describe('Combobox windowing threshold', () => {
+	const buildOptions = (count: number) =>
+		Array.from({ length: count }, (_, index) => ({
+			value: `value-${index}`,
+			label: `Label ${index}`,
+		}));
+
+	const openWith = (
+		count: number,
+		optionLabelOverflow?: 'wrap' | 'wrap-active' | 'truncate'
+	) => {
+		render(
+			<Combobox
+				label="City"
+				options={buildOptions(count)}
+				optionLabelOverflow={optionLabelOverflow}
+			/>
+		);
+		fireEvent.click(screen.getByLabelText('City'));
+		return screen.getAllByRole('option');
+	};
+
+	test('should render every option without truncation with exactly 100 options', () => {
+		const renderedOptions = openWith(100, 'wrap-active');
+
+		expect(renderedOptions).toHaveLength(100);
+		expect(renderedOptions[0]).toHaveClass('truncate');
+	});
+
+	test('should window the options with 101 options when wrap-active', () => {
+		expect(openWith(101, 'wrap-active').length).toBeLessThan(101);
+	});
+
+	test('should window the options with 150 options when truncate', () => {
+		expect(openWith(150, 'truncate').length).toBeLessThan(150);
+	});
+
+	test('should render every option with 150 options by default', () => {
+		const renderedOptions = openWith(150);
+
+		expect(renderedOptions).toHaveLength(150);
+		expect(renderedOptions[0]).not.toHaveClass('truncate');
+	});
+});
+
+describe('Combobox dropdownClassName', () => {
+	const getPanel = () => screen.getByRole('listbox').parentElement;
+
+	test('should keep w-full on the panel without dropdownClassName', () => {
+		render(<Combobox label="City" options={OPTIONS} />);
+		fireEvent.click(screen.getByLabelText('City'));
+
+		expect(getPanel()).toHaveClass('w-full');
+		expect(getPanel()).not.toHaveClass('min-w-full');
+	});
+
+	test('should use min-w-full instead of w-full with dropdownClassName', () => {
+		render(
+			<Combobox label="City" options={OPTIONS} dropdownClassName="w-96" />
+		);
+		fireEvent.click(screen.getByLabelText('City'));
+
+		expect(getPanel()).toHaveClass('min-w-full', 'w-96');
+		expect(getPanel()).not.toHaveClass('w-full');
+	});
+
+	test('should apply the class to the dropdown panel when styled', () => {
+		render(
+			<Combobox label="City" options={OPTIONS} dropdownClassName="min-w-80" />
+		);
+		fireEvent.click(screen.getByLabelText('City'));
+
+		expect(getPanel()).toHaveClass('min-w-80', 'border');
+	});
+
+	test('should apply the class to the dropdown panel when unstyled', () => {
+		render(
+			<Combobox
+				label="City"
+				options={OPTIONS}
+				unstyled
+				dropdownClassName="min-w-80"
+			/>
+		);
+		fireEvent.click(screen.getByLabelText('City'));
+
+		expect(getPanel()).toHaveClass('min-w-80');
+	});
+});

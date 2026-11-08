@@ -645,3 +645,84 @@ describe('MultiCombobox paging and set semantics', () => {
 		expect(getActiveOptionName()).toBe(activeBefore);
 	});
 });
+
+describe('MultiCombobox dropdownClassName', () => {
+	const getPanel = () => screen.getByRole('listbox').parentElement;
+
+	test('should keep w-full on the panel without dropdownClassName', () => {
+		render(<MultiCombobox label="Fruits" options={OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(getPanel()).toHaveClass('w-full');
+		expect(getPanel()).not.toHaveClass('min-w-full');
+	});
+
+	test('should use min-w-full instead of w-full with dropdownClassName', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				dropdownClassName="w-96"
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(getPanel()).toHaveClass('min-w-full', 'w-96');
+		expect(getPanel()).not.toHaveClass('w-full');
+	});
+
+	test('should apply the class to the dropdown panel when styled', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				dropdownClassName="min-w-80"
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(getPanel()).toHaveClass('min-w-80', 'border');
+	});
+
+	test('should apply the class to the dropdown panel when unstyled', () => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				unstyled
+				dropdownClassName="min-w-80"
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+
+		expect(getPanel()).toHaveClass('min-w-80');
+	});
+});
+
+describe('MultiCombobox optionLabelOverflow', () => {
+	const openWithOverflow = (
+		optionLabelOverflow: 'wrap' | 'wrap-active' | 'truncate' | undefined
+	) => {
+		render(
+			<MultiCombobox
+				label="Fruits"
+				options={OPTIONS}
+				optionLabelOverflow={optionLabelOverflow}
+			/>
+		);
+		fireEvent.click(screen.getByRole('combobox', { name: 'Fruits' }));
+		return screen.getAllByRole('option');
+	};
+
+	test('should wrap the label in a truncating span when truncate', () => {
+		const [firstRow] = openWithOverflow('truncate');
+
+		expect(firstRow.querySelector('span.truncate')).not.toBeNull();
+	});
+
+	test('should render the label without a span by default', () => {
+		const [firstRow] = openWithOverflow(undefined);
+
+		expect(firstRow.querySelector('span.truncate')).toBeNull();
+	});
+});

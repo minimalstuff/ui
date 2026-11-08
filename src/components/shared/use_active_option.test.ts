@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { useActiveOption } from '#components/shared/use_active_option';
 
@@ -166,26 +166,6 @@ describe('useActiveOption', () => {
 		});
 
 		expect(result.current.activeOptionId).toBe('option-0');
-	});
-
-	test('scrolls the active option into view when it changes', () => {
-		const scrollIntoView = vi.fn<() => void>();
-		const optionElement = document.createElement('li');
-		optionElement.id = 'option-0';
-		optionElement.scrollIntoView = scrollIntoView;
-		document.body.append(optionElement);
-
-		const { result } = renderHook(() =>
-			useActiveOption({ optionCount: OPTION_COUNT, getOptionId, isOpen: true })
-		);
-
-		act(() => {
-			result.current.first();
-		});
-
-		expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
-
-		optionElement.remove();
 	});
 
 	describe('moveWithinBounds', () => {

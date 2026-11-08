@@ -10,6 +10,12 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `useKeyboardScrollable({ label })` (or `{ labelledBy }`) makes a scroll container reachable by keyboard only while it overflows and holds nothing tabbable: it then gets a tab stop, a named `region` role and a focus outline. Spread `scrollableProps` on the container (it carries a ref, so a container shown later is picked up) and add `focusClassName` to its `className`.
 - `THEME_INIT_SCRIPT` and `useThemeStore` keep `<meta name="theme-color">` in step with the theme when the meta has `data-light` and `data-dark` attributes, so an installed PWA's status bar follows dark mode. See the README for where to put the meta. The script changed: recompute its CSP hash.
 - `Combobox` and `MultiCombobox`: while the list is open, PageDown and PageUp move the highlighted option by one visible page, stopping at the first and last option. Screen readers now hear each option's position in the list ("12 of 3000").
+- `Combobox` and `MultiCombobox` take an `optionLabelOverflow` prop for labels too long for one line: `'wrap'` (default, unchanged) wraps every label; `'wrap-active'` truncates labels with an ellipsis except the highlighted option, which shows in full; `'truncate'` truncates every label. In both truncating modes a cut-off label shows in full in a native tooltip on hover, and lists of more than 100 options only render the visible options, so a list of thousands of options opens and scrolls fast. Pick `'wrap-active'` for long lists; `'truncate'` hides the end of long labels from keyboard users, keep it for short labels.
+- `Combobox` and `MultiCombobox` take a `dropdownClassName` prop to style the dropdown panel, for example `w-96` or `min-w-80` to make it wider than the field. A panel wider than the field stays inside the viewport.
+
+### Changed
+
+- `Combobox` opens with the list scrolled to the selected option.
 
 ### Fixed
 

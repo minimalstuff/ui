@@ -35,6 +35,8 @@ import {
 	type ListboxOptionState,
 } from '#components/shared/listbox_options';
 import { readListboxPageSize } from '#components/shared/listbox_page_size';
+import { isWindowedListbox } from '#components/shared/listbox_window';
+import type { OptionLabelOverflow } from '#components/shared/option_label_overflow';
 import {
 	PANEL_RADIUS_CLASSES,
 	RADIUS_CLASSES,
@@ -43,6 +45,7 @@ import {
 import { OVERLAY_BG, OVERLAY_BORDER } from '#components/shared/surface_tokens';
 import { useActiveOption } from '#components/shared/use_active_option';
 import { useControlledState } from '#components/shared/use_controlled_state';
+import { useDropdownViewportFit } from '#components/shared/use_dropdown_viewport_fit';
 import { useFieldIds } from '#components/shared/use_field_ids';
 import { useStableCallback } from '#components/shared/use_stable_callback';
 import { useLabels } from '#components/ui_provider/use_labels';
@@ -56,7 +59,7 @@ export interface MultiComboboxOption {
 }
 
 export interface MultiComboboxProps {
-	/** Long lists render faster when the array keeps the same identity between renders (memoize it). */
+	/** Long lists render faster when the array keeps the same identity between renders (memoize it), and when `optionLabelOverflow` is not `'wrap'`. */
 	options: readonly MultiComboboxOption[];
 	/**
 	 * Decides whether an option matches the text typed in the search field.
@@ -88,6 +91,19 @@ export interface MultiComboboxProps {
 	required?: boolean;
 	className?: string;
 	wrapperClassName?: string;
+	/**
+	 * Classes for the dropdown panel, applied last so they can override its
+	 * defaults, for example a width wider than the field when option labels are
+	 * long (`w-96`, `min-w-80`). The panel is kept inside the viewport.
+	 */
+	dropdownClassName?: string;
+	/**
+	 * How option labels that do not fit on one line are shown.
+	 * - `'wrap'` (default): labels wrap; every option is rendered, so lists of thousands of options open slower.
+	 * - `'wrap-active'`: labels are truncated with a native tooltip, except the active option, which wraps in full; long lists only render the visible options. Recommended for long lists.
+	 * - `'truncate'`: every label is truncated with a native tooltip, the active one included; keyboard and zoom users can no longer read long labels (WCAG 1.4.10), use only for labels known to be short.
+	 */
+	optionLabelOverflow?: OptionLabelOverflow;
 	values?: readonly string[];
 	defaultValues?: readonly string[];
 	onChange?: (values: readonly string[]) => void;
@@ -197,6 +213,8 @@ export function MultiCombobox({
 	required = false,
 	className,
 	wrapperClassName,
+	dropdownClassName,
+	optionLabelOverflow = 'wrap',
 	values,
 	defaultValues = [],
 	onChange,
@@ -221,6 +239,7 @@ export function MultiCombobox({
 
 	const [query, setQuery] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
+	const dropdownRef = useDropdownViewportFit(isOpen);
 
 	const selectedValueSet = useMemo(
 		() => new Set(selectedValues),
@@ -370,7 +389,7 @@ export function MultiCombobox({
 		if (!isOpen || hasModifierKey(event)) return;
 		event.preventDefault();
 		moveActiveOptionWithinBounds(
-			direction * readListboxPageSize(listboxRef.current)
+			direction * readListboxPageSize(listboxRef.current, activeIndex)
 		);
 	};
 
@@ -391,14 +410,18 @@ export function MultiCombobox({
 	});
 
 	const renderOptionContent = useCallback(
-		(option: ListboxOptionData, isSelected: boolean) => (
+		(option: ListboxOptionData, isSelected: boolean, isTruncated: boolean) => (
 			<>
 				<MultiComboboxCheckbox
 					isSelected={isSelected}
 					unstyled={unstyled}
 					radius={radius}
 				/>
-				{option.label}
+				{isTruncated ? (
+					<span className="min-w-0 truncate">{option.label}</span>
+				) : (
+					option.label
+				)}
 			</>
 		),
 		[unstyled, radius]
@@ -534,15 +557,19 @@ export function MultiCombobox({
 				)}
 				{isOpen && (
 					<div
+						ref={dropdownRef}
 						onMouseDown={handlePanelMouseDown}
 						className={clsx(
-							'absolute z-10 mt-1 w-full text-sm shadow-lg',
+							'absolute z-10 mt-1',
+							dropdownClassName ? 'min-w-full' : 'w-full',
+							'text-sm shadow-lg',
 							!unstyled && [
 								'border overflow-hidden',
 								OVERLAY_BG,
 								OVERLAY_BORDER,
 								PANEL_RADIUS_CLASSES[radius],
-							]
+							],
+							dropdownClassName
 						)}
 					>
 						<input
@@ -597,6 +624,11 @@ export function MultiCombobox({
 							id={listboxId}
 							options={filteredOptions}
 							activeIndex={activeIndex}
+							isWindowed={
+								optionLabelOverflow !== 'wrap' &&
+								isWindowedListbox(options.length)
+							}
+							labelOverflow={optionLabelOverflow}
 							noResultsText={noResultsText ?? labels.noResults}
 							aria-labelledby={label && !ariaLabel ? labelId : undefined}
 							aria-label={ariaLabel}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const NO_ACTIVE_OPTION = -1;
 
@@ -31,8 +31,8 @@ function clampToOptionCount(index: number, optionCount: number): number {
  * `moveWithinBounds` (PageUp/PageDown) clamps at both ends instead of wrapping,
  * counting "no active option" as index -1;
  * `first`/`last` jump straight to an edge (used when opening the list via
- * ArrowDown/ArrowUp); `reset` clears back to "none" (-1). Whenever the active
- * option changes while the list is open, it is scrolled into view.
+ * ArrowDown/ArrowUp); `reset` clears back to "none" (-1). Scrolling the
+ * active option into view is up to `ListboxOptions`, which owns the list.
  *
  * The index a caller last stored (e.g. via `first()`) can outlive the render
  * it was set on: typing a character re-filters the option list in the same
@@ -89,13 +89,6 @@ export function useActiveOption({
 
 	const activeOptionId =
 		isOpen && activeIndex >= 0 ? getOptionId(activeIndex) : undefined;
-
-	useEffect(() => {
-		if (activeOptionId === undefined) return;
-		document
-			.getElementById(activeOptionId)
-			?.scrollIntoView?.({ block: 'nearest' });
-	}, [activeOptionId]);
 
 	return {
 		activeIndex,
