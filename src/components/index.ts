@@ -132,10 +132,13 @@ export {
 	type ThemeToggleProps,
 } from './theme_toggle/theme_toggle';
 export { ToastProvider, type ToastProviderProps } from './toast/toast_provider';
+export { toast } from './toast/toast';
 export { useToast } from './toast/use_toast';
 export type {
 	ToastAction,
 	ToastApi,
+	ToastFunction,
+	ToastMessageOptions,
 	ToastOptions,
 	ToastTone,
 } from '#components/toast/toast_types';
