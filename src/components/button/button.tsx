@@ -25,30 +25,30 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 type ButtonStyle =
 	| { unstyled: true }
 	| {
-			unstyled?: false;
-			variant?: ButtonVariant;
-			color?: ButtonColor;
-			radius?: Radius;
+			unstyled?: false | undefined;
+			variant?: ButtonVariant | undefined;
+			color?: ButtonColor | undefined;
+			radius?: Radius | undefined;
 	  };
 
 export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 	children: ReactNode;
-	size?: ControlSize;
-	className?: string;
-	fullWidth?: boolean;
+	size?: ControlSize | undefined;
+	className?: string | undefined;
+	fullWidth?: boolean | undefined;
 	/**
 	 * Shows a spinner, marks the button busy and blocks activation (click, Enter,
 	 * Space, form submit). Unlike `disabled`, the button keeps focus and stays in
 	 * the tab order, exposed as `aria-disabled`.
 	 */
-	loading?: boolean;
+	loading?: boolean | undefined;
 	/**
 	 * Turns the button into a toggle: sets `aria-pressed` and a pressed look (dark fill and inset ring).
 	 * Leave it `undefined` for a regular button (no attribute).
 	 */
-	pressed?: boolean;
-	startIcon?: string;
-	endIcon?: string;
+	pressed?: boolean | undefined;
+	startIcon?: string | undefined;
+	endIcon?: string | undefined;
 } & ButtonStyle;
 
 // Widens `ButtonStyle`'s two branches to all-optional for destructuring below:
@@ -56,10 +56,10 @@ export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 // other style props at every call site, this is purely an internal ergonomics
 // bridge past that same union once we're inside the implementation.
 type FlatButtonStyle = {
-	unstyled?: boolean;
-	variant?: ButtonVariant;
-	color?: ButtonColor;
-	radius?: Radius;
+	unstyled?: boolean | undefined;
+	variant?: ButtonVariant | undefined;
+	color?: ButtonColor | undefined;
+	radius?: Radius | undefined;
 };
 
 export function Button(buttonProps: Readonly<ButtonProps>) {
@@ -117,10 +117,19 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 			onClick={handleClick}
 		>
 			{loading && (
-				<span
-					className={clsx('i-svg-spinners-3-dots-fade', iconSizeClass)}
-					aria-hidden="true"
-				/>
+				<>
+					<span
+						className={clsx(
+							'i-svg-spinners-3-dots-fade ms-spinner-animated',
+							iconSizeClass
+						)}
+						aria-hidden="true"
+					/>
+					<span
+						className={clsx('i-mdi-loading ms-spinner-static', iconSizeClass)}
+						aria-hidden="true"
+					/>
+				</>
 			)}
 			{!loading && startIcon && (
 				<span className={clsx(startIcon, iconSizeClass)} aria-hidden="true" />

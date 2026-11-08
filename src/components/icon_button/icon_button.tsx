@@ -34,10 +34,10 @@ const ICON_SIZE_CLASSES: Record<ControlSize, string> = {
 type IconButtonStyle =
 	| { unstyled: true }
 	| {
-			unstyled?: false;
-			variant?: ButtonVariant;
-			color?: ButtonColor;
-			radius?: Radius;
+			unstyled?: false | undefined;
+			variant?: ButtonVariant | undefined;
+			color?: ButtonColor | undefined;
+			radius?: Radius | undefined;
 	  };
 
 export type { IconButtonTooltip } from '#components/icon_button/icon_button_tooltip';
@@ -45,23 +45,23 @@ export type { IconButtonTooltip } from '#components/icon_button/icon_button_tool
 export type IconButtonProps = ComponentPropsWithRef<'button'> & {
 	icon: string;
 	'aria-label': string;
-	size?: ControlSize;
+	size?: ControlSize | undefined;
 	children?: ReactNode;
-	tooltip?: IconButtonTooltip;
+	tooltip?: IconButtonTooltip | undefined;
 	/**
 	 * Turns the button into a toggle: sets `aria-pressed` and a pressed look (dark fill and inset ring).
 	 * Leave it `undefined` for a regular button (no attribute).
 	 */
-	pressed?: boolean;
+	pressed?: boolean | undefined;
 } & IconButtonStyle;
 
 // See Button's `FlatButtonStyle` for why this cast is here: it only widens
 // the destructuring inside this implementation, not the public prop type.
 type FlatIconButtonStyle = {
-	unstyled?: boolean;
-	variant?: ButtonVariant;
-	color?: ButtonColor;
-	radius?: Radius;
+	unstyled?: boolean | undefined;
+	variant?: ButtonVariant | undefined;
+	color?: ButtonColor | undefined;
+	radius?: Radius | undefined;
 };
 
 function resolveTooltipOptions(

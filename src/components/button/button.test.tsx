@@ -109,6 +109,21 @@ describe('Button', () => {
 		expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
 	});
 
+	test('shows an animated spinner and a static one for reduced motion while loading', () => {
+		const { container } = render(<Button loading>Submit</Button>);
+		expect(container.querySelector('.i-svg-spinners-3-dots-fade')).toHaveClass(
+			'ms-spinner-animated'
+		);
+		expect(container.querySelector('.i-mdi-loading')).toHaveClass(
+			'ms-spinner-static'
+		);
+	});
+
+	test('renders no spinner when not loading', () => {
+		const { container } = render(<Button>Submit</Button>);
+		expect(container.querySelector('.i-mdi-loading')).toBeNull();
+	});
+
 	test('is not marked busy when not loading', () => {
 		render(<Button>Submit</Button>);
 		expect(screen.getByRole('button')).not.toHaveAttribute('aria-busy');
@@ -262,4 +277,24 @@ describe('Button', () => {
 			);
 		});
 	});
+});
+
+test('accepts explicit undefined for every optional prop', () => {
+	render(
+		<Button
+			pressed={undefined}
+			loading={undefined}
+			size={undefined}
+			fullWidth={undefined}
+			className={undefined}
+			startIcon={undefined}
+			endIcon={undefined}
+			variant={undefined}
+			color={undefined}
+			radius={undefined}
+		>
+			Submit
+		</Button>
+	);
+	expect(screen.getByRole('button')).not.toHaveAttribute('aria-pressed');
 });
