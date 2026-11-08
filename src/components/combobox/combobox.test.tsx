@@ -344,3 +344,104 @@ test('should accept a readonly array of options', () => {
 
 	expect(screen.getByLabelText('Pick')).toBeInTheDocument();
 });
+
+describe('Combobox paging and set semantics', () => {
+	const MANY_OPTIONS = Array.from({ length: 30 }, (_, index) => ({
+		value: `city-${index + 1}`,
+		label: `City ${index + 1}`,
+	}));
+
+	function renderOpen() {
+		render(<Combobox label="City" options={MANY_OPTIONS} />);
+		fireEvent.click(screen.getByRole('combobox', { name: 'City' }));
+	}
+
+	function pressKey(key: string) {
+		fireEvent.keyDown(screen.getByRole('combobox', { name: 'City' }), { key });
+	}
+
+	function getActiveOptionName(): string | null {
+		const activeId = screen
+			.getByRole('combobox', { name: 'City' })
+			.getAttribute('aria-activedescendant');
+		return activeId
+			? (document.getElementById(activeId)?.textContent ?? null)
+			: null;
+	}
+
+	test('should expose the filtered count and 1-based position on every option', () => {
+		renderOpen();
+		const options = screen.getAllByRole('option');
+
+		expect(options[0]).toHaveAttribute('aria-setsize', '30');
+		expect(options[0]).toHaveAttribute('aria-posinset', '1');
+		expect(options[29]).toHaveAttribute('aria-posinset', '30');
+	});
+
+	test('should update aria-setsize and aria-posinset after filtering', () => {
+		renderOpen();
+		fireEvent.change(screen.getByRole('combobox', { name: 'City' }), {
+			target: { value: 'City 2' },
+		});
+		const options = screen.getAllByRole('option');
+
+		expect(options).toHaveLength(11);
+		expect(options[10]).toHaveAttribute('aria-setsize', '11');
+		expect(options[10]).toHaveAttribute('aria-posinset', '11');
+	});
+
+	test('should activate the tenth option on PageDown when none is active', () => {
+		renderOpen();
+		pressKey('PageDown');
+
+		expect(getActiveOptionName()).toBe('City 10');
+	});
+
+	test('should stay on the last option on PageDown at the end', () => {
+		renderOpen();
+		pressKey('PageDown');
+		pressKey('PageDown');
+		pressKey('PageDown');
+		pressKey('PageDown');
+
+		expect(getActiveOptionName()).toBe('City 30');
+	});
+
+	test('should clamp to the first option on PageUp', () => {
+		renderOpen();
+		pressKey('PageDown');
+		pressKey('PageUp');
+		pressKey('PageUp');
+
+		expect(getActiveOptionName()).toBe('City 1');
+	});
+
+	test('should neither open the list nor prevent default on PageDown while closed', () => {
+		render(<Combobox label="City" options={MANY_OPTIONS} />);
+		const wasNotPrevented = fireEvent.keyDown(
+			screen.getByRole('combobox', { name: 'City' }),
+			{
+				key: 'PageDown',
+			}
+		);
+
+		expect(wasNotPrevented).toBe(true);
+		expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+	});
+
+	test('should ignore PageDown with a modifier key and leave the default alone', () => {
+		renderOpen();
+		pressKey('PageDown');
+		const activeBefore = getActiveOptionName();
+		const wasNotPrevented = fireEvent.keyDown(
+			screen.getByRole('combobox', { name: 'City' }),
+			{
+				key: 'PageDown',
+				shiftKey: true,
+			}
+		);
+
+		expect(wasNotPrevented).toBe(true);
+		expect(getActiveOptionName()).toBe(activeBefore);
+	});
+});

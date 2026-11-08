@@ -3,7 +3,12 @@ import { type SyntheticEvent, useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Combobox, type ComboboxOption } from '#components/combobox/combobox';
-import { expectFocusOn } from '#storybook/play_helpers';
+import {
+	expectActiveOptionInView,
+	expectFocusOn,
+	getActiveOptionPosition,
+	pressKeyUntilActivePosition,
+} from '#storybook/play_helpers';
 
 const defaultOptions: ComboboxOption[] = [
 	{ value: 'apple', label: 'Apple' },
@@ -235,6 +240,100 @@ export const LongList: Story = {
 					containerRect.bottom
 				);
 			});
+		});
+	},
+};
+
+const THOUSANDS_OPTION_COUNT = 3000;
+
+const thousandsOfOptions: ComboboxOption[] = Array.from(
+	{ length: THOUSANDS_OPTION_COUNT },
+	(_, index) => ({
+		value: `city-${index + 1}`,
+		label: `City ${index + 1}`,
+	})
+);
+
+export const ThousandsOfOptions: Story = {
+	args: {
+		label: 'City',
+		options: thousandsOfOptions,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const combobox = canvas.getByRole('combobox', { name: 'City' });
+		await userEvent.click(combobox);
+
+		await step(
+			'lists every option with its set size and position',
+			async () => {
+				const listbox = await canvas.findByRole('listbox');
+				await waitFor(async () => {
+					await expect(
+						listbox.querySelectorAll('[role="option"]')
+					).toHaveLength(THOUSANDS_OPTION_COUNT);
+				});
+				const lastOption = listbox.querySelector('[role="option"]:last-child');
+				await expect(lastOption).toHaveAttribute(
+					'aria-setsize',
+					String(THOUSANDS_OPTION_COUNT)
+				);
+				await expect(lastOption).toHaveAttribute(
+					'aria-posinset',
+					String(THOUSANDS_OPTION_COUNT)
+				);
+			}
+		);
+
+		await step('PageDown moves forward by more than one row', async () => {
+			await userEvent.keyboard('{PageDown}');
+			await waitFor(async () => {
+				await expect(getActiveOptionPosition(combobox)).toBeGreaterThan(2);
+			});
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+
+		await step('PageUp goes back to the first option', async () => {
+			await userEvent.keyboard('{PageUp}');
+			await waitFor(async () => {
+				await expect(getActiveOptionPosition(combobox)).toBe(1);
+			});
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+	},
+};
+
+const PAGE_NAVIGATION_OPTION_COUNT = LONG_LIST_OPTION_COUNT;
+const PAGE_NAVIGATION_MAX_PRESSES = 10;
+
+export const PageNavigation: Story = {
+	args: {
+		label: 'Option',
+		options: longListOptions,
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const combobox = canvas.getByRole('combobox', { name: 'Option' });
+		await userEvent.click(combobox);
+
+		await step('repeated PageDown reaches the last option', async () => {
+			await pressKeyUntilActivePosition(
+				combobox,
+				'PageDown',
+				PAGE_NAVIGATION_OPTION_COUNT,
+				PAGE_NAVIGATION_MAX_PRESSES
+			);
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
+		});
+
+		await step('repeated PageUp reaches the first option', async () => {
+			await pressKeyUntilActivePosition(
+				combobox,
+				'PageUp',
+				1,
+				PAGE_NAVIGATION_MAX_PRESSES
+			);
+			await expectActiveOptionInView(combobox, canvas.getByRole('listbox'));
 		});
 	},
 };

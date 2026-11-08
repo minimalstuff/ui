@@ -9,6 +9,7 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 - `Modal` takes a `phoneLayout` prop: `'sheet'` shows the dialog as a bottom sheet on phones (below the `sm` breakpoint) that slides up from the bottom edge and clears the safe area, while wider screens keep the centered dialog. The default `'center'` changes nothing.
 - `useKeyboardScrollable({ label })` (or `{ labelledBy }`) makes a scroll container reachable by keyboard only while it overflows and holds nothing tabbable: it then gets a tab stop, a named `region` role and a focus outline. Spread `scrollableProps` on the container (it carries a ref, so a container shown later is picked up) and add `focusClassName` to its `className`.
 - `THEME_INIT_SCRIPT` and `useThemeStore` keep `<meta name="theme-color">` in step with the theme when the meta has `data-light` and `data-dark` attributes, so an installed PWA's status bar follows dark mode. See the README for where to put the meta. The script changed: recompute its CSP hash.
+- `Combobox` and `MultiCombobox`: while the list is open, PageDown and PageUp move the highlighted option by one visible page, stopping at the first and last option. Screen readers now hear each option's position in the list ("12 of 3000").
 
 ### Fixed
 

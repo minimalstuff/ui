@@ -6,6 +6,7 @@ export type UseActiveOptionResult = {
 	activeIndex: number;
 	activeOptionId: string | undefined;
 	move: (delta: number) => void;
+	moveWithinBounds: (delta: number) => void;
 	first: () => void;
 	last: () => void;
 	reset: () => void;
@@ -27,6 +28,8 @@ function clampToOptionCount(index: number, optionCount: number): number {
  * Tracks which option in an open listbox is "active" (highlighted and wired
  * to `aria-activedescendant`), shared by `Combobox` and `MultiCombobox`.
  * `move` wraps around both ends of the list and no-ops on an empty list;
+ * `moveWithinBounds` (PageUp/PageDown) clamps at both ends instead of wrapping,
+ * counting "no active option" as index -1;
  * `first`/`last` jump straight to an edge (used when opening the list via
  * ArrowDown/ArrowUp); `reset` clears back to "none" (-1). Whenever the active
  * option changes while the list is open, it is scrolled into view.
@@ -61,6 +64,17 @@ export function useActiveOption({
 		[optionCount]
 	);
 
+	const moveWithinBounds = useCallback(
+		(delta: number) => {
+			if (optionCount === 0) return;
+			setStoredIndex((current) => {
+				const next = clampToOptionCount(current, optionCount) + delta;
+				return Math.min(Math.max(next, 0), optionCount - 1);
+			});
+		},
+		[optionCount]
+	);
+
 	const first = useCallback(() => {
 		setStoredIndex(0);
 	}, []);
@@ -83,5 +97,13 @@ export function useActiveOption({
 			?.scrollIntoView?.({ block: 'nearest' });
 	}, [activeOptionId]);
 
-	return { activeIndex, activeOptionId, move, first, last, reset };
+	return {
+		activeIndex,
+		activeOptionId,
+		move,
+		moveWithinBounds,
+		first,
+		last,
+		reset,
+	};
 }

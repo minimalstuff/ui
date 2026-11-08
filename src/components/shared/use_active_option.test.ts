@@ -187,4 +187,64 @@ describe('useActiveOption', () => {
 
 		optionElement.remove();
 	});
+
+	describe('moveWithinBounds', () => {
+		test('should count no active option as index -1 when moving from none', () => {
+			const { result } = renderHook(() =>
+				useActiveOption({ optionCount: 20, getOptionId, isOpen: true })
+			);
+
+			act(() => {
+				result.current.moveWithinBounds(10);
+			});
+
+			expect(result.current.activeIndex).toBe(9);
+		});
+
+		test('should stay on the last option when moving past the end', () => {
+			const { result } = renderHook(() =>
+				useActiveOption({
+					optionCount: OPTION_COUNT,
+					getOptionId,
+					isOpen: true,
+				})
+			);
+
+			act(() => {
+				result.current.last();
+				result.current.moveWithinBounds(10);
+			});
+
+			expect(result.current.activeIndex).toBe(OPTION_COUNT - 1);
+		});
+
+		test('should stay on the first option when moving before the start', () => {
+			const { result } = renderHook(() =>
+				useActiveOption({
+					optionCount: OPTION_COUNT,
+					getOptionId,
+					isOpen: true,
+				})
+			);
+
+			act(() => {
+				result.current.first();
+				result.current.moveWithinBounds(-10);
+			});
+
+			expect(result.current.activeIndex).toBe(0);
+		});
+
+		test('should do nothing when the list is empty', () => {
+			const { result } = renderHook(() =>
+				useActiveOption({ optionCount: 0, getOptionId, isOpen: true })
+			);
+
+			act(() => {
+				result.current.moveWithinBounds(10);
+			});
+
+			expect(result.current.activeIndex).toBe(-1);
+		});
+	});
 });
