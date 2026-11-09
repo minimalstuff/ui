@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.5.0] - 2026-11-09
+
 ### Added
 
 - `Popover`: a non-modal panel anchored to a `trigger` that holds free content (radio groups, a segmented control, a disclosure) and stays open while the user makes several choices, unlike `Menu`. It takes `aria-label` or `aria-labelledby`, `isOpen`/`defaultOpen`, `onOpenChange` (called once per open or close, whatever the cause), `side`, `align`, `initialFocusRef`, `radius`, `unstyled`, `disabled`, `className` and `panelClassName`. It closes on Escape, a second trigger click, a pointer down outside or focus leaving it; focus returns to the trigger except after an outside click. Inside a `Modal`, Escape closes only the popover.
@@ -593,7 +595,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.4.0...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.5.0...HEAD
+[5.5.0]: https://github.com/minimalstuff/ui/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/minimalstuff/ui/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/minimalstuff/ui/compare/5.2.0...5.3.0
 [5.2.0]: https://github.com/minimalstuff/ui/compare/5.1.0...5.2.0
