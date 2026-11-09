@@ -108,6 +108,12 @@ export {
 } from './multi_combobox/multi_combobox';
 export type { MultiComboboxOption } from './multi_combobox/multi_combobox';
 export {
+	Popover,
+	type PopoverAlign,
+	type PopoverProps,
+	type PopoverSide,
+} from './popover/popover';
+export {
 	RadioOptions,
 	type RadioOptionsProps,
 } from './radio_options/radio_options';

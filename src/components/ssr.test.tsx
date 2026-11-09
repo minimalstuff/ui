@@ -13,6 +13,7 @@ import { IconButton } from '#components/icon_button/icon_button';
 import { Menu } from '#components/menu/menu';
 import { MenuItem } from '#components/menu_item/menu_item';
 import { ModalProvider } from '#components/modal_provider/modal_provider';
+import { Popover } from '#components/popover/popover';
 import { Spinner } from '#components/spinner/spinner';
 import { Tabs } from '#components/tabs/tabs';
 import { ThemeToggle } from '#components/theme_toggle/theme_toggle';
@@ -89,6 +90,9 @@ describe('server-side rendering', () => {
 				<Menu trigger={<button>Open menu</button>}>
 					<MenuItem onClick={() => {}}>Item</MenuItem>
 				</Menu>
+				<Popover trigger={<button>Open popover</button>} aria-label="Options">
+					<button>Popover body</button>
+				</Popover>
 				<ContextMenu items={<MenuItem onClick={() => {}}>Item</MenuItem>}>
 					<div>Right-click area</div>
 				</ContextMenu>
@@ -96,6 +100,8 @@ describe('server-side rendering', () => {
 		);
 
 		expect(html).toContain('Open menu');
+		expect(html).toContain('Open popover');
+		expect(html).not.toContain('Popover body');
 		expect(html).toContain('Right-click area');
 		expect(html).not.toContain('Drawer body');
 	});
