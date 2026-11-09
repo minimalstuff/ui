@@ -34,8 +34,12 @@ const getTrigger = () => screen.getByRole('button', { name: 'Filters' });
 
 async function openPopover() {
 	fireEvent.click(getTrigger());
+	const dialog = await screen.findByRole('dialog');
+	await waitFor(() => expect(dialog).toHaveAttribute('data-state', 'open'));
+	// Initial focus lands in a passive effect after the panel turns visible; a
+	// test acting before it would see that effect steal focus back from the trigger.
 	await waitFor(() =>
-		expect(screen.getByRole('dialog')).toHaveAttribute('data-state', 'open')
+		expect(dialog.contains(document.activeElement)).toBe(true)
 	);
 }
 
