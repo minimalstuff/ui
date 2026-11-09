@@ -1,6 +1,6 @@
 {
 	"name": "@minimalstuff/ui",
-	"version": "5.4.0",
+	"version": "5.5.0",
 	"description": "A small, unambitious React component library, styled with UnoCSS and focused on accessibility.",
 	"license": "MIT",
 	"repository": {
