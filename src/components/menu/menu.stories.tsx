@@ -13,6 +13,7 @@ import {
 	expectDialogCreatesNoContainingBlock,
 	expectFocusOn,
 	expectMenuReachableInDialog,
+	expectWithinViewport,
 	getPortalScope,
 	openMenu,
 	pressKeysAndExpectFocusInDialog,
@@ -302,5 +303,34 @@ export const Unstyled: Story = {
 		await expect(
 			within(menu).getByRole('menuitem', { name: 'Edit' })
 		).toBeVisible();
+	},
+};
+
+const TALL_MENU_ITEM_COUNT = 80;
+
+export const TallContent: Story = {
+	render: () => (
+		<Menu trigger={<Button>Open</Button>}>
+			{Array.from({ length: TALL_MENU_ITEM_COUNT }, (_, index) => (
+				<MenuItem key={index} onClick={() => {}}>
+					Action {index + 1}
+				</MenuItem>
+			))}
+		</Menu>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const menu = await openMenu(
+			canvas.getByRole('button', { name: 'Open' }),
+			'Open'
+		);
+		await expectWithinViewport(menu);
+
+		await userEvent.keyboard('{End}');
+		const lastItem = within(menu).getByRole('menuitem', {
+			name: `Action ${TALL_MENU_ITEM_COUNT}`,
+		});
+		await waitFor(() => expectFocusOn(lastItem));
+		await waitFor(() => expectWithinViewport(lastItem));
 	},
 };

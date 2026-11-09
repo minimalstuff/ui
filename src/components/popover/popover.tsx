@@ -34,6 +34,7 @@ import { useOutsidePointerDown } from '#components/popover/use_outside_pointer_d
 import { usePopoverState } from '#components/popover/use_popover_state';
 import { findDialogPortalTarget } from '#components/shared/dialog_portal_target';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
+import { limitToAvailableHeight } from '#components/shared/limit_to_available_height';
 import { type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
@@ -157,6 +158,7 @@ export function Popover({
 			offset(OFFSET_FROM_TRIGGER),
 			flip(),
 			shift({ padding: FLOATING_VIEWPORT_PADDING }),
+			limitToAvailableHeight(),
 		],
 	});
 

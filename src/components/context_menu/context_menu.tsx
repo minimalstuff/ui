@@ -18,6 +18,7 @@ import {
 import { MenuSurface } from '#components/menu/menu_surface';
 import { findDialogPortalTarget } from '#components/shared/dialog_portal_target';
 import { FLOATING_VIEWPORT_PADDING } from '#components/shared/floating';
+import { limitToAvailableHeight } from '#components/shared/limit_to_available_height';
 import { type Radius } from '#components/shared/radius';
 import {
 	useEnterOnPositioned,
@@ -118,6 +119,7 @@ export function ContextMenu({
 			offset(CURSOR_OFFSET),
 			flip(),
 			shift({ padding: FLOATING_VIEWPORT_PADDING }),
+			limitToAvailableHeight(),
 		],
 	});
 

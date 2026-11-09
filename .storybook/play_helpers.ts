@@ -239,3 +239,12 @@ export function findOptionAtPosition(
 		`[role="option"][aria-posinset="${position}"]`
 	);
 }
+
+/** Asserts that `element` sits fully inside the viewport vertically. */
+export async function expectWithinViewport(
+	element: HTMLElement
+): Promise<void> {
+	const { top, bottom } = element.getBoundingClientRect();
+	await expect(top).toBeGreaterThanOrEqual(0);
+	await expect(bottom).toBeLessThanOrEqual(window.innerHeight);
+}

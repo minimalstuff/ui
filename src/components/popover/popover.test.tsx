@@ -353,3 +353,22 @@ describe('Popover inside a Modal', () => {
 		).toBeInTheDocument();
 	});
 });
+
+describe('Popover height cap', () => {
+	test('should publish the available viewport height on the floating element when opened', async () => {
+		renderPopover();
+		await openPopover();
+		const floating = screen.getByRole('dialog').parentElement;
+		await waitFor(() =>
+			expect(
+				floating?.style.getPropertyValue('--ms-floating-max-height')
+			).toMatch(/^\d+(\.\d+)?px$/)
+		);
+	});
+
+	test('should scroll the panel when capped, even when unstyled', async () => {
+		renderPopover({ unstyled: true });
+		await openPopover();
+		expect(screen.getByRole('dialog')).toHaveClass('ms-floating-panel-scroll');
+	});
+});

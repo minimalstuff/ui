@@ -44,7 +44,10 @@ function focusMenuItemAt(container: HTMLElement, index: number) {
 	const items = getMenuItems(container);
 	if (items.length === 0) return;
 	const clampedIndex = ((index % items.length) + items.length) % items.length;
-	items[clampedIndex]?.focus({ preventScroll: true });
+	const target = items[clampedIndex];
+	if (!target) return;
+	target.focus({ preventScroll: true });
+	target.scrollIntoView?.({ block: 'nearest' });
 }
 
 /** Arrow/Home/End navigation. Returns whether it handled `event`. */
@@ -144,6 +147,7 @@ export function MenuSurface({
 		const targetItem =
 			initialFocus === 'last' ? items[items.length - 1] : items[0];
 		targetItem?.focus({ preventScroll: true });
+		targetItem?.scrollIntoView?.({ block: 'nearest' });
 	}, [isPositioned, initialFocus]);
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -188,7 +192,7 @@ export function MenuSurface({
 					data-state={isVisible ? 'open' : 'closed'}
 					onKeyDown={handleKeyDown}
 					className={clsx(
-						'w-max',
+						'w-max ms-floating-panel-scroll',
 						!unstyled && [
 							'min-w-40 max-w-xs origin-top border py-1 shadow-lg backdrop-blur-sm',
 							'transition-[opacity,transform] duration-150 ease-out',

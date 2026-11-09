@@ -479,3 +479,37 @@ describe('Menu', () => {
 		});
 	});
 });
+
+describe('Menu height cap', () => {
+	test('should publish the available viewport height on the floating element when opened', async () => {
+		render(
+			<Menu trigger={<button>Open</button>}>
+				<MenuItem onClick={vi.fn<() => void>()}>One</MenuItem>
+			</Menu>
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Open' }));
+		const floating = (await screen.findByRole('menu')).parentElement;
+		await waitFor(() =>
+			expect(
+				floating?.style.getPropertyValue('--ms-floating-max-height')
+			).toMatch(/^\d+(\.\d+)?px$/)
+		);
+	});
+
+	test('should scroll the focused item into view when navigating by keyboard', async () => {
+		const scrollIntoView = vi.fn<() => void>();
+		Element.prototype.scrollIntoView = scrollIntoView;
+		render(
+			<Menu trigger={<button>Open</button>}>
+				<MenuItem onClick={vi.fn<() => void>()}>One</MenuItem>
+				<MenuItem onClick={vi.fn<() => void>()}>Two</MenuItem>
+			</Menu>
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Open' }));
+		const menu = await screen.findByRole('menu');
+		await waitFor(() => expect(screen.getByText('One')).toHaveFocus());
+		scrollIntoView.mockClear();
+		fireEvent.keyDown(menu, { key: 'ArrowDown' });
+		expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+	});
+});
