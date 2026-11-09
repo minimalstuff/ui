@@ -59,6 +59,8 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-spinner-static': 'hidden motion-reduce:inline-block',
 	'ms-modal-panel-closed':
 		'opacity-0 scale-95 translate-y-1 motion-reduce:scale-100 motion-reduce:translate-y-0',
+	'ms-floating-panel-scroll':
+		'max-h-[var(--ms-floating-max-height)] overflow-y-auto overscroll-contain',
 	'ms-menu-surface-closed': 'scale-95 opacity-0 motion-reduce:scale-100',
 	'ms-tooltip-enter-top':
 		'data-[state=closed]:translate-y-1 motion-reduce:data-[state=closed]:translate-y-0',

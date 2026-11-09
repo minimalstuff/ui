@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `Popover`, `Menu` and `ContextMenu` panels now cap their height to the space left in the viewport and scroll vertically, so tall content stays reachable on short screens or at high zoom; keyboard focus scrolls the focused item into view. The cap and scroll stay with `unstyled`.
+
 ## [5.6.0] - 2026-11-10
 
 ### Added

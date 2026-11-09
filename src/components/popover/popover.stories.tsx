@@ -7,7 +7,7 @@ import { Modal } from '#components/modal/modal';
 import { Popover, type PopoverProps } from '#components/popover/popover';
 import { RadioOptions } from '#components/radio_options/radio_options';
 import { Tabs } from '#components/tabs/tabs';
-import { getPortalScope } from '#storybook/play_helpers';
+import { expectWithinViewport, getPortalScope } from '#storybook/play_helpers';
 
 const ORDER_OPTIONS = ['Newest', 'Oldest', 'Most popular'];
 
@@ -121,5 +121,37 @@ export const InModal: Story = {
 		await expect(
 			body.getByRole('dialog', { name: 'Settings' })
 		).toBeInTheDocument();
+	},
+};
+
+const TALL_CONTENT_HEIGHT_PX = 3000;
+
+export const TallContent: Story = {
+	args: {
+		children: (
+			<div
+				className="flex flex-col justify-between"
+				style={{ height: TALL_CONTENT_HEIGHT_PX }}
+			>
+				<button type="button">First action</button>
+				<button type="button">Last action</button>
+			</div>
+		),
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const body = getPortalScope(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: 'Display' }));
+		const dialog = await body.findByRole('dialog', {
+			name: 'Display options',
+		});
+		await waitFor(() => expect(dialog).toHaveAttribute('data-state', 'open'));
+		await expectWithinViewport(dialog);
+
+		const lastAction = body.getByRole('button', { name: 'Last action' });
+		await userEvent.tab();
+		await waitFor(() => expect(lastAction).toHaveFocus());
+		await waitFor(() => expectWithinViewport(lastAction));
 	},
 };

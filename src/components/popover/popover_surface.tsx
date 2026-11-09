@@ -59,7 +59,7 @@ export function PopoverSurface({
 		if (!panel) return;
 		const target =
 			initialFocusRef?.current ?? getTabbableElements(panel)[0] ?? panel;
-		target.focus({ preventScroll: true });
+		target.focus();
 	}, [isVisible, isPositioned, panelRef, initialFocusRef]);
 
 	const handleKeyDown = (event: KeyboardEvent) => {
@@ -85,7 +85,7 @@ export function PopoverSurface({
 				data-state={isVisible ? 'open' : 'closed'}
 				onKeyDown={handleKeyDown}
 				className={clsx(
-					'w-max',
+					'w-max ms-floating-panel-scroll',
 					!unstyled && [
 						'max-w-sm origin-top border p-3 shadow-lg backdrop-blur-sm',
 						'transition-[opacity,transform] duration-150 ease-out',
