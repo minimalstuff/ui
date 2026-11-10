@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Popover`: `onOpenChange` now receives `{ reason }` as a second argument (`'trigger'`, `'escape'`, `'outside-pointer'`, `'focus-out'` or `'disabled'`), so you can tell why it opened or closed; existing one-argument callbacks keep working.
+
 ## [5.6.1] - 2026-11-10
 
 ### Fixed

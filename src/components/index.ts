@@ -110,6 +110,8 @@ export type { MultiComboboxOption } from './multi_combobox/multi_combobox';
 export {
 	Popover,
 	type PopoverAlign,
+	type PopoverOpenChangeDetails,
+	type PopoverOpenChangeReason,
 	type PopoverProps,
 	type PopoverSide,
 } from './popover/popover';

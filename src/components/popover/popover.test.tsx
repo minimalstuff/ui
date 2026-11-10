@@ -253,19 +253,22 @@ describe('Popover', () => {
 	});
 
 	test('calls onOpenChange once per open and once per close', async () => {
-		const onOpenChange = vi.fn<(isOpen: boolean) => void>();
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
 		renderPopover({ onOpenChange });
 
 		await openPopover();
-		expect(onOpenChange.mock.calls).toEqual([[true]]);
+		expect(onOpenChange.mock.calls).toEqual([[true, { reason: 'trigger' }]]);
 
 		fireEvent.keyDown(screen.getByRole('radio'), { key: 'Escape' });
 		await expectClosed();
-		expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
+		expect(onOpenChange.mock.calls).toEqual([
+			[true, { reason: 'trigger' }],
+			[false, { reason: 'escape' }],
+		]);
 	});
 
 	test('calls onOpenChange once when an outside click also blurs the panel', async () => {
-		const onOpenChange = vi.fn<(isOpen: boolean) => void>();
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
 		renderPopover({ onOpenChange });
 		await openPopover();
 		onOpenChange.mockClear();
@@ -276,11 +279,13 @@ describe('Popover', () => {
 
 		await expectClosed();
 		expect(onOpenChange).toHaveBeenCalledTimes(1);
-		expect(onOpenChange).toHaveBeenCalledWith(false);
+		expect(onOpenChange).toHaveBeenCalledWith(false, {
+			reason: 'outside-pointer',
+		});
 	});
 
 	test('calls onOpenChange when disabled closes it', async () => {
-		const onOpenChange = vi.fn<(isOpen: boolean) => void>();
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
 		const { rerender } = renderPopover({ onOpenChange });
 		await openPopover();
 		onOpenChange.mockClear();
@@ -288,15 +293,80 @@ describe('Popover', () => {
 		rerender(popoverTree({ disabled: true, onOpenChange }));
 
 		await expectClosed();
-		expect(onOpenChange.mock.calls).toEqual([[false]]);
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'disabled' }]]);
+	});
+
+	test('reports reason trigger when the trigger closes it', async () => {
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
+		renderPopover({ onOpenChange });
+		await openPopover();
+		onOpenChange.mockClear();
+
+		fireEvent.click(getTrigger());
+
+		await expectClosed();
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'trigger' }]]);
+	});
+
+	test('reports reason escape once even though focus also moves', async () => {
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
+		renderPopover({ onOpenChange });
+		await openPopover();
+		onOpenChange.mockClear();
+
+		fireEvent.keyDown(screen.getByRole('radio'), { key: 'Escape' });
+		screen.getByRole('button', { name: 'Outside' }).focus();
+
+		await expectClosed();
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'escape' }]]);
+	});
+
+	test('reports reason focus-out when focus moves to an outside element', async () => {
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
+		renderPopover({ onOpenChange });
+		await openPopover();
+		onOpenChange.mockClear();
+
+		screen.getByRole('button', { name: 'Outside' }).focus();
+
+		await expectClosed();
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'focus-out' }]]);
+	});
+
+	test('reports reason focus-out when Tab leaves the last element', async () => {
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
+		renderPopover({ onOpenChange });
+		await openPopover();
+		onOpenChange.mockClear();
+		const last = screen.getByRole('button', { name: 'Apply' });
+		last.focus();
+
+		fireEvent.keyDown(last, { key: 'Tab' });
+
+		await expectClosed();
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'focus-out' }]]);
+	});
+
+	test('reports reason focus-out when Shift+Tab leaves the first element', async () => {
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
+		renderPopover({ onOpenChange });
+		await openPopover();
+		onOpenChange.mockClear();
+		const first = screen.getByRole('radio');
+		first.focus();
+
+		fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
+
+		await expectClosed();
+		expect(onOpenChange.mock.calls).toEqual([[false, { reason: 'focus-out' }]]);
 	});
 
 	test('follows isOpen when controlled and only requests changes', async () => {
-		const onOpenChange = vi.fn<(isOpen: boolean) => void>();
+		const onOpenChange = vi.fn<NonNullable<PopoverProps['onOpenChange']>>();
 		const { rerender } = renderPopover({ isOpen: false, onOpenChange });
 
 		fireEvent.click(getTrigger());
-		expect(onOpenChange).toHaveBeenCalledWith(true);
+		expect(onOpenChange).toHaveBeenCalledWith(true, { reason: 'trigger' });
 		expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
 		rerender(popoverTree({ isOpen: true, onOpenChange }));
