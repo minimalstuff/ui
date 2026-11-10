@@ -118,6 +118,17 @@ export const WithDescriptions: Story = {
 	},
 };
 
+export const WithLanguages: Story = {
+	decorators: narrow,
+	args: {
+		label: 'Language',
+		options: [
+			{ value: 'en', label: 'English', lang: 'en' },
+			{ value: 'fr', label: 'Français', lang: 'fr' },
+		],
+	},
+};
+
 export const WithIcons: Story = {
 	decorators: narrow,
 	args: {

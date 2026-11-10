@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `RadioOptions` and `CheckboxOptions` options take an optional `lang` (BCP 47 tag, e.g. `'fr'`), set as the `lang` attribute on the option's label and description so screen readers switch voice for an option written in another language, such as a language picker listing "Français". Nothing changes when it is omitted.
+
 ## [5.5.0] - 2026-11-09
 
 ### Added

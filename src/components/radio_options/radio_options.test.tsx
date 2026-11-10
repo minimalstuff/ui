@@ -184,3 +184,30 @@ test('should accept a readonly array of options', () => {
 
 	expect(screen.getAllByRole('radio').length).toBeGreaterThan(0);
 });
+
+describe('RadioOptions option lang', () => {
+	test('should set lang on the label and description of an option that has one', () => {
+		render(
+			<RadioOptions
+				options={[
+					{ value: 'fr', label: 'Français', description: 'Langue', lang: 'fr' },
+				]}
+			/>
+		);
+
+		expect(screen.getByText('Français')).toHaveAttribute('lang', 'fr');
+		expect(screen.getByText('Langue')).toHaveAttribute('lang', 'fr');
+		expect(screen.getByRole('radio')).not.toHaveAttribute('lang');
+	});
+
+	test('should not set a lang attribute when the option has none', () => {
+		render(
+			<RadioOptions
+				options={[{ value: 'en', label: 'English', description: 'Language' }]}
+			/>
+		);
+
+		expect(screen.getByText('English')).not.toHaveAttribute('lang');
+		expect(screen.getByText('Language')).not.toHaveAttribute('lang');
+	});
+});
