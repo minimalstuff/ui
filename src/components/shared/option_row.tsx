@@ -77,6 +77,7 @@ export function OptionRow({
 						/>
 					)}
 					<span
+						lang={item.lang}
 						className={clsx(
 							'select-none text-sm font-medium',
 							isSelected
@@ -92,6 +93,7 @@ export function OptionRow({
 				{item.description && (
 					<span
 						id={descriptionId}
+						lang={item.lang}
 						className={clsx(FIELD_DESCRIPTION_TEXT, 'mt-0.5')}
 						aria-hidden="true"
 					>

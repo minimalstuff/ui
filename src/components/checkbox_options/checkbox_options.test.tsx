@@ -224,3 +224,30 @@ test('should accept readonly arrays of options and values', () => {
 
 	expect(screen.getAllByRole('checkbox')).toHaveLength(2);
 });
+
+describe('CheckboxOptions option lang', () => {
+	test('should set lang on the label and description of an option that has one', () => {
+		render(
+			<CheckboxOptions
+				options={[
+					{ value: 'fr', label: 'Français', description: 'Langue', lang: 'fr' },
+				]}
+			/>
+		);
+
+		expect(screen.getByText('Français')).toHaveAttribute('lang', 'fr');
+		expect(screen.getByText('Langue')).toHaveAttribute('lang', 'fr');
+		expect(screen.getByRole('checkbox')).not.toHaveAttribute('lang');
+	});
+
+	test('should not set a lang attribute when the option has none', () => {
+		render(
+			<CheckboxOptions
+				options={[{ value: 'en', label: 'English', description: 'Language' }]}
+			/>
+		);
+
+		expect(screen.getByText('English')).not.toHaveAttribute('lang');
+		expect(screen.getByText('Language')).not.toHaveAttribute('lang');
+	});
+});

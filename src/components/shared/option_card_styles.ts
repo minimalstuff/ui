@@ -19,6 +19,8 @@ export interface ChoiceOption {
 	description?: string;
 	icon?: string;
 	disabled?: boolean;
+	/** BCP 47 language of `label` and `description`, set as their `lang` attribute when it differs from the page's. */
+	lang?: string;
 }
 
 /**
