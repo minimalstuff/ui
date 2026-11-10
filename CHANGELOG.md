@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.7.0] - 2026-11-10
+
 ### Added
 
 - `Popover`: `onOpenChange` now receives `{ reason }` as a second argument (`'trigger'`, `'escape'`, `'outside-pointer'`, `'focus-out'` or `'disabled'`), so you can tell why it opened or closed; existing one-argument callbacks keep working.
@@ -611,7 +613,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.6.1...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.7.0...HEAD
+[5.7.0]: https://github.com/minimalstuff/ui/compare/5.6.1...5.7.0
 [5.6.1]: https://github.com/minimalstuff/ui/compare/5.6.0...5.6.1
 [5.6.0]: https://github.com/minimalstuff/ui/compare/5.5.0...5.6.0
 [5.5.0]: https://github.com/minimalstuff/ui/compare/5.4.0...5.5.0
