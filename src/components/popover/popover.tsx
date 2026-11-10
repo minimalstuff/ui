@@ -26,6 +26,10 @@ import {
 } from 'react';
 
 import {
+	type PopoverOpenChangeDetails,
+	type PopoverOpenChangeReason,
+} from '#components/popover/popover_open_change';
+import {
 	type PopoverAlign,
 	type PopoverSide,
 } from '#components/popover/popover_placement';
@@ -50,6 +54,10 @@ export type {
 	PopoverAlign,
 	PopoverSide,
 } from '#components/popover/popover_placement';
+export type {
+	PopoverOpenChangeDetails,
+	PopoverOpenChangeReason,
+} from '#components/popover/popover_open_change';
 
 function toPlacement(side: PopoverSide, align: PopoverAlign): Placement {
 	return align === 'center' ? side : `${side}-${align}`;
@@ -74,8 +82,15 @@ interface PopoverBaseProps {
 	/** Controlled open state. While provided, the owner drives every change through `onOpenChange`. */
 	isOpen?: boolean;
 	defaultOpen?: boolean;
-	/** Fires once per open or close, whatever the cause (trigger, Escape, outside pointer, focus leaving, `disabled`). */
-	onOpenChange?: (isOpen: boolean) => void;
+	/**
+	 * Fires once per open or close, whatever the cause. `details.reason` says
+	 * why: `'trigger'` (click on the trigger, opening or closing), `'escape'`,
+	 * `'outside-pointer'` (pointer down outside), `'focus-out'` (focus left to
+	 * an outside element, or Tab out of the panel) or `'disabled'` (the
+	 * `disabled` prop closed it). When several closes happen in one event, the
+	 * first reason wins.
+	 */
+	onOpenChange?: (isOpen: boolean, details: PopoverOpenChangeDetails) => void;
 	side?: PopoverSide;
 	align?: PopoverAlign;
 	/** Focused on open instead of the first tabbable element of the panel. */
@@ -201,27 +216,35 @@ export function Popover({
 		if (panelRef.current?.contains(active)) focusTrigger();
 	}, [focusTrigger]);
 
-	const closeAndFocusTrigger = useCallback(() => {
-		setOpen(false);
-		focusTrigger();
-	}, [setOpen, focusTrigger]);
+	const closeAndFocusTrigger = useCallback(
+		(reason: PopoverOpenChangeReason) => {
+			setOpen(false, { reason });
+			focusTrigger();
+		},
+		[setOpen, focusTrigger]
+	);
+
+	const handleTabOut = useCallback(
+		() => closeAndFocusTrigger('focus-out'),
+		[closeAndFocusTrigger]
+	);
 
 	const handleOutsidePointerDown = () => {
-		setOpen(false);
+		setOpen(false, { reason: 'outside-pointer' });
 		window.setTimeout(restoreFocusIfLost, 0);
 	};
 
 	useOutsidePointerDown(isOpen, insideRefs, handleOutsidePointerDown);
 
 	useEffect(() => {
-		if (disabled && isOpen) setOpen(false);
+		if (disabled && isOpen) setOpen(false, { reason: 'disabled' });
 	}, [disabled, isOpen, setOpen]);
 
 	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key !== 'Escape' || !isOpen) return;
 		event.preventDefault();
 		event.stopPropagation();
-		closeAndFocusTrigger();
+		closeAndFocusTrigger('escape');
 	};
 
 	const handleBlur = (event: FocusEvent) => {
@@ -229,13 +252,13 @@ export function Popover({
 		if (!isOpen || !(next instanceof Node)) return;
 		if (wrapperRef.current?.contains(next)) return;
 		if (panelRef.current?.contains(next)) return;
-		setOpen(false);
+		setOpen(false, { reason: 'focus-out' });
 	};
 
 	const handleTriggerClick = useStableCallback((event: MouseEvent) => {
 		if (!disabled) {
-			if (isOpen) closeAndFocusTrigger();
-			else setOpen(true);
+			if (isOpen) closeAndFocusTrigger('trigger');
+			else setOpen(true, { reason: 'trigger' });
 		}
 		if (isValidElement<TriggerProps>(trigger)) {
 			trigger.props.onClick?.(event);
@@ -275,7 +298,7 @@ export function Popover({
 					ariaLabel={ariaLabel}
 					ariaLabelledBy={ariaLabelledBy}
 					initialFocusRef={initialFocusRef}
-					onTabOut={closeAndFocusTrigger}
+					onTabOut={handleTabOut}
 					portalTarget={findDialogPortalTarget(wrapperElement)}
 				>
 					{children}

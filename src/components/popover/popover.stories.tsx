@@ -4,7 +4,11 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '#components/button/button';
 import { Modal } from '#components/modal/modal';
-import { Popover, type PopoverProps } from '#components/popover/popover';
+import {
+	Popover,
+	type PopoverOpenChangeDetails,
+	type PopoverProps,
+} from '#components/popover/popover';
 import { RadioOptions } from '#components/radio_options/radio_options';
 import { Tabs } from '#components/tabs/tabs';
 import { expectWithinViewport, getPortalScope } from '#storybook/play_helpers';
@@ -66,9 +70,15 @@ function ControlledPopover(args: Readonly<PopoverProps>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [log, setLog] = useState<string[]>([]);
 
-	const handleOpenChange = (next: boolean) => {
+	const handleOpenChange = (
+		next: boolean,
+		details: PopoverOpenChangeDetails
+	) => {
 		setIsOpen(next);
-		setLog((previous) => [...previous, `onOpenChange(${next})`]);
+		setLog((previous) => [
+			...previous,
+			`onOpenChange(${next}, ${details.reason})`,
+		]);
 	};
 
 	return (
