@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.6.1] - 2026-11-10
+
 ### Fixed
 
 - `Popover`, `Menu` and `ContextMenu` panels now cap their height to the space left in the viewport and scroll vertically, so tall content stays reachable on short screens or at high zoom; keyboard focus scrolls the focused item into view. The cap and scroll stay with `unstyled`.
@@ -605,7 +607,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.6.0...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.6.1...HEAD
+[5.6.1]: https://github.com/minimalstuff/ui/compare/5.6.0...5.6.1
 [5.6.0]: https://github.com/minimalstuff/ui/compare/5.5.0...5.6.0
 [5.5.0]: https://github.com/minimalstuff/ui/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/minimalstuff/ui/compare/5.3.0...5.4.0
