@@ -15,6 +15,13 @@ export const SIDE_CLASSES: Record<DrawerSide, string> = {
 	left: 'left-0',
 };
 
+/** Padding on the panel keeps its background under the system bars while the header and footer stay clear of them. */
+export const SAFE_AREA_CLASSES: Record<DrawerSide, string> = {
+	right:
+		'pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)]',
+	left: 'pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]',
+};
+
 /** Reduced motion keeps the panel in place so it only fades with its wrapper. */
 export const OFFSCREEN_CLASSES: Record<DrawerSide, string> = {
 	right: 'ms-drawer-offscreen-right',
