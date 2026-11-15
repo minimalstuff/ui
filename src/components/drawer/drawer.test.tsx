@@ -469,6 +469,29 @@ describe('Drawer', () => {
 			expect(content).toHaveClass('flex-1', 'overflow-y-auto', 'min-h-0');
 		});
 
+		test('should pad the right drawer panel by the safe-area insets', () => {
+			renderDrawer({ side: 'right' });
+			expect(getParts().dialog).toHaveClass(
+				'pt-[env(safe-area-inset-top)]',
+				'pb-[env(safe-area-inset-bottom)]',
+				'pr-[env(safe-area-inset-right)]'
+			);
+		});
+
+		test('should pad the left drawer panel by the safe-area insets', () => {
+			renderDrawer({ side: 'left' });
+			expect(getParts().dialog).toHaveClass(
+				'pt-[env(safe-area-inset-top)]',
+				'pb-[env(safe-area-inset-bottom)]',
+				'pl-[env(safe-area-inset-left)]'
+			);
+		});
+
+		test('should keep the safe-area padding when unstyled', () => {
+			renderDrawer({ unstyled: true, side: 'right' });
+			expect(getParts().dialog).toHaveClass('pt-[env(safe-area-inset-top)]');
+		});
+
 		test('should keep the visual classes by default', () => {
 			renderDrawer();
 			const { dialog, backdrop, content } = getParts();

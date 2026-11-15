@@ -13,6 +13,7 @@ import { createPortal } from 'react-dom';
 import {
 	INNER_EDGE_RADIUS_CLASSES,
 	OFFSCREEN_CLASSES,
+	SAFE_AREA_CLASSES,
 	SIDE_CLASSES,
 	SIZE_CLASSES,
 	type DrawerSide,
@@ -160,6 +161,7 @@ function DrawerDialog({
 						className={clsx(
 							'fixed inset-y-0 h-full flex flex-col overflow-hidden',
 							SIDE_CLASSES[side],
+							SAFE_AREA_CLASSES[side],
 							SIZE_CLASSES[size],
 							'focus:outline-none',
 							!unstyled && [

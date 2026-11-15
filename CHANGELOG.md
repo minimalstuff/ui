@@ -4,6 +4,11 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `Modal`: on devices with a status bar or gesture bar drawn over the page (Android edge to edge), the dialog now keeps clear of them (`env(safe-area-inset-*)` is added to its margins and height cap); nothing changes in a regular browser.
+- `Drawer`: on devices with a status bar or gesture bar drawn over the page (Android edge to edge), the header and footer now clear the bars while the panel background still extends under them (`env(safe-area-inset-*)` padding on the panel, kept with `unstyled`); nothing changes in a regular browser.
+
 ## [5.7.0] - 2026-11-10
 
 ### Added

@@ -52,7 +52,8 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-drawer-offscreen-left': '-translate-x-full motion-reduce:translate-x-0',
 	'ms-drawer-transition':
 		'transition-transform duration-200 ease-out motion-reduce:transition-none',
-	'ms-modal-backdrop-padding': 'p-2 sm:py-[3rem] lg:py-[5rem]',
+	'ms-modal-backdrop-padding':
+		'pt-[calc(0.5rem_+_env(safe-area-inset-top))] pr-[calc(0.5rem_+_env(safe-area-inset-right))] pb-[calc(0.5rem_+_env(safe-area-inset-bottom))] pl-[calc(0.5rem_+_env(safe-area-inset-left))] sm:pt-[calc(3rem_+_env(safe-area-inset-top))] sm:pb-[calc(3rem_+_env(safe-area-inset-bottom))] lg:pt-[calc(5rem_+_env(safe-area-inset-top))] lg:pb-[calc(5rem_+_env(safe-area-inset-bottom))]',
 	'ms-button-press':
 		'interactive:active:scale-[0.95] motion-reduce:interactive:active:scale-100',
 	'ms-spinner-animated': 'motion-reduce:hidden',
@@ -92,9 +93,9 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-toast-timer-bar': 'animate-ms-toast-timer motion-reduce:hidden',
 	'ms-overview-card-wide': 'sm:col-span-2',
 	'ms-modal-height-fixed':
-		'h-[calc(100vh-4rem)] sm:h-[min(40rem,calc(100vh-10rem))]',
+		'h-[calc(100vh_-_4rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))] sm:h-[min(40rem,calc(100vh_-_10rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom)))]',
 	'ms-modal-sheet-backdrop':
-		'items-end p-0 sm:items-start sm:px-2 sm:py-[3rem] lg:py-[5rem]',
+		'items-end p-0 sm:items-start sm:pl-[calc(0.5rem_+_env(safe-area-inset-left))] sm:pr-[calc(0.5rem_+_env(safe-area-inset-right))] sm:pt-[calc(3rem_+_env(safe-area-inset-top))] sm:pb-[calc(3rem_+_env(safe-area-inset-bottom))] lg:pt-[calc(5rem_+_env(safe-area-inset-top))] lg:pb-[calc(5rem_+_env(safe-area-inset-bottom))]',
 	'ms-modal-sheet-size-sm': 'max-w-none sm:max-w-md',
 	'ms-modal-sheet-size-md': 'max-w-none sm:max-w-lg',
 	'ms-modal-sheet-size-lg': 'max-w-none sm:max-w-2xl',
@@ -111,7 +112,7 @@ const LIBRARY_SHORTCUTS: Record<string, string> = {
 	'ms-modal-sheet-closed':
 		'opacity-0 scale-95 translate-y-1 max-sm:scale-100 max-sm:motion-safe:translate-y-full motion-reduce:scale-100 motion-reduce:translate-y-0',
 	'ms-modal-max-height':
-		'max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-10rem)]',
+		'max-h-[calc(100vh_-_4rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))] sm:max-h-[calc(100vh_-_10rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))]',
 };
 
 export default defineConfig({
