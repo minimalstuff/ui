@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Button` takes a `disabledReason` prop: the button stays focusable but does nothing when activated, is exposed as `aria-disabled`, and shows the reason below it as its description. Use it instead of `disabled` when the user needs to know why the button cannot act yet.
+
 ## [5.8.0] - 2026-11-22
 
 ### Added

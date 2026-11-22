@@ -1,11 +1,18 @@
 import clsx from 'clsx';
-import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
+import {
+	type ComponentPropsWithRef,
+	type MouseEvent,
+	type ReactNode,
+	useId,
+} from 'react';
 
 import { buttonClassName } from '#components/button/button_class_name';
 import {
 	type ButtonColor,
 	type ButtonVariant,
 } from '#components/shared/button_styles';
+import { FieldDescription } from '#components/shared/field_description';
+import { joinIds } from '#components/shared/join_ids';
 import { type Radius } from '#components/shared/radius';
 import { type ControlSize } from '#components/shared/sizes';
 import { useLabels } from '#components/ui_provider/use_labels';
@@ -43,6 +50,16 @@ export type ButtonProps = Omit<ComponentPropsWithRef<'button'>, 'children'> & {
 	 */
 	loading?: boolean | undefined;
 	/**
+	 * Keeps the button focusable but inert while the user cannot act yet, and
+	 * says why: the reason is shown below the button and is its accessible
+	 * description. Activation (click, Enter, Space, form submit) is blocked and
+	 * the button is exposed as `aria-disabled`. Use it instead of `disabled`
+	 * when the user needs to know why. An empty string means not blocked, and
+	 * `disabled` takes precedence (native disabled, no hint). Wraps the button
+	 * and the hint in an extra element only while a reason is set.
+	 */
+	disabledReason?: string | undefined;
+	/**
 	 * Turns the button into a toggle: sets `aria-pressed` and a pressed look (dark fill and inset ring).
 	 * Leave it `undefined` for a regular button (no attribute).
 	 */
@@ -77,7 +94,9 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 		startIcon,
 		endIcon,
 		disabled,
+		disabledReason,
 		onClick,
+		'aria-describedby': ariaDescribedby,
 		'aria-label': ariaLabel,
 		...props
 	} = buttonProps as ButtonProps & FlatButtonStyle;
@@ -86,16 +105,19 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 	const accessibleLabel =
 		loading && hasAriaLabel ? `${ariaLabel} ${labels.loading}` : ariaLabel;
 	const iconSizeClass = ICON_SIZE_CLASSES[size];
+	const reasonId = useId();
+	const hasReason = !disabled && Boolean(disabledReason);
+	const isBlocked = loading || hasReason;
 
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-		if (loading) {
+		if (isBlocked) {
 			event.preventDefault();
 			return;
 		}
 		onClick?.(event);
 	};
 
-	return (
+	const button = (
 		<button
 			type="button"
 			className={buttonClassName({
@@ -109,10 +131,11 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 				className,
 			})}
 			disabled={disabled}
-			aria-disabled={(loading && !disabled) || undefined}
+			aria-disabled={(isBlocked && !disabled) || undefined}
 			aria-busy={loading || undefined}
 			aria-pressed={pressed}
 			aria-label={accessibleLabel}
+			aria-describedby={joinIds(ariaDescribedby, hasReason && reasonId)}
 			{...props}
 			onClick={handleClick}
 		>
@@ -142,5 +165,19 @@ export function Button(buttonProps: Readonly<ButtonProps>) {
 				<span className={clsx(endIcon, iconSizeClass)} aria-hidden="true" />
 			)}
 		</button>
+	);
+
+	if (!hasReason) return button;
+
+	return (
+		<div
+			className={clsx(
+				'gap-1',
+				fullWidth ? 'flex w-full flex-col' : 'inline-flex flex-col items-start'
+			)}
+		>
+			{button}
+			<FieldDescription id={reasonId} description={disabledReason} />
+		</div>
 	);
 }

@@ -267,3 +267,17 @@ export const StyledLink: Story = {
 		children: '',
 	},
 };
+
+export const DisabledWithReason: Story = {
+	render: () => (
+		<div className="flex flex-col gap-6">
+			<Button disabledReason="Fill in the host before saving">Save</Button>
+			<Button loading disabledReason="Saving, please wait">
+				Save
+			</Button>
+		</div>
+	),
+	args: {
+		children: '',
+	},
+};

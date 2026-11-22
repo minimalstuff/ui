@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { SyntheticEvent } from 'react';
 import { describe, expect, test, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 
 import { Button } from '#components/button/button';
 import { buttonClassName } from '#components/button/button_class_name';
@@ -277,6 +278,121 @@ describe('Button', () => {
 			);
 		});
 	});
+
+	describe('disabledReason', () => {
+		const REASON = 'Fill in the host first';
+
+		test('should expose aria-disabled and stay focusable when a reason is given', () => {
+			render(<Button disabledReason={REASON}>Save</Button>);
+			const button = screen.getByRole('button');
+			button.focus();
+			expect(button).toHaveFocus();
+			expect(button).not.toBeDisabled();
+			expect(button).toHaveAttribute('aria-disabled', 'true');
+		});
+
+		test('should not call onClick when a blocked button is clicked', () => {
+			const onClick = vi.fn<() => void>();
+			render(
+				<Button disabledReason={REASON} onClick={onClick}>
+					Save
+				</Button>
+			);
+			fireEvent.click(screen.getByRole('button'));
+			expect(onClick).not.toHaveBeenCalled();
+		});
+
+		test('should not submit the form when a blocked submit button is clicked', () => {
+			const onSubmit = vi.fn<
+				(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void
+			>((event) => {
+				event.preventDefault();
+			});
+			render(
+				<form onSubmit={onSubmit}>
+					<Button type="submit" disabledReason={REASON}>
+						Save
+					</Button>
+				</form>
+			);
+			fireEvent.click(screen.getByRole('button'));
+			expect(onSubmit).not.toHaveBeenCalled();
+		});
+
+		test('should describe the button with the visible reason', () => {
+			render(<Button disabledReason={REASON}>Save</Button>);
+			expect(screen.getByRole('button')).toHaveAccessibleDescription(REASON);
+			expect(screen.getByText(REASON)).toBeVisible();
+		});
+
+		test('should keep the consumer aria-describedby alongside the reason', () => {
+			render(
+				<>
+					<p id="extra">Extra help</p>
+					<Button disabledReason={REASON} aria-describedby="extra">
+						Save
+					</Button>
+				</>
+			);
+			expect(screen.getByRole('button')).toHaveAccessibleDescription(
+				`Extra help ${REASON}`
+			);
+		});
+
+		test('should stay natively disabled without hint when disabled is set', () => {
+			render(
+				<Button disabled disabledReason={REASON}>
+					Save
+				</Button>
+			);
+			const button = screen.getByRole('button');
+			expect(button).toBeDisabled();
+			expect(button).not.toHaveAttribute('aria-disabled');
+			expect(screen.queryByText(REASON)).not.toBeInTheDocument();
+		});
+
+		test.each([undefined, ''])(
+			'should render no wrapper and no aria-disabled when the reason is %j',
+			(reason) => {
+				const { container } = render(
+					<Button disabledReason={reason}>Save</Button>
+				);
+				const button = screen.getByRole('button');
+				expect(container.firstElementChild).toBe(button);
+				expect(button).not.toHaveAttribute('aria-disabled');
+				expect(button).not.toHaveAttribute('aria-describedby');
+			}
+		);
+
+		test('should show the spinner, the hint and aria-busy when loading with a reason', () => {
+			const { container } = render(
+				<Button loading disabledReason={REASON}>
+					Save
+				</Button>
+			);
+			const button = screen.getByRole('button');
+			expect(button).toHaveAttribute('aria-busy', 'true');
+			expect(button).toHaveAttribute('aria-disabled', 'true');
+			expect(container.querySelector('.i-mdi-loading')).not.toBeNull();
+			expect(screen.getByText(REASON)).toBeInTheDocument();
+		});
+
+		test('should stretch the wrapper when fullWidth', () => {
+			const { container } = render(
+				<Button fullWidth disabledReason={REASON}>
+					Save
+				</Button>
+			);
+			expect(container.firstElementChild).toHaveClass('flex', 'w-full');
+		});
+
+		test('should have no axe violations when blocked', async () => {
+			const { container } = render(
+				<Button disabledReason={REASON}>Save</Button>
+			);
+			expect(await axe(container)).toHaveNoViolations();
+		});
+	});
 });
 
 test('accepts explicit undefined for every optional prop', () => {
@@ -284,6 +400,7 @@ test('accepts explicit undefined for every optional prop', () => {
 		<Button
 			pressed={undefined}
 			loading={undefined}
+			disabledReason={undefined}
 			size={undefined}
 			fullWidth={undefined}
 			className={undefined}
