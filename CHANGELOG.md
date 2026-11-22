@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.9.0] - 2026-11-22
+
 ### Added
 
 - `Button` takes a `disabledReason` prop: the button stays focusable but does nothing when activated, is exposed as `aria-disabled`, and shows the reason below it as its description. Use it instead of `disabled` when the user needs to know why the button cannot act yet.
@@ -636,7 +638,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.8.0...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.9.0...HEAD
+[5.9.0]: https://github.com/minimalstuff/ui/compare/5.8.0...5.9.0
 [5.8.0]: https://github.com/minimalstuff/ui/compare/5.7.2...5.8.0
 [5.7.2]: https://github.com/minimalstuff/ui/compare/5.7.1...5.7.2
 [5.7.1]: https://github.com/minimalstuff/ui/compare/5.7.0...5.7.1
