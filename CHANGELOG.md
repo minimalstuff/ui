@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Fixed
+
+- `toast.warning()`: screen readers now hear warning toasts politely, like info and success, instead of interrupting the user; only `toast.error()` is announced assertively, as an alert should be kept for blocking errors.
+
 ## [5.7.1] - 2026-11-15
 
 ### Fixed

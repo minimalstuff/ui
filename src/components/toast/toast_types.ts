@@ -54,7 +54,7 @@ export interface ToastFunction {
 	info(message: string, options?: Readonly<ToastMessageOptions>): string;
 	/** Shows a success toast and returns its id. */
 	success(message: string, options?: Readonly<ToastMessageOptions>): string;
-	/** Shows a warning toast and returns its id. It stays until dismissed unless a duration is given. */
+	/** Shows a warning toast and returns its id. It is announced politely and stays until dismissed unless a duration is given. */
 	warning(message: string, options?: Readonly<ToastMessageOptions>): string;
 	/** Shows an error toast and returns its id. It stays until dismissed unless a duration is given. */
 	error(message: string, options?: Readonly<ToastMessageOptions>): string;

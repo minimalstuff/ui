@@ -2,7 +2,7 @@ import { type AlertTone } from '#components/alert/alert_tone';
 
 export type AnnouncerPoliteness = 'polite' | 'assertive';
 
-const ASSERTIVE_TONES: readonly AlertTone[] = ['warning', 'danger'];
+const ASSERTIVE_TONES: readonly AlertTone[] = ['danger'];
 
 export function getPoliteness(tone: string): AnnouncerPoliteness {
 	return ASSERTIVE_TONES.some((assertiveTone) => assertiveTone === tone)

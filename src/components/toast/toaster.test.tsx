@@ -139,6 +139,17 @@ describe('Toaster announcements', () => {
 		expect(screen.getByRole('alert').textContent).toBe('Failed');
 	});
 
+	test('should announce warnings politely', () => {
+		render(<Toaster />);
+		act(() => {
+			toast.warning('Disk almost full');
+		});
+		advance(TOAST_ANNOUNCE_DELAY_MS);
+
+		expect(screen.getByRole('status').textContent).toBe('Disk almost full');
+		expect(screen.getByRole('alert')).toBeEmptyDOMElement();
+	});
+
 	test('should keep the announcers outside the notifications region', () => {
 		render(<Toaster />);
 
