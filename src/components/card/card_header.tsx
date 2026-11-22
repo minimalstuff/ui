@@ -1,6 +1,19 @@
+import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 export type CardHeadingLevel = 2 | 3 | 4;
+
+export type CardTitleSize = 'sm' | 'md';
+
+const TITLE_SIZE_CLASSES: Record<CardTitleSize, string> = {
+	sm: 'text-base',
+	md: 'text-lg',
+};
+
+const HEADER_MARGIN_CLASSES: Record<CardTitleSize, string> = {
+	sm: 'mb-3',
+	md: 'mb-4',
+};
 
 const HEADING_TAGS = {
 	2: 'h2',
@@ -12,6 +25,7 @@ export interface CardHeaderProps {
 	title: ReactNode;
 	titleId: string;
 	level: CardHeadingLevel;
+	size: CardTitleSize;
 	description?: ReactNode;
 	actions?: ReactNode;
 }
@@ -25,17 +39,21 @@ export function CardHeader({
 	title,
 	titleId,
 	level,
+	size,
 	description,
 	actions,
 }: Readonly<CardHeaderProps>) {
 	const Heading = HEADING_TAGS[level];
 
 	return (
-		<div className="mb-4">
+		<div className={HEADER_MARGIN_CLASSES[size]}>
 			<div className="flex items-center justify-between gap-4">
 				<Heading
 					id={titleId}
-					className="text-lg font-medium text-gray-900 dark:text-gray-100"
+					className={clsx(
+						TITLE_SIZE_CLASSES[size],
+						'font-medium text-gray-900 dark:text-gray-100'
+					)}
 				>
 					{title}
 				</Heading>

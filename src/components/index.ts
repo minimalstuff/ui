@@ -28,6 +28,7 @@ export {
 	type CardHeadingLevel,
 	type CardPadding,
 	type CardProps,
+	type CardTitleSize,
 } from './card/card';
 export {
 	CharacterCount,

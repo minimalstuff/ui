@@ -24,6 +24,11 @@ const meta = {
 			options: [2, 3, 4],
 			description: 'Heading level of the title — match the page hierarchy.',
 		},
+		titleSize: {
+			control: 'select',
+			options: ['sm', 'md'],
+			description: 'Title size: use sm in narrow containers such as drawers.',
+		},
 		unstyled: {
 			control: 'boolean',
 			description: 'Strips surface, border, radius and padding.',
@@ -90,6 +95,15 @@ export const NestedHeadingLevel: Story = {
 		title: 'Import',
 		description: 'Sits under an existing section heading.',
 		headingLevel: 3,
+	},
+};
+
+export const CompactTitle: Story = {
+	args: {
+		title: 'Email address',
+		description: 'The address you sign in with, and where recovery links go.',
+		titleSize: 'sm',
+		padding: 'sm',
 	},
 };
 

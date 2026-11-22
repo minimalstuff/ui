@@ -4,11 +4,15 @@ import { useId, type ReactNode } from 'react';
 import {
 	CardHeader,
 	type CardHeadingLevel,
+	type CardTitleSize,
 } from '#components/card/card_header';
 import { RADIUS_CLASSES, type Radius } from '#components/shared/radius';
 import { CONTROL_BG, SURFACE_BORDER } from '#components/shared/surface_tokens';
 
-export type { CardHeadingLevel } from '#components/card/card_header';
+export type {
+	CardHeadingLevel,
+	CardTitleSize,
+} from '#components/card/card_header';
 
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
@@ -25,6 +29,7 @@ export interface CardProps {
 	description?: ReactNode;
 	actions?: ReactNode;
 	headingLevel?: CardHeadingLevel;
+	titleSize?: CardTitleSize;
 	padding?: CardPadding;
 	radius?: Radius;
 	unstyled?: boolean;
@@ -43,6 +48,9 @@ export interface CardProps {
  * landmarks. Set `headingLevel` when the card sits under an existing heading:
  * the default `h2` is right at the top level of a page and wrong nested.
  *
+ * Set `titleSize` to `'sm'` in narrow containers such as drawers: the title
+ * gets smaller and the header takes less space.
+ *
  * `unstyled` strips the surface, border, radius and padding; the header
  * markup stays, since that is structure rather than skin.
  */
@@ -52,6 +60,7 @@ export function Card({
 	description,
 	actions,
 	headingLevel = 2,
+	titleSize = 'md',
 	padding = 'md',
 	radius = 'lg',
 	unstyled = false,
@@ -80,6 +89,7 @@ export function Card({
 					title={title}
 					titleId={titleId}
 					level={headingLevel}
+					size={titleSize}
 					description={description}
 					actions={actions}
 				/>

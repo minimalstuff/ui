@@ -36,6 +36,17 @@ describe('Card', () => {
 		).toBeInTheDocument();
 	});
 
+	test('keeps the title as a named heading with a small title size', () => {
+		render(
+			<Card title="Active sessions" titleSize="sm">
+				Section body
+			</Card>
+		);
+		expect(
+			screen.getByRole('heading', { name: 'Active sessions', level: 2 })
+		).toBeInTheDocument();
+	});
+
 	test('exposes a titled card as a region named after its title', () => {
 		render(<Card title="Active sessions">Section body</Card>);
 		expect(

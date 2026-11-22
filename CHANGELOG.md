@@ -4,6 +4,10 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+### Added
+
+- `Card` takes a `titleSize` prop: `'sm'` shows a smaller title with less space under it, for cards in narrow containers such as a drawer. The default `'md'` changes nothing.
+
 ## [5.7.2] - 2026-11-22
 
 ### Fixed
