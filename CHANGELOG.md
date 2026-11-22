@@ -4,6 +4,8 @@ All notable changes to @minimalstuff/ui are written here for the people who use 
 
 ## [Unreleased]
 
+## [5.7.2] - 2026-11-22
+
 ### Fixed
 
 - `toast.warning()`: screen readers now hear warning toasts politely, like info and success, instead of interrupting the user; only `toast.error()` is announced assertively, as an alert should be kept for blocking errors.
@@ -624,7 +626,8 @@ No user-visible changes.
 - Hooks: `useClientOnly` and the `withClientOnly` HOC run logic or render only on the client, `useIsClient` tells whether the component is mounted on the client, and `useRunAfterAnimation` runs a callback once a CSS animation ends.
 - Utilities and types: `applyTheme` applies the light or dark theme to the document, and the `Theme` type.
 
-[Unreleased]: https://github.com/minimalstuff/ui/compare/5.7.1...HEAD
+[Unreleased]: https://github.com/minimalstuff/ui/compare/5.7.2...HEAD
+[5.7.2]: https://github.com/minimalstuff/ui/compare/5.7.1...5.7.2
 [5.7.1]: https://github.com/minimalstuff/ui/compare/5.7.0...5.7.1
 [5.7.0]: https://github.com/minimalstuff/ui/compare/5.6.1...5.7.0
 [5.6.1]: https://github.com/minimalstuff/ui/compare/5.6.0...5.6.1
