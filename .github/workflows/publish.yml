@@ -29,8 +29,10 @@ jobs:
 
   release:
     needs: verify
-    uses: minimalstuff/tooling/.github/workflows/release.yml@705224c97824f55bc28a6139ea0aacefe4da82e1 # v0.9.0
+    uses: minimalstuff/tooling/.github/workflows/release.yml@d181376184823bf5043059ef4f9f3f17f8e98ef0 # v0.13.0
     with:
+      tag-prefix: ''
+      commit-message: 'chore: release v${version}'
       increment: ${{ inputs.increment }}
       pre-release-id: ${{ inputs.pre-release-id }}
     secrets:
@@ -52,7 +54,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          ref: ${{ needs.release.outputs.tag }}
+          ref: ${{ needs.release.outputs.sha }}
 
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
 
